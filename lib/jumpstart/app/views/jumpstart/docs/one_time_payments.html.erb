@@ -12,9 +12,9 @@
   <pre class="language-ruby"><code>def new
   @checkout_session = payment_processor.checkout(
     mode: "payment",
-    line_items: "price_1ILVZaKXBGcbgpbZQ26kgXWG",
+    line_items: "price_12345",
     allow_promotion_codes: true,
-    return_url: checkout_completed_url
+    return_url: checkout_return_url,
   )
   redirect_to @checkout_session.url, allow_other_host: true
 end</code></pre>
@@ -30,7 +30,7 @@ end</code></pre>
   paddle__billing_target: "form",
   paddle__billing_email_value: current_account.email,
   paddle__billing_items_value: [price_id: @price_id].to_json,
-  paddle__billing_success_url_value: checkout_completed_url,
+  paddle__billing_success_url_value: checkout_return_url,
   paddle__billing_custom_data: {order: @order.id}.to_json
 } %&gt;</code></pre>
 </div>
@@ -38,23 +38,8 @@ end</code></pre>
 <%= h3_with_anchor "Checkout Completed Controller" %>
 
 <p>Webhooks are the most reliable way of fulfilling a purchase but redirects after completed purchase also help ensure fulfillment happens as the user finishes in case webhooks are delayed.</p>
-
-<p>In the previous step, we used a <code>checkout_completed_url</code> to redirect the user after checkout. You'll need to define a route for this and matching controller action to sync purchases.</p>
-
-<div class="not-prose">
-  <pre class="language-ruby"><code>class Checkout::CompletedController &lt; ApplicationController
-  def show
-   # For Stripe
-   @charge = Pay::Stripe::Charge.sync_from_checkout_session(params[:session_id])
-
-   # For Paddle Billing
-   current_account.set_payment_processor :paddle_billing, processor_id: params[:user_id]
-   @transaction = Pay::PaddleBilling::Charge.sync_from_transaction(params[:transaction_id])
-  end
-end</code></pre>
-</div>
-
-<p>The controller is only responsible for triggering the sync to the database. This is the exact same process as webhooks and ensures that any delays with webhooks don't affect the customer's checkout flow.</p>
+<p>In the previous step, we used a <code>checkout_return_url</code> to redirect the user after checkout. Jumpstart already provides this controller and uses it with subscription billing.</p>
+<p>The Checkout::ReturnsController is responsible for syncing the checkout to the database. This is the exact same process as webhooks and ensures that any delays with webhooks don't affect the customer's checkout flow. See <code>lib/jumpstart/app/controllers/checkout/returns_controller.rb</code> for more details.</p>
 
 <%= h3_with_anchor "Fulfillment" %>
 
