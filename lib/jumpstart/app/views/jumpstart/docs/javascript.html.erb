@@ -5,8 +5,8 @@
 
 <%= h2_with_anchor "Bundling JavaScript" %>
 
-<p>
-  Jumpstart Pro uses <%= link_to "Propshaft", "https://github.com/rails/propshaft", target: "_blank", class: "link" %> which is the default Rails asset pipeline library.</p>
+<p>Jumpstart Pro uses <%= link_to "Propshaft", "https://github.com/rails/propshaft", target: "_blank", class: "link" %> for serving assets.</p>
+
 <p>
   When developing your application, Jumpstart Pro defaults to having a configuration setup that will watch for changes in your views, JavaScript, or stylesheets and reload the page when it detects changes.
   This helps speed up your development process by not having to manually refresh the page every time you make a change or run commands to rebuild your assets.
@@ -14,20 +14,23 @@
 
 <%= h2_with_anchor "JavaScript Packages" %>
 
-<p>
-  Jumpstart Pro comes with a few JavaScript packages pre-installed. You can find them in <code>config/importmap.rb</code> file.
-</p>
+<p>Jumpstart Pro comes with a few JavaScript packages pre-installed. You can find them in <code>config/importmap.rb</code> file.</p>
+
 <p>
   One of the packages is our own <%= link_to "tailwindcss-stimulus-components", "https://github.com/excid3/tailwindcss-stimulus-components", target: "_blank", class: "link" %> package which is a set of StimulusJS controllers and components for TailwindCSS apps similar to Bootstrap JS components.
-  This package has components of it's own which you can find links to in the <%= link_to "Components", "https://github.com/excid3/tailwindcss-stimulus-components#components", target: "_blank", class: "link" %> section of the README in the repository.
+  This package has components of its own which you can find links to in the <%= link_to "Components", "https://github.com/excid3/tailwindcss-stimulus-components#components", target: "_blank", class: "link" %> section of the README in the repository.
 </p>
+
+<p>Jumpstart Pro has some of the controllers from this package already imported by default.</p>
+
+<div class="not-prose">
+  <pre><code>import { Dropdown, Modal, Tabs, Popover, Toggle, Slideover } from  "tailwindcss-stimulus-components"</code></pre>
+</div>
+
 <p>
-  Jumpstart Pro has some of the controllers from this package already imported in the <code>app/javascript/controllers/index.js</code> file by default:
-  <div class="not-prose">
-    <pre><code>import { Dropdown, Modal, Tabs, Popover, Toggle, Slideover } from  "tailwindcss-stimulus-components"</code></pre>
-  </div>
   If you need to import any of the remaining controllers from this package, you can do so by adding to that line. The controllers are all listed <%= link_to "here", "https://github.com/excid3/tailwindcss-stimulus-components/tree/master/src", target: "_blank" %>.
 </p>
+
 <p>
   The StimulusJS controllers from the tailwindcss-stimulus-components package and the components from Jumpstart Pro or any of your own code can be wired up together easily, saving you time and effort. For example,
   it can be used to add show and hide functionality to the Jumpstart Pro <%= link_to "alert", alerts_docs_path, target: "_blank", class: "link" %> components.
@@ -36,14 +39,15 @@
 <%= h3_with_anchor "Adding Additional JavaScript Packages" %>
 
 <p>
-  Adding new JavaScript packages to your application is easy. You can use the <code>bin/importmap pin package</code> command to add new packages to your application. For example, if you wanted to add the SortableJS package to your application, you could run the following command:
+  You can use the <code>bin/importmap pin package</code> command to add new packages to your application. For example, if you wanted to add the SortableJS package to your application, you could run the following command:
 </p>
+
 <div class="not-prose">
   <pre><code>bin/importmap pin sortablejs</code></pre>
 </div>
-<p>
-  Once you have run the above, you can then import the package in your JavaScript file with:
-</p>
+
+<p>Once you have run the above, you can then import the package in your JavaScript file.</p>
+
 <div class="not-prose">
   <pre><code>import Sortable from 'sortablejs'</code></pre>
 </div>
