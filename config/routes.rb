@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   draw :accounts
   draw :api
   draw :billing
+  draw :crm
   draw :hotwire_native
   draw :users
   draw :dev if Rails.env.local?

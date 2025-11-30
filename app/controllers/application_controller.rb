@@ -14,4 +14,15 @@ class ApplicationController < ActionController::Base
   include Users::AgreementUpdates
   include Users::NavbarNotifications
   include Users::Sudo
+
+  # CRM: Organization helper available globally
+  helper_method :current_organization
+
+  private
+
+  # Returns the organization for the current account, if one exists.
+  # Use OrganizationScoped concern in controllers that require organization access.
+  def current_organization
+    @current_organization ||= current_account&.organization
+  end
 end

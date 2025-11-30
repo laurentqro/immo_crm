@@ -1,0 +1,260 @@
+# AMSF XBRL Element Mapping for Real Estate AML/CFT Survey
+# Taxonomy Version: 2025
+# Maps internal CRM data to XBRL elements for annual submission
+#
+# Sources:
+#   - calculated: Derived from CRM data (clients, transactions)
+#   - from_settings: Pulled from organization settings
+#   - manual: Entered by user during submission wizard
+
+---
+# Section 1: Entity Information
+entity_info:
+  a1001:
+    description: "Company name"
+    source: organization.name
+    type: string
+
+  a1002:
+    description: "RCI number (Monaco business registry)"
+    source: organization.rci_number
+    type: string
+
+  a1003:
+    description: "Country of registration"
+    source: organization.country
+    type: string
+
+# Section 2: Client Statistics
+client_statistics:
+  a1101:
+    description: "Total number of clients"
+    source: calculated
+    calculation: clients.count
+    type: integer
+
+  a1102:
+    description: "Number of natural person clients (PP)"
+    source: calculated
+    calculation: clients.where(client_type: 'PP').count
+    type: integer
+
+  a1103:
+    description: "Number of legal entity clients (PM)"
+    source: calculated
+    calculation: clients.where(client_type: 'PM').count
+    type: integer
+
+  a1104:
+    description: "Number of trust clients (TRUST)"
+    source: calculated
+    calculation: clients.where(client_type: 'TRUST').count
+    type: integer
+
+  a1105:
+    description: "Number of high-risk clients"
+    source: calculated
+    calculation: clients.where(risk_level: 'HIGH').count
+    type: integer
+
+  a1106:
+    description: "Number of PEP clients"
+    source: calculated
+    calculation: clients.where(is_pep: true).count
+    type: integer
+
+  a1107:
+    description: "Number of domestic PEP clients"
+    source: calculated
+    calculation: clients.where(is_pep: true, pep_type: 'DOMESTIC').count
+    type: integer
+
+  a1108:
+    description: "Number of foreign PEP clients"
+    source: calculated
+    calculation: clients.where(is_pep: true, pep_type: 'FOREIGN').count
+    type: integer
+
+  a1109:
+    description: "Number of international organization PEP clients"
+    source: calculated
+    calculation: clients.where(is_pep: true, pep_type: 'INTL_ORG').count
+    type: integer
+
+  a1110:
+    description: "Number of VASP clients"
+    source: calculated
+    calculation: clients.where(is_vasp: true).count
+    type: integer
+
+  a1111:
+    description: "Number of new clients in reporting year"
+    source: calculated
+    calculation: clients.where(became_client_at: reporting_year_range).count
+    type: integer
+
+  a1112:
+    description: "Number of rejected clients in reporting year"
+    source: calculated
+    calculation: clients.where(rejection_reason: [:AML_CFT, :OTHER]).where(created_at: reporting_year_range).count
+    type: integer
+
+# Section 3: Transaction Statistics
+transaction_statistics:
+  a2101:
+    description: "Total number of transactions in reporting year"
+    source: calculated
+    calculation: transactions.for_year(reporting_year).count
+    type: integer
+
+  a2102:
+    description: "Number of purchase transactions"
+    source: calculated
+    calculation: transactions.for_year(reporting_year).purchases.count
+    type: integer
+
+  a2103:
+    description: "Number of sale transactions"
+    source: calculated
+    calculation: transactions.for_year(reporting_year).sales.count
+    type: integer
+
+  a2104:
+    description: "Number of rental transactions"
+    source: calculated
+    calculation: transactions.for_year(reporting_year).rentals.count
+    type: integer
+
+  a2105:
+    description: "Total transaction value in reporting year (EUR)"
+    source: calculated
+    calculation: transactions.for_year(reporting_year).sum(:transaction_value)
+    type: decimal
+
+  a2106:
+    description: "Number of transactions with cash payment"
+    source: calculated
+    calculation: transactions.for_year(reporting_year).cash_transactions.count
+    type: integer
+
+  a2107:
+    description: "Total cash amount in reporting year (EUR)"
+    source: calculated
+    calculation: transactions.for_year(reporting_year).sum(:cash_amount)
+    type: decimal
+
+# Section 4: STR Reports
+str_statistics:
+  a3101:
+    description: "Number of STRs filed in reporting year"
+    source: calculated
+    calculation: str_reports.where(report_date: reporting_year_range).count
+    type: integer
+
+  a3102:
+    description: "Number of STRs related to cash transactions"
+    source: calculated
+    calculation: str_reports.where(report_date: reporting_year_range, reason: 'CASH').count
+    type: integer
+
+  a3103:
+    description: "Number of STRs related to PEPs"
+    source: calculated
+    calculation: str_reports.where(report_date: reporting_year_range, reason: 'PEP').count
+    type: integer
+
+# Section 4: KYC and Compliance Policies (from settings)
+kyc_procedures:
+  a4101:
+    description: "Enhanced due diligence for PEPs"
+    source: from_settings
+    setting_key: edd_for_peps
+    type: boolean
+
+  a4102:
+    description: "Enhanced due diligence for high-risk countries"
+    source: from_settings
+    setting_key: edd_for_high_risk_countries
+    type: boolean
+
+  a4103:
+    description: "Enhanced due diligence for complex structures"
+    source: from_settings
+    setting_key: edd_for_complex_structures
+    type: boolean
+
+  a4104:
+    description: "Beneficial ownership verification procedure"
+    source: from_settings
+    setting_key: beneficial_ownership_verification
+    type: boolean
+
+  a4105:
+    description: "Client identity verification method"
+    source: from_settings
+    setting_key: identity_verification_method
+    type: enum
+    allowed_values: [DOCUMENT, ELECTRONIC, BOTH]
+
+  a4106:
+    description: "Ongoing monitoring implemented"
+    source: from_settings
+    setting_key: ongoing_monitoring
+    type: boolean
+
+compliance_policies:
+  a4201:
+    description: "Written AML/CFT policy exists"
+    source: from_settings
+    setting_key: written_aml_policy
+    type: boolean
+
+  a4202:
+    description: "Risk-based approach implemented"
+    source: from_settings
+    setting_key: risk_based_approach
+    type: boolean
+
+  a4203:
+    description: "Compliance officer appointed"
+    source: from_settings
+    setting_key: compliance_officer_appointed
+    type: boolean
+
+  a4204:
+    description: "Compliance officer name"
+    source: from_settings
+    setting_key: compliance_officer_name
+    type: string
+
+  a4205:
+    description: "Internal controls implemented"
+    source: from_settings
+    setting_key: internal_controls
+    type: boolean
+
+  a4206:
+    description: "Suspicious transaction reporting procedure exists"
+    source: from_settings
+    setting_key: str_procedure
+    type: boolean
+
+# Section 5: Training
+training:
+  a5101:
+    description: "Staff AML/CFT training conducted in reporting year"
+    source: from_settings
+    setting_key: staff_training_conducted
+    type: boolean
+
+  a5102:
+    description: "Number of staff trained"
+    source: from_settings
+    setting_key: staff_trained_count
+    type: integer
+
+  a5103:
+    description: "Date of last training"
+    source: from_settings
+    setting_key: last_training_date
+    type: date
