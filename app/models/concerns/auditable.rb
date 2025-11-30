@@ -1,7 +1,16 @@
 # frozen_string_literal: true
 
-# Adds audit logging callbacks to models for compliance tracking
-# Records create, update, and delete (soft) actions to AuditLog
+# Adds audit logging callbacks to models for compliance tracking.
+# Records create, update, and delete (soft) actions to AuditLog.
+#
+# IMPORTANT: For models using Discard for soft deletes, include Discard::Model
+# BEFORE including Auditable to ensure the after_discard callback is registered:
+#
+#   class Client < ApplicationRecord
+#     include Discard::Model  # Must come first
+#     include Auditable
+#   end
+#
 module Auditable
   extend ActiveSupport::Concern
 
@@ -9,8 +18,9 @@ module Auditable
     after_create :log_audit_create
     after_update :log_audit_update
 
-    # Hook into Discard's soft delete if the model uses it
-    if respond_to?(:after_discard)
+    # Hook into Discard's soft delete if the model has already included Discard::Model
+    # The class must include Discard::Model before Auditable for this to work
+    if included_modules.any? { |m| m.name == "Discard::Model" }
       after_discard :log_audit_delete
     end
   end

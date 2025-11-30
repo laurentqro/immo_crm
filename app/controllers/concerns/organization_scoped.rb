@@ -16,7 +16,7 @@ module OrganizationScoped
   private
 
   # Returns the organization for the current account.
-  # Creates one if it doesn't exist (during onboarding).
+  # Returns nil if organization doesn't exist yet (user needs onboarding).
   def current_organization
     @current_organization ||= current_account&.organization
   end

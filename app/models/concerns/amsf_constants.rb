@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
-# AMSF (Monaco AML/CFT) enumeration values and constants
-# These map to XBRL taxonomy elements for annual submission
+# AMSF (Monaco AML/CFT) enumeration values and constants.
+# These map to XBRL taxonomy elements for the annual AML/CFT submission.
+#
+# Reference: Monaco AMSF Real Estate Professionals AML/CFT Survey
+# Taxonomy: strix_Real_Estate_AML_CFT_survey_2025
+# See: docs/strix_Real_Estate_AML_CFT_survey_2025.xsd for full schema
+# See: config/amsf_element_mapping.yml for element-to-field mappings
+#
 module AmsfConstants
   extend ActiveSupport::Concern
 

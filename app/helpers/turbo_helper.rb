@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 
 # Helper for consistent Turbo Frame naming conventions across the CRM.
-# Provides standard patterns for frame IDs and target names.
+# Provides standard patterns for frame IDs beyond Rails' built-in dom_id.
+#
+# For basic record IDs, use Rails' built-in dom_id(@record) directly.
 module TurboHelper
-  # Generate a Turbo Frame ID for a model record
-  # Usage: frame_id(@client) => "client_123"
-  def frame_id(record)
-    dom_id(record)
-  end
-
   # Generate a Turbo Frame ID for a new record form
   # Usage: new_frame_id(Client) => "new_client"
   def new_frame_id(model_class)
