@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_30_223350) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_30_232902) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -389,8 +389,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_223350) do
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "api_tokens", "users"
-  add_foreign_key "audit_logs", "organizations"
-  add_foreign_key "audit_logs", "users"
+  add_foreign_key "audit_logs", "organizations", on_delete: :nullify
+  add_foreign_key "audit_logs", "users", on_delete: :nullify
   add_foreign_key "organizations", "accounts"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"

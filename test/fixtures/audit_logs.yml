@@ -1,0 +1,42 @@
+# Audit log fixtures for testing
+# Tests various action types and associations
+
+login_event:
+  organization: one
+  user: one
+  action: login
+  metadata:
+    ip_address: "192.168.1.1"
+    user_agent: "Mozilla/5.0"
+
+logout_event:
+  organization: one
+  user: one
+  action: logout
+  metadata:
+    ip_address: "192.168.1.1"
+
+create_event:
+  organization: one
+  user: one
+  action: create
+  auditable_type: Organization
+  auditable_id: 1
+  metadata:
+    ip_address: "192.168.1.1"
+
+update_event:
+  organization: one
+  user: one
+  action: update
+  auditable_type: Organization
+  auditable_id: 1
+  metadata:
+    changed_fields: ["name"]
+
+# Auth event without organization (for login failures before account selection)
+failed_login:
+  user: one
+  action: login_failed
+  metadata:
+    ip_address: "10.0.0.1"

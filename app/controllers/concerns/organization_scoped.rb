@@ -22,11 +22,13 @@ module OrganizationScoped
   end
 
   # Ensures an organization exists for the current account.
-  # Redirects to onboarding if organization is missing.
+  # Redirects to onboarding if organization is missing, with fallback to root.
   def require_organization
     return if current_organization.present?
 
-    redirect_to new_onboarding_path, alert: "Please complete your organization setup."
+    # Fallback to root_path if onboarding route not yet defined
+    redirect_path = respond_to?(:new_onboarding_path) ? new_onboarding_path : root_path
+    redirect_to redirect_path, alert: "Please complete your organization setup."
   end
 
   # Helper to scope queries to the current organization.
