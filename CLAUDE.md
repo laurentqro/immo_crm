@@ -112,3 +112,10 @@ Routes are modularized in `config/routes/`:
 - **Billing features** conditionally loaded based on `Jumpstart.config.payments_enabled?`
 - **Background jobs** configurable between SolidQueue and Sidekiq
 - **Multi-database** setup with separate databases for cache, jobs, and cable
+
+## Active Technologies
+- Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Devise, Pundit, Hotwire (Turbo/Stimulus), Nokogiri, Pay gem (001-mvp-immo-crm)
+- PostgreSQL 15+ (primary), SolidQueue (jobs), SolidCache (cache), SolidCable (websockets) (001-mvp-immo-crm)
+
+## Recent Changes
+- 001-mvp-immo-crm: Added Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Devise, Pundit, Hotwire (Turbo/Stimulus), Nokogiri, Pay gem
