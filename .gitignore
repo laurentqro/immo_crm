@@ -45,3 +45,6 @@ yarn-debug.log*
 .DS_Store
 .idea
 *~
+
+# Ignore .claude
+/.claude
