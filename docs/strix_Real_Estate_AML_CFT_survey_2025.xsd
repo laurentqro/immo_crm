@@ -1,0 +1,6229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema
+  attributeFormDefault="unqualified"
+  elementFormDefault="qualified"
+  targetNamespace="https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:nonnum="http://www.xbrl.org/dtr/type/non-numeric"
+  xmlns:strix="https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr"
+  xmlns:xbrldt="http://xbrl.org/2005/xbrldt"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <annotation>
+        <appinfo>
+            <link:roleType
+              id="roleType_Link_NoCountryDimension "
+              roleURI="https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr/role/Link_NoCountryDimension ">
+                <link:definition>Link_NoCountryDimension</link:definition>
+                <link:usedOn>link:presentationLink</link:usedOn>
+                <link:usedOn>link:definitionLink</link:usedOn>
+            </link:roleType>
+            <link:roleType
+              id="roleType_Link_aAC "
+              roleURI="https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr/role/Link_aAC ">
+                <link:definition>Link_aAC</link:definition>
+                <link:usedOn>link:presentationLink</link:usedOn>
+                <link:usedOn>link:definitionLink</link:usedOn>
+            </link:roleType>
+            <link:roleType
+              id="roleType_Link_aLE "
+              roleURI="https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr/role/Link_aLE ">
+                <link:definition>Link_aLE</link:definition>
+                <link:usedOn>link:presentationLink</link:usedOn>
+                <link:usedOn>link:definitionLink</link:usedOn>
+            </link:roleType>
+            <link:linkbaseRef
+              xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+              xlink:href="strix_Real_Estate_AML_CFT_survey_2025_lab.xml"
+              xlink:role="http://www.xbrl.org/2003/role/labelLinkbaseRef"
+              xlink:type="simple"/>
+            <link:linkbaseRef
+              xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+              xlink:href="strix_Real_Estate_AML_CFT_survey_2025_pre.xml"
+              xlink:role="http://www.xbrl.org/2003/role/presentationLinkbaseRef"
+              xlink:type="simple"/>
+            <link:linkbaseRef
+              xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+              xlink:href="strix_Real_Estate_AML_CFT_survey_2025_def.xml"
+              xlink:role="http://www.xbrl.org/2003/role/definitionLinkbaseRef"
+              xlink:type="simple"/>
+            <link:linkbaseRef
+              xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"
+              xlink:href="strix_Real_Estate_AML_CFT_survey_2025_cal.xml"
+              xlink:role="http://www.xbrl.org/2003/role/calculationLinkbaseRef"
+              xlink:type="simple"/>
+        </appinfo>
+    </annotation>
+    <import
+      namespace="http://www.xbrl.org/2003/instance"
+      schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+    <import
+      namespace="http://www.xbrl.org/dtr/type/non-numeric"
+      schemaLocation="http://www.xbrl.org/dtr/type/nonNumeric-2009-12-16.xsd"/>
+    <import
+      namespace="http://xbrl.org/2005/xbrldt"
+      schemaLocation="http://www.xbrl.org/2005/xbrldt-2005.xsd"/>
+    <element
+      abstract="true"
+      id="strix_Abstract_NoCountryDimension"
+      name="Abstract_NoCountryDimension"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_Abstract_aAC"
+      name="Abstract_aAC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_Abstract_aLE"
+      name="Abstract_aLE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_CountryDimension"
+      name="CountryDimension"
+      nillable="true"
+      substitutionGroup="xbrldt:dimensionItem"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_CountryDomain"
+      name="CountryDomain"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_CountryTableNoCountryDimension"
+      name="CountryTableNoCountryDimension"
+      nillable="true"
+      substitutionGroup="xbrldt:hypercubeItem"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_CountryTableaAC"
+      name="CountryTableaAC"
+      nillable="true"
+      substitutionGroup="xbrldt:hypercubeItem"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_CountryTableaLE"
+      name="CountryTableaLE"
+      nillable="true"
+      substitutionGroup="xbrldt:hypercubeItem"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11001BTOLA"
+      name="a11001BTOLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a11006"
+      name="a11006"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1101"
+      name="a1101"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1102"
+      name="a1102"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1103"
+      name="a1103"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1104"
+      name="a1104"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1105B"
+      name="a1105B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1105W"
+      name="a1105W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1106B"
+      name="a1106B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1106BRENTALS"
+      name="a1106BRENTALS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1106W"
+      name="a1106W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a112012B"
+      name="a112012B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11201BCD"
+      name="a11201BCD"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a11201BCDU"
+      name="a11201BCDU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a11206B"
+      name="a11206B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11301"
+      name="a11301"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a11302"
+      name="a11302"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11302RES"
+      name="a11302RES"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11304B"
+      name="a11304B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11305B"
+      name="a11305B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11307"
+      name="a11307"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11309B"
+      name="a11309B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11502B"
+      name="a11502B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11602B"
+      name="a11602B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11702B"
+      name="a11702B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a11802B"
+      name="a11802B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12002B"
+      name="a12002B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1202O"
+      name="a1202O"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1202OB"
+      name="a1202OB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1203"
+      name="a1203"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a1203D"
+      name="a1203D"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a120425O"
+      name="a120425O"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1204O"
+      name="a1204O"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a1204S"
+      name="a1204S"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a1204S1"
+      name="a1204S1"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:pureItemType">
+                    <maxInclusive value="100"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a1207O"
+      name="a1207O"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12102B"
+      name="a12102B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1210O"
+      name="a1210O"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12202B"
+      name="a12202B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12302B"
+      name="a12302B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12302C"
+      name="a12302C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12402B"
+      name="a12402B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12502B"
+      name="a12502B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12602B"
+      name="a12602B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12702B"
+      name="a12702B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12802B"
+      name="a12802B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a12902B"
+      name="a12902B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13002B"
+      name="a13002B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13202B"
+      name="a13202B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13302B"
+      name="a13302B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13402B"
+      name="a13402B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13501B"
+      name="a13501B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601"
+      name="a13601"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601A"
+      name="a13601A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601B"
+      name="a13601B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601C"
+      name="a13601C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601C2"
+      name="a13601C2"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601CW"
+      name="a13601CW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601EP"
+      name="a13601EP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601ICO"
+      name="a13601ICO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13601OTHER"
+      name="a13601OTHER"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a13602A"
+      name="a13602A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13602B"
+      name="a13602B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13602C"
+      name="a13602C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13602D"
+      name="a13602D"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13603AB"
+      name="a13603AB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13603BB"
+      name="a13603BB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13603CACB"
+      name="a13603CACB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13603DB"
+      name="a13603DB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13604AB"
+      name="a13604AB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13604BB"
+      name="a13604BB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13604CB"
+      name="a13604CB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13604DB"
+      name="a13604DB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13604E"
+      name="a13604E"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13702B"
+      name="a13702B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13802B"
+      name="a13802B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a13902B"
+      name="a13902B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14001"
+      name="a14001"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1401"
+      name="a1401"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1401R"
+      name="a1401R"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1402"
+      name="a1402"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1403B"
+      name="a1403B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1403R"
+      name="a1403R"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1404B"
+      name="a1404B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14102B"
+      name="a14102B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14202B"
+      name="a14202B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14302B"
+      name="a14302B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14402B"
+      name="a14402B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14502B"
+      name="a14502B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14602B"
+      name="a14602B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14702B"
+      name="a14702B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a14801"
+      name="a14801"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a1501"
+      name="a1501"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1502B"
+      name="a1502B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1503B"
+      name="a1503B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a155"
+      name="a155"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a1801"
+      name="a1801"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a1802BTOLA"
+      name="a1802BTOLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a1802TOLA"
+      name="a1802TOLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1806TOLA"
+      name="a1806TOLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1807ATOLA"
+      name="a1807ATOLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1807TOLA"
+      name="a1807TOLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1808"
+      name="a1808"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a1809"
+      name="a1809"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2101B"
+      name="a2101B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2101W"
+      name="a2101W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2101WRP"
+      name="a2101WRP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2102B"
+      name="a2102B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2102BB"
+      name="a2102BB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2102BW"
+      name="a2102BW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2102W"
+      name="a2102W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2104B"
+      name="a2104B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2104W"
+      name="a2104W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2104WRP"
+      name="a2104WRP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2105B"
+      name="a2105B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2105BB"
+      name="a2105BB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2105BW"
+      name="a2105BW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2105W"
+      name="a2105W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2107B"
+      name="a2107B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2107W"
+      name="a2107W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2107WRP"
+      name="a2107WRP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2108B"
+      name="a2108B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2108W"
+      name="a2108W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2109B"
+      name="a2109B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2109W"
+      name="a2109W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2110B"
+      name="a2110B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2110W"
+      name="a2110W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2113AB"
+      name="a2113AB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2113AW"
+      name="a2113AW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2113B"
+      name="a2113B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2113W"
+      name="a2113W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2114A"
+      name="a2114A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2114AB"
+      name="a2114AB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2115AB"
+      name="a2115AB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2115AW"
+      name="a2115AW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2201A"
+      name="a2201A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2201D"
+      name="a2201D"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2202"
+      name="a2202"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a2203"
+      name="a2203"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2501"
+      name="a2501"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a2501A"
+      name="a2501A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3101"
+      name="a3101"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3102"
+      name="a3102"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3103"
+      name="a3103"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3104"
+      name="a3104"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3105"
+      name="a3105"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3201"
+      name="a3201"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3202"
+      name="a3202"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3203"
+      name="a3203"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3204"
+      name="a3204"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3205"
+      name="a3205"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3208TOLA"
+      name="a3208TOLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3209"
+      name="a3209"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3210"
+      name="a3210"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3210B"
+      name="a3210B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3210C"
+      name="a3210C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3211"
+      name="a3211"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3211B"
+      name="a3211B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3211C"
+      name="a3211C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3212CTOLA"
+      name="a3212CTOLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3301"
+      name="a3301"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3302"
+      name="a3302"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3303"
+      name="a3303"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3304"
+      name="a3304"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3304C"
+      name="a3304C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3305"
+      name="a3305"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Kosovo"/>
+                    <enumeration value="Afghanistan (AF, AFG, 004)"/>
+                    <enumeration value="Iles Aland (AX, ALA, 248)"/>
+                    <enumeration value="Albanie (AL, ALB, 008)"/>
+                    <enumeration value="Algerie (DZ, DZA, 012)"/>
+                    <enumeration value="Samoa Américaines (AS, ASM, 016)"/>
+                    <enumeration value="Andorre (AD, AND, 020)"/>
+                    <enumeration value="Angola (AO, AGO, 024)"/>
+                    <enumeration value="Anguilla (AI, AIA, 660)"/>
+                    <enumeration value="Antarctique (AQ, ATA, 010)"/>
+                    <enumeration value="Antigua-et-Barbuda (AG, ATG, 028)"/>
+                    <enumeration value="Argentine (AR, ARG, 032)"/>
+                    <enumeration value="Armenie (AM, ARM, 051)"/>
+                    <enumeration value="Aruba (AW, ABW, 533)"/>
+                    <enumeration value="Australie (AU, AUS, 036)"/>
+                    <enumeration value="Autriche (AT, AUT, 040)"/>
+                    <enumeration value="Azerbaïdjan (AZ, AZE, 031)"/>
+                    <enumeration value="Bahamas (BS, BHS, 044)"/>
+                    <enumeration value="Bahreïn (BH, BHR, 048)"/>
+                    <enumeration value="Bangladesh (BD, BGD, 050)"/>
+                    <enumeration value="Barbade (BB, BRB, 052)"/>
+                    <enumeration value="Biélorussie (BY, BLR, 112)"/>
+                    <enumeration value="Belgique (BE, BEL, 056)"/>
+                    <enumeration value="Belize (BZ, BLZ, 084)"/>
+                    <enumeration value="Bénin (BJ, BEN, 204)"/>
+                    <enumeration value="Bermudes (BM, BMU, 060)"/>
+                    <enumeration value="Bhoutan (BT, BTN, 064)"/>
+                    <enumeration value="Bolivie (BO, BOL, 068)"/>
+                    <enumeration value="Bonaire, Saint-Eustache et Saba (BQ, BES, 535)"/>
+                    <enumeration value="Bosnie Herzégovine (BA, BIH, 070)"/>
+                    <enumeration value="Botswana (BW, BWA, 072)"/>
+                    <enumeration value="Ile Bouvet (BV, BVT, 074)"/>
+                    <enumeration value="Brésil (BR, BRA, 076)"/>
+                    <enumeration value="Territoire Britanique de l'océan Indien (IO, IOT, 086)"/>
+                    <enumeration value="Iles Vierges Britanniques (VG, VGB, 092)"/>
+                    <enumeration value="Brunei (BN, BRN, 096)"/>
+                    <enumeration value="Bulgarie (BG, BGR, 100)"/>
+                    <enumeration value="Burkina Faso (BF, BFA, 854)"/>
+                    <enumeration value="Burundi (BI, BDI, 108)"/>
+                    <enumeration value="Cap-Vert (CV, CPV, 132)"/>
+                    <enumeration value="Cambodge (KH, KHM, 116)"/>
+                    <enumeration value="Cameroun (CM, CMR, 120)"/>
+                    <enumeration value="Canada (CA, CAN, 124)"/>
+                    <enumeration value="Iles Caïmans (KY, CYM, 136)"/>
+                    <enumeration value="République Centrafricaine (CF, CAF, 140)"/>
+                    <enumeration value="Tchad (TD, TCD, 148)"/>
+                    <enumeration value="Chili (CL, CHL, 152)"/>
+                    <enumeration value="Chine (CN, CHN, 156)"/>
+                    <enumeration value="Hong Kong (HK, HKG, 344)"/>
+                    <enumeration value="Macao (MO, MAC, 446)"/>
+                    <enumeration value="Ile Christmas (CX, CXR, 162)"/>
+                    <enumeration value="Iles Cocos (CC, CCK, 166)"/>
+                    <enumeration value="Colombie (CO, COL, 170)"/>
+                    <enumeration value="Comores (KM, COM, 174)"/>
+                    <enumeration value="Congo (CG, COG, 178)"/>
+                    <enumeration value="Iles Cook (CK, COK, 184)"/>
+                    <enumeration value="Costa Rica (CR, CRI, 188)"/>
+                    <enumeration value="Côte d'Ivoire (CI, CIV, 384)"/>
+                    <enumeration value="Croatie (HR, HRV, 191)"/>
+                    <enumeration value="Cuba (CU, CUB, 192)"/>
+                    <enumeration value="Curaçao (CW, CUW, 531)"/>
+                    <enumeration value="Chypre (CY, CYP, 196)"/>
+                    <enumeration value="Tchéquie (CZ, CZE, 203)"/>
+                    <enumeration value="République Populaire Démocratique de Corée (KP, PRK, 408)"/>
+                    <enumeration value="République Démocratique du Congo (CD, COD, 180)"/>
+                    <enumeration value="Danemark (DK, DNK, 208)"/>
+                    <enumeration value="Djibouti (DJ, DJI, 262)"/>
+                    <enumeration value="Dominique (DM, DMA, 212)"/>
+                    <enumeration value="République Dominicaine (DO, DOM, 214)"/>
+                    <enumeration value="Equateur (EC, ECU, 218)"/>
+                    <enumeration value="Egypte (EG, EGY, 818)"/>
+                    <enumeration value="El Salvador (SV, SLV, 222)"/>
+                    <enumeration value="Guinée Equatoriale (GQ, GNQ, 226)"/>
+                    <enumeration value="Erythrée (ER, ERI, 232)"/>
+                    <enumeration value="Estonie (EE, EST, 233)"/>
+                    <enumeration value="Eswatini (SZ, SWZ, 748)"/>
+                    <enumeration value="Ethiopie (ET, ETH, 231)"/>
+                    <enumeration value="Iles Falkland (FK, FLK, 238)"/>
+                    <enumeration value="Iles Féroé (FO, FRO, 234)"/>
+                    <enumeration value="Fidji (FJ, FJI, 242)"/>
+                    <enumeration value="Finlande (FI, FIN, 246)"/>
+                    <enumeration value="France (FR, FRA, 250)"/>
+                    <enumeration value="Guyane Française (GF, GUF, 254)"/>
+                    <enumeration value="Polynésie Française (PF, PYF, 258)"/>
+                    <enumeration value="Terres Australes et Antarctiques Françaises (TF, ATF, 260)"/>
+                    <enumeration value="Gabon (GA, GAB, 266)"/>
+                    <enumeration value="Gambie (GM, GMB, 270)"/>
+                    <enumeration value="Géorgie (GE, GEO, 268)"/>
+                    <enumeration value="Allemagne (DE, DEU, 276)"/>
+                    <enumeration value="Ghana (GH, GHA, 288)"/>
+                    <enumeration value="Gibraltar (GI, GIB, 292)"/>
+                    <enumeration value="Grèce (GR, GRC, 300)"/>
+                    <enumeration value="Groenland (GL, GRL, 304)"/>
+                    <enumeration value="Grenade (GD, GRD, 308)"/>
+                    <enumeration value="Guadeloupe (GP, GLP, 312)"/>
+                    <enumeration value="Guam (GU, GUM, 316)"/>
+                    <enumeration value="Guatemala (GT, GTM, 320)"/>
+                    <enumeration value="Guernesey (GG, GGY, 831)"/>
+                    <enumeration value="Guinée (GN, GIN, 324)"/>
+                    <enumeration value="Guinée Bissau (GW, GNB, 624)"/>
+                    <enumeration value="Guyane (GY, GUY, 328)"/>
+                    <enumeration value="Haïti (HT, HTI, 332)"/>
+                    <enumeration value="Iles Heard-et-MacDonald (HM, HMD, 334)"/>
+                    <enumeration value="Saint-Siège (VA, VAT, 336)"/>
+                    <enumeration value="Honduras (HN, HND, 340)"/>
+                    <enumeration value="Hongrie (HU, HUN, 348)"/>
+                    <enumeration value="Islande (IS, ISL, 352)"/>
+                    <enumeration value="Inde (IN, IND, 356)"/>
+                    <enumeration value="Indonésie (ID, IDN, 360)"/>
+                    <enumeration value="Iran (IR, IRN, 364)"/>
+                    <enumeration value="Irak (IQ, IRQ, 368)"/>
+                    <enumeration value="Irlande (IE, IRL, 372)"/>
+                    <enumeration value="Ile de Man (IM, IMN, 833)"/>
+                    <enumeration value="Israël (IL, ISR, 376)"/>
+                    <enumeration value="Italie (IT, ITA, 380)"/>
+                    <enumeration value="Jamaïque (JM, JAM, 388)"/>
+                    <enumeration value="Japon (JP, JPN, 392)"/>
+                    <enumeration value="Jersey (JE, JEY, 832)"/>
+                    <enumeration value="Jordanie (JO, JOR, 400)"/>
+                    <enumeration value="Kazakhstan (KZ, KAZ, 398)"/>
+                    <enumeration value="Kenya (KE, KEN, 404)"/>
+                    <enumeration value="Kiribati (KI, KIR, 296)"/>
+                    <enumeration value="Koweit (KW, KWT, 414)"/>
+                    <enumeration value="Kirghizistan (KG, KGZ, 417)"/>
+                    <enumeration value="République Démocratique Populaire Lao (LA, LAO, 418)"/>
+                    <enumeration value="Lettonie (LV, LVA, 428)"/>
+                    <enumeration value="Liban (LB, LBN, 422)"/>
+                    <enumeration value="Lesotho (LS, LSO, 426)"/>
+                    <enumeration value="Liberia (LR, LBR, 430)"/>
+                    <enumeration value="Libye (LY, LBY, 434)"/>
+                    <enumeration value="Liechtenstein (LI, LIE, 438)"/>
+                    <enumeration value="Lithuanie (LT, LTU, 440)"/>
+                    <enumeration value="Luxembourg (LU, LUX, 442)"/>
+                    <enumeration value="Madagascar (MG, MDG, 450)"/>
+                    <enumeration value="Malawi (MW, MWI, 454)"/>
+                    <enumeration value="Malaisie (MY, MYS, 458)"/>
+                    <enumeration value="Maldives (MV, MDV, 462)"/>
+                    <enumeration value="Mali (ML, MLI, 466)"/>
+                    <enumeration value="Malte (MT, MLT, 470)"/>
+                    <enumeration value="Iles Marshall (MH, MHL, 584)"/>
+                    <enumeration value="Martinique (MQ, MTQ, 474)"/>
+                    <enumeration value="Mauritanie (MR, MRT, 478)"/>
+                    <enumeration value="Ile Maurice (MU, MUS, 480)"/>
+                    <enumeration value="Mayotte (YT, MYT, 175)"/>
+                    <enumeration value="Mexique (MX, MEX, 484)"/>
+                    <enumeration value="Etats Fédérs de Micronésie (FM, FSM, 583)"/>
+                    <enumeration value="Monaco (MC, MCO, 492)"/>
+                    <enumeration value="Mongolie (MN, MNG, 496)"/>
+                    <enumeration value="Montenegro (ME, MNE, 499)"/>
+                    <enumeration value="Montserrat (MS, MSR, 500)"/>
+                    <enumeration value="Maroc (MA, MAR, 504)"/>
+                    <enumeration value="Mozambique (MZ, MOZ, 508)"/>
+                    <enumeration value="Myanmar (MM, MMR, 104)"/>
+                    <enumeration value="Namibie (NA, NAM, 516)"/>
+                    <enumeration value="Nauru (NR, NRU, 520)"/>
+                    <enumeration value="Nepal (NP, NPL, 524)"/>
+                    <enumeration value="Pays-Bas (NL, NLD, 528)"/>
+                    <enumeration value="Nouvelle Calédonie (NC, NCL, 540)"/>
+                    <enumeration value="Nouvelle Zélande (NZ, NZL, 554)"/>
+                    <enumeration value="Nicaragua (NI, NIC, 558)"/>
+                    <enumeration value="Niger (NE, NER, 562)"/>
+                    <enumeration value="Nigeria (NG, NGA, 566)"/>
+                    <enumeration value="Niue (NU, NIU, 570)"/>
+                    <enumeration value="Ile de Norfolk (NF, NFK, 574)"/>
+                    <enumeration value="Macédoine du Nord (MK, MKD, 807)"/>
+                    <enumeration value="Iles Mariannes du Nord (MP, MNP, 580)"/>
+                    <enumeration value="Norvège (NO, NOR, 578)"/>
+                    <enumeration value="Oman (OM, OMN, 512)"/>
+                    <enumeration value="Pakistan (PK, PAK, 586)"/>
+                    <enumeration value="Palau (PW, PLW, 585)"/>
+                    <enumeration value="Panama (PA, PAN, 591)"/>
+                    <enumeration value="Papouasie Nouvelle Guinée (PG, PNG, 598)"/>
+                    <enumeration value="Paraguay (PY, PRY, 600)"/>
+                    <enumeration value="Pérou (PE, PER, 604)"/>
+                    <enumeration value="Philippines (PH, PHL, 608)"/>
+                    <enumeration value="Iles Pitcairn (PN, PCN, 612)"/>
+                    <enumeration value="Pologne (PL, POL, 616)"/>
+                    <enumeration value="Portugal (PT, PRT, 620)"/>
+                    <enumeration value="Porto Rico (PR, PRI, 630)"/>
+                    <enumeration value="Qatar (QA, QAT, 634)"/>
+                    <enumeration value="République de Corée (KR, KOR, 410)"/>
+                    <enumeration value="République de Moldavie (MD, MDA, 498)"/>
+                    <enumeration value="Réunion (RE, REU, 638)"/>
+                    <enumeration value="Roumanie (RO, ROU, 642)"/>
+                    <enumeration value="Fédération de Russie (RU, RUS, 643)"/>
+                    <enumeration value="Rwanda (RW, RWA, 646)"/>
+                    <enumeration value="Saint-Barthélemy (BL, BLM, 652)"/>
+                    <enumeration value="Sainte-Hélène, Ascension et Tristan da Cunha (SH, SHN, 654)"/>
+                    <enumeration value="Saint-Christophe-et-Niévès (KN, KNA, 659)"/>
+                    <enumeration value="Sainte-Lucie (LC, LCA, 662)"/>
+                    <enumeration value="Saint-Martin (MF, MAF, 663)"/>
+                    <enumeration value="Saint-Pierre-et-Miquelon (PM, SPM, 666)"/>
+                    <enumeration value="Saint-Vincent et les Grenadines (VC, VCT, 670)"/>
+                    <enumeration value="Samoa (WS, WSM, 882)"/>
+                    <enumeration value="Saint Marin (SM, SMR, 674)"/>
+                    <enumeration value="Sao Tomé-et-Principe (ST, STP, 678)"/>
+                    <enumeration value="Arabie Saoudite (SA, SAU, 682)"/>
+                    <enumeration value="Sénégal (SN, SEN, 686)"/>
+                    <enumeration value="Serbie (RS, SRB, 688)"/>
+                    <enumeration value="Seychelles (SC, SYC, 690)"/>
+                    <enumeration value="Sierra Leone (SL, SLE, 694)"/>
+                    <enumeration value="Singapour (SG, SGP, 702)"/>
+                    <enumeration value="Saint-Martin (Pays-Bas) (SX, SXM, 534)"/>
+                    <enumeration value="Slovakie (SK, SVK, 703)"/>
+                    <enumeration value="Slovenie (SI, SVN, 705)"/>
+                    <enumeration value="Iles Salomon (SB, SLB, 090)"/>
+                    <enumeration value="Somalie (SO, SOM, 706)"/>
+                    <enumeration value="Afrique du Sud (ZA, ZAF, 710)"/>
+                    <enumeration value="Géorgie du Sud-et-les-iles Sandwich du Sud (GS, SGS, 239)"/>
+                    <enumeration value="Soudan du Sud (SS, SSD, 728)"/>
+                    <enumeration value="Espagne (ES, ESP, 724)"/>
+                    <enumeration value="Sri Lanka (LK, LKA, 144)"/>
+                    <enumeration value="Etat de Palestine (PS, PSE, 275)"/>
+                    <enumeration value="Soudan (SD, SDN, 729)"/>
+                    <enumeration value="Suriname (SR, SUR, 740)"/>
+                    <enumeration value="Svalbard et Jan Mayen (SJ, SJM, 744)"/>
+                    <enumeration value="Suède (SE, SWE, 752)"/>
+                    <enumeration value="Suisse (CH, CHE, 756)"/>
+                    <enumeration value="République Arabe Syrienne (SY, SYR, 760)"/>
+                    <enumeration value="Taïwan (TW, TWN, 158)"/>
+                    <enumeration value="Tadjikistan (TJ, TJK, 762)"/>
+                    <enumeration value="Thaïlande (TH, THA, 764)"/>
+                    <enumeration value="Timor (TL, TLS, 626)"/>
+                    <enumeration value="Togo (TG, TGO, 768)"/>
+                    <enumeration value="Tokelau (TK, TKL, 772)"/>
+                    <enumeration value="Tonga (TO, TON, 776)"/>
+                    <enumeration value="Trinité-et-Tobago (TT, TTO, 780)"/>
+                    <enumeration value="Tunisie (TN, TUN, 788)"/>
+                    <enumeration value="Turquie (TR, TUR, 792)"/>
+                    <enumeration value="Turkménistan (TM, TKM, 795)"/>
+                    <enumeration value="Iles Turques-et-Caiques (TC, TCA, 796)"/>
+                    <enumeration value="Tuvalu (TV, TUV, 798)"/>
+                    <enumeration value="Ouganda (UG, UGA, 800)"/>
+                    <enumeration value="Ukraine (UA, UKR, 804)"/>
+                    <enumeration value="Emirats Arabes Unis (AE, ARE, 784)"/>
+                    <enumeration value="Royaume-Uni de Grande-Bretagne et d'Irlande du Nord (GB, GBR, 826)"/>
+                    <enumeration value="République unie de Tanzanie (TZ, TZA, 834)"/>
+                    <enumeration value="Iles mineures Eloignées des Etats-Unis (UM, UMI, 581)"/>
+                    <enumeration value="Etats-Unis d'Amerique (US, USA, 840)"/>
+                    <enumeration value="Iles Vierges des Etats-Unis (VI, VIR, 850)"/>
+                    <enumeration value="Uruguay (UY, URY, 858)"/>
+                    <enumeration value="Ouzbékistan (UZ, UZB, 860)"/>
+                    <enumeration value="Vanuatu (VU, VUT, 548)"/>
+                    <enumeration value="Vénézuela (VE, VEN, 862)"/>
+                    <enumeration value="Vietnam (VN, VNM, 704)"/>
+                    <enumeration value="Iles Wallis-et-Futuna (WF, WLF, 876)"/>
+                    <enumeration value="Sahara Occidental (EH, ESH, 732)"/>
+                    <enumeration value="Yémen (YE, YEM, 887)"/>
+                    <enumeration value="Zambie (ZM, ZMB, 894)"/>
+                    <enumeration value="Zimbabwe (ZW, ZWE, 716)"/>
+                    <enumeration value="Inconnu"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3306"
+      name="a3306"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3306A"
+      name="a3306A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:integerItemType">
+                    <maxInclusive value="4"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3306B"
+      name="a3306B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3307"
+      name="a3307"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3308"
+      name="a3308"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3401"
+      name="a3401"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3402"
+      name="a3402"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3403"
+      name="a3403"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3414"
+      name="a3414"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3415"
+      name="a3415"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3416"
+      name="a3416"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3501B"
+      name="a3501B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3501C"
+      name="a3501C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3701"
+      name="a3701"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3701A"
+      name="a3701A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_a3802"
+      name="a3802"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3803"
+      name="a3803"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a3804"
+      name="a3804"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_a381"
+      name="a381"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aACTIVE"
+      name="aACTIVE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aACTIVEPS"
+      name="aACTIVEPS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aACTIVERENTALS"
+      name="aACTIVERENTALS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aB1801B"
+      name="aB1801B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aB3206"
+      name="aB3206"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aB3207"
+      name="aB3207"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1101Z"
+      name="aC1101Z"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:decimalItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1102"
+      name="aC1102"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:decimalItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1102A"
+      name="aC1102A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1106"
+      name="aC1106"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11101"
+      name="aC11101"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11102"
+      name="aC11102"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11103"
+      name="aC11103"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11104"
+      name="aC11104"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11105"
+      name="aC11105"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11201"
+      name="aC11201"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1125A"
+      name="aC1125A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11301"
+      name="aC11301"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11302"
+      name="aC11302"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC11303"
+      name="aC11303"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC11304"
+      name="aC11304"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11305"
+      name="aC11305"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11306"
+      name="aC11306"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11307"
+      name="aC11307"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC114"
+      name="aC114"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11401"
+      name="aC11401"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11402"
+      name="aC11402"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11403"
+      name="aC11403"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC11501B"
+      name="aC11501B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11502"
+      name="aC11502"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC11504"
+      name="aC11504"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC11508"
+      name="aC11508"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC11601"
+      name="aC11601"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC116A"
+      name="aC116A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1201"
+      name="aC1201"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1202"
+      name="aC1202"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1203"
+      name="aC1203"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1204"
+      name="aC1204"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1205"
+      name="aC1205"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1206"
+      name="aC1206"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:dateItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1207"
+      name="aC1207"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1208"
+      name="aC1208"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Par des consultants externes"/>
+                    <enumeration value="Par un autre membre du groupe"/>
+                    <enumeration value="Par l&amp;#39;entit&amp;#233;"/>
+                    <enumeration value="Combinaison de soi, membre ou externe"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1209"
+      name="aC1209"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1209B"
+      name="aC1209B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1209C"
+      name="aC1209C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC12236"
+      name="aC12236"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC12237"
+      name="aC12237"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC12333"
+      name="aC12333"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1301"
+      name="aC1301"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1302"
+      name="aC1302"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1303"
+      name="aC1303"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1304"
+      name="aC1304"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1401"
+      name="aC1401"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1402"
+      name="aC1402"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1403"
+      name="aC1403"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1501"
+      name="aC1501"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1503B"
+      name="aC1503B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1506"
+      name="aC1506"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1518A"
+      name="aC1518A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1601"
+      name="aC1601"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1602"
+      name="aC1602"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1608"
+      name="aC1608"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1609"
+      name="aC1609"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1610"
+      name="aC1610"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1611"
+      name="aC1611"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1612"
+      name="aC1612"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1612A"
+      name="aC1612A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1614"
+      name="aC1614"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1615"
+      name="aC1615"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1616A"
+      name="aC1616A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="&amp;gt; Annuel"/>
+                    <enumeration value="&amp;lt; Annuel"/>
+                    <enumeration value="&amp;lt; Mensuel"/>
+                    <enumeration value="&amp;lt; Hebdomadaire"/>
+                    <enumeration value="&amp;#201;v&amp;#233;nement d&amp;#233;clencheur"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1616B"
+      name="aC1616B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="&amp;gt; Annuel"/>
+                    <enumeration value="&amp;lt; Annuel"/>
+                    <enumeration value="&amp;lt; Mensuel"/>
+                    <enumeration value="&amp;lt; Hebdomadaire"/>
+                    <enumeration value="&amp;#201;v&amp;#233;nement d&amp;#233;clencheur"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1616C"
+      name="aC1616C"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1617"
+      name="aC1617"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1618"
+      name="aC1618"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1619"
+      name="aC1619"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1620"
+      name="aC1620"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1621"
+      name="aC1621"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1622A"
+      name="aC1622A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1622B"
+      name="aC1622B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1622F"
+      name="aC1622F"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1625"
+      name="aC1625"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1626"
+      name="aC1626"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1627"
+      name="aC1627"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1629"
+      name="aC1629"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1630"
+      name="aC1630"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1631"
+      name="aC1631"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1633"
+      name="aC1633"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1634"
+      name="aC1634"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1635"
+      name="aC1635"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1635A"
+      name="aC1635A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1636"
+      name="aC1636"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1637"
+      name="aC1637"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1638A"
+      name="aC1638A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1639A"
+      name="aC1639A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1640A"
+      name="aC1640A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1641A"
+      name="aC1641A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1642A"
+      name="aC1642A"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC168"
+      name="aC168"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1701"
+      name="aC1701"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1702"
+      name="aC1702"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1703"
+      name="aC1703"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:pureItemType">
+                    <maxInclusive value="100"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC171"
+      name="aC171"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1801"
+      name="aC1801"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1802"
+      name="aC1802"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1806"
+      name="aC1806"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1807"
+      name="aC1807"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1811"
+      name="aC1811"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1812"
+      name="aC1812"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1813"
+      name="aC1813"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aC1814W"
+      name="aC1814W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aC1904"
+      name="aC1904"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Jamais"/>
+                    <enumeration value="Plus de 5 ans"/>
+                    <enumeration value="Entre quatre et cinq ans"/>
+                    <enumeration value="Entre  trois et quatre ans"/>
+                    <enumeration value="Entre deux et trois ans"/>
+                    <enumeration value="Entre un et deux ans"/>
+                    <enumeration value="Au cours des 12 derniers mois"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aG24010B"
+      name="aG24010B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aG24010W"
+      name="aG24010W"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aINCOMPLETE"
+      name="aINCOMPLETE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR117"
+      name="aIR117"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR1210"
+      name="aIR1210"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR129"
+      name="aIR129"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aIR2313"
+      name="aIR2313"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR2316"
+      name="aIR2316"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR233"
+      name="aIR233"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR233B"
+      name="aIR233B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR233S"
+      name="aIR233S"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR234"
+      name="aIR234"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR235B_1"
+      name="aIR235B_1"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR235B_2"
+      name="aIR235B_2"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR235S"
+      name="aIR235S"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR236"
+      name="aIR236"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR237B"
+      name="aIR237B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR238B"
+      name="aIR238B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR2391"
+      name="aIR2391"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aIR2392"
+      name="aIR2392"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR2393"
+      name="aIR2393"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR239B"
+      name="aIR239B"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:monetaryItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aIR328"
+      name="aIR328"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="Oui"/>
+                    <enumeration value="Non"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aIR33LF"
+      name="aIR33LF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      xbrli:periodType="instant">
+        <complexType>
+            <simpleContent>
+                <restriction base="xbrli:stringItemType">
+                    <enumeration value="01. Associations monégasques"/>
+                    <enumeration value="02. Autres sociétés civiles"/>
+                    <enumeration value="04. Autres arrangements juridiques"/>
+                    <enumeration value="05. Domaine Privé de l'Etat Monégasque"/>
+                    <enumeration value="06. Entreprise individuelle"/>
+                    <enumeration value="07. Fondation monégasque"/>
+                    <enumeration value="08. Groupement d'Intérêt économiques"/>
+                    <enumeration value="09. Sociétés en nom collectif"/>
+                    <enumeration value="10. Sociétés civiles immobilières"/>
+                    <enumeration value="11. Sociétés civiles particulières"/>
+                    <enumeration value="12. Sociétés en commandite simple"/>
+                    <enumeration value="13. Sociétés à responsabilité limitée"/>
+                    <enumeration value="14. Sociétés anonymes monégasques"/>
+                    <enumeration value="15. Sociétés en commandite par actions"/>
+                    <enumeration value="16. Trusts"/>
+                    <enumeration value="17. Inconnu (LE)"/>
+                </restriction>
+            </simpleContent>
+        </complexType>
+    </element>
+    <element
+      abstract="false"
+      id="strix_aMLES"
+      name="aMLES"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:integerItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aS1"
+      name="aS1"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="false"
+      id="strix_aS2"
+      name="aS2"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="xbrli:stringItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAD"
+      name="sdlAD"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAE"
+      name="sdlAE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAF"
+      name="sdlAF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAG"
+      name="sdlAG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAI"
+      name="sdlAI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAL"
+      name="sdlAL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAM"
+      name="sdlAM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAO"
+      name="sdlAO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAQ"
+      name="sdlAQ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAR"
+      name="sdlAR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAS"
+      name="sdlAS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAT"
+      name="sdlAT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAU"
+      name="sdlAU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAW"
+      name="sdlAW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAX"
+      name="sdlAX"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlAZ"
+      name="sdlAZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBA"
+      name="sdlBA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBB"
+      name="sdlBB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBD"
+      name="sdlBD"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBE"
+      name="sdlBE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBF"
+      name="sdlBF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBG"
+      name="sdlBG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBH"
+      name="sdlBH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBI"
+      name="sdlBI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBJ"
+      name="sdlBJ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBL"
+      name="sdlBL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBM"
+      name="sdlBM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBN"
+      name="sdlBN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBO"
+      name="sdlBO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBQ"
+      name="sdlBQ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBR"
+      name="sdlBR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBS"
+      name="sdlBS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBT"
+      name="sdlBT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBV"
+      name="sdlBV"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBW"
+      name="sdlBW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBY"
+      name="sdlBY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlBZ"
+      name="sdlBZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCA"
+      name="sdlCA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCC"
+      name="sdlCC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCD"
+      name="sdlCD"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCF"
+      name="sdlCF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCG"
+      name="sdlCG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCH"
+      name="sdlCH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCI"
+      name="sdlCI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCK"
+      name="sdlCK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCL"
+      name="sdlCL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCM"
+      name="sdlCM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCN"
+      name="sdlCN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCO"
+      name="sdlCO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCR"
+      name="sdlCR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCU"
+      name="sdlCU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCV"
+      name="sdlCV"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCW"
+      name="sdlCW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCX"
+      name="sdlCX"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCY"
+      name="sdlCY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlCZ"
+      name="sdlCZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlDE"
+      name="sdlDE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlDJ"
+      name="sdlDJ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlDK"
+      name="sdlDK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlDM"
+      name="sdlDM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlDO"
+      name="sdlDO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlDP"
+      name="sdlDP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlDZ"
+      name="sdlDZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlEC"
+      name="sdlEC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlEE"
+      name="sdlEE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlEG"
+      name="sdlEG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlEH"
+      name="sdlEH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlER"
+      name="sdlER"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlES"
+      name="sdlES"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlET"
+      name="sdlET"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlFI"
+      name="sdlFI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlFJ"
+      name="sdlFJ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlFK"
+      name="sdlFK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlFM"
+      name="sdlFM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlFO"
+      name="sdlFO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlFR"
+      name="sdlFR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGA"
+      name="sdlGA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGB"
+      name="sdlGB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGD"
+      name="sdlGD"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGE"
+      name="sdlGE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGF"
+      name="sdlGF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGG"
+      name="sdlGG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGH"
+      name="sdlGH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGI"
+      name="sdlGI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGIE"
+      name="sdlGIE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGL"
+      name="sdlGL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGM"
+      name="sdlGM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGN"
+      name="sdlGN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGP"
+      name="sdlGP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGQ"
+      name="sdlGQ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGR"
+      name="sdlGR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGS"
+      name="sdlGS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGT"
+      name="sdlGT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGU"
+      name="sdlGU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGW"
+      name="sdlGW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlGY"
+      name="sdlGY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlHK"
+      name="sdlHK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlHM"
+      name="sdlHM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlHN"
+      name="sdlHN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlHR"
+      name="sdlHR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlHT"
+      name="sdlHT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlHU"
+      name="sdlHU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlID"
+      name="sdlID"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIE"
+      name="sdlIE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIL"
+      name="sdlIL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIM"
+      name="sdlIM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIN"
+      name="sdlIN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIO"
+      name="sdlIO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIQ"
+      name="sdlIQ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIR"
+      name="sdlIR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIS"
+      name="sdlIS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlIT"
+      name="sdlIT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlJE"
+      name="sdlJE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlJM"
+      name="sdlJM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlJO"
+      name="sdlJO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlJP"
+      name="sdlJP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKE"
+      name="sdlKE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKG"
+      name="sdlKG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKH"
+      name="sdlKH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKI"
+      name="sdlKI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKM"
+      name="sdlKM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKN"
+      name="sdlKN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKP"
+      name="sdlKP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKR"
+      name="sdlKR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKW"
+      name="sdlKW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKY"
+      name="sdlKY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlKZ"
+      name="sdlKZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLA"
+      name="sdlLA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLA1"
+      name="sdlLA1"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLA2"
+      name="sdlLA2"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLB"
+      name="sdlLB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLC"
+      name="sdlLC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLI"
+      name="sdlLI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLK"
+      name="sdlLK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLR"
+      name="sdlLR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLS"
+      name="sdlLS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLT"
+      name="sdlLT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLU"
+      name="sdlLU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLV"
+      name="sdlLV"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlLY"
+      name="sdlLY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMA"
+      name="sdlMA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMAENTITÉS"
+      name="sdlMAENTITÉS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMC"
+      name="sdlMC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMD"
+      name="sdlMD"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlME"
+      name="sdlME"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMF"
+      name="sdlMF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMFENTITÉS"
+      name="sdlMFENTITÉS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMG"
+      name="sdlMG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMH"
+      name="sdlMH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMK"
+      name="sdlMK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlML"
+      name="sdlML"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMM"
+      name="sdlMM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMN"
+      name="sdlMN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMO"
+      name="sdlMO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMP"
+      name="sdlMP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMQ"
+      name="sdlMQ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMR"
+      name="sdlMR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMS"
+      name="sdlMS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMT"
+      name="sdlMT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMU"
+      name="sdlMU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMV"
+      name="sdlMV"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMW"
+      name="sdlMW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMX"
+      name="sdlMX"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMY"
+      name="sdlMY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlMZ"
+      name="sdlMZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNA"
+      name="sdlNA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNC"
+      name="sdlNC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNE"
+      name="sdlNE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNF"
+      name="sdlNF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNG"
+      name="sdlNG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNI"
+      name="sdlNI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNL"
+      name="sdlNL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNO"
+      name="sdlNO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNP"
+      name="sdlNP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNR"
+      name="sdlNR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNU"
+      name="sdlNU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlNZ"
+      name="sdlNZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlOM"
+      name="sdlOM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPA"
+      name="sdlPA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPE"
+      name="sdlPE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPF"
+      name="sdlPF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPG"
+      name="sdlPG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPH"
+      name="sdlPH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPK"
+      name="sdlPK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPL"
+      name="sdlPL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPM"
+      name="sdlPM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPN"
+      name="sdlPN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPR"
+      name="sdlPR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPS"
+      name="sdlPS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPT"
+      name="sdlPT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPW"
+      name="sdlPW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlPY"
+      name="sdlPY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlQA"
+      name="sdlQA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlRE"
+      name="sdlRE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlRO"
+      name="sdlRO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlRS"
+      name="sdlRS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlRU"
+      name="sdlRU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlRW"
+      name="sdlRW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSA"
+      name="sdlSA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSAM"
+      name="sdlSAM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSARL"
+      name="sdlSARL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSB"
+      name="sdlSB"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSC"
+      name="sdlSC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSCA"
+      name="sdlSCA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSCAUTRE"
+      name="sdlSCAUTRE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSCI"
+      name="sdlSCI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSCP"
+      name="sdlSCP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSCS"
+      name="sdlSCS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSD"
+      name="sdlSD"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSE"
+      name="sdlSE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSG"
+      name="sdlSG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSH"
+      name="sdlSH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSI"
+      name="sdlSI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSJ"
+      name="sdlSJ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSK"
+      name="sdlSK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSL"
+      name="sdlSL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSM"
+      name="sdlSM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSN"
+      name="sdlSN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSNC"
+      name="sdlSNC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSO"
+      name="sdlSO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSP"
+      name="sdlSP"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSR"
+      name="sdlSR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSS"
+      name="sdlSS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlST"
+      name="sdlST"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSV"
+      name="sdlSV"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSX"
+      name="sdlSX"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSY"
+      name="sdlSY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlSZ"
+      name="sdlSZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTC"
+      name="sdlTC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTD"
+      name="sdlTD"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTF"
+      name="sdlTF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTG"
+      name="sdlTG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTH"
+      name="sdlTH"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTJ"
+      name="sdlTJ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTK"
+      name="sdlTK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTL"
+      name="sdlTL"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTM"
+      name="sdlTM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTN"
+      name="sdlTN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTO"
+      name="sdlTO"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTR"
+      name="sdlTR"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTT"
+      name="sdlTT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTV"
+      name="sdlTV"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTW"
+      name="sdlTW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlTZ"
+      name="sdlTZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlUA"
+      name="sdlUA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlUG"
+      name="sdlUG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlUM"
+      name="sdlUM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlUNKNOWN"
+      name="sdlUNKNOWN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlUNKNOWNLE"
+      name="sdlUNKNOWNLE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlUS"
+      name="sdlUS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlUY"
+      name="sdlUY"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlUZ"
+      name="sdlUZ"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlVA"
+      name="sdlVA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlVC"
+      name="sdlVC"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlVE"
+      name="sdlVE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlVG"
+      name="sdlVG"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlVI"
+      name="sdlVI"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlVN"
+      name="sdlVN"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlVU"
+      name="sdlVU"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlWF"
+      name="sdlWF"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlWS"
+      name="sdlWS"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlXK"
+      name="sdlXK"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlYE"
+      name="sdlYE"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlYT"
+      name="sdlYT"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlZA"
+      name="sdlZA"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlZM"
+      name="sdlZM"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+    <element
+      abstract="true"
+      id="strix_sdlZW"
+      name="sdlZW"
+      nillable="true"
+      substitutionGroup="xbrli:item"
+      type="nonnum:domainItemType"
+      xbrli:periodType="instant"/>
+</schema>

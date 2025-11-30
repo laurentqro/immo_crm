@@ -1,0 +1,4437 @@
+namespace strix = Real_Estate_AML_CFT_survey_2025.xsd
+
+output a1101-a1102-a1103-a1104-a1501-a1802TOLA-Sum
+
+$code1 = 'a1101'
+$code2 = 'a1102'
+$code3 = 'a1103'
+$code4 = 'a1104'
+$code5 = 'a1501'
+$code6 = 'a1802TOLA'
+
+$a1 = { @concept.local-name = $code1}
+$a2 = list({ covered @concept.local-name = $code2})
+$a3 = list({ covered @concept.local-name = $code3})
+$a4 = list({ covered @concept.local-name = $code4})
+$a5 = list({ covered @concept.local-name = $code5})
+$a6 = list({ covered @concept.local-name = $code6})
+$a7 = sum($a2) + sum($a3) + sum($a4) + sum($a5) + sum($a6)
+
+$a1 >= $a7
+message{
+if $a1 >= $a7
+$code1 + " Sum Valid"
+else
+"Invalid! Sum of children (" + $code2 + ", " + $code3 + ", " + $code4 + ", " + $code5 + ", " + $code6 + ") is more than the parent (" + $code1 + ")."
+}
+
+output a1105B-a1403B-a1403R-a1502B-a1806TOLA-Sum
+
+$code1 = 'a1105B'
+$code2 = 'a1403B'
+$code3 = 'a1403R'
+$code4 = 'a1502B'
+$code5 = 'a1806TOLA'
+
+$a1 = { @concept.local-name = $code1}
+$a2 = list({ covered @concept.local-name = $code2})
+$a3 = list({ covered @concept.local-name = $code3})
+$a4 = list({ covered @concept.local-name = $code4})
+$a5 = list({ covered @concept.local-name = $code5})
+$a6 = sum($a2) + sum($a3) + sum($a4) + sum($a5)
+
+$a1 >= $a6
+message{
+if $a1 >= $a6
+$code1 + " Sum Valid"
+else
+"Invalid! Sum of children (" + $code2 + ", " + $code3 + ", " + $code4 + ", " + $code5 + ") is more than the parent (" + $code1 + ")."
+}
+
+output a1106B-a1404B-a1503B-a1807TOLA-Sum
+
+$code1 = 'a1106B'
+$code2 = 'a1404B'
+$code3 = 'a1503B'
+$code4 = 'a1807TOLA'
+
+$a1 = { @concept.local-name = $code1}
+$a2 = list({ covered @concept.local-name = $code2})
+$a3 = list({ covered @concept.local-name = $code3})
+$a4 = list({ covered @concept.local-name = $code4})
+$a5 = sum($a2) + sum($a3) + sum($a4)
+
+$a1 >= $a5
+message{
+if $a1 >= $a5
+$code1 + " Sum Valid"
+else
+"Invalid! Sum of children (" + $code2 + ", " + $code3 + ", " + $code4 + ") is more than the parent (" + $code1 + ")."
+}
+
+output a1105W-a2105W-a2102W-a2108W-Sum
+
+$code1 = 'a1105W'
+$code2 = 'a2105W'
+$code3 = 'a2102W'
+$code4 = 'a2108W'
+
+$a1 = { @concept.local-name = $code1}
+$a2 = list({ covered @concept.local-name = $code2})
+$a3 = list({ covered @concept.local-name = $code3})
+$a4 = list({ covered @concept.local-name = $code4})
+$a5 = sum($a2) + sum($a3) + sum($a4)
+
+$a1 >= $a5
+message{
+if $a1 >= $a5
+$code1 + " Sum Valid"
+else
+"Invalid! Sum of children (" + $code2 + ", " + $code3 + ", " + $code4 + ") is more than the parent (" + $code1 + ")."
+}
+
+output a1106W-a2105BW-a2102BW-a2109W-Sum
+
+$code1 = 'a1106W'
+$code2 = 'a2105BW'
+$code3 = 'a2102BW'
+$code4 = 'a2109W'
+
+$a1 = { @concept.local-name = $code1}
+$a2 = list({ covered @concept.local-name = $code2})
+$a3 = list({ covered @concept.local-name = $code3})
+$a4 = list({ covered @concept.local-name = $code4})
+$a5 = sum($a2) + sum($a3) + sum($a4)
+
+$a1 >= $a5
+message{
+if $a1 >= $a5
+$code1 + " Sum Valid"
+else
+"Invalid! Sum of children (" + $code2 + ", " + $code3 + ", " + $code4 + ") is more than the parent (" + $code1 + ")."
+}
+
+output a120425O-a1210O-a1207O-Sum
+
+$code1 = 'a120425O'
+$code2 = 'a1210O'
+$code3 = 'a1207O'
+
+$a1 = { @concept.local-name = $code1}
+$a2 = { @concept.local-name = $code2}
+$a3 = { @concept.local-name = $code3}
+$a4 = $a2 + $a3
+
+$a1 >= $a4
+message{
+if $a1 >= $a4
+$code1 + " Sum Valid for " + $a1.dimension(strix:CountryDimension).string
+else
+"Invalid! Sum of children (" + $code2 + ", " + $code3 + ") is more than the parent (" + $code1 + ") for " + $a1.dimension(strix:CountryDimension).string
+}
+
+output a11206B-a112012B-Sum
+
+$code1 = 'a11206B'
+$code2 = 'a112012B'
+
+$a1 = { @concept.local-name = $code1}
+$a2 = { @concept.local-name = $code2}
+$a3 = $a2
+
+$a1 >= $a3
+message{
+if $a1 >= $a3
+$code1 + " Sum Valid for " + $a1.dimension(strix:CountryDimension).string
+else
+"Invalid! Sum of children (" + $code2 + ") is more than the parent (" + $code1 + ") for " + $a1.dimension(strix:CountryDimension).string
+}
+
+output a381-a3803-a3802-Sum
+
+$code1 = 'a381'
+$code2 = 'a3803'
+$code3 = 'a3802'
+
+$a1 = { @concept.local-name = $code1}
+$a2 = list({ covered @concept.local-name = $code2})
+$a3 = list({ covered @concept.local-name = $code3})
+$a4 = sum($a2) + sum($a3)
+
+$a1 >= $a4
+message{
+if $a1 >= $a4
+$code1 + " Sum Valid"
+else
+"Invalid! Sum of children (" + $code2 + ", " + $code3 + ") is more than the parent (" + $code1 + ")."
+}
+
+output a120425O-a1210O-Dimension
+
+$code1 = 'a120425O'
+$code2 = 'a1210O'
+$a1 = list({covered @concept.local-name = $code1}.dimension(strix:CountryDimension))
+$a2 = {covered @concept.local-name = $code2}.dimension(strix:CountryDimension)
+
+$a2 in $a1
+message {
+if $a2 in $a1 and (not $a2 == none)
+"Child's (" + $code2 + ") country dimension valid."
+else 
+"Invalid! Country in child (" + $code2 + ") not in parent (" + $code1 + "): " + $a2.string
+}
+
+output a120425O-a1207O-Dimension
+
+$code1 = 'a120425O'
+$code2 = 'a1207O'
+$a1 = list({covered @concept.local-name = $code1}.dimension(strix:CountryDimension))
+$a2 = {covered @concept.local-name = $code2}.dimension(strix:CountryDimension)
+
+$a2 in $a1
+message {
+if $a2 in $a1 and (not $a2 == none)
+"Child's (" + $code2 + ") country dimension valid."
+else 
+"Invalid! Country in child (" + $code2 + ") not in parent (" + $code1 + "): " + $a2.string
+}
+
+output a11206B-a112012B-Dimension
+
+$code1 = 'a11206B'
+$code2 = 'a112012B'
+$a1 = list({covered @concept.local-name = $code1}.dimension(strix:CountryDimension))
+$a2 = {covered @concept.local-name = $code2}.dimension(strix:CountryDimension)
+
+$a2 in $a1
+message {
+if $a2 in $a1 and (not $a2 == none)
+"Child's (" + $code2 + ") country dimension valid."
+else 
+"Invalid! Country in child (" + $code2 + ") not in parent (" + $code1 + "): " + $a2.string
+}
+
+output aACTIVE-aACTIVEPS
+
+$code1 = 'aACTIVE'
+$code2 = 'aACTIVEPS'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-aACTIVERENTALS
+
+$code1 = 'aACTIVE'
+$code2 = 'aACTIVERENTALS'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1101
+
+$code1 = 'aACTIVE'
+$code2 = 'a1101'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1105B
+
+$code1 = 'aACTIVE'
+$code2 = 'a1105B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-a1106B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'a1106B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVERENTALS-a1106BRENTALS
+
+$code1 = 'aACTIVERENTALS'
+$code2 = 'a1106BRENTALS'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1105W
+
+$code1 = 'aACTIVE'
+$code2 = 'a1105W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1106W
+
+$code1 = 'aACTIVE'
+$code2 = 'a1106W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1204S
+
+$code1 = 'aACTIVE'
+$code2 = 'a1204S'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1204S-a1204S1
+
+$code1 = 'a1204S'
+$code2 = 'a1204S1'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1204S-a1202O
+
+$code1 = 'a1204S'
+$code2 = 'a1202O'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1204S-a1202OB
+
+$code1 = 'a1204S'
+$code2 = 'a1202OB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1204O
+
+$code1 = 'aACTIVE'
+$code2 = 'a1204O'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1204O-a120425O
+
+$code1 = 'a1204O'
+$code2 = 'a120425O'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1204S-a120425O
+
+$code1 = 'a1204S'
+$code2 = 'a120425O'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1204O-a1203D
+
+$code1 = 'a1204O'
+$code2 = 'a1203D'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1203D-a1207O
+
+$code1 = 'a1203D'
+$code2 = 'a1207O'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1203D-a1210O
+
+$code1 = 'a1203D'
+$code2 = 'a1210O'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a11201BCD
+
+$code1 = 'aACTIVE'
+$code2 = 'a11201BCD'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a11201BCDU
+
+$code1 = 'aACTIVE'
+$code2 = 'a11201BCDU'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1801
+
+$code1 = 'aACTIVE'
+$code2 = 'a1801'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a13601
+
+$code1 = 'aACTIVE'
+$code2 = 'a13601'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1102
+
+$code1 = 'aACTIVE'
+$code2 = 'a1102'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1103
+
+$code1 = 'aACTIVE'
+$code2 = 'a1103'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1104
+
+$code1 = 'aACTIVE'
+$code2 = 'a1104'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-a1401
+
+$code1 = 'aACTIVEPS'
+$code2 = 'a1401'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-a1403B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'a1403B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-a1404B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'a1404B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVERENTALS-a1401R
+
+$code1 = 'aACTIVERENTALS'
+$code2 = 'a1401R'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVERENTALS-a1403R
+
+$code1 = 'aACTIVERENTALS'
+$code2 = 'a1403R'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR129
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR129'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aIR129-aIR1210
+
+$code1 = 'aIR129'
+$code2 = 'aIR1210'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1501
+
+$code1 = 'aACTIVE'
+$code2 = 'a1501'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-a1502B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'a1502B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-a1503B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'a1503B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a155
+
+$code1 = 'aACTIVE'
+$code2 = 'a155'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a155-aMLES
+
+$code1 = 'a155'
+$code2 = 'aMLES'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11201BCD-a11206B
+
+$code1 = 'a11201BCD'
+$code2 = 'a11206B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11201BCDU-a112012B
+
+$code1 = 'a11201BCDU'
+$code2 = 'a112012B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1801-a1802BTOLA
+
+$code1 = 'a1801'
+$code2 = 'a1802BTOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1802BTOLA-a1802TOLA
+
+$code1 = 'a1802BTOLA'
+$code2 = 'a1802TOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1802BTOLA-a1807ATOLA
+
+$code1 = 'a1802BTOLA'
+$code2 = 'a1807ATOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1802BTOLA-a1808
+
+$code1 = 'a1802BTOLA'
+$code2 = 'a1808'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1802BTOLA-a1809
+
+$code1 = 'a1802BTOLA'
+$code2 = 'a1809'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1802BTOLA-a11001BTOLA
+
+$code1 = 'a1802BTOLA'
+$code2 = 'a11001BTOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11001BTOLA-a1806TOLA
+
+$code1 = 'a11001BTOLA'
+$code2 = 'a1806TOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11001BTOLA-a1807TOLA
+
+$code1 = 'a11001BTOLA'
+$code2 = 'a1807TOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1802BTOLA-a11006
+
+$code1 = 'a1802BTOLA'
+$code2 = 'a11006'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a11301
+
+$code1 = 'aACTIVE'
+$code2 = 'a11301'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11301-a11302RES
+
+$code1 = 'a11301'
+$code2 = 'a11302RES'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11301-a11302
+
+$code1 = 'a11301'
+$code2 = 'a11302'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11301-a11304B
+
+$code1 = 'a11301'
+$code2 = 'a11304B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11301-a11305B
+
+$code1 = 'a11301'
+$code2 = 'a11305B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11301-a11307
+
+$code1 = 'a11301'
+$code2 = 'a11307'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a11301-a11309B
+
+$code1 = 'a11301'
+$code2 = 'a11309B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601-a13501B
+
+$code1 = 'a13601'
+$code2 = 'a13501B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13501B-a13601A
+
+$code1 = 'a13501B'
+$code2 = 'a13601A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601A-a13601CW
+
+$code1 = 'a13601A'
+$code2 = 'a13601CW'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601CW-a13602B
+
+$code1 = 'a13601CW'
+$code2 = 'a13602B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601CW-a13603BB
+
+$code1 = 'a13601CW'
+$code2 = 'a13603BB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601CW-a13604BB
+
+$code1 = 'a13601CW'
+$code2 = 'a13604BB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13501B-a13601B
+
+$code1 = 'a13501B'
+$code2 = 'a13601B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601B-a13601EP
+
+$code1 = 'a13601B'
+$code2 = 'a13601EP'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601EP-a13602A
+
+$code1 = 'a13601EP'
+$code2 = 'a13602A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601EP-a13603AB
+
+$code1 = 'a13601EP'
+$code2 = 'a13603AB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601EP-a13604AB
+
+$code1 = 'a13601EP'
+$code2 = 'a13604AB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13501B-a13601C
+
+$code1 = 'a13501B'
+$code2 = 'a13601C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601C-a13601ICO
+
+$code1 = 'a13601C'
+$code2 = 'a13601ICO'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601ICO-a13602C
+
+$code1 = 'a13601ICO'
+$code2 = 'a13602C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601ICO-a13603CACB
+
+$code1 = 'a13601ICO'
+$code2 = 'a13603CACB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601ICO-a13604CB
+
+$code1 = 'a13601ICO'
+$code2 = 'a13604CB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13501B-a13601C2
+
+$code1 = 'a13501B'
+$code2 = 'a13601C2'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601C2-a13601OTHER
+
+$code1 = 'a13601C2'
+$code2 = 'a13601OTHER'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601OTHER-a13602D
+
+$code1 = 'a13601OTHER'
+$code2 = 'a13602D'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601OTHER-a13603DB
+
+$code1 = 'a13601OTHER'
+$code2 = 'a13603DB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601OTHER-a13604DB
+
+$code1 = 'a13601OTHER'
+$code2 = 'a13604DB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a13601OTHER-a13604E
+
+$code1 = 'a13601OTHER'
+$code2 = 'a13604E'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a1203
+
+$code1 = 'aACTIVE'
+$code2 = 'a1203'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1203-a1402
+
+$code1 = 'a1203'
+$code2 = 'a1402'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aC171
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aC171'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a11502B
+
+$code1 = 'aC171'
+$code2 = 'a11502B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a11602B
+
+$code1 = 'aC171'
+$code2 = 'a11602B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a11702B
+
+$code1 = 'aC171'
+$code2 = 'a11702B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a11802B
+
+$code1 = 'aC171'
+$code2 = 'a11802B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12002B
+
+$code1 = 'aC171'
+$code2 = 'a12002B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12102B
+
+$code1 = 'aC171'
+$code2 = 'a12102B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12202B
+
+$code1 = 'aC171'
+$code2 = 'a12202B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12302B
+
+$code1 = 'aC171'
+$code2 = 'a12302B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12302C
+
+$code1 = 'aC171'
+$code2 = 'a12302C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12402B
+
+$code1 = 'aC171'
+$code2 = 'a12402B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12502B
+
+$code1 = 'aC171'
+$code2 = 'a12502B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12602B
+
+$code1 = 'aC171'
+$code2 = 'a12602B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12702B
+
+$code1 = 'aC171'
+$code2 = 'a12702B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12802B
+
+$code1 = 'aC171'
+$code2 = 'a12802B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a12902B
+
+$code1 = 'aC171'
+$code2 = 'a12902B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a13002B
+
+$code1 = 'aC171'
+$code2 = 'a13002B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a13202B
+
+$code1 = 'aC171'
+$code2 = 'a13202B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a13302B
+
+$code1 = 'aC171'
+$code2 = 'a13302B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a13402B
+
+$code1 = 'aC171'
+$code2 = 'a13402B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a13702B
+
+$code1 = 'aC171'
+$code2 = 'a13702B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a13802B
+
+$code1 = 'aC171'
+$code2 = 'a13802B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a13902B
+
+$code1 = 'aC171'
+$code2 = 'a13902B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a14102B
+
+$code1 = 'aC171'
+$code2 = 'a14102B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a14202B
+
+$code1 = 'aC171'
+$code2 = 'a14202B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a14302B
+
+$code1 = 'aC171'
+$code2 = 'a14302B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a14402B
+
+$code1 = 'aC171'
+$code2 = 'a14402B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a14502B
+
+$code1 = 'aC171'
+$code2 = 'a14502B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a14602B
+
+$code1 = 'aC171'
+$code2 = 'a14602B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC171-a14702B
+
+$code1 = 'aC171'
+$code2 = 'a14702B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a14801-a14001
+
+$code1 = 'a14801'
+$code2 = 'a14001'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2101W
+
+$code1 = 'aACTIVE'
+$code2 = 'a2101W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2101W-a2101WRP
+
+$code1 = 'a2101W'
+$code2 = 'a2101WRP'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2101WRP-a2102W
+
+$code1 = 'a2101WRP'
+$code2 = 'a2102W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2101WRP-a2102BW
+
+$code1 = 'a2101WRP'
+$code2 = 'a2102BW'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2101B
+
+$code1 = 'aACTIVE'
+$code2 = 'a2101B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2101B-a2102B
+
+$code1 = 'a2101B'
+$code2 = 'a2102B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2101B-a2102BB
+
+$code1 = 'a2101B'
+$code2 = 'a2102BB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2104W
+
+$code1 = 'aACTIVE'
+$code2 = 'a2104W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2104W-a2104WRP
+
+$code1 = 'a2104W'
+$code2 = 'a2104WRP'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2104WRP-a2105W
+
+$code1 = 'a2104WRP'
+$code2 = 'a2105W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2104WRP-a2105BW
+
+$code1 = 'a2104WRP'
+$code2 = 'a2105BW'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2104B
+
+$code1 = 'aACTIVE'
+$code2 = 'a2104B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2104B-a2105B
+
+$code1 = 'a2104B'
+$code2 = 'a2105B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2104B-a2105BB
+
+$code1 = 'a2104B'
+$code2 = 'a2105BB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2107W
+
+$code1 = 'aACTIVE'
+$code2 = 'a2107W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107W-a2107WRP
+
+$code1 = 'a2107W'
+$code2 = 'a2107WRP'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107WRP-a2108W
+
+$code1 = 'a2107WRP'
+$code2 = 'a2108W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107WRP-a2109W
+
+$code1 = 'a2107WRP'
+$code2 = 'a2109W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107WRP-aG24010W
+
+$code1 = 'a2107WRP'
+$code2 = 'aG24010W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107WRP-a2110W
+
+$code1 = 'a2107WRP'
+$code2 = 'a2110W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107WRP-a2113W
+
+$code1 = 'a2107WRP'
+$code2 = 'a2113W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2113W-a2113AW
+
+$code1 = 'a2113W'
+$code2 = 'a2113AW'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2113W-a2114A
+
+$code1 = 'a2113W'
+$code2 = 'a2114A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2113W-a2115AW
+
+$code1 = 'a2113W'
+$code2 = 'a2115AW'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2107B
+
+$code1 = 'aACTIVE'
+$code2 = 'a2107B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107B-a2108B
+
+$code1 = 'a2107B'
+$code2 = 'a2108B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107B-a2109B
+
+$code1 = 'a2107B'
+$code2 = 'a2109B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107B-aG24010B
+
+$code1 = 'a2107B'
+$code2 = 'aG24010B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107B-a2110B
+
+$code1 = 'a2107B'
+$code2 = 'a2110B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2107B-a2113B
+
+$code1 = 'a2107B'
+$code2 = 'a2113B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2113B-a2113AB
+
+$code1 = 'a2113B'
+$code2 = 'a2113AB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2113B-a2114AB
+
+$code1 = 'a2113B'
+$code2 = 'a2114AB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2113B-a2115AB
+
+$code1 = 'a2113B'
+$code2 = 'a2115AB'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2201A
+
+$code1 = 'aACTIVE'
+$code2 = 'a2201A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2201D
+
+$code1 = 'aACTIVE'
+$code2 = 'a2201D'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2202
+
+$code1 = 'aACTIVE'
+$code2 = 'a2202'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2202-a2203
+
+$code1 = 'a2202'
+$code2 = 'a2203'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR233
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR233'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR233B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR233B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR233S
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR233S'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR235B_1
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR235B_1'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR235B_2
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR235B_2'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR235S
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR235S'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR237B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR237B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR238B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR238B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR239B
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR239B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR117
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR117'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVEPS-aIR2391
+
+$code1 = 'aACTIVEPS'
+$code2 = 'aIR2391'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aIR2391-aIR2392
+
+$code1 = 'aIR2391'
+$code2 = 'aIR2392'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aIR2391-aIR2393
+
+$code1 = 'aIR2391'
+$code2 = 'aIR2393'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVERENTALS-aIR234
+
+$code1 = 'aACTIVERENTALS'
+$code2 = 'aIR234'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVERENTALS-aIR236
+
+$code1 = 'aACTIVERENTALS'
+$code2 = 'aIR236'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVERENTALS-aIR2313
+
+$code1 = 'aACTIVERENTALS'
+$code2 = 'aIR2313'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVERENTALS-aIR2316
+
+$code1 = 'aACTIVERENTALS'
+$code2 = 'aIR2316'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a2501A
+
+$code1 = 'aACTIVE'
+$code2 = 'a2501A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a2501A-a2501
+
+$code1 = 'a2501A'
+$code2 = 'a2501'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a3102
+
+$code1 = 'aACTIVE'
+$code2 = 'a3102'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3101-a3102
+
+$code1 = 'a3101'
+$code2 = 'a3102'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a3104
+
+$code1 = 'aACTIVE'
+$code2 = 'a3104'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3103-a3104
+
+$code1 = 'a3103'
+$code2 = 'a3104'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a3105
+
+$code1 = 'aACTIVE'
+$code2 = 'a3105'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3103-a3105
+
+$code1 = 'a3103'
+$code2 = 'a3105'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-aB3206
+
+$code1 = 'aACTIVE'
+$code2 = 'aB3206'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-aB3207
+
+$code1 = 'aACTIVE'
+$code2 = 'aB3207'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1802BTOLA-a3208TOLA
+
+$code1 = 'a1802BTOLA'
+$code2 = 'a3208TOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a3210C
+
+$code1 = 'aACTIVE'
+$code2 = 'a3210C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3209-a3210C
+
+$code1 = 'a3209'
+$code2 = 'a3210C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a3211C
+
+$code1 = 'aACTIVE'
+$code2 = 'a3211C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3209-a3211C
+
+$code1 = 'a3209'
+$code2 = 'a3211C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a1802BTOLA-a3212CTOLA
+
+$code1 = 'a1802BTOLA'
+$code2 = 'a3212CTOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3209-a3212CTOLA
+
+$code1 = 'a3209'
+$code2 = 'a3212CTOLA'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3201-a3501B
+
+$code1 = 'a3201'
+$code2 = 'a3501B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3501B-a3202
+
+$code1 = 'a3501B'
+$code2 = 'a3202'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a3204
+
+$code1 = 'aACTIVE'
+$code2 = 'a3204'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3501B-a3204
+
+$code1 = 'a3501B'
+$code2 = 'a3204'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3201-a3501C
+
+$code1 = 'a3201'
+$code2 = 'a3501C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3501C-a3203
+
+$code1 = 'a3501C'
+$code2 = 'a3203'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-a3205
+
+$code1 = 'aACTIVE'
+$code2 = 'a3205'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3501C-a3205
+
+$code1 = 'a3501C'
+$code2 = 'a3205'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aACTIVE-aIR33LF
+
+$code1 = 'aACTIVE'
+$code2 = 'aIR33LF'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aIR328-a3306A
+
+$code1 = 'aIR328'
+$code2 = 'a3306A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aIR328-a3306B
+
+$code1 = 'aIR328'
+$code2 = 'a3306B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3302-a3303
+
+$code1 = 'a3302'
+$code2 = 'a3303'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3304C-a3304
+
+$code1 = 'a3304C'
+$code2 = 'a3304'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3304-a3305
+
+$code1 = 'a3304'
+$code2 = 'a3305'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3304-a3306
+
+$code1 = 'a3304'
+$code2 = 'a3306'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3307-a3308
+
+$code1 = 'a3307'
+$code2 = 'a3308'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3210B-a3211B
+
+$code1 = 'a3210B'
+$code2 = 'a3211B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3210-a3211
+
+$code1 = 'a3210'
+$code2 = 'a3211'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3402-a3403
+
+$code1 = 'a3402'
+$code2 = 'a3403'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3415-a3416
+
+$code1 = 'a3415'
+$code2 = 'a3416'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output a3701A-a3701
+
+$code1 = 'a3701A'
+$code2 = 'a3701'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC114-aC1202
+
+$code1 = 'aC114'
+$code2 = 'aC1202'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1201-aC1203
+
+$code1 = 'aC1201'
+$code2 = 'aC1203'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1201-aC1204
+
+$code1 = 'aC1201'
+$code2 = 'aC1204'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1201-aC1205
+
+$code1 = 'aC1201'
+$code2 = 'aC1205'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1201-aC1206
+
+$code1 = 'aC1201'
+$code2 = 'aC1206'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1201-aC1207
+
+$code1 = 'aC1201'
+$code2 = 'aC1207'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1518A-aC1209B
+
+$code1 = 'aC1518A'
+$code2 = 'aC1209B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1209B-aC1209C
+
+$code1 = 'aC1209B'
+$code2 = 'aC1209C'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1201-aC1208
+
+$code1 = 'aC1201'
+$code2 = 'aC1208'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1201-aC1209
+
+$code1 = 'aC1201'
+$code2 = 'aC1209'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC114-aC1301
+
+$code1 = 'aC114'
+$code2 = 'aC1301'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC114-aC1302
+
+$code1 = 'aC114'
+$code2 = 'aC1302'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC114-aC1303
+
+$code1 = 'aC114'
+$code2 = 'aC1303'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC114-aC1304
+
+$code1 = 'aC114'
+$code2 = 'aC1304'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1401-aC1402
+
+$code1 = 'aC1401'
+$code2 = 'aC1402'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1401-aC1403
+
+$code1 = 'aC1401'
+$code2 = 'aC1403'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC114-aC1501
+
+$code1 = 'aC114'
+$code2 = 'aC1501'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1629-aC1630
+
+$code1 = 'aC1629'
+$code2 = 'aC1630'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1601-aC1602
+
+$code1 = 'aC1601'
+$code2 = 'aC1602'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == No and $a2>0
+message {
+if $a1 == No and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == Yes and $a2>0
+"Invalid! If " + $code1 + " is No, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is No, then " + $code2 + " should be present."
+}
+
+output aC1636-aC1637
+
+$code1 = 'aC1636'
+$code2 = 'aC1637'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1638A-aC1639A
+
+$code1 = 'aC1638A'
+$code2 = 'aC1639A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1641A-aC1640A
+
+$code1 = 'aC1641A'
+$code2 = 'aC1640A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1641A-aC1642A
+
+$code1 = 'aC1641A'
+$code2 = 'aC1642A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1610
+
+$code1 = 'aC1609'
+$code2 = 'aC1610'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1611
+
+$code1 = 'aC1609'
+$code2 = 'aC1611'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1612A
+
+$code1 = 'aC1609'
+$code2 = 'aC1612A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1612A-aC1612
+
+$code1 = 'aC1612A'
+$code2 = 'aC1612'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1622F-aC1622A
+
+$code1 = 'aC1622F'
+$code2 = 'aC1622A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1622A-aC1622B
+
+$code1 = 'aC1622A'
+$code2 = 'aC1622B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1620
+
+$code1 = 'aC1609'
+$code2 = 'aC1620'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1616B
+
+$code1 = 'aC1609'
+$code2 = 'aC1616B'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1616A
+
+$code1 = 'aC1609'
+$code2 = 'aC1616A'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1618
+
+$code1 = 'aC1609'
+$code2 = 'aC1618'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1618-aC1619
+
+$code1 = 'aC1618'
+$code2 = 'aC1619'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1616C-aC1621
+
+$code1 = 'aC1616C'
+$code2 = 'aC1621'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1701
+
+$code1 = 'aC1609'
+$code2 = 'aC1701'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1702
+
+$code1 = 'aC1609'
+$code2 = 'aC1702'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1609-aC1703
+
+$code1 = 'aC1609'
+$code2 = 'aC1703'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aB1801B-aC1801
+
+$code1 = 'aB1801B'
+$code2 = 'aC1801'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aB1801B-aC1802
+
+$code1 = 'aB1801B'
+$code2 = 'aC1802'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aB1801B-aC1806
+
+$code1 = 'aB1801B'
+$code2 = 'aC1806'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1806-aC1807
+
+$code1 = 'aC1806'
+$code2 = 'aC1807'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == No and $a2>0
+message {
+if $a1 == No and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == Yes and $a2>0
+"Invalid! If " + $code1 + " is No, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is No, then " + $code2 + " should be present."
+}
+
+output aB1801B-aC1811
+
+$code1 = 'aB1801B'
+$code2 = 'aC1811'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aB1801B-aC1812
+
+$code1 = 'aB1801B'
+$code2 = 'aC1812'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC1812-aC1813
+
+$code1 = 'aC1812'
+$code2 = 'aC1813'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aB1801B-aC1814W
+
+$code1 = 'aB1801B'
+$code2 = 'aC1814W'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11101-aC11103
+
+$code1 = 'aC11101'
+$code2 = 'aC11103'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11101-aC11104
+
+$code1 = 'aC11101'
+$code2 = 'aC11104'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11101-aC11105
+
+$code1 = 'aC11101'
+$code2 = 'aC11105'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC12333-aC12236
+
+$code1 = 'aC12333'
+$code2 = 'aC12236'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC12333-aC12237
+
+$code1 = 'aC12333'
+$code2 = 'aC12237'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11301-aC11302
+
+$code1 = 'aC11301'
+$code2 = 'aC11302'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11301-aC11303
+
+$code1 = 'aC11301'
+$code2 = 'aC11303'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11301-aC11304
+
+$code1 = 'aC11301'
+$code2 = 'aC11304'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11301-aC11305
+
+$code1 = 'aC11301'
+$code2 = 'aC11305'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11301-aC11306
+
+$code1 = 'aC11301'
+$code2 = 'aC11306'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11301-aC11307
+
+$code1 = 'aC11301'
+$code2 = 'aC11307'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11401-aC11402
+
+$code1 = 'aC11401'
+$code2 = 'aC11402'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11402-aC11403
+
+$code1 = 'aC11402'
+$code2 = 'aC11403'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11501B-aC11502
+
+$code1 = 'aC11501B'
+$code2 = 'aC11502'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC11501B-aC11504
+
+$code1 = 'aC11501B'
+$code2 = 'aC11504'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
+output aC116A-aC11601
+
+$code1 = 'aC116A'
+$code2 = 'aC11601'
+$a1 = {@concept.local-name = $code1}
+$a2 = list({covered @concept.local-name = $code2}).length
+$a1 == Yes and $a2>0
+message {
+if $a1 == Yes and $a2>0
+"Existence of " + $code2 + " is valid"
+else if $a1 == No and $a2>0
+"Invalid! If " + $code1 + " is Yes, only then " + $code2 + " should be present."
+else
+"Invalid! If " + $code1 + " is Yes, then " + $code2 + " should be present."
+}
+
