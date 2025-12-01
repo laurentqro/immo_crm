@@ -5,19 +5,19 @@
   <div class="sm:flex sm:items-center sm:justify-between">
     <div>
       <div class="flex items-center">
-        <%= link_to clients_path, class: "text-sm text-gray-500 hover:text-gray-700" do %>
+        <%= link_to clients_path, class: "text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" do %>
           &larr; Back to Clients
         <% end %>
       </div>
-      <h1 class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+      <h1 class="mt-2 text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight">
         <%= @client.name %>
       </h1>
       <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
         <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset mt-2
           <%= case @client.client_type
-              when 'PP' then 'bg-blue-50 text-blue-700 ring-blue-700/10'
-              when 'PM' then 'bg-purple-50 text-purple-700 ring-purple-700/10'
-              when 'TRUST' then 'bg-amber-50 text-amber-700 ring-amber-700/10'
+              when 'PP' then 'bg-blue-50 text-blue-700 ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-300 dark:ring-blue-400/30'
+              when 'PM' then 'bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300 dark:ring-purple-400/30'
+              when 'TRUST' then 'bg-amber-50 text-amber-700 ring-amber-700/10 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-400/30'
               end %>">
           <%= @client.client_type_label %>
           <% if @client.legal_entity? && @client.legal_person_type.present? %>
@@ -30,67 +30,66 @@
           </span>
         <% end %>
         <% if @client.is_pep? %>
-          <span class="pep-badge inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700 mt-2">
+          <span class="pep-badge inline-flex items-center rounded-full bg-red-100 dark:bg-red-900/30 px-2 py-1 text-xs font-medium text-red-700 dark:text-red-300 mt-2">
             PEP - <%= @client.pep_type %>
           </span>
         <% end %>
       </div>
     </div>
     <div class="mt-5 flex lg:ml-4 lg:mt-0">
-      <%= link_to "Edit", edit_client_path(@client),
-          class: "inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+      <%= link_to "Edit", edit_client_path(@client), class: "btn btn-secondary" %>
       <%= button_to "Delete Client", client_path(@client),
           method: :delete,
           form: { data: { turbo_confirm: "Are you sure you want to delete this client?" } },
-          class: "ml-3 inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500" %>
+          class: "ml-3 btn btn-danger" %>
     </div>
   </div>
 
   <%# Client Details %>
-  <div class="mt-8 overflow-hidden bg-white shadow sm:rounded-lg">
+  <div class="mt-8 overflow-hidden bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
     <div class="px-4 py-5 sm:px-6">
-      <h3 class="text-base font-semibold leading-6 text-gray-900">Client Details</h3>
+      <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">Client Details</h3>
     </div>
-    <div class="border-t border-gray-200">
+    <div class="border-t border-gray-200 dark:border-gray-700">
       <dl>
-        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">Name</dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @client.name %></dd>
+        <div class="bg-gray-50 dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Name</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.name %></dd>
         </div>
-        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">Type</dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @client.client_type_label %></dd>
+        <div class="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Type</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.client_type_label %></dd>
         </div>
         <% if @client.legal_entity? %>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Legal Form</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @client.legal_person_type %></dd>
+          <div class="bg-gray-50 dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Legal Form</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.legal_person_type %></dd>
           </div>
         <% end %>
-        <div class="<%= @client.legal_entity? ? 'bg-white' : 'bg-gray-50' %> px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">Nationality</dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @client.nationality || "—" %></dd>
+        <div class="<%= @client.legal_entity? ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800' %> px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Nationality</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.nationality || "—" %></dd>
         </div>
-        <div class="<%= @client.legal_entity? ? 'bg-gray-50' : 'bg-white' %> px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">Residence Country</dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @client.residence_country || "—" %></dd>
+        <div class="<%= @client.legal_entity? ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900' %> px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Residence Country</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.residence_country || "—" %></dd>
         </div>
         <% if @client.business_sector.present? %>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Business Sector</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= @client.business_sector %></dd>
+          <div class="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Business Sector</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.business_sector %></dd>
           </div>
         <% end %>
-        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">Client Since</dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+        <div class="bg-gray-50 dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Client Since</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0">
             <%= @client.became_client_at ? l(@client.became_client_at.to_date, format: :long) : "—" %>
           </dd>
         </div>
         <% if @client.notes.present? %>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Notes</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"><%= simple_format(@client.notes) %></dd>
+          <div class="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Notes</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= simple_format(@client.notes) %></dd>
           </div>
         <% end %>
       </dl>
@@ -99,28 +98,28 @@
 
   <%# Beneficial Owners Section (only for PM/TRUST) %>
   <% if @client.can_have_beneficial_owners? %>
-    <div class="beneficial-owners mt-8 overflow-hidden bg-white shadow sm:rounded-lg">
+    <div class="beneficial-owners mt-8 overflow-hidden bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
       <div class="px-4 py-5 sm:px-6 flex items-center justify-between">
         <div>
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Beneficial Owners</h3>
-          <p class="mt-1 text-sm text-gray-500">People who own or control this entity.</p>
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">Beneficial Owners</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">People who own or control this entity.</p>
         </div>
         <%= link_to new_client_beneficial_owner_path(@client),
-            class: "rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500",
+            class: "btn btn-primary",
             data: { turbo_frame: "new_beneficial_owner" } do %>
           Add Beneficial Owner
         <% end %>
       </div>
-      <div class="border-t border-gray-200">
+      <div class="border-t border-gray-200 dark:border-gray-700">
         <%= turbo_frame_tag "beneficial_owners" do %>
           <% if @client.beneficial_owners.any? %>
-            <ul role="list" class="divide-y divide-gray-200">
+            <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
               <% @client.beneficial_owners.each do |owner| %>
                 <%= render partial: "beneficial_owners/beneficial_owner", locals: { beneficial_owner: owner, client: @client } %>
               <% end %>
             </ul>
           <% else %>
-            <div class="px-4 py-8 text-center text-sm text-gray-500">
+            <div class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
               No beneficial owners recorded yet.
             </div>
           <% end %>
