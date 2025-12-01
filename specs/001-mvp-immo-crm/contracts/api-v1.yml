@@ -1,0 +1,695 @@
+openapi: 3.0.3
+info:
+  title: Immo CRM API
+  description: |
+    Internal API for Immo CRM MVP. Primarily consumed by Turbo/Stimulus frontend.
+    All endpoints require authentication and are scoped to current organization.
+  version: 1.0.0
+  contact:
+    name: Immo CRM Team
+
+servers:
+  - url: /
+    description: Same-origin (Rails app)
+
+security:
+  - sessionAuth: []
+
+tags:
+  - name: Dashboard
+    description: Home page aggregates
+  - name: Clients
+    description: Client management
+  - name: BeneficialOwners
+    description: Beneficial owners for legal entities
+  - name: Transactions
+    description: Real estate transactions
+  - name: STRReports
+    description: Suspicious Transaction Reports
+  - name: Settings
+    description: Organization settings
+  - name: Submissions
+    description: Annual AMSF submissions
+
+paths:
+  # ============================================================================
+  # DASHBOARD
+  # ============================================================================
+  /dashboard:
+    get:
+      tags: [Dashboard]
+      summary: Dashboard view
+      description: Returns dashboard HTML with stats
+      responses:
+        '200':
+          description: Dashboard HTML
+          content:
+            text/html:
+              schema:
+                type: string
+
+  # ============================================================================
+  # CLIENTS
+  # ============================================================================
+  /clients:
+    get:
+      tags: [Clients]
+      summary: List clients
+      parameters:
+        - name: q
+          in: query
+          description: Search query (name)
+          schema:
+            type: string
+        - name: client_type
+          in: query
+          schema:
+            type: string
+            enum: [PP, PM, TRUST]
+        - name: risk_level
+          in: query
+          schema:
+            type: string
+            enum: [LOW, MEDIUM, HIGH]
+        - name: is_pep
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Client list (HTML or Turbo Frame)
+          content:
+            text/html:
+              schema:
+                type: string
+            text/vnd.turbo-stream.html:
+              schema:
+                type: string
+
+    post:
+      tags: [Clients]
+      summary: Create client
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientInput'
+      responses:
+        '201':
+          description: Client created (redirects or Turbo Stream)
+        '422':
+          description: Validation errors
+
+  /clients/{id}:
+    get:
+      tags: [Clients]
+      summary: Show client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Client detail HTML
+        '404':
+          description: Not found (includes cross-tenant attempts)
+
+    patch:
+      tags: [Clients]
+      summary: Update client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientInput'
+      responses:
+        '200':
+          description: Client updated
+        '404':
+          description: Not found
+        '422':
+          description: Validation errors
+
+    delete:
+      tags: [Clients]
+      summary: Delete client (soft delete)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Client deleted (Turbo Stream removes from list)
+        '404':
+          description: Not found
+
+  # ============================================================================
+  # BENEFICIAL OWNERS
+  # ============================================================================
+  /clients/{client_id}/beneficial_owners:
+    get:
+      tags: [BeneficialOwners]
+      summary: List beneficial owners for a client
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Beneficial owners list (Turbo Frame)
+
+    post:
+      tags: [BeneficialOwners]
+      summary: Create beneficial owner
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BeneficialOwnerInput'
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Validation errors
+
+  /clients/{client_id}/beneficial_owners/{id}:
+    patch:
+      tags: [BeneficialOwners]
+      summary: Update beneficial owner
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BeneficialOwnerInput'
+      responses:
+        '200':
+          description: Updated
+        '422':
+          description: Validation errors
+
+    delete:
+      tags: [BeneficialOwners]
+      summary: Delete beneficial owner
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted
+
+  # ============================================================================
+  # TRANSACTIONS
+  # ============================================================================
+  /transactions:
+    get:
+      tags: [Transactions]
+      summary: List transactions
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: transaction_type
+          in: query
+          schema:
+            type: string
+            enum: [PURCHASE, SALE, RENTAL]
+        - name: year
+          in: query
+          schema:
+            type: integer
+        - name: payment_method
+          in: query
+          schema:
+            type: string
+            enum: [WIRE, CASH, CHECK, CRYPTO, MIXED]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Transaction list
+
+    post:
+      tags: [Transactions]
+      summary: Create transaction
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TransactionInput'
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Validation errors
+
+  /transactions/{id}:
+    get:
+      tags: [Transactions]
+      summary: Show transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Transaction detail
+        '404':
+          description: Not found
+
+    patch:
+      tags: [Transactions]
+      summary: Update transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TransactionInput'
+      responses:
+        '200':
+          description: Updated
+        '422':
+          description: Validation errors
+
+    delete:
+      tags: [Transactions]
+      summary: Delete transaction (soft delete)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted
+
+  # ============================================================================
+  # STR REPORTS
+  # ============================================================================
+  /str_reports:
+    get:
+      tags: [STRReports]
+      summary: List STR reports
+      responses:
+        '200':
+          description: STR report list
+
+    post:
+      tags: [STRReports]
+      summary: Create STR report
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/STRReportInput'
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Validation errors
+
+  /str_reports/{id}:
+    patch:
+      tags: [STRReports]
+      summary: Update STR report
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Updated
+        '422':
+          description: Validation errors
+
+    delete:
+      tags: [STRReports]
+      summary: Delete STR report
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted
+
+  # ============================================================================
+  # SETTINGS
+  # ============================================================================
+  /settings:
+    get:
+      tags: [Settings]
+      summary: Settings page
+      responses:
+        '200':
+          description: Settings form
+
+    patch:
+      tags: [Settings]
+      summary: Update settings (batch)
+      description: Updates multiple settings at once
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+      responses:
+        '200':
+          description: Updated (Turbo Stream confirmation)
+        '422':
+          description: Validation errors
+
+  # ============================================================================
+  # SUBMISSIONS
+  # ============================================================================
+  /submissions:
+    get:
+      tags: [Submissions]
+      summary: List submissions
+      responses:
+        '200':
+          description: Submissions list (history)
+
+    post:
+      tags: [Submissions]
+      summary: Start new submission
+      description: Creates draft submission for current year (or returns existing)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                year:
+                  type: integer
+                  example: 2025
+      responses:
+        '201':
+          description: New submission created (redirects to step 1)
+        '302':
+          description: Existing draft found (redirects to current step)
+
+  /submissions/{id}:
+    get:
+      tags: [Submissions]
+      summary: Show submission
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Submission overview
+
+  /submissions/{id}/step/{step}:
+    get:
+      tags: [Submissions]
+      summary: Get submission step
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: step
+          in: path
+          required: true
+          schema:
+            type: integer
+            enum: [1, 2, 3, 4]
+      responses:
+        '200':
+          description: Step form/content
+
+    patch:
+      tags: [Submissions]
+      summary: Update submission step
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: step
+          in: path
+          required: true
+          schema:
+            type: integer
+            enum: [1, 2, 3, 4]
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              description: Step-specific fields
+      responses:
+        '200':
+          description: Step saved (redirects to next or stays)
+        '422':
+          description: Validation errors
+
+  /submissions/{id}/validate:
+    post:
+      tags: [Submissions]
+      summary: Run XULE validation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Validation results (Turbo Stream)
+          content:
+            text/vnd.turbo-stream.html:
+              schema:
+                type: string
+
+  /submissions/{id}/download:
+    get:
+      tags: [Submissions]
+      summary: Download XBRL file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: acknowledge_unvalidated
+          in: query
+          description: Required if downloading unvalidated file
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: XBRL file download
+          content:
+            application/xml:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: 'attachment; filename="amsf_2025_12345678.xml"'
+        '422':
+          description: Must acknowledge unvalidated download
+
+# ============================================================================
+# COMPONENTS
+# ============================================================================
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: _immo_crm_session
+      description: Rails session cookie (Devise)
+
+  schemas:
+    ClientInput:
+      type: object
+      required:
+        - name
+        - client_type
+      properties:
+        client[name]:
+          type: string
+        client[client_type]:
+          type: string
+          enum: [PP, PM, TRUST]
+        client[nationality]:
+          type: string
+        client[residence_country]:
+          type: string
+        client[is_pep]:
+          type: boolean
+        client[pep_type]:
+          type: string
+          enum: [DOMESTIC, FOREIGN, INTL_ORG]
+        client[risk_level]:
+          type: string
+          enum: [LOW, MEDIUM, HIGH]
+        client[is_vasp]:
+          type: boolean
+        client[vasp_type]:
+          type: string
+        client[legal_person_type]:
+          type: string
+        client[business_sector]:
+          type: string
+        client[became_client_at]:
+          type: string
+          format: date
+        client[notes]:
+          type: string
+
+    BeneficialOwnerInput:
+      type: object
+      required:
+        - name
+      properties:
+        beneficial_owner[name]:
+          type: string
+        beneficial_owner[nationality]:
+          type: string
+        beneficial_owner[residence_country]:
+          type: string
+        beneficial_owner[ownership_pct]:
+          type: number
+        beneficial_owner[control_type]:
+          type: string
+          enum: [DIRECT, INDIRECT, REPRESENTATIVE]
+        beneficial_owner[is_pep]:
+          type: boolean
+        beneficial_owner[pep_type]:
+          type: string
+
+    TransactionInput:
+      type: object
+      required:
+        - client_id
+        - transaction_date
+        - transaction_type
+      properties:
+        transaction[client_id]:
+          type: integer
+        transaction[reference]:
+          type: string
+        transaction[transaction_date]:
+          type: string
+          format: date
+        transaction[transaction_type]:
+          type: string
+          enum: [PURCHASE, SALE, RENTAL]
+        transaction[transaction_value]:
+          type: number
+        transaction[commission_amount]:
+          type: number
+        transaction[property_country]:
+          type: string
+        transaction[payment_method]:
+          type: string
+          enum: [WIRE, CASH, CHECK, CRYPTO, MIXED]
+        transaction[cash_amount]:
+          type: number
+        transaction[agency_role]:
+          type: string
+          enum: [BUYER_AGENT, SELLER_AGENT, DUAL_AGENT]
+        transaction[purchase_purpose]:
+          type: string
+          enum: [RESIDENCE, INVESTMENT]
+        transaction[notes]:
+          type: string
+
+    STRReportInput:
+      type: object
+      required:
+        - report_date
+        - reason
+      properties:
+        str_report[client_id]:
+          type: integer
+        str_report[transaction_id]:
+          type: integer
+        str_report[report_date]:
+          type: string
+          format: date
+        str_report[reason]:
+          type: string
+          enum: [CASH, PEP, UNUSUAL_PATTERN, OTHER]
+        str_report[notes]:
+          type: string

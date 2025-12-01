@@ -1,0 +1,61 @@
+# frozen_string_literal: true
+
+# CRM routes for Immo CRM MVP
+# All routes require authentication via Devise's authenticate block
+#
+# NOTE: Routes are defined for the full MVP scope. Controllers will be
+# implemented incrementally across phases:
+# - Phase 1: Routes defined (this file), no controllers yet
+# - Phase 2: Onboarding, Dashboard, Clients controllers
+# - Phase 3: Transactions, STR Reports, Settings controllers
+# - Phase 4: Submissions, Audit Logs controllers
+#
+# Accessing undefined controller routes will return Rails' default error.
+
+authenticate :user do
+  # Onboarding wizard (organization setup) - Phase 2
+  # Two-step wizard: entity_info → policies → dashboard
+  resources :onboarding, only: [:new, :create] do
+    collection do
+      get :entity_info
+      post :entity_info, action: :entity_info_submit
+      get :policies
+      post :policies, action: :policies_submit
+    end
+  end
+
+  # Dashboard (root for authenticated users) - Phase 2
+  resource :dashboard, only: [:show], controller: "dashboard"
+
+  # Client management (US2) - Phase 2
+  resources :clients do
+    resources :beneficial_owners, shallow: true
+  end
+
+  # Transaction management (US3) - Phase 3
+  resources :transactions
+  resources :str_reports
+
+  # Settings management (US4) - Phase 3
+  resources :settings, only: [:index, :update] do
+    collection do
+      patch :batch_update
+    end
+  end
+
+  # Annual submission wizard (US5) - Phase 4
+  resources :submissions do
+    member do
+      get :download
+    end
+
+    resources :submission_steps, only: [:show, :update], param: :step do
+      member do
+        post :confirm
+      end
+    end
+  end
+
+  # Audit log viewing (compliance) - Phase 4
+  resources :audit_logs, only: [:index, :show]
+end

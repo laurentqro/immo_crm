@@ -1,0 +1,20 @@
+# Organization fixtures for testing
+# Each organization belongs to an account from accounts.yml
+
+one:
+  account: one
+  name: "Monaco Real Estate Agency One"
+  rci_number: "RCI12345"
+  country: "MC"
+
+two:
+  account: two
+  name: "Monaco Real Estate Agency Two"
+  rci_number: "RCI67890"
+  country: "MC"
+
+company:
+  account: company
+  name: "Monaco Company Real Estate"
+  rci_number: "RCI11111"
+  country: "MC"

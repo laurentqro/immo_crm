@@ -1,0 +1,118 @@
+<% Current.meta_tags.set(title: "Organization Setup - Compliance Policies") %>
+
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      Compliance Policies
+    </h2>
+    <p class="mt-2 text-center text-sm text-gray-600">
+      Step 2 of 2: Configure your AML/CFT policies
+    </p>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10" data-controller="onboarding">
+      <%= form_with url: policies_onboarding_index_path, method: :post, local: true do |form| %>
+        <div class="space-y-6">
+          <div class="bg-gray-50 p-4 rounded-md">
+            <h4 class="text-sm font-medium text-gray-700">Organization</h4>
+            <p class="text-sm text-gray-900"><%= @organization.name %></p>
+            <p class="text-xs text-gray-500">RCI: <%= @organization.rci_number %></p>
+          </div>
+
+          <hr>
+
+          <h3 class="text-lg font-medium text-gray-900">Enhanced Due Diligence (EDD)</h3>
+          <p class="text-sm text-gray-500 mb-4">Select when you apply Enhanced Due Diligence</p>
+
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="flex items-center h-5">
+                <%= check_box_tag "settings[edd_for_peps]", "true",
+                    @settings&.dig(:edd_for_peps) == "true",
+                    class: "focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded",
+                    id: "edd_for_peps" %>
+              </div>
+              <div class="ml-3 text-sm">
+                <%= label_tag "edd_for_peps", "EDD for PEPs", class: "font-medium text-gray-700" %>
+                <p class="text-gray-500">Apply enhanced due diligence for Politically Exposed Persons</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="flex items-center h-5">
+                <%= check_box_tag "settings[edd_for_high_risk_countries]", "true",
+                    @settings&.dig(:edd_for_high_risk_countries) == "true",
+                    class: "focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded",
+                    id: "edd_for_high_risk_countries" %>
+              </div>
+              <div class="ml-3 text-sm">
+                <%= label_tag "edd_for_high_risk_countries", "EDD for high-risk countries", class: "font-medium text-gray-700" %>
+                <p class="text-gray-500">Apply enhanced due diligence for clients from high-risk jurisdictions</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="flex items-center h-5">
+                <%= check_box_tag "settings[edd_for_complex_structures]", "true",
+                    @settings&.dig(:edd_for_complex_structures) == "true",
+                    class: "focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded",
+                    id: "edd_for_complex_structures" %>
+              </div>
+              <div class="ml-3 text-sm">
+                <%= label_tag "edd_for_complex_structures", "EDD for complex structures", class: "font-medium text-gray-700" %>
+                <p class="text-gray-500">Apply enhanced due diligence for complex ownership structures</p>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <h3 class="text-lg font-medium text-gray-900">AML/CFT Policy</h3>
+
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <%= check_box_tag "settings[written_aml_policy]", "true",
+                  @settings&.dig(:written_aml_policy) == "true",
+                  class: "focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded",
+                  id: "written_aml_policy" %>
+            </div>
+            <div class="ml-3 text-sm">
+              <%= label_tag "written_aml_policy", "Written AML/CFT policy", class: "font-medium text-gray-700" %>
+              <p class="text-gray-500">Your organization has a documented AML/CFT policy</p>
+            </div>
+          </div>
+
+          <hr>
+
+          <h3 class="text-lg font-medium text-gray-900">Training</h3>
+
+          <div>
+            <%= label_tag "settings_training_frequency", "Training frequency", class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1">
+              <%= select_tag "settings[training_frequency]",
+                  options_for_select([
+                    ["Annual", "annual"],
+                    ["Bi-annual", "biannual"],
+                    ["Quarterly", "quarterly"],
+                    ["As needed", "as_needed"]
+                  ], @settings&.dig(:training_frequency)),
+                  class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                  id: "settings_training_frequency" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex space-x-4">
+          <%= link_to "Back",
+              entity_info_onboarding_index_path,
+              class: "flex-1 flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+
+          <%= form.submit "Complete Setup",
+              class: "flex-1 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500",
+              data: { onboarding_target: "submit" } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
