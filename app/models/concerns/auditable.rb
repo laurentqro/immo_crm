@@ -51,6 +51,9 @@ module Auditable
     org = respond_to?(:organization) ? organization : nil
     org_id = org&.id || try(:organization_id)
 
+    # Current.user/ip_address/user_agent are set by SetCurrentRequestDetails concern
+    # (included in ApplicationController, part of Jumpstart Pro base).
+    # See: app/controllers/concerns/set_current_request_details.rb
     AuditLog.create!(
       organization_id: org_id,
       user_id: Current.user&.id,
