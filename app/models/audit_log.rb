@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "ipaddr"
+
 # Compliance audit trail for authentication and data changes.
 # Records login/logout, CRUD operations on sensitive models, and file downloads.
 #
@@ -65,11 +67,9 @@ class AuditLog < ApplicationRecord
   def validate_metadata_values
     return if metadata.blank?
 
-    # Validate ip_address format if present
+    # Validate ip_address format if present (IPv4 or IPv6)
     if metadata["ip_address"].present?
-      unless metadata["ip_address"].is_a?(String) && metadata["ip_address"].length <= 45
-        errors.add(:metadata, "ip_address must be a string (max 45 chars)")
-      end
+      validate_ip_address_format(metadata["ip_address"])
     end
 
     # Validate user_agent is a string with reasonable length
@@ -79,12 +79,27 @@ class AuditLog < ApplicationRecord
       end
     end
 
-    # Validate changed_fields is an array of strings
+    # Validate changed_fields is an array of strings with reasonable limit
     if metadata["changed_fields"].present?
-      unless metadata["changed_fields"].is_a?(Array) &&
-             metadata["changed_fields"].all? { |f| f.is_a?(String) }
-        errors.add(:metadata, "changed_fields must be an array of strings")
+      fields = metadata["changed_fields"]
+      unless fields.is_a?(Array) && fields.length <= 100 && fields.all? { |f| f.is_a?(String) }
+        errors.add(:metadata, "changed_fields must be an array of strings (max 100 items)")
       end
     end
+  end
+
+  # Validate IP address format using Ruby's IPAddr
+  # Accepts both IPv4 (max 15 chars) and IPv6 (max 45 chars)
+  def validate_ip_address_format(ip)
+    return if ip.blank?
+
+    unless ip.is_a?(String) && ip.length <= 45
+      errors.add(:metadata, "ip_address must be a string (max 45 chars)")
+      return
+    end
+
+    IPAddr.new(ip)
+  rescue IPAddr::InvalidAddressError
+    errors.add(:metadata, "ip_address must be a valid IPv4 or IPv6 address")
   end
 end

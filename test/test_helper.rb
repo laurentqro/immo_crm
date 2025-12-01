@@ -36,6 +36,15 @@ end
 
 # Organization-scoped test helpers for CRM multi-tenancy testing.
 # These helpers ensure tests properly scope data to organizations.
+#
+# DESIGN DECISION: Global inclusion in ActiveSupport::TestCase
+# - Included globally because multi-tenancy affects nearly all tests
+# - Current context (Current.user, Current.ip_address) must be set for:
+#   * Model tests using Auditable concern
+#   * Policy tests requiring user context
+#   * Integration tests verifying tenant isolation
+# - teardown automatically clears context to prevent state leakage
+# - Minor memory overhead is acceptable for test simplicity
 module OrganizationTestHelper
   # Set up Current context for organization-scoped operations.
   # Use in model/service tests that depend on Current.user.

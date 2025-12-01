@@ -23,9 +23,12 @@
             <div class="mt-1">
               <%= form.text_field :name,
                   required: true,
+                  autocomplete: "organization",
+                  aria: { describedby: "name-hint" },
                   class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
                   placeholder: "Monaco Real Estate Agency" %>
             </div>
+            <p id="name-hint" class="sr-only">Enter your company's legal registered name</p>
           </div>
 
           <div>
@@ -33,10 +36,12 @@
             <div class="mt-1">
               <%= form.text_field :rci_number,
                   required: true,
+                  autocomplete: "off",
+                  aria: { describedby: "rci-hint" },
                   class: "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
                   placeholder: "RCI12345" %>
             </div>
-            <p class="mt-1 text-xs text-gray-500">Your Monaco Registre du Commerce et d'Industrie number</p>
+            <p id="rci-hint" class="mt-1 text-xs text-gray-500">Your Monaco Registre du Commerce et d'Industrie number</p>
           </div>
 
           <div>
@@ -50,7 +55,7 @@
                     ["Other", ""]
                   ], @organization.country || "MC"),
                   {},
-                  class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+                  { autocomplete: "country", class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" } %>
             </div>
           </div>
 
