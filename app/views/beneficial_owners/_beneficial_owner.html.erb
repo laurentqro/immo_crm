@@ -1,0 +1,44 @@
+<%= turbo_frame_tag dom_id(beneficial_owner) do %>
+  <li class="flex items-center justify-between gap-x-6 py-5 px-4">
+    <div class="min-w-0">
+      <div class="flex items-start gap-x-3">
+        <p class="text-sm font-semibold leading-6 text-gray-900"><%= beneficial_owner.name %></p>
+        <% if beneficial_owner.is_pep? %>
+          <span class="pep-badge inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
+            PEP
+          </span>
+        <% end %>
+      </div>
+      <div class="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+        <% if beneficial_owner.ownership_pct.present? %>
+          <p class="whitespace-nowrap">
+            <%= number_to_percentage(beneficial_owner.ownership_pct, precision: 1) %> ownership
+          </p>
+          <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current">
+            <circle cx="1" cy="1" r="1" />
+          </svg>
+        <% end %>
+        <% if beneficial_owner.nationality.present? %>
+          <p class="whitespace-nowrap"><%= beneficial_owner.nationality %></p>
+        <% end %>
+        <% if beneficial_owner.residence_country.present? %>
+          <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current">
+            <circle cx="1" cy="1" r="1" />
+          </svg>
+          <p class="whitespace-nowrap">Resides in <%= beneficial_owner.residence_country %></p>
+        <% end %>
+      </div>
+    </div>
+    <div class="flex flex-none items-center gap-x-4">
+      <%= link_to "Edit",
+          edit_beneficial_owner_path(beneficial_owner),
+          class: "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block",
+          data: { turbo_frame: dom_id(beneficial_owner) } %>
+      <%= button_to "Remove",
+          beneficial_owner_path(beneficial_owner),
+          method: :delete,
+          form: { data: { turbo_confirm: "Are you sure you want to remove this beneficial owner?" } },
+          class: "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-300 hover:bg-red-50 sm:block" %>
+    </div>
+  </li>
+<% end %>

@@ -1,0 +1,3 @@
+<%= turbo_stream.replace dom_id(@beneficial_owner) do %>
+  <%= render partial: "beneficial_owner", locals: { beneficial_owner: @beneficial_owner, client: @client } %>
+<% end %>

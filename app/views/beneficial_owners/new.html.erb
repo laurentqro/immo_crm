@@ -1,0 +1,6 @@
+<%= turbo_frame_tag "new_beneficial_owner" do %>
+  <div class="px-4 py-5 border-t border-gray-200 bg-gray-50">
+    <h4 class="text-sm font-medium text-gray-900 mb-4">Add Beneficial Owner</h4>
+    <%= render "form", beneficial_owner: @beneficial_owner, client: @client %>
+  </div>
+<% end %>

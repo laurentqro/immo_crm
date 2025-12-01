@@ -1,0 +1,56 @@
+<%= turbo_frame_tag dom_id(client), class: "contents #{client.risk_level == 'HIGH' ? 'high-risk' : ''}" do %>
+  <tr id="client_<%= client.id %>" data-client-type="<%= client.client_type %>">
+    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0">
+      <div class="flex items-center">
+        <div>
+          <div class="font-medium text-gray-900">
+            <%= link_to client.name, client, class: "hover:text-blue-600" %>
+          </div>
+          <% if client.business_sector.present? %>
+            <div class="text-gray-500"><%= client.business_sector %></div>
+          <% end %>
+        </div>
+      </div>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+      <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset
+        <%= case client.client_type
+            when 'PP' then 'bg-blue-50 text-blue-700 ring-blue-700/10'
+            when 'PM' then 'bg-purple-50 text-purple-700 ring-purple-700/10'
+            when 'TRUST' then 'bg-amber-50 text-amber-700 ring-amber-700/10'
+            end %>">
+        <%= client.client_type_label %>
+      </span>
+      <% if client.legal_entity? && client.legal_person_type.present? %>
+        <span class="ml-1 text-gray-400">(<%= client.legal_person_type %>)</span>
+      <% end %>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm">
+      <% if client.risk_level.present? %>
+        <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium <%= client.risk_badge_class %>">
+          <%= client.risk_level %>
+        </span>
+      <% end %>
+      <% if client.is_pep? %>
+        <span class="pep-badge ml-1 inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
+          PEP
+        </span>
+      <% end %>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+      <% if client.active? %>
+        <span class="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+          Active
+        </span>
+      <% else %>
+        <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+          Ended
+        </span>
+      <% end %>
+    </td>
+    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+      <%= link_to "View", client, class: "text-blue-600 hover:text-blue-900" %>
+      <%= link_to "Edit", edit_client_path(client), class: "ml-4 text-gray-600 hover:text-gray-900" %>
+    </td>
+  </tr>
+<% end %>

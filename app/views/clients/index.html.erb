@@ -1,0 +1,99 @@
+<% Current.meta_tags.set(title: "Clients") %>
+
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold leading-6 text-gray-900">Clients</h1>
+      <p class="mt-2 text-sm text-gray-700">
+        Manage your clients - natural persons, legal entities, and trusts.
+      </p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <%= link_to "Add Client", new_client_path,
+          class: "block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500",
+          data: { turbo_frame: "modal" } %>
+    </div>
+  </div>
+
+  <%# Filters %>
+  <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-4">
+    <%= form_with url: clients_path, method: :get, local: true, class: "col-span-full sm:col-span-3 flex gap-4" do |f| %>
+      <div class="flex-1">
+        <%= f.text_field :q, value: params[:q], placeholder: "Search by name...",
+            class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+      </div>
+      <div>
+        <%= f.select :client_type,
+            options_for_select([
+              ["All Types", ""],
+              ["Natural Person", "PP"],
+              ["Legal Entity", "PM"],
+              ["Trust", "TRUST"]
+            ], params[:client_type]),
+            {},
+            class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+      </div>
+      <div>
+        <%= f.select :risk_level,
+            options_for_select([
+              ["All Risk Levels", ""],
+              ["Low", "LOW"],
+              ["Medium", "MEDIUM"],
+              ["High", "HIGH"]
+            ], params[:risk_level]),
+            {},
+            class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+      </div>
+      <%= f.submit "Search", class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+    <% end %>
+  </div>
+
+  <%# Client list %>
+  <%= turbo_frame_tag "clients_list" do %>
+    <div class="mt-8 flow-root">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <% if @clients.any? %>
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead>
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Name</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Risk</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                    <span class="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <% @clients.each do |client| %>
+                  <%= render partial: "clients/client", locals: { client: client } %>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <div class="empty-state text-center py-12">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <h3 class="mt-2 text-sm font-semibold text-gray-900">No clients</h3>
+              <p class="mt-1 text-sm text-gray-500">Get started by adding your first client.</p>
+              <div class="mt-6">
+                <%= link_to new_client_path, class: "inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" do %>
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                  </svg>
+                  Add Client
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%# Modal frame for new/edit forms %>
+<%= turbo_frame_tag "modal" %>

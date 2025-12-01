@@ -1,0 +1,171 @@
+<%= form_with model: client, local: true, data: { controller: "client-form" } do |form| %>
+  <%= render "application/error_messages", resource: client %>
+
+  <div class="space-y-6">
+    <%# Basic Information %>
+    <div>
+      <%= form.label :name, class: "block text-sm font-medium leading-6 text-gray-900" %>
+      <div class="mt-2">
+        <%= form.text_field :name,
+            required: true,
+            class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :client_type, "Client type", class: "block text-sm font-medium leading-6 text-gray-900" %>
+      <div class="mt-2">
+        <%= form.select :client_type,
+            options_for_select([
+              ["Natural Person", "PP"],
+              ["Legal Entity", "PM"],
+              ["Trust", "TRUST"]
+            ], client.client_type),
+            { include_blank: "Select type..." },
+            {
+              required: true,
+              class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
+              data: { client_form_target: "clientType", action: "change->client-form#toggleFields" }
+            } %>
+      </div>
+    </div>
+
+    <%# Legal Person Type (only for PM) %>
+    <div data-client-form-target="legalPersonType" class="<%= 'hidden' unless client.legal_entity? %>">
+      <%= form.label :legal_person_type, "Legal form", class: "block text-sm font-medium leading-6 text-gray-900" %>
+      <div class="mt-2">
+        <%= form.select :legal_person_type,
+            options_for_select([
+              ["SCI (Société Civile Immobilière)", "SCI"],
+              ["SARL (Société à Responsabilité Limitée)", "SARL"],
+              ["SAM (Société Anonyme Monégasque)", "SAM"],
+              ["SNC (Société en Nom Collectif)", "SNC"],
+              ["SA (Société Anonyme)", "SA"],
+              ["Other", "OTHER"]
+            ], client.legal_person_type),
+            { include_blank: "Select legal form..." },
+            { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div>
+        <%= form.label :nationality, class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.select :nationality,
+              options_for_select([
+                ["Monaco", "MC"],
+                ["France", "FR"],
+                ["Italy", "IT"],
+                ["Switzerland", "CH"],
+                ["United Kingdom", "GB"],
+                ["United States", "US"],
+                ["Russia", "RU"],
+                ["Other", ""]
+              ], client.nationality),
+              { include_blank: "Select country..." },
+              { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :residence_country, "Residence country", class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.select :residence_country,
+              options_for_select([
+                ["Monaco", "MC"],
+                ["France", "FR"],
+                ["Italy", "IT"],
+                ["Switzerland", "CH"],
+                ["United Kingdom", "GB"],
+                ["United States", "US"],
+                ["Russia", "RU"],
+                ["Other", ""]
+              ], client.residence_country),
+              { include_blank: "Select country..." },
+              { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
+        </div>
+      </div>
+    </div>
+
+    <%# PEP Section %>
+    <div class="border-t border-gray-200 pt-6">
+      <div class="flex items-start">
+        <div class="flex h-6 items-center">
+          <%= form.check_box :is_pep,
+              class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600",
+              data: { client_form_target: "isPep", action: "change->client-form#togglePepType" } %>
+        </div>
+        <div class="ml-3">
+          <%= form.label :is_pep, "Politically Exposed Person", class: "text-sm font-medium leading-6 text-gray-900" %>
+          <p class="text-sm text-gray-500">Client is a PEP or related to a PEP.</p>
+        </div>
+      </div>
+
+      <div data-client-form-target="pepType" class="mt-4 ml-7 <%= 'hidden' unless client.is_pep? %>">
+        <%= form.label :pep_type, "PEP type", class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.select :pep_type,
+              options_for_select([
+                ["Domestic PEP", "DOMESTIC"],
+                ["Foreign PEP", "FOREIGN"],
+                ["International Organization", "INTL_ORG"]
+              ], client.pep_type),
+              { include_blank: "Select PEP type..." },
+              { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
+        </div>
+      </div>
+    </div>
+
+    <%# Risk Level %>
+    <div>
+      <%= form.label :risk_level, "Risk level", class: "block text-sm font-medium leading-6 text-gray-900" %>
+      <div class="mt-2">
+        <%= form.select :risk_level,
+            options_for_select([
+              ["Low", "LOW"],
+              ["Medium", "MEDIUM"],
+              ["High", "HIGH"]
+            ], client.risk_level),
+            { include_blank: "Select risk level..." },
+            { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
+      </div>
+    </div>
+
+    <%# Business Sector (optional) %>
+    <div data-client-form-target="businessSector" class="<%= 'hidden' unless client.legal_entity? %>">
+      <%= form.label :business_sector, class: "block text-sm font-medium leading-6 text-gray-900" %>
+      <div class="mt-2">
+        <%= form.text_field :business_sector,
+            class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
+            placeholder: "e.g., Finance, Real Estate, Consulting" %>
+      </div>
+    </div>
+
+    <%# Became Client Date %>
+    <div>
+      <%= form.label :became_client_at, "Client since", class: "block text-sm font-medium leading-6 text-gray-900" %>
+      <div class="mt-2">
+        <%= form.date_field :became_client_at,
+            class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+      </div>
+    </div>
+
+    <%# Notes %>
+    <div>
+      <%= form.label :notes, class: "block text-sm font-medium leading-6 text-gray-900" %>
+      <div class="mt-2">
+        <%= form.text_area :notes,
+            rows: 3,
+            class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
+            placeholder: "Additional notes about this client..." %>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", clients_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+    <%= form.submit client.persisted? ? "Update Client" : "Create Client",
+        class: "rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" %>
+  </div>
+<% end %>

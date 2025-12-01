@@ -1,0 +1,5 @@
+<%= turbo_stream.append "beneficial_owners" do %>
+  <%= render partial: "beneficial_owner", locals: { beneficial_owner: @beneficial_owner, client: @client } %>
+<% end %>
+<%= turbo_stream.update "new_beneficial_owner" do %>
+<% end %>
