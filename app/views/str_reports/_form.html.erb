@@ -1,0 +1,74 @@
+<%= form_with model: str_report, local: true do |form| %>
+  <%= render "application/error_messages", resource: str_report %>
+
+  <div class="space-y-6">
+    <%# Report Details %>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :report_date, "Report Date" %>
+        <%= form.date_field :report_date,
+            value: str_report.report_date || Date.current,
+            required: true,
+            class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :reason, "Reason for STR" %>
+        <%= form.select :reason,
+            options_for_select([
+              ["Cash Payment (>€10k)", "CASH"],
+              ["PEP Involvement", "PEP"],
+              ["Unusual Transaction Pattern", "UNUSUAL_PATTERN"],
+              ["Other Suspicious Activity", "OTHER"]
+            ], str_report.reason),
+            { include_blank: "Select reason..." },
+            { required: true } %>
+      </div>
+    </div>
+
+    <%# Optional Client Link %>
+    <div class="form-group">
+      <%= form.label :client_id, "Related Client (optional)" %>
+      <%= form.collection_select :client_id,
+          current_organization.clients.kept.order(:name),
+          :id,
+          :name,
+          { include_blank: "Select client...", selected: str_report.client_id },
+          {} %>
+      <p class="form-hint mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Link this report to a specific client if applicable.
+      </p>
+    </div>
+
+    <%# Optional Transaction Link %>
+    <div class="form-group">
+      <%= form.label :transaction_id, "Related Transaction (optional)" %>
+      <%= form.collection_select :transaction_id,
+          current_organization.transactions.kept.recent.limit(50),
+          :id,
+          ->(t) { "#{t.reference || l(t.transaction_date)} - #{t.client.name} (#{t.transaction_type_label})" },
+          { include_blank: "Select transaction...", selected: str_report.transaction_id },
+          {} %>
+      <p class="form-hint mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Link this report to a specific transaction if applicable.
+      </p>
+    </div>
+
+    <%# Notes %>
+    <div class="form-group">
+      <%= form.label :notes, "Details & Notes" %>
+      <%= form.text_area :notes,
+          rows: 5,
+          class: "form-control",
+          placeholder: "Describe the suspicious activity in detail. Include relevant facts, observations, and any supporting documentation references..." %>
+      <p class="form-hint mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Provide detailed information about the suspicious activity. This will be included in the AMSF annual declaration.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", str_reports_path, class: "btn btn-secondary" %>
+    <%= form.submit str_report.persisted? ? "Update STR Report" : "File STR Report", class: "btn btn-primary" %>
+  </div>
+<% end %>

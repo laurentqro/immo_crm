@@ -17,8 +17,8 @@ class Client < ApplicationRecord
   # === Associations ===
   belongs_to :organization
   has_many :beneficial_owners, dependent: :destroy
-  # Future: has_many :transactions
-  # Future: has_many :str_reports
+  has_many :transactions, dependent: :restrict_with_error
+  has_many :str_reports, dependent: :nullify
 
   # === Validations ===
   validates :name, presence: true

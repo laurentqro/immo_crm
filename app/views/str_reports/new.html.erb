@@ -1,0 +1,20 @@
+<% Current.meta_tags.set(title: "New STR Report") %>
+
+<%= turbo_frame_tag "modal" do %>
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center">
+      <div class="sm:flex-auto">
+        <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">File STR Report</h1>
+        <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+          Report a suspicious transaction or activity to be included in the annual AMSF declaration.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-8 bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:p-6">
+        <%= render "form", str_report: @str_report %>
+      </div>
+    </div>
+  </div>
+<% end %>

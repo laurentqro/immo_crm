@@ -1,0 +1,44 @@
+<%= turbo_frame_tag dom_id(str_report), class: "contents" do %>
+  <tr id="str_report_<%= str_report.id %>">
+    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0">
+      <div class="font-medium text-gray-900 dark:text-white">
+        <%= link_to l(str_report.report_date, format: :long), str_report, class: "hover:text-blue-600 dark:hover:text-blue-400" %>
+      </div>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+      <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset
+        <%= case str_report.reason
+            when 'CASH' then 'bg-amber-50 text-amber-700 ring-amber-700/10 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-400/30'
+            when 'PEP' then 'bg-red-50 text-red-700 ring-red-700/10 dark:bg-red-900/30 dark:text-red-300 dark:ring-red-400/30'
+            when 'UNUSUAL_PATTERN' then 'bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300 dark:ring-purple-400/30'
+            else 'bg-gray-50 text-gray-600 ring-gray-500/10 dark:bg-gray-700 dark:text-gray-300 dark:ring-gray-400/30'
+            end %>">
+        <%= str_report.reason_label %>
+      </span>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm">
+      <% if str_report.client.present? %>
+        <div class="text-gray-900 dark:text-white">
+          <%= link_to str_report.client.name, str_report.client, class: "hover:text-blue-600 dark:hover:text-blue-400" %>
+        </div>
+        <div class="text-gray-500 dark:text-gray-400"><%= str_report.client.client_type_label %></div>
+      <% else %>
+        <span class="text-gray-400 dark:text-gray-500">—</span>
+      <% end %>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm">
+      <% if str_report.linked_transaction.present? %>
+        <div class="text-gray-900 dark:text-white">
+          <%= link_to str_report.linked_transaction.reference || l(str_report.linked_transaction.transaction_date), str_report.linked_transaction, class: "hover:text-blue-600 dark:hover:text-blue-400" %>
+        </div>
+        <div class="text-gray-500 dark:text-gray-400"><%= str_report.linked_transaction.transaction_type_label %></div>
+      <% else %>
+        <span class="text-gray-400 dark:text-gray-500">—</span>
+      <% end %>
+    </td>
+    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+      <%= link_to "View", str_report, class: "text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" %>
+      <%= link_to "Edit", edit_str_report_path(str_report), class: "ml-4 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300" %>
+    </td>
+  </tr>
+<% end %>

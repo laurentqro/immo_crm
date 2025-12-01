@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_01_152755) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_01_231620) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -383,6 +383,50 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_152755) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "str_reports", force: :cascade do |t|
+    t.bigint "client_id"
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.text "notes"
+    t.bigint "organization_id", null: false
+    t.string "reason", null: false
+    t.date "report_date", null: false
+    t.bigint "transaction_id"
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_str_reports_on_client_id"
+    t.index ["deleted_at"], name: "index_str_reports_on_deleted_at"
+    t.index ["organization_id", "report_date"], name: "index_str_reports_on_organization_id_and_report_date"
+    t.index ["organization_id"], name: "index_str_reports_on_organization_id"
+    t.index ["reason"], name: "index_str_reports_on_reason"
+    t.index ["report_date"], name: "index_str_reports_on_report_date"
+    t.index ["transaction_id"], name: "index_str_reports_on_transaction_id"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string "agency_role"
+    t.decimal "cash_amount", precision: 15, scale: 2
+    t.bigint "client_id", null: false
+    t.decimal "commission_amount", precision: 15, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.text "notes"
+    t.bigint "organization_id", null: false
+    t.string "payment_method"
+    t.string "property_country", default: "MC"
+    t.string "purchase_purpose"
+    t.string "reference"
+    t.date "transaction_date", null: false
+    t.string "transaction_type", null: false
+    t.decimal "transaction_value", precision: 15, scale: 2
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_transactions_on_client_id"
+    t.index ["deleted_at"], name: "index_transactions_on_deleted_at"
+    t.index ["organization_id", "transaction_date"], name: "index_transactions_on_organization_id_and_transaction_date"
+    t.index ["organization_id"], name: "index_transactions_on_organization_id"
+    t.index ["transaction_date"], name: "index_transactions_on_transaction_date"
+    t.index ["transaction_type"], name: "index_transactions_on_transaction_type"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "accepted_privacy_at", precision: nil
     t.datetime "accepted_terms_at", precision: nil
@@ -440,4 +484,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_152755) do
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
+  add_foreign_key "str_reports", "clients"
+  add_foreign_key "str_reports", "organizations"
+  add_foreign_key "str_reports", "transactions"
+  add_foreign_key "transactions", "clients"
+  add_foreign_key "transactions", "organizations"
 end

@@ -1,0 +1,5 @@
+<%= turbo_stream.prepend "transactions_table" do %>
+  <%= render partial: "transaction", locals: { transaction: @transaction } %>
+<% end %>
+<%= turbo_stream.update "modal" do %>
+<% end %>

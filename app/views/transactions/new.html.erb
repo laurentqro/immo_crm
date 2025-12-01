@@ -1,0 +1,20 @@
+<% Current.meta_tags.set(title: "New Transaction") %>
+
+<%= turbo_frame_tag "modal" do %>
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center">
+      <div class="sm:flex-auto">
+        <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">New Transaction</h1>
+        <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+          Record a new purchase, sale, or rental transaction.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-8 bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:p-6">
+        <%= render "form", transaction: @transaction %>
+      </div>
+    </div>
+  </div>
+<% end %>

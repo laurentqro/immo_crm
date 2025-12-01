@@ -20,12 +20,12 @@ class Organization < ApplicationRecord
 
   # CRM associations
   has_many :clients, dependent: :destroy
+  has_many :transactions, dependent: :destroy
+  has_many :str_reports, dependent: :destroy
   has_many :audit_logs, dependent: :nullify
 
   # Future associations - will be added as models are created
-  # has_many :transactions, dependent: :destroy
   # has_many :submissions, dependent: :destroy
-  # has_many :str_reports, dependent: :destroy
   # has_many :settings, dependent: :destroy
 
   validates :name, presence: true, length: {maximum: 255}

@@ -1,0 +1,89 @@
+<% Current.meta_tags.set(title: "STR Reports") %>
+
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">STR Reports</h1>
+      <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+        Suspicious Transaction Reports for AML/CFT compliance.
+      </p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <%= link_to "File STR", new_str_report_path, class: "btn btn-primary", data: { turbo_frame: "modal" } %>
+    </div>
+  </div>
+
+  <%# Filters %>
+  <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-4">
+    <%= form_with url: str_reports_path, method: :get, local: true, class: "col-span-full flex gap-4 flex-wrap" do |f| %>
+      <div>
+        <%= f.select :reason,
+            options_for_select([
+              ["All Reasons", ""],
+              ["Cash Payment", "CASH"],
+              ["PEP Involvement", "PEP"],
+              ["Unusual Pattern", "UNUSUAL_PATTERN"],
+              ["Other", "OTHER"]
+            ], params[:reason]),
+            {},
+            {} %>
+      </div>
+      <div>
+        <%= f.select :year,
+            options_for_select([["All Years", ""]] + (Date.current.year.downto(Date.current.year - 5)).map { |y| [y.to_s, y] }, params[:year]),
+            {},
+            {} %>
+      </div>
+      <%= f.submit "Filter", class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+
+  <%# STR Reports list %>
+  <%= turbo_frame_tag "str_reports_list" do %>
+    <div class="mt-8 flow-root">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <% if @str_reports.any? %>
+            <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+              <thead>
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-0">Date</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Reason</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Client</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Transaction</th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                    <span class="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="str_reports_table">
+                <% @str_reports.each do |str_report| %>
+                  <%= render partial: "str_reports/str_report", locals: { str_report: str_report } %>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <div class="empty-state text-center py-12">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.999L13.732 4.001c-.77-1.333-2.694-1.333-3.464 0L3.34 16.001c-.77 1.332.192 2.999 1.732 2.999z" />
+              </svg>
+              <h3 class="mt-2 text-sm font-semibold text-gray-900 dark:text-white">No STR Reports</h3>
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">No suspicious transaction reports have been filed.</p>
+              <div class="mt-6">
+                <%= link_to new_str_report_path, class: "btn btn-primary" do %>
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                  </svg>
+                  File STR Report
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%# Modal frame for new/edit forms %>
+<%= turbo_frame_tag "modal" %>
