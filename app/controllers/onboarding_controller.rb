@@ -114,6 +114,10 @@ class OnboardingController < ApplicationController
     )
   end
 
+  # Session key handling: Rails cookie serializer may use symbols (MessagePack) or
+  # strings (JSON) depending on configuration. These helpers handle both to ensure
+  # compatibility across Rails versions and serializer settings.
+  # See: config/initializers/cookies_serializer.rb
   def session_organization_params
     onboarding_data = session[:onboarding] || session["onboarding"]
     return {}.with_indifferent_access unless onboarding_data
@@ -130,7 +134,8 @@ class OnboardingController < ApplicationController
     settings_data.with_indifferent_access
   end
 
-  # Check if onboarding session data is present (handles symbol/string keys)
+  # Check if onboarding session data is present.
+  # Handles both symbol and string keys for cross-serializer compatibility.
   def onboarding_session_present?
     onboarding_data = session[:onboarding] || session["onboarding"]
     return false unless onboarding_data
