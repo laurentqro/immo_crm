@@ -42,14 +42,18 @@ module Auditable
   def log_audit(action, metadata = {})
     return unless defined?(AuditLog)
 
-    # Models must define organization or organization_id for proper audit scoping
-    unless respond_to?(:organization) || respond_to?(:organization_id)
+    # Determine organization_id for audit scoping
+    # Special case: Organization model audits itself
+    org_id = if is_a?(Organization)
+      id
+    elsif respond_to?(:organization)
+      organization&.id
+    elsif respond_to?(:organization_id)
+      organization_id
+    else
       Rails.logger.warn("Auditable: #{self.class.name} lacks organization/organization_id - audit skipped")
       return
     end
-
-    org = respond_to?(:organization) ? organization : nil
-    org_id = org&.id || try(:organization_id)
 
     # Current.user/ip_address/user_agent are set by SetCurrentRequestDetails concern
     # (included in ApplicationController, part of Jumpstart Pro base).
@@ -64,7 +68,7 @@ module Auditable
         user_agent: Current.user_agent
       ).compact
     )
-  rescue StandardError => e
+  rescue => e
     # Don't let audit logging failures break the main operation
     Rails.logger.error("Audit logging failed: #{e.message}")
   end

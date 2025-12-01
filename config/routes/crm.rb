@@ -14,12 +14,13 @@
 
 authenticate :user do
   # Onboarding wizard (organization setup) - Phase 2
+  # Two-step wizard: entity_info → policies → dashboard
   resources :onboarding, only: [:new, :create] do
     collection do
       get :entity_info
-      post :entity_info
+      post :entity_info, action: :entity_info_submit
       get :policies
-      post :policies
+      post :policies, action: :policies_submit
     end
   end
 
