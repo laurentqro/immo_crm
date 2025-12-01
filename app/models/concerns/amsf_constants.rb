@@ -59,6 +59,6 @@ module AmsfConstants
   # Source of submission values
   SUBMISSION_VALUE_SOURCES = %w[calculated from_settings manual].freeze
 
-  # Audit log action types
-  AUDIT_ACTIONS = %w[login logout login_failed create update delete download].freeze
+  # Note: Audit log action types are defined as a Rails enum in AuditLog model.
+  # Use AuditLog.actions.keys to get the list of valid actions.
 end

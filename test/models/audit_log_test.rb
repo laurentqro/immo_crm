@@ -89,6 +89,55 @@ class AuditLogTest < ActiveSupport::TestCase
     assert audit_log.valid?
   end
 
+  # Metadata value type validation tests
+  test "rejects ip_address longer than 45 chars" do
+    audit_log = AuditLog.new(
+      action: :login,
+      metadata: { "ip_address" => "a" * 46 }
+    )
+    assert_not audit_log.valid?
+    assert audit_log.errors[:metadata].any? { |e| e.include?("ip_address") }
+  end
+
+  test "rejects user_agent longer than 500 chars" do
+    audit_log = AuditLog.new(
+      action: :login,
+      metadata: { "user_agent" => "a" * 501 }
+    )
+    assert_not audit_log.valid?
+    assert audit_log.errors[:metadata].any? { |e| e.include?("user_agent") }
+  end
+
+  test "rejects non-array changed_fields" do
+    audit_log = AuditLog.new(
+      action: :update,
+      metadata: { "changed_fields" => "not_an_array" }
+    )
+    assert_not audit_log.valid?
+    assert audit_log.errors[:metadata].any? { |e| e.include?("changed_fields") }
+  end
+
+  test "rejects changed_fields with non-string elements" do
+    audit_log = AuditLog.new(
+      action: :update,
+      metadata: { "changed_fields" => ["valid", 123, "also_valid"] }
+    )
+    assert_not audit_log.valid?
+    assert audit_log.errors[:metadata].any? { |e| e.include?("changed_fields") }
+  end
+
+  test "allows valid metadata value types" do
+    audit_log = AuditLog.new(
+      action: :update,
+      metadata: {
+        "ip_address" => "192.168.1.1",
+        "user_agent" => "Mozilla/5.0 (compatible)",
+        "changed_fields" => ["name", "email", "phone"]
+      }
+    )
+    assert audit_log.valid?
+  end
+
   # Scope tests
   test "for_organization scope filters by organization" do
     org_one = organizations(:one)

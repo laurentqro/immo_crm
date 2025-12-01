@@ -32,6 +32,7 @@ class AuditLog < ApplicationRecord
   belongs_to :auditable, polymorphic: true, optional: true
 
   validate :validate_metadata_keys
+  validate :validate_metadata_values
 
   # Scopes for common queries
   scope :for_organization, ->(org) { where(organization: org) }
@@ -54,5 +55,31 @@ class AuditLog < ApplicationRecord
     return if invalid_keys.empty?
 
     errors.add(:metadata, "contains invalid keys: #{invalid_keys.join(', ')}")
+  end
+
+  def validate_metadata_values
+    return if metadata.blank?
+
+    # Validate ip_address format if present
+    if metadata["ip_address"].present?
+      unless metadata["ip_address"].is_a?(String) && metadata["ip_address"].length <= 45
+        errors.add(:metadata, "ip_address must be a string (max 45 chars)")
+      end
+    end
+
+    # Validate user_agent is a string with reasonable length
+    if metadata["user_agent"].present?
+      unless metadata["user_agent"].is_a?(String) && metadata["user_agent"].length <= 500
+        errors.add(:metadata, "user_agent must be a string (max 500 chars)")
+      end
+    end
+
+    # Validate changed_fields is an array of strings
+    if metadata["changed_fields"].present?
+      unless metadata["changed_fields"].is_a?(Array) &&
+             metadata["changed_fields"].all? { |f| f.is_a?(String) }
+        errors.add(:metadata, "changed_fields must be an array of strings")
+      end
+    end
   end
 end

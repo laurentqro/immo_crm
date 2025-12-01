@@ -41,7 +41,12 @@ module Auditable
 
   def log_audit(action, metadata = {})
     return unless defined?(AuditLog)
-    return unless respond_to?(:organization) || respond_to?(:organization_id)
+
+    # Models must define organization or organization_id for proper audit scoping
+    unless respond_to?(:organization) || respond_to?(:organization_id)
+      Rails.logger.warn("Auditable: #{self.class.name} lacks organization/organization_id - audit skipped")
+      return
+    end
 
     org = respond_to?(:organization) ? organization : nil
     org_id = org&.id || try(:organization_id)

@@ -5,21 +5,17 @@
 #
 # Ensures all queries are scoped to the current organization and provides
 # helper methods for accessing organization-level resources.
+#
+# Note: current_organization is defined in ApplicationController and available as
+# a helper_method. This concern adds the requirement that organization must exist.
 module OrganizationScoped
   extend ActiveSupport::Concern
 
   included do
     before_action :require_organization
-    helper_method :current_organization
   end
 
   private
-
-  # Returns the organization for the current account.
-  # Returns nil if organization doesn't exist yet (user needs onboarding).
-  def current_organization
-    @current_organization ||= current_account&.organization
-  end
 
   # Ensures an organization exists for the current account.
   # Redirects to onboarding if organization is missing, with fallback to root.

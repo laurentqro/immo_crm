@@ -16,8 +16,12 @@ class Organization < ApplicationRecord
   # has_many :audit_logs, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 255 }
+  # RCI (Répertoire du Commerce et de l'Industrie) number validation.
+  # Format kept intentionally permissive - Monaco RCI formats vary across business types.
+  # Alphanumeric constraint prevents special characters while allowing flexibility.
   validates :rci_number, presence: true, uniqueness: true,
-                         format: { with: /\A[A-Za-z0-9]+\z/, message: "must be alphanumeric" }
+                         format: { with: /\A[A-Za-z0-9]+\z/, message: "must be alphanumeric" },
+                         length: { minimum: 3, maximum: 20 }
   validates :country, length: { is: 2 }, allow_blank: true
 
   # Scopes for future use

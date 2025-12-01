@@ -48,6 +48,20 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_not_empty organization.errors[:rci_number]
   end
 
+  test "validates rci_number minimum length" do
+    organization = organizations(:one).dup
+    organization.rci_number = "AB"  # Too short (min 3)
+    assert_not organization.valid?
+    assert_not_empty organization.errors[:rci_number]
+  end
+
+  test "validates rci_number maximum length" do
+    organization = organizations(:one).dup
+    organization.rci_number = "A" * 21  # Too long (max 20)
+    assert_not organization.valid?
+    assert_not_empty organization.errors[:rci_number]
+  end
+
   test "allows various alphanumeric rci_number formats" do
     valid_formats = %w[RCI12345 ABC123 12345 RCIABC abc123]
     valid_formats.each_with_index do |format, index|
