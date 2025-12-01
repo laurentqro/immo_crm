@@ -35,9 +35,31 @@ module OrganizationScoped
 
   # Safely find a record by ID, scoped to the current organization.
   # Returns 404 if not found (security: don't reveal existence of records in other orgs).
+  # Logs unauthorized access attempts for security monitoring.
   def find_organization_record(model_class, id)
     organization_scope(model_class).find(id)
   rescue ActiveRecord::RecordNotFound
+    log_unauthorized_access_attempt(model_class, id)
     raise ActiveRecord::RecordNotFound, "#{model_class.name} not found"
+  end
+
+  # Log potential cross-tenant access attempts for security monitoring.
+  # This helps detect enumeration attacks or misconfigured clients.
+  def log_unauthorized_access_attempt(model_class, id)
+    return unless defined?(AuditLog) && current_organization.present?
+
+    # Check if the record exists in another organization (potential attack)
+    record_exists_elsewhere = model_class.exists?(id)
+
+    if record_exists_elsewhere
+      Rails.logger.warn(
+        "[SECURITY] Potential cross-tenant access attempt: " \
+        "User #{Current.user&.id} tried to access #{model_class}##{id} " \
+        "from organization #{current_organization.id}"
+      )
+    end
+  rescue StandardError => e
+    # Don't let logging failures affect the main flow
+    Rails.logger.error("Failed to log unauthorized access: #{e.message}")
   end
 end

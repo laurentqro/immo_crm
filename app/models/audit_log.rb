@@ -15,6 +15,11 @@ class AuditLog < ApplicationRecord
   ALLOWED_METADATA_KEYS = %w[ip_address user_agent changed_fields].freeze
 
   # Action types as Rails enum (stored as strings in DB for readability)
+  # DESIGN DECISION: String enum vs integer enum
+  # - Chose strings for better debugging and DB readability (~7 bytes vs 2 per record)
+  # - Trade-off acceptable: compliance audit logs are relatively low-volume
+  # - If high-volume logging needed, consider integer enum or separate logging service
+  #
   # Using prefix to avoid conflicts with ActiveRecord methods (create, update, etc.)
   # Usage: audit_log.action_login?, AuditLog.action_create, etc.
   enum :action, {
