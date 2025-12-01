@@ -47,17 +47,17 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T016 Create fixtures for testing in `test/fixtures/organizations.yml`
-- [ ] T017 [P] Create fixtures `test/fixtures/accounts.yml` extending Jumpstart fixtures
-- [ ] T018 [P] Create fixtures `test/fixtures/users.yml` for test users
-- [ ] T019 Create `test/test_helper.rb` additions for organization-scoped tests
-- [ ] T020 [P] Create `test/models/organization_test.rb` with validation tests
-- [ ] T021 [P] Create `test/policies/organization_policy_test.rb`
-- [ ] T022 Run tests and verify green: `bin/rails test`
-- [ ] T023 [P] Create base Stimulus controller structure in `app/javascript/controllers/`
-- [ ] T024 [P] Configure Turbo Frame naming conventions in `app/helpers/turbo_helper.rb`
+- [X] T016 Create fixtures for testing in `test/fixtures/organizations.yml`
+- [X] T017 [P] Create fixtures `test/fixtures/accounts.yml` extending Jumpstart fixtures
+- [X] T018 [P] Create fixtures `test/fixtures/users.yml` for test users
+- [X] T019 Create `test/test_helper.rb` additions for organization-scoped tests
+- [X] T020 [P] Create `test/models/organization_test.rb` with validation tests
+- [X] T021 [P] Create `test/policies/organization_policy_test.rb`
+- [X] T022 Run tests and verify green: `bin/rails test`
+- [X] T023 [P] Create base Stimulus controller structure in `app/javascript/controllers/`
+- [X] T024 [P] Configure Turbo Frame naming conventions in `app/helpers/turbo_helper.rb`
 
-**Checkpoint**: Foundation ready - tests passing, organization scoping verified, Stimulus ready.
+**Checkpoint**: ✅ Foundation ready - tests passing, organization scoping verified, Stimulus ready.
 
 ---
 
