@@ -15,9 +15,13 @@
 
   <%# Filters %>
   <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-4">
-    <%= form_with url: clients_path, method: :get, local: true, class: "col-span-full sm:col-span-3 flex gap-4" do |f| %>
+    <%= form_with url: clients_path, method: :get, local: true,
+                  class: "col-span-full sm:col-span-3 flex gap-4",
+                  data: { controller: "client-search", turbo_frame: "clients_list" } do |f| %>
       <div class="flex-1">
-        <%= f.text_field :q, value: params[:q], placeholder: "Search by name...", class: "form-control" %>
+        <%= f.text_field :q, value: params[:q], placeholder: "Search by name...",
+                         class: "form-control",
+                         data: { action: "input->client-search#search" } %>
       </div>
       <div>
         <%= f.select :client_type,
@@ -28,7 +32,7 @@
               ["Trust", "TRUST"]
             ], params[:client_type]),
             {},
-            {} %>
+            { data: { action: "change->client-search#submit" } } %>
       </div>
       <div>
         <%= f.select :risk_level,
@@ -39,7 +43,7 @@
               ["High", "HIGH"]
             ], params[:risk_level]),
             {},
-            {} %>
+            { data: { action: "change->client-search#submit" } } %>
       </div>
       <%= f.submit "Search", class: "btn btn-secondary" %>
     <% end %>

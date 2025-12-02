@@ -101,35 +101,35 @@
 
 > **TDD: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T037 [P] [US2] Create `test/models/client_test.rb` with validations, scopes, soft delete tests
-- [ ] T038 [P] [US2] Create `test/models/beneficial_owner_test.rb` with validations
-- [ ] T039 [P] [US2] Create `test/controllers/clients_controller_test.rb` with CRUD tests
-- [ ] T040 [P] [US2] Create `test/controllers/beneficial_owners_controller_test.rb`
-- [ ] T041 [P] [US2] Create `test/policies/client_policy_test.rb` with tenant isolation tests
-- [ ] T042 [P] [US2] Create `test/system/client_management_test.rb` with Turbo Frame tests
+- [X] T037 [P] [US2] Create `test/models/client_test.rb` with validations, scopes, soft delete tests
+- [X] T038 [P] [US2] Create `test/models/beneficial_owner_test.rb` with validations
+- [X] T039 [P] [US2] Create `test/controllers/clients_controller_test.rb` with CRUD tests
+- [X] T040 [P] [US2] Create `test/controllers/beneficial_owners_controller_test.rb`
+- [X] T041 [P] [US2] Create `test/policies/client_policy_test.rb` with tenant isolation tests
+- [X] T042 [P] [US2] Create `test/system/client_management_test.rb` with Turbo Frame tests
 
 ### Implementation for User Story 2
 
-- [ ] T043 [US2] Create migration `db/migrate/YYYYMMDD_create_clients.rb`
-- [ ] T044 [US2] Create migration `db/migrate/YYYYMMDD_create_beneficial_owners.rb`
-- [ ] T045 [US2] Run migrations: `bin/rails db:migrate`
-- [ ] T046 [P] [US2] Create `app/models/client.rb` with validations, scopes, Discard
-- [ ] T047 [P] [US2] Create `app/models/beneficial_owner.rb` with validations
-- [ ] T048 [P] [US2] Create `app/policies/client_policy.rb` with organization scoping
-- [ ] T049 [P] [US2] Create `app/policies/beneficial_owner_policy.rb`
-- [ ] T050 [US2] Create `app/controllers/clients_controller.rb` with CRUD actions
-- [ ] T051 [US2] Create `app/controllers/beneficial_owners_controller.rb` (nested)
-- [ ] T052 [P] [US2] Create `app/views/clients/index.html.erb` with search and filters
-- [ ] T053 [P] [US2] Create `app/views/clients/_client.html.erb` partial with Turbo Frame
-- [ ] T054 [P] [US2] Create `app/views/clients/show.html.erb` with beneficial owners section
-- [ ] T055 [P] [US2] Create `app/views/clients/_form.html.erb` with conditional fields
-- [ ] T056 [P] [US2] Create `app/views/beneficial_owners/_form.html.erb`
-- [ ] T057 [US2] Create `app/javascript/controllers/client_search_controller.js`
-- [ ] T058 [US2] Create `app/javascript/controllers/client_form_controller.js` for PEP/legal type fields
-- [ ] T059 [US2] Create fixtures `test/fixtures/clients.yml` and `test/fixtures/beneficial_owners.yml`
-- [ ] T060 [US2] Verify all US2 tests pass: `bin/rails test test/models/client_test.rb test/models/beneficial_owner_test.rb test/controllers/clients_controller_test.rb test/system/client_management_test.rb`
+- [X] T043 [US2] Create migration `db/migrate/YYYYMMDD_create_clients.rb`
+- [X] T044 [US2] Create migration `db/migrate/YYYYMMDD_create_beneficial_owners.rb`
+- [X] T045 [US2] Run migrations: `bin/rails db:migrate`
+- [X] T046 [P] [US2] Create `app/models/client.rb` with validations, scopes, Discard
+- [X] T047 [P] [US2] Create `app/models/beneficial_owner.rb` with validations
+- [X] T048 [P] [US2] Create `app/policies/client_policy.rb` with organization scoping
+- [X] T049 [P] [US2] Create `app/policies/beneficial_owner_policy.rb`
+- [X] T050 [US2] Create `app/controllers/clients_controller.rb` with CRUD actions
+- [X] T051 [US2] Create `app/controllers/beneficial_owners_controller.rb` (nested)
+- [X] T052 [P] [US2] Create `app/views/clients/index.html.erb` with search and filters
+- [X] T053 [P] [US2] Create `app/views/clients/_client.html.erb` partial with Turbo Frame
+- [X] T054 [P] [US2] Create `app/views/clients/show.html.erb` with beneficial owners section
+- [X] T055 [P] [US2] Create `app/views/clients/_form.html.erb` with conditional fields
+- [X] T056 [P] [US2] Create `app/views/beneficial_owners/_form.html.erb`
+- [X] T057 [US2] Create `app/javascript/controllers/client_search_controller.js`
+- [X] T058 [US2] Create `app/javascript/controllers/client_form_controller.js` for PEP/legal type fields
+- [X] T059 [US2] Create fixtures `test/fixtures/clients.yml` and `test/fixtures/beneficial_owners.yml`
+- [X] T060 [US2] Verify all US2 tests pass: `bin/rails test test/models/client_test.rb test/models/beneficial_owner_test.rb test/controllers/clients_controller_test.rb test/system/client_management_test.rb`
 
-**Checkpoint**: Full client management working. US2 independently testable.
+**Checkpoint**: ✅ Full client management working. US2 independently testable.
 
 ---
 
@@ -143,34 +143,34 @@
 
 > **TDD: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T061 [P] [US3] Create `test/models/transaction_test.rb` with validations, scopes
-- [ ] T062 [P] [US3] Create `test/models/str_report_test.rb` with validations
-- [ ] T063 [P] [US3] Create `test/controllers/transactions_controller_test.rb`
-- [ ] T064 [P] [US3] Create `test/controllers/str_reports_controller_test.rb`
-- [ ] T065 [P] [US3] Create `test/system/transaction_logging_test.rb` with Turbo Frame tests
+- [X] T061 [P] [US3] Create `test/models/transaction_test.rb` with validations, scopes
+- [X] T062 [P] [US3] Create `test/models/str_report_test.rb` with validations
+- [X] T063 [P] [US3] Create `test/controllers/transactions_controller_test.rb`
+- [X] T064 [P] [US3] Create `test/controllers/str_reports_controller_test.rb`
+- [X] T065 [P] [US3] Create `test/system/transaction_logging_test.rb` with Turbo Frame tests
 
 ### Implementation for User Story 3
 
-- [ ] T066 [US3] Create migration `db/migrate/YYYYMMDD_create_transactions.rb`
-- [ ] T067 [US3] Create migration `db/migrate/YYYYMMDD_create_str_reports.rb`
-- [ ] T068 [US3] Run migrations: `bin/rails db:migrate`
-- [ ] T069 [P] [US3] Create `app/models/transaction.rb` with validations, scopes, Discard
-- [ ] T070 [P] [US3] Create `app/models/str_report.rb` with validations, Discard
-- [ ] T071 [P] [US3] Create `app/policies/transaction_policy.rb`
-- [ ] T072 [P] [US3] Create `app/policies/str_report_policy.rb`
-- [ ] T073 [US3] Create `app/controllers/transactions_controller.rb` with CRUD
-- [ ] T074 [US3] Create `app/controllers/str_reports_controller.rb` with CRUD
-- [ ] T075 [P] [US3] Create `app/views/transactions/index.html.erb` with filters
-- [ ] T076 [P] [US3] Create `app/views/transactions/_transaction.html.erb` partial
-- [ ] T077 [P] [US3] Create `app/views/transactions/_form.html.erb` with client selector
-- [ ] T078 [P] [US3] Create `app/views/str_reports/index.html.erb`
-- [ ] T079 [P] [US3] Create `app/views/str_reports/_form.html.erb`
-- [ ] T080 [US3] Create `app/javascript/controllers/transaction_form_controller.js` for payment method
-- [ ] T081 [US3] Create fixtures `test/fixtures/transactions.yml` and `test/fixtures/str_reports.yml`
-- [ ] T082 [US3] Update dashboard to show recent transactions (integrate with US1)
-- [ ] T083 [US3] Verify all US3 tests pass: `bin/rails test test/models/transaction_test.rb test/controllers/transactions_controller_test.rb test/system/transaction_logging_test.rb`
+- [X] T066 [US3] Create migration `db/migrate/YYYYMMDD_create_transactions.rb`
+- [X] T067 [US3] Create migration `db/migrate/YYYYMMDD_create_str_reports.rb`
+- [X] T068 [US3] Run migrations: `bin/rails db:migrate`
+- [X] T069 [P] [US3] Create `app/models/transaction.rb` with validations, scopes, Discard
+- [X] T070 [P] [US3] Create `app/models/str_report.rb` with validations, Discard
+- [X] T071 [P] [US3] Create `app/policies/transaction_policy.rb`
+- [X] T072 [P] [US3] Create `app/policies/str_report_policy.rb`
+- [X] T073 [US3] Create `app/controllers/transactions_controller.rb` with CRUD
+- [X] T074 [US3] Create `app/controllers/str_reports_controller.rb` with CRUD
+- [X] T075 [P] [US3] Create `app/views/transactions/index.html.erb` with filters
+- [X] T076 [P] [US3] Create `app/views/transactions/_transaction.html.erb` partial
+- [X] T077 [P] [US3] Create `app/views/transactions/_form.html.erb` with client selector
+- [X] T078 [P] [US3] Create `app/views/str_reports/index.html.erb`
+- [X] T079 [P] [US3] Create `app/views/str_reports/_form.html.erb`
+- [X] T080 [US3] Create `app/javascript/controllers/transaction_form_controller.js` for payment method
+- [X] T081 [US3] Create fixtures `test/fixtures/transactions.yml` and `test/fixtures/str_reports.yml`
+- [X] T082 [US3] Update dashboard to show recent transactions (integrate with US1)
+- [X] T083 [US3] Verify all US3 tests pass: `bin/rails test test/models/transaction_test.rb test/controllers/transactions_controller_test.rb test/system/transaction_logging_test.rb`
 
-**Checkpoint**: Full transaction management working. US3 independently testable.
+**Checkpoint**: ✅ Full transaction management working. US3 independently testable.
 
 ---
 
