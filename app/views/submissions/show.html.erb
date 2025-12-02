@@ -1,0 +1,91 @@
+<%= content_for :title, "Submission #{@submission.year}" %>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-6">
+    <%= link_to "&larr; Back to Submissions".html_safe, submissions_path, class: "text-blue-600 hover:text-blue-900" %>
+  </div>
+
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900"><%= @submission.year %> Annual Submission</h1>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+          Taxonomy version: <%= @submission.taxonomy_version %>
+        </p>
+      </div>
+      <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full <%= @submission.status_badge_class %>">
+        <%= @submission.status %>
+      </span>
+    </div>
+
+    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+      <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+        <div class="sm:col-span-1">
+          <dt class="text-sm font-medium text-gray-500">Started</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @submission.started_at&.strftime("%B %d, %Y at %H:%M") %></dd>
+        </div>
+        <div class="sm:col-span-1">
+          <dt class="text-sm font-medium text-gray-500">Status</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @submission.status_label %></dd>
+        </div>
+        <% if @submission.validated_at %>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">Validated</dt>
+            <dd class="mt-1 text-sm text-gray-900"><%= @submission.validated_at.strftime("%B %d, %Y at %H:%M") %></dd>
+          </div>
+        <% end %>
+        <% if @submission.completed_at %>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">Completed</dt>
+            <dd class="mt-1 text-sm text-gray-900"><%= @submission.completed_at.strftime("%B %d, %Y at %H:%M") %></dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+
+    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+      <div class="flex space-x-3">
+        <% if @submission.draft? %>
+          <%= link_to "Continue Wizard", submission_submission_step_path(@submission, step: 1), class: "btn btn-primary" %>
+        <% end %>
+        <% if @submission.validated? || @submission.completed? %>
+          <%= link_to "Download XBRL", download_submission_path(@submission), class: "btn btn-secondary" %>
+        <% end %>
+        <% if @submission.draft? %>
+          <%= button_to "Delete", submission_path(@submission), method: :delete,
+              class: "btn btn-danger",
+              data: { turbo_confirm: "Are you sure you want to delete this submission?" } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <% if @submission.submission_values.any? %>
+    <div class="mt-8 bg-white shadow overflow-hidden sm:rounded-lg">
+      <div class="px-4 py-5 sm:px-6">
+        <h2 class="text-lg font-medium text-gray-900">Submission Values</h2>
+        <p class="mt-1 text-sm text-gray-500">XBRL element values for this submission</p>
+      </div>
+      <div class="border-t border-gray-200">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Element</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Value</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Source</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @submission.submission_values.order(:element_name).each do |sv| %>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900"><%= sv.element_name %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= sv.value %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= sv.source %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+</div>

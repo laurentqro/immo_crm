@@ -83,6 +83,23 @@ class Submission < ApplicationRecord
     update!(status: "draft")
   end
 
+  # State transition predicates (check if transition is valid)
+  def may_start_review?
+    draft?
+  end
+
+  def may_validate_submission?
+    in_review?
+  end
+
+  def may_complete?
+    validated?
+  end
+
+  def may_reject?
+    in_review?
+  end
+
   # === Helper Methods ===
 
   def editable?

@@ -31,9 +31,10 @@ class SubmissionPolicy < ApplicationPolicy
     update?
   end
 
-  # Only draft submissions can be deleted
+  # Users can attempt to delete submissions in their organization
+  # Business logic about which submissions can be deleted is in the controller
   def destroy?
-    belongs_to_organization? && record.draft?
+    belongs_to_organization?
   end
 
   # Download is allowed for validated/completed submissions,

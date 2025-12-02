@@ -154,9 +154,6 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     validated_submission = submissions(:validated_submission)
     sign_in @user
 
-    # Stub the XBRL generator
-    XbrlGenerator.any_instance.stubs(:generate).returns("<xbrl></xbrl>")
-
     get download_submission_path(validated_submission)
     assert_response :success
     assert_equal "application/xml", response.media_type
@@ -167,8 +164,6 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     validated_submission = submissions(:validated_submission)
     sign_in @user
 
-    XbrlGenerator.any_instance.stubs(:generate).returns("<xbrl></xbrl>")
-
     get download_submission_path(validated_submission)
     assert_match /amsf.*#{validated_submission.year}.*#{@organization.rci_number}.*\.xml/,
                  response.headers["Content-Disposition"]
@@ -177,8 +172,6 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
   test "allows download of unvalidated submission with warning flag" do
     draft_submission = @submission
     sign_in @user
-
-    XbrlGenerator.any_instance.stubs(:generate).returns("<xbrl></xbrl>")
 
     get download_submission_path(draft_submission), params: { unvalidated: true }
     assert_response :success
@@ -304,8 +297,6 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
   test "creates audit log on XBRL download" do
     validated = submissions(:validated_submission)
     sign_in @user
-
-    XbrlGenerator.any_instance.stubs(:generate).returns("<xbrl></xbrl>")
 
     assert_difference "AuditLog.count" do
       get download_submission_path(validated)
