@@ -18,7 +18,7 @@ gem "pretender", "~> 0.4"
 gem "pundit", "~> 2.1"
 gem "receipts", "~> 2.1"
 gem "rotp", "~> 6.2"
-gem "rqrcode", "~> 3.0"
+gem "rqrcode", "~> 3.1"
 gem "ruby-oembed", "~> 0.18.0", require: "oembed"
 gem "tailwindcss-rails", "~> 4.0"
 
