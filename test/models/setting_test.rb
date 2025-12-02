@@ -173,16 +173,6 @@ class SettingTest < ActiveSupport::TestCase
     assert_kind_of Date, setting.typed_value
   end
 
-  test "typed_value returns nil for invalid date format" do
-    setting = Setting.new(value: "not-a-date", value_type: "date")
-    assert_nil setting.typed_value
-  end
-
-  test "typed_value returns nil for malformed date" do
-    setting = Setting.new(value: "2025-13-45", value_type: "date")
-    assert_nil setting.typed_value
-  end
-
   test "typed_value returns nil for nil value" do
     setting = Setting.new(value: nil, value_type: "string")
     assert_nil setting.typed_value
@@ -191,6 +181,71 @@ class SettingTest < ActiveSupport::TestCase
   test "typed_value returns nil for empty string" do
     setting = Setting.new(value: "", value_type: "integer")
     assert_nil setting.typed_value
+  end
+
+  # === Type Validation ===
+
+  test "rejects invalid date format" do
+    setting = Setting.new(
+      organization: @organization,
+      key: "bad_date",
+      value: "not-a-date",
+      value_type: "date",
+      category: "training"
+    )
+    assert_not setting.valid?
+    assert_includes setting.errors[:value], "is not a valid date"
+  end
+
+  test "rejects malformed date" do
+    setting = Setting.new(
+      organization: @organization,
+      key: "bad_date",
+      value: "2025-13-45",
+      value_type: "date",
+      category: "training"
+    )
+    assert_not setting.valid?
+    assert_includes setting.errors[:value], "is not a valid date"
+  end
+
+  test "rejects invalid integer format" do
+    setting = Setting.new(
+      organization: @organization,
+      key: "bad_int",
+      value: "abc",
+      value_type: "integer",
+      category: "entity_info"
+    )
+    assert_not setting.valid?
+    assert_includes setting.errors[:value], "is not a valid integer"
+  end
+
+  test "rejects invalid decimal format" do
+    setting = Setting.new(
+      organization: @organization,
+      key: "bad_decimal",
+      value: "not-a-number",
+      value_type: "decimal",
+      category: "entity_info"
+    )
+    assert_not setting.valid?
+    assert_includes setting.errors[:value], "is not a valid decimal"
+  end
+
+  test "allows valid values for each type" do
+    valid_settings = [
+      {key: "valid_date", value: "2025-06-15", value_type: "date", category: "training"},
+      {key: "valid_int", value: "42", value_type: "integer", category: "entity_info"},
+      {key: "valid_decimal", value: "99.95", value_type: "decimal", category: "entity_info"},
+      {key: "valid_string", value: "hello", value_type: "string", category: "entity_info"},
+      {key: "valid_bool", value: "true", value_type: "boolean", category: "kyc_procedures"}
+    ]
+
+    valid_settings.each do |attrs|
+      setting = Setting.new(attrs.merge(organization: @organization))
+      assert setting.valid?, "Expected #{attrs[:value_type]} value '#{attrs[:value]}' to be valid"
+    end
   end
 
   # === Scopes ===

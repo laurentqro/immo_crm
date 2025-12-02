@@ -55,6 +55,7 @@ class Setting < ApplicationRecord
   validates :value_type, presence: true, inclusion: {in: VALUE_TYPES}
   validates :category, presence: true, inclusion: {in: CATEGORIES}
   validates :xbrl_element, format: {with: /\A[a-z]\d{4}\z/, allow_blank: true}
+  validate :value_matches_type
 
   # === Scopes ===
 
@@ -111,5 +112,24 @@ class Setting < ApplicationRecord
 
   def enum?
     value_type == "enum"
+  end
+
+  private
+
+  # Validates that the value can be cast to the declared value_type.
+  # Prevents saving invalid data that would silently return nil from typed_value.
+  def value_matches_type
+    return if value.blank?
+
+    case value_type
+    when "date"
+      Date.parse(value)
+    when "decimal"
+      BigDecimal(value)
+    when "integer"
+      raise ArgumentError unless value.match?(/\A-?\d+\z/)
+    end
+  rescue ArgumentError, Date::Error
+    errors.add(:value, "is not a valid #{value_type}")
   end
 end
