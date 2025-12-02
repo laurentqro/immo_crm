@@ -83,40 +83,44 @@
             <%= hidden_field_tag "settings[edd_for_peps]", "false" %>
             <%= check_box_tag "settings[edd_for_peps]", "true", get_setting_value("edd_for_peps") == "true",
                 id: "edd_for_peps", name: "settings[edd_for_peps]",
-                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1" %>
+                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                aria: { describedby: "edd_for_peps_description" } %>
             <%= label_tag :edd_for_peps, class: "ml-3" do %>
               <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">EDD for PEPs</span>
-              <span class="block text-sm text-gray-500 dark:text-gray-400">Apply Enhanced Due Diligence for Politically Exposed Persons</span>
+              <span id="edd_for_peps_description" class="block text-sm text-gray-500 dark:text-gray-400">Apply Enhanced Due Diligence for Politically Exposed Persons</span>
             <% end %>
           </div>
           <div class="flex items-start">
             <%= hidden_field_tag "settings[edd_for_high_risk_countries]", "false" %>
             <%= check_box_tag "settings[edd_for_high_risk_countries]", "true", get_setting_value("edd_for_high_risk_countries") == "true",
                 id: "edd_for_high_risk_countries", name: "settings[edd_for_high_risk_countries]",
-                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1" %>
+                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                aria: { describedby: "edd_for_high_risk_countries_description" } %>
             <%= label_tag :edd_for_high_risk_countries, class: "ml-3" do %>
               <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">EDD for High-Risk Countries</span>
-              <span class="block text-sm text-gray-500 dark:text-gray-400">Apply Enhanced Due Diligence for clients from high-risk jurisdictions</span>
+              <span id="edd_for_high_risk_countries_description" class="block text-sm text-gray-500 dark:text-gray-400">Apply Enhanced Due Diligence for clients from high-risk jurisdictions</span>
             <% end %>
           </div>
           <div class="flex items-start">
             <%= hidden_field_tag "settings[edd_for_complex_structures]", "false" %>
             <%= check_box_tag "settings[edd_for_complex_structures]", "true", get_setting_value("edd_for_complex_structures") == "true",
                 id: "edd_for_complex_structures", name: "settings[edd_for_complex_structures]",
-                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1" %>
+                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                aria: { describedby: "edd_for_complex_structures_description" } %>
             <%= label_tag :edd_for_complex_structures, class: "ml-3" do %>
               <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">EDD for Complex Structures</span>
-              <span class="block text-sm text-gray-500 dark:text-gray-400">Apply Enhanced Due Diligence for complex ownership structures</span>
+              <span id="edd_for_complex_structures_description" class="block text-sm text-gray-500 dark:text-gray-400">Apply Enhanced Due Diligence for complex ownership structures</span>
             <% end %>
           </div>
           <div class="flex items-start">
             <%= hidden_field_tag "settings[sdd_applied]", "false" %>
             <%= check_box_tag "settings[sdd_applied]", "true", get_setting_value("sdd_applied") == "true",
                 id: "sdd_applied", name: "settings[sdd_applied]",
-                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1" %>
+                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                aria: { describedby: "sdd_applied_description" } %>
             <%= label_tag :sdd_applied, class: "ml-3" do %>
               <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Simplified Due Diligence (SDD)</span>
-              <span class="block text-sm text-gray-500 dark:text-gray-400">Apply simplified procedures for low-risk situations</span>
+              <span id="sdd_applied_description" class="block text-sm text-gray-500 dark:text-gray-400">Apply simplified procedures for low-risk situations</span>
             <% end %>
           </div>
         </div>
@@ -133,10 +137,11 @@
             <%= hidden_field_tag "settings[written_aml_policy]", "false" %>
             <%= check_box_tag "settings[written_aml_policy]", "true", get_setting_value("written_aml_policy") == "true",
                 id: "written_aml_policy", name: "settings[written_aml_policy]",
-                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1" %>
+                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                aria: { describedby: "written_aml_policy_description" } %>
             <%= label_tag :written_aml_policy, class: "ml-3" do %>
               <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Written AML Policy</span>
-              <span class="block text-sm text-gray-500 dark:text-gray-400">Organization has documented AML/CFT policies</span>
+              <span id="written_aml_policy_description" class="block text-sm text-gray-500 dark:text-gray-400">Organization has documented AML/CFT policies</span>
             <% end %>
           </div>
           <div>
@@ -149,20 +154,22 @@
             <%= hidden_field_tag "settings[risk_assessment_performed]", "false" %>
             <%= check_box_tag "settings[risk_assessment_performed]", "true", get_setting_value("risk_assessment_performed") == "true",
                 id: "risk_assessment_performed", name: "settings[risk_assessment_performed]",
-                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1" %>
+                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                aria: { describedby: "risk_assessment_performed_description" } %>
             <%= label_tag :risk_assessment_performed, class: "ml-3" do %>
               <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Risk Assessment Performed</span>
-              <span class="block text-sm text-gray-500 dark:text-gray-400">Organizational risk assessment has been completed</span>
+              <span id="risk_assessment_performed_description" class="block text-sm text-gray-500 dark:text-gray-400">Organizational risk assessment has been completed</span>
             <% end %>
           </div>
           <div class="flex items-start">
             <%= hidden_field_tag "settings[internal_controls]", "false" %>
             <%= check_box_tag "settings[internal_controls]", "true", get_setting_value("internal_controls") == "true",
                 id: "internal_controls", name: "settings[internal_controls]",
-                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1" %>
+                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                aria: { describedby: "internal_controls_description" } %>
             <%= label_tag :internal_controls, class: "ml-3" do %>
               <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Internal Controls</span>
-              <span class="block text-sm text-gray-500 dark:text-gray-400">Internal control procedures are documented and implemented</span>
+              <span id="internal_controls_description" class="block text-sm text-gray-500 dark:text-gray-400">Internal control procedures are documented and implemented</span>
             <% end %>
           </div>
         </div>
@@ -197,10 +204,11 @@
             <%= hidden_field_tag "settings[training_covers_aml]", "false" %>
             <%= check_box_tag "settings[training_covers_aml]", "true", get_setting_value("training_covers_aml") == "true",
                 id: "training_covers_aml", name: "settings[training_covers_aml]",
-                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1" %>
+                class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                aria: { describedby: "training_covers_aml_description" } %>
             <%= label_tag :training_covers_aml, class: "ml-3" do %>
               <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Training Covers AML/CFT</span>
-              <span class="block text-sm text-gray-500 dark:text-gray-400">Training program includes AML/CFT compliance topics</span>
+              <span id="training_covers_aml_description" class="block text-sm text-gray-500 dark:text-gray-400">Training program includes AML/CFT compliance topics</span>
             <% end %>
           </div>
         </div>
