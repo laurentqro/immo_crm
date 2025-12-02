@@ -16,6 +16,7 @@ class SettingsController < ApplicationController
   def update
     authorize Setting
     updated_count = 0
+    current_key = nil
 
     ActiveRecord::Base.transaction do
       settings_params.each do |key, value|
@@ -23,6 +24,7 @@ class SettingsController < ApplicationController
         schema = Setting::SCHEMA[key]
         next unless schema
 
+        current_key = key
         setting = current_organization.settings.find_or_initialize_by(key: key)
 
         # Set schema attributes for new settings
@@ -42,9 +44,10 @@ class SettingsController < ApplicationController
       format.turbo_stream { flash.now[:notice] = "#{updated_count} #{'setting'.pluralize(updated_count)} saved successfully." }
     end
   rescue ActiveRecord::RecordInvalid => e
+    error_msg = current_key ? "Failed to save '#{current_key}': #{e.record.errors.full_messages.join(', ')}" : e.message
     respond_to do |format|
-      format.html { redirect_to settings_path, alert: "Failed to save settings: #{e.message}" }
-      format.turbo_stream { flash.now[:alert] = "Failed to save settings: #{e.message}" }
+      format.html { redirect_to settings_path, alert: error_msg }
+      format.turbo_stream { flash.now[:alert] = error_msg }
     end
   end
 
