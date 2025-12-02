@@ -264,6 +264,19 @@ class SettingTest < ActiveSupport::TestCase
     assert setting.valid?
   end
 
+  test "xbrl_element must match format when present" do
+    setting = Setting.new(
+      organization: @organization,
+      key: "bad_xbrl",
+      value: "test",
+      value_type: "string",
+      category: "entity_info",
+      xbrl_element: "invalid"
+    )
+    assert_not setting.valid?
+    assert_includes setting.errors[:xbrl_element], "is invalid"
+  end
+
   # === Category Constants ===
 
   test "CATEGORIES constant includes all valid categories" do

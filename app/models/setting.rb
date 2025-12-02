@@ -54,6 +54,7 @@ class Setting < ApplicationRecord
   validates :key, presence: true, uniqueness: {scope: :organization_id}
   validates :value_type, presence: true, inclusion: {in: VALUE_TYPES}
   validates :category, presence: true, inclusion: {in: CATEGORIES}
+  validates :xbrl_element, format: {with: /\A[a-z]\d{4}\z/, allow_blank: true}
 
   # === Scopes ===
 
