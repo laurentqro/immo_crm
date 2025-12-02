@@ -44,9 +44,10 @@ class SettingsSeeder
   # @return [Array<Setting>] The created settings
   def seed!
     created_settings = []
+    existing_keys = organization.settings.pluck(:key).to_set
 
     Setting::SCHEMA.each do |key, schema|
-      next if organization.settings.exists?(key: key)
+      next if existing_keys.include?(key)
 
       setting = organization.settings.create!(
         key: key,
