@@ -4,12 +4,8 @@
 # Settings are organization-level configuration - all users in an account
 # can view and update settings for their organization.
 class SettingPolicy < ApplicationPolicy
-  # All authenticated users can view settings
-  def index?
-    true
-  end
-
-  # Users can view settings belonging to their organization
+  # Users can view settings for their organization
+  # When authorizing the class (singular resource), allow all authenticated users
   def show?
     record.is_a?(Class) || belongs_to_organization?
   end

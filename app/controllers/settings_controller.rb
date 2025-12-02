@@ -6,7 +6,9 @@
 class SettingsController < ApplicationController
   include OrganizationScoped
 
-  def index
+  # GET /settings - Display all settings for the organization
+  # Uses `show` action for RESTful consistency with singular resource routing
+  def show
     authorize Setting
     @settings = policy_scope(Setting).order(:category, :key)
     @settings_by_category = @settings.group_by(&:category)

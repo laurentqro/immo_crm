@@ -12,7 +12,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
 
   # === Authentication ===
 
-  test "requires authentication for index" do
+  test "requires authentication for show" do
     get settings_path
     assert_redirected_to new_user_session_path
   end
@@ -22,9 +22,9 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_path
   end
 
-  # === Index Action ===
+  # === Show Action ===
 
-  test "index displays all settings grouped by category" do
+  test "show displays all settings grouped by category" do
     sign_in @user
 
     get settings_path
@@ -36,7 +36,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".settings-category", minimum: 4
   end
 
-  test "index shows entity info settings" do
+  test "show shows entity info settings" do
     sign_in @user
 
     get settings_path
@@ -46,7 +46,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[name='settings[total_employees]']"
   end
 
-  test "index shows kyc procedure settings" do
+  test "show shows kyc procedure settings" do
     sign_in @user
 
     get settings_path
@@ -55,7 +55,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[name='settings[edd_for_peps]']"
   end
 
-  test "index shows compliance policy settings" do
+  test "show shows compliance policy settings" do
     sign_in @user
 
     get settings_path
@@ -64,7 +64,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[name='settings[written_aml_policy]']"
   end
 
-  test "index shows training settings" do
+  test "show shows training settings" do
     sign_in @user
 
     get settings_path
@@ -73,7 +73,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "select[name='settings[training_frequency]']"
   end
 
-  test "index pre-fills values from existing settings" do
+  test "show pre-fills values from existing settings" do
     sign_in @user
 
     get settings_path

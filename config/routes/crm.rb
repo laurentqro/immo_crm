@@ -37,10 +37,8 @@ authenticate :user do
   resources :str_reports
 
   # Settings management (US4) - Phase 3
-  # Settings use singular-style routes since there's only one settings page per org
-  resource :settings, only: [:show, :update], controller: "settings" do
-    get "/", action: :index, as: "", on: :collection
-  end
+  # Singular resource: one settings page per organization (GET/PATCH /settings)
+  resource :settings, only: [:show, :update], controller: "settings"
 
   # Annual submission wizard (US5) - Phase 4
   resources :submissions do
