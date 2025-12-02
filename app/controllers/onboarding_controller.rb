@@ -102,16 +102,14 @@ class OnboardingController < ApplicationController
   end
 
   def settings_params
-    params.fetch(:settings, ActionController::Parameters.new).permit(
-      :total_employees, :compliance_officers, :annual_revenue
-    )
+    return {} unless params.key?(:settings)
+    params.expect(settings: [:total_employees, :compliance_officers, :annual_revenue])
   end
 
   def policy_settings_params
-    params.fetch(:settings, ActionController::Parameters.new).permit(
-      :edd_for_peps, :edd_for_high_risk_countries, :edd_for_complex_structures,
-      :written_aml_policy, :training_frequency
-    )
+    return {} unless params.key?(:settings)
+    params.expect(settings: [:edd_for_peps, :edd_for_high_risk_countries, :edd_for_complex_structures,
+                             :written_aml_policy, :training_frequency])
   end
 
   # Session key handling: Rails cookie serializer may use symbols (MessagePack) or
