@@ -19,6 +19,8 @@ end
 
 # Clean up existing data (be careful in production!)
 puts "Cleaning existing data..."
+StrReport.destroy_all
+Transaction.destroy_all
 BeneficialOwner.destroy_all
 Client.destroy_all
 Organization.destroy_all
@@ -194,6 +196,193 @@ ended_client = Client.create!(
 )
 puts "  - Created ended relationship: #{ended_client.name}"
 
+# ============================================
+# Transactions
+# ============================================
+puts ""
+puts "Creating transactions..."
+
+# Get all active clients for transaction assignment
+active_clients = Client.where(relationship_ended_at: nil).to_a
+
+# Monaco property value ranges (in EUR)
+PROPERTY_VALUES = {
+  purchase: {
+    min: 500_000,
+    max: 50_000_000,
+    typical: [800_000, 1_200_000, 2_500_000, 5_000_000, 8_000_000, 15_000_000]
+  },
+  rental: {
+    min: 2_000,
+    max: 50_000,
+    typical: [3_500, 5_000, 8_000, 12_000, 25_000]
+  }
+}.freeze
+
+# Create transactions for current year
+current_year = Date.current.year
+transaction_count = 0
+
+# Create 25 transactions for current year
+25.times do |i|
+  client = active_clients.sample
+  transaction_type = %w[PURCHASE SALE RENTAL].sample
+
+  # Determine value based on transaction type
+  value = case transaction_type
+          when "PURCHASE", "SALE"
+            PROPERTY_VALUES[:purchase][:typical].sample + rand(-100_000..100_000)
+          when "RENTAL"
+            # Monthly rental * 12 for annual value
+            PROPERTY_VALUES[:rental][:typical].sample * 12
+          end
+
+  # Payment method - more cash for smaller transactions
+  payment_method = if value < 1_000_000 && rand < 0.3
+                     %w[CASH MIXED].sample
+                   else
+                     %w[WIRE CHECK].sample
+                   end
+
+  # Cash amount for CASH or MIXED payments
+  cash_amount = case payment_method
+                when "CASH"
+                  value
+                when "MIXED"
+                  [10_000, 15_000, 20_000, 50_000].sample
+                else
+                  nil
+                end
+
+  # Commission is typically 3-5% of transaction value
+  commission = (value * rand(0.03..0.05)).round(2) if transaction_type != "RENTAL"
+
+  # Agency role
+  agency_role = %w[BUYER_AGENT SELLER_AGENT DUAL_AGENT].sample
+
+  # Purchase purpose (only for purchases)
+  purchase_purpose = transaction_type == "PURCHASE" ? %w[RESIDENCE INVESTMENT].sample : nil
+
+  # Random date within current year
+  transaction_date = Faker::Date.between(
+    from: Date.new(current_year, 1, 1),
+    to: [Date.new(current_year, 12, 31), Date.current].min
+  )
+
+  transaction = Transaction.create!(
+    organization: organization,
+    client: client,
+    transaction_date: transaction_date,
+    transaction_type: transaction_type,
+    transaction_value: value,
+    payment_method: payment_method,
+    cash_amount: cash_amount,
+    agency_role: agency_role,
+    purchase_purpose: purchase_purpose,
+    commission_amount: commission,
+    property_country: "MC",
+    reference: "TXN-#{current_year}-#{(i + 1).to_s.rjust(4, '0')}",
+    notes: rand < 0.3 ? Faker::Lorem.sentence : nil
+  )
+
+  transaction_count += 1
+  puts "  - #{transaction.reference}: #{transaction.transaction_type_label} €#{transaction.transaction_value.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse}"
+end
+
+# Create 15 transactions for previous year
+previous_year = current_year - 1
+15.times do |i|
+  client = active_clients.sample
+  transaction_type = %w[PURCHASE SALE RENTAL].sample
+
+  value = case transaction_type
+          when "PURCHASE", "SALE"
+            PROPERTY_VALUES[:purchase][:typical].sample + rand(-100_000..100_000)
+          when "RENTAL"
+            PROPERTY_VALUES[:rental][:typical].sample * 12
+          end
+
+  payment_method = value < 1_000_000 && rand < 0.3 ? %w[CASH MIXED].sample : %w[WIRE CHECK].sample
+  cash_amount = payment_method == "CASH" ? value : (payment_method == "MIXED" ? [10_000, 15_000, 20_000].sample : nil)
+  commission = (value * rand(0.03..0.05)).round(2) if transaction_type != "RENTAL"
+
+  transaction_date = Faker::Date.between(
+    from: Date.new(previous_year, 1, 1),
+    to: Date.new(previous_year, 12, 31)
+  )
+
+  Transaction.create!(
+    organization: organization,
+    client: client,
+    transaction_date: transaction_date,
+    transaction_type: transaction_type,
+    transaction_value: value,
+    payment_method: payment_method,
+    cash_amount: cash_amount,
+    agency_role: %w[BUYER_AGENT SELLER_AGENT DUAL_AGENT].sample,
+    purchase_purpose: transaction_type == "PURCHASE" ? %w[RESIDENCE INVESTMENT].sample : nil,
+    commission_amount: commission,
+    property_country: "MC",
+    reference: "TXN-#{previous_year}-#{(i + 1).to_s.rjust(4, '0')}"
+  )
+
+  transaction_count += 1
+end
+
+puts "  - Created #{15} transactions for #{previous_year}"
+
+# ============================================
+# STR Reports
+# ============================================
+puts ""
+puts "Creating STR reports..."
+
+# Create a few STR reports linked to transactions
+str_count = 0
+
+# Find transactions with cash payments for STR reports
+cash_transactions = Transaction.where(payment_method: %w[CASH MIXED])
+                               .where.not(cash_amount: nil)
+                               .limit(3)
+
+cash_transactions.each do |txn|
+  StrReport.create!(
+    organization: organization,
+    client: txn.client,
+    linked_transaction: txn,
+    report_date: txn.transaction_date + rand(1..7).days,
+    reason: "CASH",
+    notes: "Cash payment of €#{txn.cash_amount.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse} flagged for review"
+  )
+  str_count += 1
+  puts "  - STR for cash transaction: #{txn.reference}"
+end
+
+# Create STR for PEP clients
+pep_clients = Client.peps.limit(2)
+pep_clients.each do |client|
+  StrReport.create!(
+    organization: organization,
+    client: client,
+    report_date: Faker::Date.between(from: 6.months.ago, to: Date.current),
+    reason: "PEP",
+    notes: "Politically Exposed Person - enhanced monitoring applied"
+  )
+  str_count += 1
+  puts "  - STR for PEP client: #{client.name}"
+end
+
+# Create STR for unusual pattern
+StrReport.create!(
+  organization: organization,
+  client: active_clients.sample,
+  report_date: Faker::Date.between(from: 3.months.ago, to: Date.current),
+  reason: "UNUSUAL_PATTERN",
+  notes: "Multiple rapid transactions in short timeframe - pattern flagged for review"
+)
+str_count += 1
+puts "  - STR for unusual pattern"
+
 # Summary
 puts ""
 puts "=" * 50
@@ -201,10 +390,23 @@ puts "Seed complete!"
 puts "=" * 50
 puts ""
 puts "Created:"
-puts "  - #{Client.natural_persons.count} natural persons"
-puts "  - #{Client.legal_entities.count} legal entities"
-puts "  - #{Client.trusts.count} trusts"
-puts "  - #{BeneficialOwner.count} beneficial owners"
+puts "  Clients:"
+puts "    - #{Client.natural_persons.count} natural persons"
+puts "    - #{Client.legal_entities.count} legal entities"
+puts "    - #{Client.trusts.count} trusts"
+puts "    - #{BeneficialOwner.count} beneficial owners"
+puts ""
+puts "  Transactions:"
+puts "    - #{Transaction.for_year(current_year).count} transactions in #{current_year}"
+puts "    - #{Transaction.for_year(previous_year).count} transactions in #{previous_year}"
+puts "    - Total value (#{current_year}): €#{Transaction.for_year(current_year).sum(:transaction_value).to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse}"
+puts ""
+puts "  Transaction types (#{current_year}):"
+puts "    - Purchases: #{Transaction.for_year(current_year).purchases.count}"
+puts "    - Sales: #{Transaction.for_year(current_year).sales.count}"
+puts "    - Rentals: #{Transaction.for_year(current_year).rentals.count}"
+puts ""
+puts "  STR Reports: #{StrReport.count}"
 puts ""
 puts "Risk distribution:"
 puts "  - HIGH: #{Client.where(risk_level: 'HIGH').count}"
