@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_30_232902) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_02_100456) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -133,6 +133,51 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_232902) do
     t.index ["organization_id", "created_at"], name: "index_audit_logs_on_organization_id_and_created_at"
     t.index ["organization_id"], name: "index_audit_logs_on_organization_id"
     t.index ["user_id"], name: "index_audit_logs_on_user_id"
+  end
+
+  create_table "beneficial_owners", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.string "control_type"
+    t.datetime "created_at", null: false
+    t.boolean "is_pep", default: false, null: false
+    t.string "name", null: false
+    t.string "nationality"
+    t.decimal "ownership_pct", precision: 5, scale: 2
+    t.string "pep_type"
+    t.string "residence_country"
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_beneficial_owners_on_client_id"
+    t.index ["is_pep"], name: "index_beneficial_owners_on_is_pep"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.datetime "became_client_at"
+    t.string "business_sector"
+    t.string "client_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.boolean "is_pep", default: false, null: false
+    t.boolean "is_vasp", default: false, null: false
+    t.string "legal_person_type"
+    t.string "name", null: false
+    t.string "nationality"
+    t.text "notes"
+    t.bigint "organization_id", null: false
+    t.string "pep_type"
+    t.string "rejection_reason"
+    t.datetime "relationship_ended_at"
+    t.string "residence_country"
+    t.string "risk_level"
+    t.datetime "updated_at", null: false
+    t.string "vasp_type"
+    t.index ["client_type"], name: "index_clients_on_client_type"
+    t.index ["deleted_at"], name: "index_clients_on_deleted_at"
+    t.index ["is_pep"], name: "index_clients_on_is_pep"
+    t.index ["organization_id", "client_type"], name: "index_clients_on_org_and_type"
+    t.index ["organization_id", "deleted_at"], name: "index_clients_on_organization_id_and_deleted_at"
+    t.index ["organization_id", "risk_level"], name: "index_clients_on_org_and_risk"
+    t.index ["organization_id"], name: "index_clients_on_organization_id"
+    t.index ["risk_level"], name: "index_clients_on_risk_level"
   end
 
   create_table "connected_accounts", force: :cascade do |t|
@@ -340,6 +385,52 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_232902) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "str_reports", force: :cascade do |t|
+    t.bigint "client_id"
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.text "notes"
+    t.bigint "organization_id", null: false
+    t.string "reason", null: false
+    t.date "report_date", null: false
+    t.bigint "transaction_id"
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_str_reports_on_client_id"
+    t.index ["deleted_at"], name: "index_str_reports_on_deleted_at"
+    t.index ["organization_id", "reason"], name: "index_str_reports_on_org_and_reason"
+    t.index ["organization_id", "report_date"], name: "index_str_reports_on_organization_id_and_report_date"
+    t.index ["organization_id"], name: "index_str_reports_on_organization_id"
+    t.index ["reason"], name: "index_str_reports_on_reason"
+    t.index ["report_date"], name: "index_str_reports_on_report_date"
+    t.index ["transaction_id"], name: "index_str_reports_on_transaction_id"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string "agency_role"
+    t.decimal "cash_amount", precision: 15, scale: 2
+    t.bigint "client_id", null: false
+    t.decimal "commission_amount", precision: 15, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.text "notes"
+    t.bigint "organization_id", null: false
+    t.string "payment_method"
+    t.string "property_country", default: "MC"
+    t.string "purchase_purpose"
+    t.string "reference"
+    t.date "transaction_date", null: false
+    t.string "transaction_type", null: false
+    t.decimal "transaction_value", precision: 15, scale: 2
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_transactions_on_client_id"
+    t.index ["deleted_at"], name: "index_transactions_on_deleted_at"
+    t.index ["organization_id", "transaction_date"], name: "index_transactions_on_organization_id_and_transaction_date"
+    t.index ["organization_id", "transaction_type"], name: "index_transactions_on_org_and_type"
+    t.index ["organization_id"], name: "index_transactions_on_organization_id"
+    t.index ["transaction_date"], name: "index_transactions_on_transaction_date"
+    t.index ["transaction_type"], name: "index_transactions_on_transaction_type"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "accepted_privacy_at", precision: nil
     t.datetime "accepted_terms_at", precision: nil
@@ -391,8 +482,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_30_232902) do
   add_foreign_key "api_tokens", "users"
   add_foreign_key "audit_logs", "organizations", on_delete: :nullify
   add_foreign_key "audit_logs", "users", on_delete: :nullify
+  add_foreign_key "beneficial_owners", "clients"
+  add_foreign_key "clients", "organizations"
   add_foreign_key "organizations", "accounts"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
+  add_foreign_key "str_reports", "clients"
+  add_foreign_key "str_reports", "organizations"
+  add_foreign_key "str_reports", "transactions"
+  add_foreign_key "transactions", "clients"
+  add_foreign_key "transactions", "organizations"
 end

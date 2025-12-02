@@ -25,4 +25,14 @@ class ApplicationController < ActionController::Base
   def current_organization
     @current_organization ||= current_account&.organization
   end
+
+  # Renders a 404 response in appropriate format.
+  # Used by organization-scoped controllers when resources are not found.
+  def render_not_found
+    respond_to do |format|
+      format.html { render file: Rails.root.join("public/404.html"), layout: false, status: :not_found }
+      format.turbo_stream { head :not_found }
+      format.json { head :not_found }
+    end
+  end
 end

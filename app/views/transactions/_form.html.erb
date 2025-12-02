@@ -1,0 +1,159 @@
+<%= form_with model: transaction, local: true, data: { controller: "transaction-form" } do |form| %>
+  <%= render "application/error_messages", resource: transaction %>
+
+  <div class="space-y-6">
+    <%# Client Selection %>
+    <div class="form-group">
+      <%= form.label :client_id, "Client" %>
+      <%= form.collection_select :client_id,
+          current_organization.clients.kept.order(:name),
+          :id,
+          :name,
+          { include_blank: "Select client...", selected: transaction.client_id },
+          { required: true } %>
+    </div>
+
+    <%# Transaction Details %>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :transaction_date, "Transaction Date" %>
+        <%= form.date_field :transaction_date,
+            value: transaction.transaction_date || Date.current,
+            required: true,
+            class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :reference, "Reference (optional)" %>
+        <%= form.text_field :reference,
+            class: "form-control",
+            placeholder: "e.g., TX-2024-001" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :transaction_type, "Type" %>
+        <%= form.select :transaction_type,
+            options_for_select([
+              ["Purchase", "PURCHASE"],
+              ["Sale", "SALE"],
+              ["Rental", "RENTAL"]
+            ], transaction.transaction_type),
+            { include_blank: "Select type..." },
+            {
+              required: true,
+              data: { transaction_form_target: "transactionType", action: "change->transaction-form#togglePurchasePurpose" }
+            } %>
+      </div>
+
+      <div class="form-group" data-transaction-form-target="purchasePurpose" <%= 'hidden' unless transaction.purchase? %>>
+        <%= form.label :purchase_purpose, "Purchase Purpose" %>
+        <%= form.select :purchase_purpose,
+            options_for_select([
+              ["Primary Residence", "RESIDENCE"],
+              ["Investment", "INVESTMENT"]
+            ], transaction.purchase_purpose),
+            { include_blank: "Select purpose..." } %>
+      </div>
+    </div>
+
+    <%# Value & Commission %>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :transaction_value, "Transaction Value (€)" %>
+        <%= form.number_field :transaction_value,
+            class: "form-control",
+            step: "0.01",
+            min: "0",
+            placeholder: "e.g., 1500000" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :commission_amount, "Commission Amount (€)" %>
+        <%= form.number_field :commission_amount,
+            class: "form-control",
+            step: "0.01",
+            min: "0",
+            placeholder: "e.g., 45000" %>
+      </div>
+    </div>
+
+    <%# Property & Agency %>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :property_country, "Property Country" %>
+        <%= form.select :property_country,
+            options_for_select([
+              ["Monaco", "MC"],
+              ["France", "FR"],
+              ["Italy", "IT"],
+              ["Switzerland", "CH"],
+              ["United Kingdom", "GB"],
+              ["Other", ""]
+            ], transaction.property_country || "MC"),
+            { include_blank: "Select country..." } %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :agency_role, "Agency Role" %>
+        <%= form.select :agency_role,
+            options_for_select([
+              ["Buyer's Agent", "BUYER_AGENT"],
+              ["Seller's Agent", "SELLER_AGENT"],
+              ["Dual Agent", "DUAL_AGENT"]
+            ], transaction.agency_role),
+            { include_blank: "Select role..." } %>
+      </div>
+    </div>
+
+    <%# Payment Section %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-4">Payment Information</h4>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div class="form-group">
+          <%= form.label :payment_method, "Payment Method" %>
+          <%= form.select :payment_method,
+              options_for_select([
+                ["Wire Transfer", "WIRE"],
+                ["Cash", "CASH"],
+                ["Check", "CHECK"],
+                ["Cryptocurrency", "CRYPTO"],
+                ["Mixed (Cash + Other)", "MIXED"]
+              ], transaction.payment_method),
+              { include_blank: "Select method..." },
+              {
+                data: { transaction_form_target: "paymentMethod", action: "change->transaction-form#toggleCashAmount" }
+              } %>
+        </div>
+
+        <div class="form-group" data-transaction-form-target="cashAmount" <%= 'hidden' unless transaction.has_cash? %>>
+          <%= form.label :cash_amount, "Cash Amount (€)" %>
+          <%= form.number_field :cash_amount,
+              class: "form-control",
+              step: "0.01",
+              min: "0",
+              placeholder: "e.g., 50000" %>
+          <p class="form-hint mt-1 text-xs text-amber-600 dark:text-amber-400">
+            Cash payments > €10,000 require enhanced due diligence.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <%# Notes %>
+    <div class="form-group">
+      <%= form.label :notes %>
+      <%= form.text_area :notes,
+          rows: 3,
+          class: "form-control",
+          placeholder: "Additional notes about this transaction..." %>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", transactions_path, class: "btn btn-secondary" %>
+    <%= form.submit transaction.persisted? ? "Update Transaction" : "Create Transaction", class: "btn btn-primary" %>
+  </div>
+<% end %>

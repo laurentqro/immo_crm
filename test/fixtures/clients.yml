@@ -1,0 +1,159 @@
+# Client fixtures for testing
+# Each client belongs to an organization from organizations.yml
+
+# Natural person in organization :one
+natural_person:
+  organization: one
+  name: "Jean-Pierre Martin"
+  client_type: "PP"
+  nationality: "FR"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 1.year.ago %>
+
+# Legal entity in organization :one
+legal_entity:
+  organization: one
+  name: "Monaco Investments SARL"
+  client_type: "PM"
+  legal_person_type: "SARL"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "MEDIUM"
+  business_sector: "Finance"
+  became_client_at: <%= 6.months.ago %>
+
+# Second legal entity in organization :one (for testing owner not belonging to client)
+legal_entity_two:
+  organization: one
+  name: "Second Corp SA"
+  client_type: "PM"
+  legal_person_type: "SA"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 3.months.ago %>
+
+# Legal entity with beneficial owners (for cascade delete test)
+legal_entity_with_owners:
+  organization: one
+  name: "Corp With Owners"
+  client_type: "PM"
+  legal_person_type: "SCI"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 2.months.ago %>
+
+# Trust in organization :one
+trust:
+  organization: one
+  name: "Martin Family Trust"
+  client_type: "TRUST"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "MEDIUM"
+  became_client_at: <%= 8.months.ago %>
+
+# PEP client in organization :one
+pep_client:
+  organization: one
+  name: "Pierre Dupont"
+  client_type: "PP"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: true
+  pep_type: "DOMESTIC"
+  risk_level: "HIGH"
+  became_client_at: <%= 4.months.ago %>
+
+# High risk client in organization :one
+high_risk_client:
+  organization: one
+  name: "Risky Business LLC"
+  client_type: "PM"
+  legal_person_type: "OTHER"
+  nationality: "RU"
+  residence_country: "RU"
+  is_pep: false
+  risk_level: "HIGH"
+  business_sector: "Consulting"
+  became_client_at: <%= 5.months.ago %>
+
+# Client with ended relationship (for active scope test)
+ended_relationship:
+  organization: one
+  name: "Former Client"
+  client_type: "PP"
+  nationality: "FR"
+  residence_country: "FR"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 2.years.ago %>
+  relationship_ended_at: <%= 1.month.ago %>
+
+# Discarded (soft-deleted) client
+discarded_client:
+  organization: one
+  name: "Deleted Client"
+  client_type: "PP"
+  nationality: "IT"
+  residence_country: "IT"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 1.year.ago %>
+  deleted_at: <%= 1.week.ago %>
+
+# Client in organization :two (for cross-tenant isolation tests)
+other_org_client:
+  organization: two
+  name: "Other Org Client"
+  client_type: "PP"
+  nationality: "FR"
+  residence_country: "FR"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 3.months.ago %>
+
+# Legal entity in organization :two (for cross-tenant beneficial owner tests)
+other_org_legal_entity:
+  organization: two
+  name: "Other Org Corp"
+  client_type: "PM"
+  legal_person_type: "SARL"
+  nationality: "FR"
+  residence_country: "FR"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 2.months.ago %>
+
+# Client in organization :company (for policy tests)
+company_client:
+  organization: company
+  name: "Company Test Client"
+  client_type: "PP"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 1.month.ago %>
+
+# VASP client
+vasp_client:
+  organization: one
+  name: "Crypto Exchange Monaco"
+  client_type: "PM"
+  legal_person_type: "SAM"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  is_vasp: true
+  vasp_type: "EXCHANGE"
+  risk_level: "HIGH"
+  business_sector: "Cryptocurrency"
+  became_client_at: <%= 2.months.ago %>

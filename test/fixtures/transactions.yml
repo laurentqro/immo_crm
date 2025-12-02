@@ -1,0 +1,149 @@
+# Transaction fixtures for testing
+# Each transaction belongs to an organization and a client
+
+# Standard purchase transaction in organization :one
+purchase:
+  organization: one
+  client: natural_person
+  reference: "2024-001"
+  transaction_date: <%= Date.current - 30.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 1500000.00
+  commission_amount: 45000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "BUYER_AGENT"
+  purchase_purpose: "RESIDENCE"
+
+# Sale transaction in organization :one
+sale:
+  organization: one
+  client: natural_person
+  reference: "2024-002"
+  transaction_date: <%= Date.current - 15.days %>
+  transaction_type: "SALE"
+  transaction_value: 2100000.00
+  commission_amount: 63000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "SELLER_AGENT"
+
+# Rental transaction in organization :one
+rental:
+  organization: one
+  client: legal_entity
+  reference: "2024-003"
+  transaction_date: <%= Date.current - 10.days %>
+  transaction_type: "RENTAL"
+  transaction_value: 36000.00
+  commission_amount: 3600.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "DUAL_AGENT"
+
+# Transaction with cash payment
+cash_payment:
+  organization: one
+  client: natural_person
+  reference: "2024-004"
+  transaction_date: <%= Date.current - 5.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 500000.00
+  commission_amount: 15000.00
+  property_country: "MC"
+  payment_method: "MIXED"
+  cash_amount: 50000.00
+  agency_role: "BUYER_AGENT"
+  purchase_purpose: "INVESTMENT"
+
+# Transaction from last year (for year filtering tests)
+last_year_transaction:
+  organization: one
+  client: natural_person
+  reference: "2023-001"
+  transaction_date: <%= Date.current - 1.year - 30.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 1200000.00
+  commission_amount: 36000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "BUYER_AGENT"
+
+# High-value transaction
+high_value:
+  organization: one
+  client: legal_entity
+  reference: "2024-005"
+  transaction_date: <%= Date.current - 7.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 5000000.00
+  commission_amount: 150000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "BUYER_AGENT"
+  purchase_purpose: "INVESTMENT"
+
+# Transaction with PEP client
+pep_transaction:
+  organization: one
+  client: pep_client
+  reference: "2024-006"
+  transaction_date: <%= Date.current - 3.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 3500000.00
+  commission_amount: 105000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "BUYER_AGENT"
+  purchase_purpose: "RESIDENCE"
+
+# Transaction with crypto payment
+crypto_payment:
+  organization: one
+  client: vasp_client
+  reference: "2024-007"
+  transaction_date: <%= Date.current - 2.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 800000.00
+  commission_amount: 24000.00
+  property_country: "MC"
+  payment_method: "CRYPTO"
+  agency_role: "BUYER_AGENT"
+  purchase_purpose: "INVESTMENT"
+
+# Discarded (soft-deleted) transaction
+discarded_transaction:
+  organization: one
+  client: natural_person
+  reference: "2024-DEL"
+  transaction_date: <%= Date.current - 60.days %>
+  transaction_type: "SALE"
+  transaction_value: 900000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  deleted_at: <%= 1.week.ago %>
+
+# Transaction in organization :two (for cross-tenant isolation tests)
+other_org_transaction:
+  organization: two
+  client: other_org_client
+  reference: "OTHER-001"
+  transaction_date: <%= Date.current - 20.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 1000000.00
+  property_country: "FR"
+  payment_method: "WIRE"
+  agency_role: "BUYER_AGENT"
+
+# Transaction with check payment
+check_payment:
+  organization: one
+  client: legal_entity
+  reference: "2024-008"
+  transaction_date: <%= Date.current - 1.day %>
+  transaction_type: "SALE"
+  transaction_value: 750000.00
+  commission_amount: 22500.00
+  property_country: "MC"
+  payment_method: "CHECK"
+  agency_role: "SELLER_AGENT"

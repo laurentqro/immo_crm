@@ -1,0 +1,56 @@
+<%= turbo_frame_tag dom_id(transaction), class: "contents" do %>
+  <tr id="transaction_<%= transaction.id %>">
+    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0">
+      <div class="font-medium text-gray-900 dark:text-white">
+        <%= link_to l(transaction.transaction_date, format: :long), transaction, class: "hover:text-blue-600 dark:hover:text-blue-400" %>
+      </div>
+      <% if transaction.reference.present? %>
+        <div class="text-gray-500 dark:text-gray-400"><%= transaction.reference %></div>
+      <% end %>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+      <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset
+        <%= case transaction.transaction_type
+            when 'PURCHASE' then 'bg-green-50 text-green-700 ring-green-700/10 dark:bg-green-900/30 dark:text-green-300 dark:ring-green-400/30'
+            when 'SALE' then 'bg-blue-50 text-blue-700 ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-300 dark:ring-blue-400/30'
+            when 'RENTAL' then 'bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300 dark:ring-purple-400/30'
+            end %>">
+        <%= transaction.transaction_type_label %>
+      </span>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm">
+      <div class="text-gray-900 dark:text-white">
+        <%= link_to transaction.client.name, transaction.client, class: "hover:text-blue-600 dark:hover:text-blue-400" %>
+      </div>
+      <div class="text-gray-500 dark:text-gray-400"><%= transaction.client.client_type_label %></div>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 dark:text-white">
+      <% if transaction.transaction_value.present? %>
+        <%= number_to_currency(transaction.transaction_value, unit: "€", precision: 0) %>
+      <% else %>
+        <span class="text-gray-400 dark:text-gray-500">—</span>
+      <% end %>
+    </td>
+    <td class="whitespace-nowrap px-3 py-4 text-sm">
+      <% if transaction.payment_method.present? %>
+        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+          <%= if transaction.has_cash?
+                'bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-700/10 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-400/30'
+              else
+                'bg-gray-50 text-gray-600 ring-1 ring-inset ring-gray-500/10 dark:bg-gray-700 dark:text-gray-300 dark:ring-gray-400/30'
+              end %>">
+          <%= transaction.payment_method_label %>
+          <% if transaction.has_cash? && transaction.cash_amount.present? %>
+            (<%= number_to_currency(transaction.cash_amount, unit: "€", precision: 0) %> cash)
+          <% end %>
+        </span>
+      <% else %>
+        <span class="text-gray-400 dark:text-gray-500">—</span>
+      <% end %>
+    </td>
+    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+      <%= link_to "View", transaction, class: "text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" %>
+      <%= link_to "Edit", edit_transaction_path(transaction), class: "ml-4 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300" %>
+    </td>
+  </tr>
+<% end %>

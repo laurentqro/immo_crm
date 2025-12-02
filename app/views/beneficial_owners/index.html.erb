@@ -1,0 +1,13 @@
+<%= turbo_frame_tag "beneficial_owners" do %>
+  <% if @beneficial_owners.any? %>
+    <ul role="list" class="divide-y divide-gray-200">
+      <% @beneficial_owners.each do |owner| %>
+        <%= render partial: "beneficial_owner", locals: { beneficial_owner: owner, client: @client } %>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="px-4 py-8 text-center text-sm text-gray-500">
+      No beneficial owners recorded yet.
+    </div>
+  <% end %>
+<% end %>

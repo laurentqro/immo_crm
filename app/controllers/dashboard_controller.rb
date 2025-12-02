@@ -57,7 +57,7 @@ class DashboardController < ApplicationController
   def fetch_recent_transactions
     return [] unless defined?(Transaction) && Transaction.table_exists?
 
-    organization_scope(Transaction)
+    policy_scope(Transaction)
       .includes(:client)
       .order(transaction_date: :desc)
       .limit(5)

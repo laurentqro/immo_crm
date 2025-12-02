@@ -1,0 +1,107 @@
+# STR Report fixtures for testing
+# Each STR report belongs to an organization and optionally to a client and/or transaction
+
+# STR report from this year
+this_year_str:
+  organization: one
+  client: natural_person
+  report_date: <%= Date.current - 30.days %>
+  reason: "CASH"
+  notes: "Cash payment exceeded threshold"
+
+# STR report from last year (for year filtering tests)
+last_year_str:
+  organization: one
+  client: natural_person
+  report_date: <%= Date.current - 1.year - 30.days %>
+  reason: "UNUSUAL_PATTERN"
+  notes: "Historical STR for testing"
+
+# STR with cash reason
+cash_str:
+  organization: one
+  client: natural_person
+  linked_transaction: cash_payment
+  report_date: <%= Date.current - 5.days %>
+  reason: "CASH"
+  notes: "Cash amount exceeded 10K threshold"
+
+# STR with PEP reason
+pep_str:
+  organization: one
+  client: pep_client
+  report_date: <%= Date.current - 3.days %>
+  reason: "PEP"
+  notes: "PEP client involvement flagged"
+
+# STR with unusual pattern
+unusual_pattern_str:
+  organization: one
+  client: legal_entity
+  report_date: <%= Date.current - 10.days %>
+  reason: "UNUSUAL_PATTERN"
+  notes: "Multiple transactions in short period"
+
+# STR with other reason
+other_str:
+  organization: one
+  report_date: <%= Date.current - 20.days %>
+  reason: "OTHER"
+  notes: "General suspicion - third party tip"
+
+# STR with client only (no transaction)
+str_with_client:
+  organization: one
+  client: natural_person
+  report_date: <%= Date.current - 15.days %>
+  reason: "PEP"
+  notes: "PEP-related STR"
+
+# STR without client (suspicious activity from unknown source)
+str_without_client:
+  organization: one
+  report_date: <%= Date.current - 25.days %>
+  reason: "OTHER"
+  notes: "Anonymous tip about potential money laundering"
+
+# STR with transaction only
+str_with_transaction:
+  organization: one
+  linked_transaction: high_value
+  report_date: <%= Date.current - 7.days %>
+  reason: "CASH"
+  notes: "High-value transaction with unusual payment pattern"
+
+# STR without transaction
+str_without_transaction:
+  organization: one
+  client: high_risk_client
+  report_date: <%= Date.current - 12.days %>
+  reason: "UNUSUAL_PATTERN"
+  notes: "Client behavior flagged without specific transaction"
+
+# Discarded (soft-deleted) STR
+discarded_str:
+  organization: one
+  client: natural_person
+  report_date: <%= Date.current - 60.days %>
+  reason: "OTHER"
+  notes: "Deleted STR report"
+  deleted_at: <%= 1.week.ago %>
+
+# STR in organization :two (for cross-tenant isolation tests)
+other_org_str:
+  organization: two
+  client: other_org_client
+  report_date: <%= Date.current - 10.days %>
+  reason: "CASH"
+  notes: "Other org STR for testing isolation"
+
+# STR with crypto-related transaction
+crypto_str:
+  organization: one
+  client: vasp_client
+  linked_transaction: crypto_payment
+  report_date: <%= Date.current - 2.days %>
+  reason: "OTHER"
+  notes: "Cryptocurrency transaction requires additional scrutiny"

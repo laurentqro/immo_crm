@@ -1,0 +1,5 @@
+<%= turbo_stream.prepend "str_reports_table" do %>
+  <%= render partial: "str_report", locals: { str_report: @str_report } %>
+<% end %>
+<%= turbo_stream.update "modal" do %>
+<% end %>

@@ -1,0 +1,138 @@
+<%= form_with model: client, local: true, data: { controller: "client-form" } do |form| %>
+  <%= render "application/error_messages", resource: client %>
+
+  <div class="space-y-6">
+    <%# Basic Information %>
+    <div class="form-group">
+      <%= form.label :name %>
+      <%= form.text_field :name, required: true, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :client_type, "Client type" %>
+      <%= form.select :client_type,
+          options_for_select([
+            ["Natural Person", "PP"],
+            ["Legal Entity", "PM"],
+            ["Trust", "TRUST"]
+          ], client.client_type),
+          { include_blank: "Select type..." },
+          {
+            required: true,
+            data: { client_form_target: "clientType", action: "change->client-form#toggleFields" }
+          } %>
+    </div>
+
+    <%# Legal Person Type (only for PM) %>
+    <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="legalPersonType">
+      <%= form.label :legal_person_type, "Legal form" %>
+      <%= form.select :legal_person_type,
+          options_for_select([
+            ["SCI (Société Civile Immobilière)", "SCI"],
+            ["SARL (Société à Responsabilité Limitée)", "SARL"],
+            ["SAM (Société Anonyme Monégasque)", "SAM"],
+            ["SNC (Société en Nom Collectif)", "SNC"],
+            ["SA (Société Anonyme)", "SA"],
+            ["Other", "OTHER"]
+          ], client.legal_person_type),
+          { include_blank: "Select legal form..." } %>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :nationality %>
+        <%= form.select :nationality,
+            options_for_select([
+              ["Monaco", "MC"],
+              ["France", "FR"],
+              ["Italy", "IT"],
+              ["Switzerland", "CH"],
+              ["United Kingdom", "GB"],
+              ["United States", "US"],
+              ["Russia", "RU"],
+              ["Other", ""]
+            ], client.nationality),
+            { include_blank: "Select country..." } %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :residence_country, "Residence country" %>
+        <%= form.select :residence_country,
+            options_for_select([
+              ["Monaco", "MC"],
+              ["France", "FR"],
+              ["Italy", "IT"],
+              ["Switzerland", "CH"],
+              ["United Kingdom", "GB"],
+              ["United States", "US"],
+              ["Russia", "RU"],
+              ["Other", ""]
+            ], client.residence_country),
+            { include_blank: "Select country..." } %>
+      </div>
+    </div>
+
+    <%# PEP Section %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <div class="form-picker-group">
+        <%= form.check_box :is_pep,
+            data: { client_form_target: "isPep", action: "change->client-form#togglePepType" } %>
+        <div>
+          <%= form.label :is_pep, "Politically Exposed Person" %>
+          <p class="form-hint">Client is a PEP or related to a PEP.</p>
+        </div>
+      </div>
+
+      <div class="form-group mt-4 ml-7 <%= 'hidden' unless client.is_pep? %>" data-client-form-target="pepType">
+        <%= form.label :pep_type, "PEP type" %>
+        <%= form.select :pep_type,
+            options_for_select([
+              ["Domestic PEP", "DOMESTIC"],
+              ["Foreign PEP", "FOREIGN"],
+              ["International Organization", "INTL_ORG"]
+            ], client.pep_type),
+            { include_blank: "Select PEP type..." } %>
+      </div>
+    </div>
+
+    <%# Risk Level %>
+    <div class="form-group">
+      <%= form.label :risk_level, "Risk level" %>
+      <%= form.select :risk_level,
+          options_for_select([
+            ["Low", "LOW"],
+            ["Medium", "MEDIUM"],
+            ["High", "HIGH"]
+          ], client.risk_level),
+          { include_blank: "Select risk level..." } %>
+    </div>
+
+    <%# Business Sector (optional) %>
+    <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="businessSector">
+      <%= form.label :business_sector %>
+      <%= form.text_field :business_sector,
+          class: "form-control",
+          placeholder: "e.g., Finance, Real Estate, Consulting" %>
+    </div>
+
+    <%# Became Client Date %>
+    <div class="form-group">
+      <%= form.label :became_client_at, "Client since" %>
+      <%= form.date_field :became_client_at, class: "form-control" %>
+    </div>
+
+    <%# Notes %>
+    <div class="form-group">
+      <%= form.label :notes %>
+      <%= form.text_area :notes,
+          rows: 3,
+          class: "form-control",
+          placeholder: "Additional notes about this client..." %>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", clients_path, class: "btn btn-secondary" %>
+    <%= form.submit client.persisted? ? "Update Client" : "Create Client", class: "btn btn-primary" %>
+  </div>
+<% end %>

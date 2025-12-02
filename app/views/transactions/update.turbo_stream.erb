@@ -1,0 +1,5 @@
+<%= turbo_stream.replace dom_id(@transaction) do %>
+  <%= render partial: "transaction", locals: { transaction: @transaction } %>
+<% end %>
+<%= turbo_stream.update "modal" do %>
+<% end %>

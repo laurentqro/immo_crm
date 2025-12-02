@@ -1,0 +1,88 @@
+# Beneficial owner fixtures for testing
+# Each beneficial owner belongs to a client (legal entity or trust)
+
+# Standard owner for legal_entity
+owner_one:
+  client: legal_entity
+  name: "Marie Durand"
+  nationality: "FR"
+  residence_country: "MC"
+  ownership_pct: 51.0
+  control_type: "DIRECT"
+  is_pep: false
+
+# Second owner for legal_entity
+owner_two:
+  client: legal_entity
+  name: "Philippe Laurent"
+  nationality: "MC"
+  residence_country: "MC"
+  ownership_pct: 49.0
+  control_type: "DIRECT"
+  is_pep: false
+
+# Owner for legal_entity_with_owners (for cascade delete tests)
+cascade_owner_one:
+  client: legal_entity_with_owners
+  name: "Cascade Owner One"
+  nationality: "MC"
+  residence_country: "MC"
+  ownership_pct: 60.0
+  control_type: "DIRECT"
+  is_pep: false
+
+cascade_owner_two:
+  client: legal_entity_with_owners
+  name: "Cascade Owner Two"
+  nationality: "FR"
+  residence_country: "MC"
+  ownership_pct: 40.0
+  control_type: "INDIRECT"
+  is_pep: false
+
+# PEP beneficial owner
+pep_owner:
+  client: legal_entity
+  name: "PEP Beneficial Owner"
+  nationality: "MC"
+  residence_country: "MC"
+  ownership_pct: 0.0
+  control_type: "REPRESENTATIVE"
+  is_pep: true
+  pep_type: "DOMESTIC"
+
+# Owner for trust
+trust_owner:
+  client: trust
+  name: "Trust Beneficiary"
+  nationality: "MC"
+  residence_country: "MC"
+  ownership_pct: 100.0
+  control_type: "DIRECT"
+  is_pep: false
+
+# Owner for different client (for testing owner not belonging to client)
+other_client_owner:
+  client: legal_entity_two
+  name: "Other Client Owner"
+  nationality: "IT"
+  residence_country: "IT"
+  ownership_pct: 100.0
+  control_type: "DIRECT"
+  is_pep: false
+
+# Owner in organization :two (for cross-tenant tests)
+other_org_owner:
+  client: other_org_legal_entity
+  name: "Other Org Owner"
+  nationality: "FR"
+  residence_country: "FR"
+  ownership_pct: 100.0
+  control_type: "DIRECT"
+  is_pep: false
+
+# Owner with minimal data (testing optional fields)
+minimal_owner:
+  client: legal_entity
+  name: "Minimal Owner"
+  is_pep: false

@@ -1,0 +1,99 @@
+<%# Use shallow route: POST to /clients/:id/beneficial_owners for new, PATCH to /beneficial_owners/:id for existing %>
+<%= form_with model: beneficial_owner,
+              url: beneficial_owner.persisted? ? beneficial_owner_path(beneficial_owner) : client_beneficial_owners_path(client),
+              local: true do |form| %>
+  <%= render "application/error_messages", resource: beneficial_owner %>
+
+  <div class="space-y-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :name, class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.text_field :name,
+              required: true,
+              class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :ownership_pct, "Ownership %", class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.number_field :ownership_pct,
+              min: 0,
+              max: 100,
+              step: 0.1,
+              class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
+              placeholder: "e.g., 25.0" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :nationality, class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.select :nationality,
+              options_for_select([
+                ["Monaco", "MC"],
+                ["France", "FR"],
+                ["Italy", "IT"],
+                ["Switzerland", "CH"],
+                ["United Kingdom", "GB"],
+                ["United States", "US"],
+                ["Russia", "RU"],
+                ["Other", ""]
+              ], beneficial_owner.nationality),
+              { include_blank: "Select country..." },
+              { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :residence_country, "Residence country", class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.select :residence_country,
+              options_for_select([
+                ["Monaco", "MC"],
+                ["France", "FR"],
+                ["Italy", "IT"],
+                ["Switzerland", "CH"],
+                ["United Kingdom", "GB"],
+                ["United States", "US"],
+                ["Russia", "RU"],
+                ["Other", ""]
+              ], beneficial_owner.residence_country),
+              { include_blank: "Select country..." },
+              { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
+        </div>
+      </div>
+    </div>
+
+    <%# PEP Section %>
+    <div class="flex items-start">
+      <div class="flex h-6 items-center">
+        <%= form.check_box :is_pep,
+            class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600" %>
+      </div>
+      <div class="ml-3">
+        <%= form.label :is_pep, "Politically Exposed Person", class: "text-sm font-medium leading-6 text-gray-900" %>
+        <p class="text-sm text-gray-500">This beneficial owner is a PEP or related to a PEP.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 flex items-center justify-end gap-x-4">
+    <% if beneficial_owner.persisted? %>
+      <%= link_to "Cancel",
+          client_path(client),
+          class: "text-sm font-semibold leading-6 text-gray-900",
+          data: { turbo_frame: dom_id(beneficial_owner) } %>
+    <% else %>
+      <%= link_to "Cancel",
+          client_path(client),
+          class: "text-sm font-semibold leading-6 text-gray-900",
+          data: { turbo_frame: "new_beneficial_owner" } %>
+    <% end %>
+    <%= form.submit beneficial_owner.persisted? ? "Update" : "Add",
+        class: "rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" %>
+  </div>
+<% end %>

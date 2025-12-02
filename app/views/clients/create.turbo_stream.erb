@@ -1,0 +1,5 @@
+<%= turbo_stream.prepend "clients_table" do %>
+  <%= render partial: "client", locals: { client: @client } %>
+<% end %>
+<%= turbo_stream.update "modal" do %>
+<% end %>

@@ -1,0 +1,105 @@
+<% Current.meta_tags.set(title: "Transactions") %>
+
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">Transactions</h1>
+      <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+        Manage purchase, sale, and rental transactions.
+      </p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <%= link_to "Add Transaction", new_transaction_path, class: "btn btn-primary", data: { turbo_frame: "modal" } %>
+    </div>
+  </div>
+
+  <%# Filters %>
+  <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-5">
+    <%= form_with url: transactions_path, method: :get, local: true, class: "col-span-full flex gap-4 flex-wrap" do |f| %>
+      <div class="flex-1 min-w-[200px]">
+        <%= f.text_field :q, value: params[:q], placeholder: "Search by reference...", class: "form-control" %>
+      </div>
+      <div>
+        <%= f.select :transaction_type,
+            options_for_select([
+              ["All Types", ""],
+              ["Purchase", "PURCHASE"],
+              ["Sale", "SALE"],
+              ["Rental", "RENTAL"]
+            ], params[:transaction_type]),
+            {},
+            {} %>
+      </div>
+      <div>
+        <%= f.select :payment_method,
+            options_for_select([
+              ["All Payment Methods", ""],
+              ["Wire Transfer", "WIRE"],
+              ["Cash", "CASH"],
+              ["Check", "CHECK"],
+              ["Cryptocurrency", "CRYPTO"],
+              ["Mixed", "MIXED"]
+            ], params[:payment_method]),
+            {},
+            {} %>
+      </div>
+      <div>
+        <%= f.select :year,
+            options_for_select([["All Years", ""]] + (Date.current.year.downto(Date.current.year - 5)).map { |y| [y.to_s, y] }, params[:year]),
+            {},
+            {} %>
+      </div>
+      <%= f.submit "Search", class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+
+  <%# Transaction list %>
+  <%= turbo_frame_tag "transactions_list" do %>
+    <div class="mt-8 flow-root">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <% if @transactions.any? %>
+            <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+              <thead>
+                <tr>
+                  <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-0">Date</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Type</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Client</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Value</th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Payment</th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                    <span class="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="transactions_table">
+                <% @transactions.each do |transaction| %>
+                  <%= render partial: "transactions/transaction", locals: { transaction: transaction } %>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <div class="empty-state text-center py-12">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <h3 class="mt-2 text-sm font-semibold text-gray-900 dark:text-white">No transactions</h3>
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by recording your first transaction.</p>
+              <div class="mt-6">
+                <%= link_to new_transaction_path, class: "btn btn-primary" do %>
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                  </svg>
+                  Add Transaction
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%# Modal frame for new/edit forms %>
+<%= turbo_frame_tag "modal" %>
