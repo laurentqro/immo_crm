@@ -106,12 +106,6 @@ class OnboardingController < ApplicationController
     params.expect(settings: [:total_employees, :compliance_officers, :annual_revenue])
   end
 
-  def policy_settings_params
-    return {} unless params.key?(:settings)
-    params.expect(settings: [:edd_for_peps, :edd_for_high_risk_countries, :edd_for_complex_structures,
-                             :written_aml_policy, :training_frequency])
-  end
-
   # Session key handling: Rails cookie serializer may use symbols (MessagePack) or
   # strings (JSON) depending on configuration. These helpers handle both to ensure
   # compatibility across Rails versions and serializer settings.
