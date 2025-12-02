@@ -37,10 +37,9 @@ authenticate :user do
   resources :str_reports
 
   # Settings management (US4) - Phase 3
-  resources :settings, only: [:index, :update] do
-    collection do
-      patch :batch_update
-    end
+  # Settings use singular-style routes since there's only one settings page per org
+  resource :settings, only: [:show, :update], controller: "settings" do
+    get "/", action: :index, as: "", on: :collection
   end
 
   # Annual submission wizard (US5) - Phase 4

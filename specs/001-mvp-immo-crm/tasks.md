@@ -180,31 +180,31 @@
 
 **Independent Test**: Can edit entity info, toggle compliance settings, see settings grouped by category.
 
-### Tests for User Story 4 ⚠️
+### Tests for User Story 4 ✅
 
 > **TDD: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T084 [P] [US4] Create `test/models/setting_test.rb` with type casting, uniqueness tests
-- [ ] T085 [P] [US4] Create `test/controllers/settings_controller_test.rb`
-- [ ] T086 [P] [US4] Create `test/system/settings_test.rb` with category tabs tests
+- [X] T084 [P] [US4] Create `test/models/setting_test.rb` with type casting, uniqueness tests
+- [X] T085 [P] [US4] Create `test/controllers/settings_controller_test.rb`
+- [X] T086 [P] [US4] Create `test/system/settings_test.rb` with category tabs tests
 
-### Implementation for User Story 4
+### Implementation for User Story 4 ✅
 
-- [ ] T087 [US4] Create migration `db/migrate/YYYYMMDD_create_settings.rb` with unique index
-- [ ] T088 [US4] Run migration: `bin/rails db:migrate`
-- [ ] T089 [P] [US4] Create `app/models/setting.rb` with typed_value method, categories
-- [ ] T090 [P] [US4] Create `app/policies/setting_policy.rb`
-- [ ] T091 [US4] Create `app/controllers/settings_controller.rb` with batch update
-- [ ] T092 [P] [US4] Create `app/views/settings/index.html.erb` with category tabs
-- [ ] T093 [P] [US4] Create `app/views/settings/_entity_info.html.erb` partial
-- [ ] T094 [P] [US4] Create `app/views/settings/_kyc_procedures.html.erb` partial
-- [ ] T095 [P] [US4] Create `app/views/settings/_compliance_policies.html.erb` partial
-- [ ] T096 [P] [US4] Create `app/views/settings/_training.html.erb` partial
-- [ ] T097 [US4] Create `app/services/settings_seeder.rb` for default settings on org creation
-- [ ] T098 [US4] Create fixtures `test/fixtures/settings.yml`
-- [ ] T099 [US4] Verify all US4 tests pass: `bin/rails test test/models/setting_test.rb test/controllers/settings_controller_test.rb test/system/settings_test.rb`
+- [X] T087 [US4] Create migration `db/migrate/YYYYMMDD_create_settings.rb` with unique index
+- [X] T088 [US4] Run migration: `bin/rails db:migrate`
+- [X] T089 [P] [US4] Create `app/models/setting.rb` with typed_value method, categories
+- [X] T090 [P] [US4] Create `app/policies/setting_policy.rb`
+- [X] T091 [US4] Create `app/controllers/settings_controller.rb` with batch update
+- [X] T092 [P] [US4] Create `app/views/settings/index.html.erb` with category tabs
+- [X] T093 [P] [US4] Create `app/views/settings/_entity_info.html.erb` partial (inline in index)
+- [X] T094 [P] [US4] Create `app/views/settings/_kyc_procedures.html.erb` partial (inline in index)
+- [X] T095 [P] [US4] Create `app/views/settings/_compliance_policies.html.erb` partial (inline in index)
+- [X] T096 [P] [US4] Create `app/views/settings/_training.html.erb` partial (inline in index)
+- [X] T097 [US4] Create `app/services/settings_seeder.rb` for default settings on org creation
+- [X] T098 [US4] Create fixtures `test/fixtures/settings.yml`
+- [X] T099 [US4] Verify all US4 tests pass: `bin/rails test test/models/setting_test.rb test/controllers/settings_controller_test.rb test/system/settings_test.rb`
 
-**Checkpoint**: Settings management working. US4 independently testable.
+**Checkpoint**: Settings management working. US4 independently testable. ✅
 
 ---
 
