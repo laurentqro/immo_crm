@@ -10,6 +10,7 @@
 #
 class BeneficialOwner < ApplicationRecord
   include AmsfConstants
+  include Auditable
 
   # === Associations ===
   belongs_to :client
@@ -33,6 +34,9 @@ class BeneficialOwner < ApplicationRecord
 
   # Client type validation - beneficial owners only for PM/TRUST
   validate :client_must_be_legal_entity_or_trust
+
+  # === Callbacks ===
+  before_save :clear_pep_type_if_not_pep
 
   # === Scopes ===
   scope :peps, -> { where(is_pep: true) }
@@ -68,5 +72,10 @@ class BeneficialOwner < ApplicationRecord
     unless client.can_have_beneficial_owners?
       errors.add(:client, "must be a legal entity (PM) or trust")
     end
+  end
+
+  # Clear pep_type when is_pep is set to false to maintain data consistency
+  def clear_pep_type_if_not_pep
+    self.pep_type = nil unless is_pep?
   end
 end

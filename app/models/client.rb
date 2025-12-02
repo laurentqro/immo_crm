@@ -37,6 +37,10 @@ class Client < ApplicationRecord
   validates :risk_level, inclusion: { in: RISK_LEVELS }, allow_blank: true
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_blank: true
 
+  # === Callbacks ===
+  before_save :clear_pep_type_if_not_pep
+  before_save :clear_vasp_type_if_not_vasp
+
   # === Scopes ===
 
   # Client type scopes
@@ -56,8 +60,12 @@ class Client < ApplicationRecord
   # Organization scope (for policy/controller use)
   scope :for_organization, ->(org) { where(organization: org) }
 
-  # Search scope
-  scope :search, ->(query) { where("name ILIKE ?", "%#{query}%") if query.present? }
+  # Search scope - uses sanitize_sql_like to escape LIKE special characters (%, _, \)
+  scope :search, ->(query) {
+    return all if query.blank?
+
+    where("name ILIKE ?", "%#{sanitize_sql_like(query)}%")
+  }
 
   # === Instance Methods ===
 
@@ -103,5 +111,17 @@ class Client < ApplicationRecord
     when "LOW" then "bg-green-100 text-green-800"
     else "bg-gray-100 text-gray-800"
     end
+  end
+
+  private
+
+  # Clear pep_type when is_pep is set to false to maintain data consistency
+  def clear_pep_type_if_not_pep
+    self.pep_type = nil unless is_pep?
+  end
+
+  # Clear vasp_type when is_vasp is set to false to maintain data consistency
+  def clear_vasp_type_if_not_vasp
+    self.vasp_type = nil unless is_vasp?
   end
 end

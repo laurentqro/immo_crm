@@ -85,12 +85,4 @@ class BeneficialOwnersController < ApplicationController
   def beneficial_owner_params
     params.require(:beneficial_owner).permit(policy(@beneficial_owner || BeneficialOwner).permitted_attributes)
   end
-
-  def render_not_found
-    respond_to do |format|
-      format.html { render file: Rails.root.join("public/404.html"), layout: false, status: :not_found }
-      format.turbo_stream { head :not_found }
-      format.json { head :not_found }
-    end
-  end
 end

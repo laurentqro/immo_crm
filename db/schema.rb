@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_01_231620) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_02_100456) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -173,7 +173,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_231620) do
     t.index ["client_type"], name: "index_clients_on_client_type"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
     t.index ["is_pep"], name: "index_clients_on_is_pep"
+    t.index ["organization_id", "client_type"], name: "index_clients_on_org_and_type"
     t.index ["organization_id", "deleted_at"], name: "index_clients_on_organization_id_and_deleted_at"
+    t.index ["organization_id", "risk_level"], name: "index_clients_on_org_and_risk"
     t.index ["organization_id"], name: "index_clients_on_organization_id"
     t.index ["risk_level"], name: "index_clients_on_risk_level"
   end
@@ -395,6 +397,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_231620) do
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_str_reports_on_client_id"
     t.index ["deleted_at"], name: "index_str_reports_on_deleted_at"
+    t.index ["organization_id", "reason"], name: "index_str_reports_on_org_and_reason"
     t.index ["organization_id", "report_date"], name: "index_str_reports_on_organization_id_and_report_date"
     t.index ["organization_id"], name: "index_str_reports_on_organization_id"
     t.index ["reason"], name: "index_str_reports_on_reason"
@@ -422,6 +425,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_01_231620) do
     t.index ["client_id"], name: "index_transactions_on_client_id"
     t.index ["deleted_at"], name: "index_transactions_on_deleted_at"
     t.index ["organization_id", "transaction_date"], name: "index_transactions_on_organization_id_and_transaction_date"
+    t.index ["organization_id", "transaction_type"], name: "index_transactions_on_org_and_type"
     t.index ["organization_id"], name: "index_transactions_on_organization_id"
     t.index ["transaction_date"], name: "index_transactions_on_transaction_date"
     t.index ["transaction_type"], name: "index_transactions_on_transaction_type"

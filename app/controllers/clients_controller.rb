@@ -8,7 +8,7 @@ class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :edit, :update, :destroy]
 
   def index
-    @clients = policy_scope(Client)
+    @clients = policy_scope(Client).includes(:beneficial_owners)
     @clients = @clients.where(client_type: params[:client_type]) if params[:client_type].present?
     @clients = @clients.where(risk_level: params[:risk_level]) if params[:risk_level].present?
     @clients = @clients.search(params[:q]) if params[:q].present?
@@ -81,13 +81,5 @@ class ClientsController < ApplicationController
 
   def client_params
     params.require(:client).permit(policy(@client || Client).permitted_attributes)
-  end
-
-  def render_not_found
-    respond_to do |format|
-      format.html { render file: Rails.root.join("public/404.html"), layout: false, status: :not_found }
-      format.turbo_stream { head :not_found }
-      format.json { head :not_found }
-    end
   end
 end

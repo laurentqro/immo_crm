@@ -53,9 +53,12 @@ class Transaction < ApplicationRecord
   # Organization scope (for policy/controller use)
   scope :for_organization, ->(org) { where(organization: org) }
 
-  # Search scope
+  # Search scope - uses sanitize_sql_like to escape LIKE special characters (%, _, \)
   scope :search, ->(query) {
-    where("reference ILIKE ? OR notes ILIKE ?", "%#{query}%", "%#{query}%") if query.present?
+    return all if query.blank?
+
+    sanitized = sanitize_sql_like(query)
+    where("reference ILIKE ? OR notes ILIKE ?", "%#{sanitized}%", "%#{sanitized}%")
   }
 
   # === Instance Methods ===

@@ -8,13 +8,13 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
 
   def index
-    @transactions = policy_scope(Transaction)
+    @transactions = policy_scope(Transaction).includes(:client)
 
     # Apply filters
     @transactions = @transactions.where(transaction_type: params[:transaction_type]) if params[:transaction_type].present?
     @transactions = @transactions.for_year(params[:year].to_i) if params[:year].present?
     @transactions = @transactions.by_payment_method(params[:payment_method]) if params[:payment_method].present?
-    @transactions = @transactions.where("reference ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+    @transactions = @transactions.search(params[:q]) if params[:q].present?
 
     @transactions = @transactions.recent
 
@@ -86,13 +86,5 @@ class TransactionsController < ApplicationController
 
   def transaction_params
     params.require(:transaction).permit(policy(@transaction || Transaction).permitted_attributes)
-  end
-
-  def render_not_found
-    respond_to do |format|
-      format.html { render file: Rails.root.join("public/404.html"), layout: false, status: :not_found }
-      format.turbo_stream { head :not_found }
-      format.json { head :not_found }
-    end
   end
 end

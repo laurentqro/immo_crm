@@ -8,7 +8,7 @@ class StrReportsController < ApplicationController
   before_action :set_str_report, only: [:show, :edit, :update, :destroy]
 
   def index
-    @str_reports = policy_scope(StrReport)
+    @str_reports = policy_scope(StrReport).includes(:client, :linked_transaction)
 
     # Apply filters
     @str_reports = @str_reports.for_year(params[:year].to_i) if params[:year].present?
@@ -85,13 +85,5 @@ class StrReportsController < ApplicationController
 
   def str_report_params
     params.require(:str_report).permit(policy(@str_report || StrReport).permitted_attributes)
-  end
-
-  def render_not_found
-    respond_to do |format|
-      format.html { render file: Rails.root.join("public/404.html"), layout: false, status: :not_found }
-      format.turbo_stream { head :not_found }
-      format.json { head :not_found }
-    end
   end
 end
