@@ -96,7 +96,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_redirected_to settings_path
-    assert_equal "Settings saved successfully.", flash[:notice]
+    assert_match(/settings? saved successfully/i, flash[:notice])
 
     @entity_name.reload
     assert_equal "Updated Agency Name", @entity_name.value
@@ -267,7 +267,8 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to settings_path
     follow_redirect!
 
-    assert_select "#flash", /Settings saved/i
+    # Flash message includes count of updated settings
+    assert_select "#flash", /1 setting saved successfully/i
   end
 
   # === Batch Update ===

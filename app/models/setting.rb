@@ -24,6 +24,31 @@ class Setting < ApplicationRecord
   # Supported value types with corresponding cast behavior
   VALUE_TYPES = %w[boolean integer decimal string date enum].freeze
 
+  # Schema for known settings with their types, categories, and XBRL mappings.
+  # This is the single source of truth for valid setting keys.
+  # Used by SettingsController for strong parameters and SettingsSeeder for defaults.
+  SCHEMA = {
+    # Entity Info - Basic organization information (XBRL section a01xx)
+    "entity_name" => {value_type: "string", category: "entity_info", xbrl: "a0101"},
+    "total_employees" => {value_type: "integer", category: "entity_info", xbrl: "a0102"},
+    "compliance_officers" => {value_type: "integer", category: "entity_info", xbrl: "a0103"},
+    "annual_revenue" => {value_type: "decimal", category: "entity_info", xbrl: "a0104"},
+    # KYC Procedures - Due diligence settings (XBRL section a41xx)
+    "edd_for_peps" => {value_type: "boolean", category: "kyc_procedures", xbrl: "a4101"},
+    "edd_for_high_risk_countries" => {value_type: "boolean", category: "kyc_procedures", xbrl: "a4102"},
+    "edd_for_complex_structures" => {value_type: "boolean", category: "kyc_procedures", xbrl: "a4103"},
+    "sdd_applied" => {value_type: "boolean", category: "kyc_procedures", xbrl: "a4104"},
+    # Compliance Policies - Policy documentation (XBRL section a51xx)
+    "written_aml_policy" => {value_type: "boolean", category: "compliance_policies", xbrl: "a5101"},
+    "policy_last_updated" => {value_type: "date", category: "compliance_policies", xbrl: "a5102"},
+    "risk_assessment_performed" => {value_type: "boolean", category: "compliance_policies", xbrl: "a5103"},
+    "internal_controls" => {value_type: "boolean", category: "compliance_policies", xbrl: "a5104"},
+    # Training - Staff training settings (XBRL section a61xx)
+    "training_frequency" => {value_type: "enum", category: "training", xbrl: "a6101"},
+    "last_training_date" => {value_type: "date", category: "training", xbrl: "a6102"},
+    "training_covers_aml" => {value_type: "boolean", category: "training", xbrl: "a6103"}
+  }.freeze
+
   belongs_to :organization
 
   validates :key, presence: true, uniqueness: {scope: :organization_id}
@@ -39,14 +64,16 @@ class Setting < ApplicationRecord
 
   # Returns the value cast to its appropriate Ruby type.
   # All values are stored as strings in the database.
+  # Returns nil for empty values or invalid formats (e.g., invalid dates).
   #
-  # @return [Object, nil] The typed value or nil if empty
+  # @return [Object, nil] The typed value or nil if empty/invalid
   def typed_value
     return nil if value.nil? || value.empty?
 
     case value_type
     when "boolean"
-      value.in?(%w[true 1 yes])
+      # Accept common boolean representations from forms
+      value.in?(%w[true 1])
     when "integer"
       value.to_i
     when "decimal"
@@ -58,6 +85,9 @@ class Setting < ApplicationRecord
     else
       value
     end
+  rescue ArgumentError, Date::Error
+    # Return nil for invalid date formats instead of raising
+    nil
   end
 
   # === Type Predicates ===

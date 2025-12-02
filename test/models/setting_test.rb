@@ -173,6 +173,16 @@ class SettingTest < ActiveSupport::TestCase
     assert_kind_of Date, setting.typed_value
   end
 
+  test "typed_value returns nil for invalid date format" do
+    setting = Setting.new(value: "not-a-date", value_type: "date")
+    assert_nil setting.typed_value
+  end
+
+  test "typed_value returns nil for malformed date" do
+    setting = Setting.new(value: "2025-13-45", value_type: "date")
+    assert_nil setting.typed_value
+  end
+
   test "typed_value returns nil for nil value" do
     setting = Setting.new(value: nil, value_type: "string")
     assert_nil setting.typed_value
@@ -264,6 +274,18 @@ class SettingTest < ActiveSupport::TestCase
   test "VALUE_TYPES constant includes all valid types" do
     expected = %w[boolean integer decimal string date enum]
     assert_equal expected.sort, Setting::VALUE_TYPES.sort
+  end
+
+  test "SCHEMA constant includes all setting definitions" do
+    assert_kind_of Hash, Setting::SCHEMA
+    assert_equal 15, Setting::SCHEMA.keys.count
+
+    # Verify each schema entry has required keys
+    Setting::SCHEMA.each do |key, schema|
+      assert_includes Setting::VALUE_TYPES, schema[:value_type], "#{key} has invalid value_type"
+      assert_includes Setting::CATEGORIES, schema[:category], "#{key} has invalid category"
+      assert schema[:xbrl].present?, "#{key} is missing xbrl element"
+    end
   end
 
   # === Instance Methods ===

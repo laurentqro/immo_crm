@@ -2,31 +2,9 @@
 
 # Controller for organization-wide settings management.
 # Settings are displayed in categorized sections and can be updated in batch.
+# Settings use singular resource routes (GET/PATCH /settings) since there's one settings page per org.
 class SettingsController < ApplicationController
   include OrganizationScoped
-
-  # Schema for known settings with their types and categories
-  SETTING_SCHEMA = {
-    # Entity Info
-    "entity_name" => {value_type: "string", category: "entity_info", xbrl: "a0101"},
-    "total_employees" => {value_type: "integer", category: "entity_info", xbrl: "a0102"},
-    "compliance_officers" => {value_type: "integer", category: "entity_info", xbrl: "a0103"},
-    "annual_revenue" => {value_type: "decimal", category: "entity_info", xbrl: "a0104"},
-    # KYC Procedures
-    "edd_for_peps" => {value_type: "boolean", category: "kyc_procedures", xbrl: "a4101"},
-    "edd_for_high_risk_countries" => {value_type: "boolean", category: "kyc_procedures", xbrl: "a4102"},
-    "edd_for_complex_structures" => {value_type: "boolean", category: "kyc_procedures", xbrl: "a4103"},
-    "sdd_applied" => {value_type: "boolean", category: "kyc_procedures", xbrl: "a4104"},
-    # Compliance Policies
-    "written_aml_policy" => {value_type: "boolean", category: "compliance_policies", xbrl: "a5101"},
-    "policy_last_updated" => {value_type: "date", category: "compliance_policies", xbrl: "a5102"},
-    "risk_assessment_performed" => {value_type: "boolean", category: "compliance_policies", xbrl: "a5103"},
-    "internal_controls" => {value_type: "boolean", category: "compliance_policies", xbrl: "a5104"},
-    # Training
-    "training_frequency" => {value_type: "enum", category: "training", xbrl: "a6101"},
-    "last_training_date" => {value_type: "date", category: "training", xbrl: "a6102"},
-    "training_covers_aml" => {value_type: "boolean", category: "training", xbrl: "a6103"}
-  }.freeze
 
   def index
     authorize Setting
@@ -37,26 +15,31 @@ class SettingsController < ApplicationController
 
   def update
     authorize Setting
+    updated_count = 0
 
     ActiveRecord::Base.transaction do
       settings_params.each do |key, value|
+        # Skip unknown keys - only allow keys defined in schema
+        schema = Setting::SCHEMA[key]
+        next unless schema
+
         setting = current_organization.settings.find_or_initialize_by(key: key)
 
         # Set schema attributes for new settings
-        if setting.new_record? && SETTING_SCHEMA.key?(key)
-          schema = SETTING_SCHEMA[key]
+        if setting.new_record?
           setting.value_type = schema[:value_type]
           setting.category = schema[:category]
           setting.xbrl_element = schema[:xbrl]
         end
 
         setting.update!(value: value.to_s)
+        updated_count += 1
       end
     end
 
     respond_to do |format|
-      format.html { redirect_to settings_path, notice: "Settings saved successfully." }
-      format.turbo_stream { flash.now[:notice] = "Settings saved successfully." }
+      format.html { redirect_to settings_path, notice: "#{updated_count} #{'setting'.pluralize(updated_count)} saved successfully." }
+      format.turbo_stream { flash.now[:notice] = "#{updated_count} #{'setting'.pluralize(updated_count)} saved successfully." }
     end
   rescue ActiveRecord::RecordInvalid => e
     respond_to do |format|
@@ -67,7 +50,12 @@ class SettingsController < ApplicationController
 
   private
 
+  # Only permit known setting keys from the schema - prevents mass assignment attacks.
+  # Uses slice to extract only allowed keys, then permit to convert to permitted params.
+  # @see https://api.rubyonrails.org/classes/ActionController/Parameters.html
   def settings_params
-    params.fetch(:settings, {}).permit!
+    params.require(:settings).slice(*Setting::SCHEMA.keys).permit!
+  rescue ActionController::ParameterMissing
+    ActionController::Parameters.new({}).permit!
   end
 end
