@@ -185,16 +185,24 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal original_value, other_org_setting.value
   end
 
-  # === Category Filtering ===
+  # === Tab Navigation ===
 
-  test "can filter by category parameter" do
+  test "renders all settings categories with tabs" do
     sign_in @user
 
-    get settings_path(category: "entity_info")
+    get settings_path
 
     assert_response :success
-    # Should highlight the entity_info category
-    assert_select ".category-tab.active", text: /Entity Info/i
+    # Should render all 4 tabs for client-side navigation
+    assert_select "[data-tabs-target='tab']", 4
+    # Should render all 4 panels (3 hidden, 1 visible initially)
+    assert_select "[data-tabs-target='panel']", 4
+    # First panel (Entity Information) should be visible
+    assert_select "#entity_info.settings-category"
+    # Other panels should have hidden class
+    assert_select "#kyc_procedures.settings-category.hidden"
+    assert_select "#compliance_policies.settings-category.hidden"
+    assert_select "#training.settings-category.hidden"
   end
 
   # === Turbo Stream Responses ===

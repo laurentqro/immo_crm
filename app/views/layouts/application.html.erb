@@ -10,7 +10,7 @@
       <%= render "navbar" %>
     </header>
 
-    <main>
+    <main class="py-8">
       <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
 
