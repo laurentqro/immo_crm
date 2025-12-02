@@ -36,7 +36,11 @@ export default class extends Controller {
   }
 
   // Immediate submit for select changes (no debounce needed)
+  // Clears any pending debounced search to prevent double-submit race condition
   submit() {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
     this.element.requestSubmit()
   }
 }
