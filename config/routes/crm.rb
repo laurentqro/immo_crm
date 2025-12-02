@@ -37,11 +37,8 @@ authenticate :user do
   resources :str_reports
 
   # Settings management (US4) - Phase 3
-  resources :settings, only: [:index, :update] do
-    collection do
-      patch :batch_update
-    end
-  end
+  # Singular resource: one settings page per organization (GET/PATCH /settings)
+  resource :settings, only: [:show, :update], controller: "settings"
 
   # Annual submission wizard (US5) - Phase 4
   resources :submissions do

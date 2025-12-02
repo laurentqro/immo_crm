@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_02_100456) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_02_155301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -385,6 +385,21 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_100456) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "settings", force: :cascade do |t|
+    t.string "category", null: false
+    t.datetime "created_at", null: false
+    t.string "key", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "updated_at", null: false
+    t.string "value", default: "", null: false
+    t.string "value_type", null: false
+    t.string "xbrl_element"
+    t.index ["category"], name: "index_settings_on_category"
+    t.index ["organization_id", "key"], name: "index_settings_on_organization_id_and_key", unique: true
+    t.index ["organization_id"], name: "index_settings_on_organization_id"
+    t.index ["xbrl_element"], name: "index_settings_on_xbrl_element"
+  end
+
   create_table "str_reports", force: :cascade do |t|
     t.bigint "client_id"
     t.datetime "created_at", null: false
@@ -488,6 +503,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_100456) do
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
+  add_foreign_key "settings", "organizations"
   add_foreign_key "str_reports", "clients"
   add_foreign_key "str_reports", "organizations"
   add_foreign_key "str_reports", "transactions"
