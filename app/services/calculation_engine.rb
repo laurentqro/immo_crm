@@ -33,6 +33,7 @@ class CalculationEngine
   # Persist calculated values to submission_values table
   # Idempotent - updates existing values or creates new ones
   def populate_submission_values!
+    # Populate calculated values from CRM data
     calculate_all.each do |element_name, value|
       submission_value = submission.submission_values.find_or_initialize_by(
         element_name: element_name
@@ -43,6 +44,27 @@ class CalculationEngine
         submission_value.assign_attributes(
           value: value.to_s,
           source: "calculated"
+        )
+        submission_value.save!
+      end
+    end
+
+    # Populate settings-based values (policies, entity info)
+    populate_settings_values!
+  end
+
+  # Copy organization settings with XBRL mappings to submission values
+  def populate_settings_values!
+    organization.settings.where.not(xbrl_element: [nil, ""]).find_each do |setting|
+      submission_value = submission.submission_values.find_or_initialize_by(
+        element_name: setting.xbrl_element
+      )
+
+      # Only update if not already confirmed by user
+      unless submission_value.persisted? && submission_value.confirmed?
+        submission_value.assign_attributes(
+          value: setting.value.to_s,
+          source: "from_settings"
         )
         submission_value.save!
       end

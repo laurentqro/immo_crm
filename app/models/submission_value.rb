@@ -121,6 +121,50 @@ class SubmissionValue < ApplicationRecord
     end
   end
 
+  # Human-readable description from AMSF element mapping
+  def description
+    # Check for exact match in YAML
+    if (desc = self.class.element_metadata.dig(element_name, "description"))
+      return desc
+    end
+
+    # Handle dynamic nationality codes like a1103_FR, a1103_GB
+    if element_name.match?(/\Aa1103_([A-Z]{2})\z/)
+      country_code = element_name.split("_").last
+      country = ::ISO3166::Country[country_code]
+      if country
+        flag = country.emoji_flag
+        country_name = country.common_name || country.iso_short_name
+        return "Clients from \u00A0#{flag} #{country_name}"
+      end
+      return "Clients from #{country_code}"
+    end
+
+    # Fallback to humanized element name
+    element_name.humanize
+  end
+
+  # Load and cache AMSF element mapping
+  def self.element_metadata
+    @element_metadata ||= begin
+      yaml = YAML.safe_load_file(
+        Rails.root.join("config/amsf_element_mapping.yml"),
+        permitted_classes: [],
+        permitted_symbols: [],
+        aliases: true
+      )
+      # Flatten nested sections into a single hash keyed by element code
+      yaml.each_with_object({}) do |(section, elements), result|
+        next unless elements.is_a?(Hash)
+
+        elements.each { |code, meta| result[code] = meta }
+      end
+    rescue Psych::SyntaxError => e
+      Rails.logger.warn("Failed to parse AMSF element mapping: #{e.message}")
+      {}
+    end
+  end
+
   def source_badge_class
     case source
     when "calculated" then "bg-blue-100 text-blue-800"

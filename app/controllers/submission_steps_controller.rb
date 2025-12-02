@@ -28,10 +28,8 @@ class SubmissionStepsController < ApplicationController
       show_step_4
     end
 
-    respond_to do |format|
-      format.html { render step_template }
-      format.turbo_stream { render step_template }
-    end
+    # Always render HTML - this is a full page wizard, not turbo stream updates
+    render step_template
   end
 
   def update
@@ -66,11 +64,11 @@ class SubmissionStepsController < ApplicationController
     when 2
       confirm_policy_values
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Policy values confirmed."
+                  notice: "Policy values confirmed.", status: :see_other
     when 4
       handle_step_4_confirm
     else
-      redirect_to submission_submission_step_path(@submission, step: @step)
+      redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
     end
   end
 
@@ -93,13 +91,13 @@ class SubmissionStepsController < ApplicationController
   def redirect_to_previous_step
     create_step_audit_log("back")
     previous = @step > 1 ? @step - 1 : 1
-    redirect_to submission_submission_step_path(@submission, step: previous)
+    redirect_to submission_submission_step_path(@submission, step: previous), status: :see_other
   end
 
   def redirect_to_next_step
     create_step_audit_log("continue")
     next_step = @step < 4 ? @step + 1 : 4
-    redirect_to submission_submission_step_path(@submission, step: next_step)
+    redirect_to submission_submission_step_path(@submission, step: next_step), status: :see_other
   end
 
   # === Step 1: Review Aggregates ===
@@ -124,7 +122,7 @@ class SubmissionStepsController < ApplicationController
       redirect_to_next_step
     else
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Changes saved."
+                  notice: "Changes saved.", status: :see_other
     end
   end
 
@@ -145,7 +143,7 @@ class SubmissionStepsController < ApplicationController
     if params[:commit] == "continue"
       redirect_to_next_step
     else
-      redirect_to submission_submission_step_path(@submission, step: @step)
+      redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
     end
   end
 
@@ -171,7 +169,7 @@ class SubmissionStepsController < ApplicationController
       redirect_to_next_step
     else
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Answers saved."
+                  notice: "Answers saved.", status: :see_other
     end
   end
 
@@ -198,11 +196,11 @@ class SubmissionStepsController < ApplicationController
   def update_step_4
     if params[:commit] == "complete" && @submission.may_complete?
       @submission.complete!
-      redirect_to @submission, notice: "Submission completed successfully."
+      redirect_to @submission, notice: "Submission completed successfully.", status: :see_other
     elsif params[:commit] == "back"
       redirect_to_previous_step
     else
-      redirect_to submission_submission_step_path(@submission, step: @step)
+      redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
     end
   end
 
@@ -210,13 +208,13 @@ class SubmissionStepsController < ApplicationController
     if params[:action_type] == "revalidate"
       @validation_result = perform_validation(force: true)
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Validation re-run."
+                  notice: "Validation re-run.", status: :see_other
     elsif @submission.in_review? && @validation_result&.valid?
       @submission.validate_submission!
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Submission validated successfully."
+                  notice: "Submission validated successfully.", status: :see_other
     else
-      redirect_to submission_submission_step_path(@submission, step: @step)
+      redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
     end
   end
 
