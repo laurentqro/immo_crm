@@ -51,6 +51,8 @@ class SubmissionStepsControllerTest < ActionDispatch::IntegrationTest
     get submission_submission_step_path(@submission, step: 1)
     assert_response :success
 
+    # Reload to see new values created by controller
+    @submission.reload
     # Values should be calculated
     assert @submission.submission_values.any?
   end

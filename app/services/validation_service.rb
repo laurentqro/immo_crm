@@ -11,6 +11,13 @@ require "uri"
 # running at VALIDATOR_URL.
 #
 class ValidationService
+  # Result object for validation responses
+  # Provides method access to validation data (valid?, errors, warnings)
+  Result = Struct.new(:valid, :errors, :warnings, keyword_init: true) do
+    def valid?
+      valid
+    end
+  end
   # Base URL for the validator service
   VALIDATOR_URL = ENV.fetch("XBRL_VALIDATOR_URL", "http://localhost:8000")
 
@@ -95,11 +102,11 @@ class ValidationService
   def parse_success_response(response)
     data = JSON.parse(response.body, symbolize_names: true)
 
-    {
+    Result.new(
       valid: data[:valid],
       errors: normalize_errors(data[:errors] || []),
       warnings: normalize_errors(data[:warnings] || [])
-    }
+    )
   end
 
   def normalize_errors(errors)
@@ -114,11 +121,11 @@ class ValidationService
   end
 
   def error_result(message)
-    {
+    Result.new(
       valid: false,
       errors: [{ code: "SERVICE_ERROR", message: message, element: nil }],
       warnings: []
-    }
+    )
   end
 
   def self.build_http(uri)

@@ -1,0 +1,40 @@
+<%# Progress indicator for submission wizard steps %>
+<nav class="mb-8" aria-label="Progress">
+  <ol class="step-indicator flex items-center justify-center space-x-8">
+    <% (1..4).each do |step_num| %>
+      <li class="flex items-center">
+        <% if step_num < current_step %>
+          <%# Completed step %>
+          <span class="flex items-center">
+            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
+              <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </span>
+            <span class="ml-3 text-sm font-medium text-gray-900"><%= step_name(step_num) %></span>
+          </span>
+        <% elsif step_num == current_step %>
+          <%# Current step %>
+          <span class="flex items-center">
+            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-600 bg-white">
+              <span class="text-sm font-semibold text-blue-600"><%= step_num %></span>
+            </span>
+            <span class="ml-3 text-sm font-medium text-blue-600"><%= step_name(step_num) %></span>
+          </span>
+        <% else %>
+          <%# Upcoming step %>
+          <span class="flex items-center">
+            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-300 bg-white">
+              <span class="text-sm font-medium text-gray-500"><%= step_num %></span>
+            </span>
+            <span class="ml-3 text-sm font-medium text-gray-500"><%= step_name(step_num) %></span>
+          </span>
+        <% end %>
+
+        <% if step_num < 4 %>
+          <div class="ml-8 h-0.5 w-16 bg-gray-200"></div>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+</nav>
