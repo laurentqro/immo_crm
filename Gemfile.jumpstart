@@ -11,7 +11,7 @@ gem "name_of_person", "~> 1.0"
 gem "nokogiri", ">= 1.12.5" # Security update
 gem "noticed", "~> 2.2"
 gem "openssl", "~> 3.3"
-gem "pagy", "~> 43.0"
+gem "pagy", "~> 43.1"
 gem "pay", "~> 11.0"
 gem "prefixed_ids", "~> 1.2"
 gem "pretender", "~> 0.4"
