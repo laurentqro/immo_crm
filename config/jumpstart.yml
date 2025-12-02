@@ -1,0 +1,17 @@
+---
+application_name: Immo CRM
+business_name: L. Curau SARL
+business_address: 
+domain: example.com
+support_email: support@example.com
+default_from_email: My App <no-reply@example.com>
+background_job_processor: 
+email_provider: 
+account_types: both
+apns: false
+fcm: false
+integrations:
+omniauth_providers:
+payment_processors:
+multitenancy:
+gems:
