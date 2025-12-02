@@ -80,6 +80,6 @@ class ClientsController < ApplicationController
   end
 
   def client_params
-    params.require(:client).permit(policy(@client || Client).permitted_attributes)
+    params.expect(client: policy(@client || Client).permitted_attributes)
   end
 end

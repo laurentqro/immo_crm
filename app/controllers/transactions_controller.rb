@@ -85,6 +85,6 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_params
-    params.require(:transaction).permit(policy(@transaction || Transaction).permitted_attributes)
+    params.expect(transaction: policy(@transaction || Transaction).permitted_attributes)
   end
 end

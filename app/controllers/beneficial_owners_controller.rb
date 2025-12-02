@@ -83,6 +83,6 @@ class BeneficialOwnersController < ApplicationController
   end
 
   def beneficial_owner_params
-    params.require(:beneficial_owner).permit(policy(@beneficial_owner || BeneficialOwner).permitted_attributes)
+    params.expect(beneficial_owner: policy(@beneficial_owner || BeneficialOwner).permitted_attributes)
   end
 end

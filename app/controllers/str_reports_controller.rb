@@ -84,6 +84,6 @@ class StrReportsController < ApplicationController
   end
 
   def str_report_params
-    params.require(:str_report).permit(policy(@str_report || StrReport).permitted_attributes)
+    params.expect(str_report: policy(@str_report || StrReport).permitted_attributes)
   end
 end

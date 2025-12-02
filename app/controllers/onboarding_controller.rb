@@ -98,17 +98,17 @@ class OnboardingController < ApplicationController
   end
 
   def organization_params
-    params.require(:organization).permit(:name, :rci_number, :country)
+    params.expect(organization: [:name, :rci_number, :country])
   end
 
   def settings_params
-    params.fetch(:settings, {}).permit(
+    params.fetch(:settings, ActionController::Parameters.new).permit(
       :total_employees, :compliance_officers, :annual_revenue
     )
   end
 
   def policy_settings_params
-    params.fetch(:settings, {}).permit(
+    params.fetch(:settings, ActionController::Parameters.new).permit(
       :edd_for_peps, :edd_for_high_risk_countries, :edd_for_complex_structures,
       :written_aml_policy, :training_frequency
     )
