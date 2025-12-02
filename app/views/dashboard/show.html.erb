@@ -68,7 +68,7 @@
     </div>
 
     <%# STR Reports %>
-    <div class="stats-panel bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
+    <%= link_to str_reports_path, class: "stats-panel block bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-150" do %>
       <div class="p-5">
         <div class="flex items-center">
           <div class="flex-shrink-0">
@@ -84,7 +84,7 @@
           </div>
         </div>
       </div>
-    </div>
+    <% end %>
 
     <%# Submission Status %>
     <div class="submission-status bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg border border-gray-200 dark:border-gray-700">
