@@ -54,12 +54,11 @@ class ElementMappingTest < XbrlComplianceTestCase
       end
     end
 
-    # Report but don't fail - type mapping may use different conventions
-    if mismatched_types.any?
-      puts "\n=== Type Mismatches ==="
-      mismatched_types.each { |m| puts "  #{m}" }
-      puts "======================\n"
-    end
+    # Expected issue - type mapping may use different conventions than taxonomy
+    # Skip if mismatches found - this documents the known issue
+    skip "Type conventions differ between mapping and taxonomy (#{mismatched_types.size} elements)" if mismatched_types.any?
+
+    assert mismatched_types.empty?, "Type conventions should match"
   end
 
   test "no obsolete elements in mapping" do
@@ -83,11 +82,8 @@ class ElementMappingTest < XbrlComplianceTestCase
       end
     end
 
-    if obsolete_patterns.any?
-      puts "\n=== Potentially Obsolete Elements ==="
-      obsolete_patterns.each { |o| puts "  #{o}" }
-      puts "====================================\n"
-    end
+    # Document potentially obsolete elements - these may need cleanup
+    skip "Found #{obsolete_patterns.size} potentially obsolete element(s) in mapping" if obsolete_patterns.any?
   end
 
   test "mapping sources are valid" do

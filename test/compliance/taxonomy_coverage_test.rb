@@ -19,8 +19,9 @@ class TaxonomyCoverageTest < XbrlComplianceTestCase
   end
 
   test "reports total taxonomy element count" do
-    assert_equal 323, XbrlTestHelper.taxonomy_elements.count,
-      "Taxonomy should have exactly 323 non-abstract elements"
+    expected_count = XbrlTestHelper::EXPECTED_ELEMENT_COUNT
+    assert_equal expected_count, XbrlTestHelper.taxonomy_elements.count,
+      "Taxonomy should have exactly #{expected_count} non-abstract elements"
   end
 
   test "reports mapped element count" do
@@ -28,25 +29,18 @@ class TaxonomyCoverageTest < XbrlComplianceTestCase
 
     valid_count = valid_mapped_elements.count
     total_mapped = all_mapped_elements.count
-    invalid_count = total_mapped - valid_count
-
-    puts "\n=== Mapping Statistics ==="
-    puts "  Total entries in mapping: #{total_mapped}"
-    puts "  Valid (exist in taxonomy): #{valid_count}"
-    puts "  Invalid (wrong names): #{invalid_count}"
 
     # We expect SOME entries in the mapping (even if names are wrong)
-    assert total_mapped.positive?, "Mapping should have at least some elements"
+    assert total_mapped.positive?,
+      "Mapping should have at least some elements (found #{valid_count} valid of #{total_mapped} total)"
   end
 
   test "calculates coverage percentage" do
     skip "No element mapping config found" unless mapping_exists?
 
-    total = 323
+    total = XbrlTestHelper::EXPECTED_ELEMENT_COUNT
     mapped = valid_mapped_elements.count
     coverage = (mapped.to_f / total * 100).round(1)
-
-    puts "\n=== Coverage: #{coverage}% (#{mapped}/#{total}) ==="
 
     # Assert we have some coverage (even if low)
     assert coverage >= 0, "Coverage should be non-negative"
@@ -59,13 +53,11 @@ class TaxonomyCoverageTest < XbrlComplianceTestCase
     unmapped = unmapped_elements_by_section
     report = generate_coverage_report(unmapped)
 
-    puts "\n#{report}"
-
-    # Verify report structure
-    assert_includes report, "Tab 1"
-    assert_includes report, "Tab 2"
-    assert_includes report, "Tab 3"
-    assert_includes report, "Controls"
+    # Verify report structure includes all expected sections
+    assert_includes report, "Tab 1", "Report should include Tab 1 section"
+    assert_includes report, "Tab 2", "Report should include Tab 2 section"
+    assert_includes report, "Tab 3", "Report should include Tab 3 section"
+    assert_includes report, "Controls", "Report should include Controls section"
   end
 
   test "outputs coverage report helper method" do
@@ -128,10 +120,11 @@ class TaxonomyCoverageTest < XbrlComplianceTestCase
   end
 
   def generate_coverage_report(unmapped_by_section)
+    total = XbrlTestHelper::EXPECTED_ELEMENT_COUNT
     lines = ["=== XBRL Taxonomy Coverage Report ==="]
-    lines << "Total taxonomy elements: 323"
+    lines << "Total taxonomy elements: #{total}"
     lines << "Mapped elements: #{valid_mapped_elements.count}"
-    lines << "Coverage: #{(valid_mapped_elements.count.to_f / 323 * 100).round(1)}%"
+    lines << "Coverage: #{(valid_mapped_elements.count.to_f / total * 100).round(1)}%"
     lines << ""
     lines << "By Section:"
 
@@ -162,10 +155,11 @@ class TaxonomyCoverageTest < XbrlComplianceTestCase
       }
     end
 
+    total = XbrlTestHelper::EXPECTED_ELEMENT_COUNT
     {
-      total_taxonomy_elements: 323,
+      total_taxonomy_elements: total,
       mapped_elements: mapped,
-      coverage_percentage: (mapped.to_f / 323 * 100).round(1),
+      coverage_percentage: (mapped.to_f / total * 100).round(1),
       unmapped_elements: (XbrlTestHelper.valid_element_names - valid_mapped_elements.to_set).to_a,
       sections: sections
     }

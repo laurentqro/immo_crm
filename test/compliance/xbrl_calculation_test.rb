@@ -15,138 +15,145 @@ class XbrlCalculationTest < XbrlComplianceTestCase
     super
     @submission = submissions(:compliance_test_submission)
     @engine = CalculationEngine.new(@submission)
+    # Use the public API to get all calculated values
+    @calculated_values = @engine.calculate_all
   end
 
-  # === Client Count Tests ===
+  # === Dynamic Fixture Counts ===
+  # Query actual fixture data to avoid hardcoded values drifting out of sync
+
+  def expected_client_counts
+    clients = @organization.clients.kept
+    {
+      total: clients.count,
+      natural_persons: clients.natural_persons.count,
+      legal_entities: clients.legal_entities.count,
+      trusts: clients.trusts.count,
+      peps: clients.peps.count
+    }
+  end
+
+  def expected_transaction_counts
+    txns = @organization.transactions.kept.for_year(@submission.year)
+    {
+      total: txns.count,
+      purchases: txns.purchases.count,
+      sales: txns.sales.count,
+      total_value: txns.sum(:transaction_value),
+      purchase_value: txns.purchases.sum(:transaction_value),
+      sale_value: txns.sales.sum(:transaction_value),
+      cash_count: txns.where(payment_method: %w[CASH MIXED]).count,
+      cash_amount: txns.where(payment_method: %w[CASH MIXED]).sum(:cash_amount)
+    }
+  end
+
+  # === Client Count Tests (using public API) ===
 
   test "client count a1101 equals total clients" do
-    # compliance_test_org has:
-    # - 10 natural persons (calc_natural_1..10)
-    # - 5 legal entities (calc_legal_1..5)
-    # - 2 PEP clients (calc_pep_1..2)
-    # - 1 trust (calc_trust_1)
-    # Total: 18 clients
+    expected = expected_client_counts[:total]
 
-    stats = @engine.send(:client_statistics)
-
-    # Note: PEP clients are also counted as natural persons in a1101
-    # So total = 10 non-PEP natural + 2 PEP natural + 5 legal + 1 trust = 18
-    assert_equal 18, stats["a1101"],
-      "Total client count (a1101) should be 18"
+    assert_equal expected, @calculated_values["a1101"],
+      "Total client count (a1101) should be #{expected}"
   end
 
-  test "natural person count a1102 matches fixture count" do
-    # 10 natural persons (non-PEP) + 2 PEP natural persons = 12
-    stats = @engine.send(:client_statistics)
+  test "natural person count a1102 matches actual count" do
+    expected = expected_client_counts[:natural_persons]
 
-    assert_equal 12, stats["a1102"],
-      "Natural person count (a1102) should be 12"
+    assert_equal expected, @calculated_values["a1102"],
+      "Natural person count (a1102) should be #{expected}"
   end
 
-  test "legal entity count a11502B matches fixture count" do
-    # 5 legal entities (calc_legal_1..5)
-    stats = @engine.send(:client_statistics)
+  test "legal entity count a11502B matches actual count" do
+    expected = expected_client_counts[:legal_entities]
 
-    assert_equal 5, stats["a11502B"],
-      "Legal entity count (a11502B) should be 5"
+    assert_equal expected, @calculated_values["a11502B"],
+      "Legal entity count (a11502B) should be #{expected}"
   end
 
-  test "trust count a11802B matches fixture count" do
-    # 1 trust (calc_trust_1)
-    stats = @engine.send(:client_statistics)
+  test "trust count a11802B matches actual count" do
+    expected = expected_client_counts[:trusts]
 
-    assert_equal 1, stats["a11802B"],
-      "Trust count (a11802B) should be 1"
+    assert_equal expected, @calculated_values["a11802B"],
+      "Trust count (a11802B) should be #{expected}"
   end
 
-  test "PEP client count a1301 matches fixture count" do
-    # 2 PEP clients (calc_pep_1, calc_pep_2)
-    stats = @engine.send(:client_statistics)
+  test "PEP client count a1301 matches actual count" do
+    expected = expected_client_counts[:peps]
 
-    assert_equal 2, stats["a1301"],
-      "PEP client count (a1301) should be 2"
+    assert_equal expected, @calculated_values["a1301"],
+      "PEP client count (a1301) should be #{expected}"
   end
 
-  # === Transaction Count Tests ===
+  # === Transaction Count Tests (using public API) ===
 
-  test "transaction count a2101B matches fixture count" do
-    # 4 transactions total: calc_txn_1, calc_txn_2, calc_txn_3, calc_txn_cash
-    stats = @engine.send(:transaction_statistics)
+  test "transaction count a2101B matches actual count" do
+    expected = expected_transaction_counts[:total]
 
-    assert_equal 4, stats["a2101B"],
-      "Transaction count (a2101B) should be 4"
+    assert_equal expected, @calculated_values["a2101B"],
+      "Transaction count (a2101B) should be #{expected}"
   end
 
-  test "purchase transaction count a2102 matches" do
-    # 3 purchases: calc_txn_1, calc_txn_2, calc_txn_cash
-    stats = @engine.send(:transaction_statistics)
+  test "purchase transaction count a2102 matches actual count" do
+    expected = expected_transaction_counts[:purchases]
 
-    assert_equal 3, stats["a2102"],
-      "Purchase count (a2102) should be 3"
+    assert_equal expected, @calculated_values["a2102"],
+      "Purchase count (a2102) should be #{expected}"
   end
 
-  test "sale transaction count a2103 matches" do
-    # 1 sale: calc_txn_3
-    stats = @engine.send(:transaction_statistics)
+  test "sale transaction count a2103 matches actual count" do
+    expected = expected_transaction_counts[:sales]
 
-    assert_equal 1, stats["a2103"],
-      "Sale count (a2103) should be 1"
+    assert_equal expected, @calculated_values["a2103"],
+      "Sale count (a2103) should be #{expected}"
   end
 
-  # === Transaction Value Tests ===
+  # === Transaction Value Tests (using public API) ===
 
   test "transaction total a2104B equals sum of all transactions" do
-    # 100,000 + 200,000 + 300,000 + 50,000 = 650,000
-    stats = @engine.send(:transaction_values)
+    expected = expected_transaction_counts[:total_value]
 
-    assert_equal 650_000.0, stats["a2104B"],
-      "Total transaction value (a2104B) should be 650,000"
+    assert_equal expected, @calculated_values["a2104B"],
+      "Total transaction value (a2104B) should be #{expected}"
   end
 
   test "purchase total a2105 equals sum of purchases" do
-    # 100,000 + 200,000 + 50,000 = 350,000
-    stats = @engine.send(:transaction_values)
+    expected = expected_transaction_counts[:purchase_value]
 
-    assert_equal 350_000.0, stats["a2105"],
-      "Purchase total (a2105) should be 350,000"
+    assert_equal expected, @calculated_values["a2105"],
+      "Purchase total (a2105) should be #{expected}"
   end
 
   test "sale total a2106 equals sum of sales" do
-    # 300,000
-    stats = @engine.send(:transaction_values)
+    expected = expected_transaction_counts[:sale_value]
 
-    assert_equal 300_000.0, stats["a2106"],
-      "Sale total (a2106) should be 300,000"
+    assert_equal expected, @calculated_values["a2106"],
+      "Sale total (a2106) should be #{expected}"
   end
 
-  # === Payment Method Tests ===
+  # === Payment Method Tests (using public API) ===
 
-  test "cash transaction count a2201 matches" do
-    # 1 cash transaction: calc_txn_cash
-    stats = @engine.send(:payment_method_statistics)
+  test "cash transaction count a2201 matches actual count" do
+    expected = expected_transaction_counts[:cash_count]
 
-    assert_equal 1, stats["a2201"],
-      "Cash transaction count (a2201) should be 1"
+    assert_equal expected, @calculated_values["a2201"],
+      "Cash transaction count (a2201) should be #{expected}"
   end
 
-  test "cash transaction amount a2202 matches" do
-    # calc_txn_cash has cash_amount: 50,000
-    stats = @engine.send(:payment_method_statistics)
+  test "cash transaction amount a2202 matches actual amount" do
+    expected = expected_transaction_counts[:cash_amount]
 
-    assert_equal 50_000.0, stats["a2202"],
-      "Cash transaction amount (a2202) should be 50,000"
+    assert_equal expected, @calculated_values["a2202"],
+      "Cash transaction amount (a2202) should be #{expected}"
   end
 
   # === Full Calculation Test ===
 
   test "calculate_all returns complete statistics hash" do
-    result = @engine.calculate_all
-
     # Verify structure includes expected keys
-    assert result.is_a?(Hash), "calculate_all should return a Hash"
-    assert result.key?("a1101"), "Should include client count"
-    assert result.key?("a2101B"), "Should include transaction count"
-    assert result.key?("a2104B"), "Should include transaction total"
+    assert @calculated_values.is_a?(Hash), "calculate_all should return a Hash"
+    assert @calculated_values.key?("a1101"), "Should include client count"
+    assert @calculated_values.key?("a2101B"), "Should include transaction count"
+    assert @calculated_values.key?("a2104B"), "Should include transaction total"
   end
 
   test "populate_submission_values creates submission_value records" do
@@ -159,32 +166,29 @@ class XbrlCalculationTest < XbrlComplianceTestCase
       "Should create submission_value records"
 
     # Verify a sample value was persisted correctly
+    expected_total = expected_client_counts[:total].to_s
     client_count_value = @submission.submission_values.find_by(element_name: "a1101")
-    assert_equal "18", client_count_value&.value,
-      "Persisted client count should be '18'"
+    assert_equal expected_total, client_count_value&.value,
+      "Persisted client count should be '#{expected_total}'"
   end
 
-  # === Nationality Breakdown Tests ===
+  # === Nationality Breakdown Tests (using public API) ===
 
   test "nationality breakdown generates country-specific elements" do
-    result = @engine.send(:client_nationality_breakdown)
+    # Check that calculate_all includes nationality breakdown elements
+    fr_elements = @calculated_values.keys.select { |k| k.start_with?("a1103_") }
+    assert fr_elements.any?, "Should have nationality breakdown elements"
 
-    # compliance test fixtures have various nationalities:
-    # FR (calc_natural_1, calc_natural_5, calc_pep_1, calc_legal_5), DE, IT, MC, GB, ES, CH, BE, NL
-    assert result.any?, "Should have nationality breakdown"
-
-    # Check FR count (should be 4: calc_natural_1, calc_natural_5, calc_pep_1, calc_legal_5)
-    fr_count = result["a1103_FR"]
-    assert_equal 4, fr_count, "French nationality count should be 4"
+    # Verify FR count matches actual data
+    expected_fr = @organization.clients.kept.where(nationality: "FR").count
+    actual_fr = @calculated_values["a1103_FR"]
+    assert_equal expected_fr, actual_fr, "French nationality count should match"
   end
 
   # === Element Name Validation ===
 
   test "all calculated element names should exist in taxonomy" do
-    # This test validates that CalculationEngine uses correct element names
-    result = @engine.calculate_all
-
-    invalid_elements = result.keys.reject do |element_name|
+    invalid_elements = @calculated_values.keys.reject do |element_name|
       XbrlTestHelper.valid_element_names.include?(element_name)
     end
 

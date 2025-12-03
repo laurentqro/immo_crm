@@ -79,12 +79,9 @@ class XbrlTypeTest < XbrlComplianceTestCase
       end
     end
 
-    # Report issues but don't fail - this catches the Oui/Non vs true/false issue
-    if invalid_values.any?
-      puts "\n=== Enum Value Issues ==="
-      invalid_values.each { |v| puts "  #{v}" }
-      puts "=========================\n"
-    end
+    # Expected failure per gap_analysis.md - XbrlGenerator uses true/false not Oui/Non
+    # This test documents the known issue until XbrlGenerator is updated
+    skip "Known issue: XbrlGenerator outputs boolean values instead of Oui/Non (see gap_analysis.md)" if invalid_values.any?
   end
 
   test "enum elements use Oui/Non values not true/false" do
@@ -102,12 +99,9 @@ class XbrlTypeTest < XbrlComplianceTestCase
       end
     end
 
-    # Report but don't fail - this is an expected issue per gap_analysis.md
-    if incorrect_boolean_values.any?
-      puts "\n=== Boolean Format Issues ==="
-      incorrect_boolean_values.each { |v| puts "  #{v}" }
-      puts "=========================\n"
-    end
+    # Expected failure per gap_analysis.md - XbrlGenerator uses boolean values
+    # This test documents the known issue until XbrlGenerator is updated
+    skip "Known issue: XbrlGenerator uses boolean format instead of Oui/Non (see gap_analysis.md)" if incorrect_boolean_values.any?
   end
 
   test "element type categorization is correct" do

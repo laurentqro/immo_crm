@@ -19,6 +19,15 @@ module XbrlTestHelper
   XSD_PATH = Rails.root.join("docs/strix_Real_Estate_AML_CFT_survey_2025.xsd")
   STRIX_NAMESPACE = "https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr"
 
+  # Expected number of non-abstract elements in AMSF taxonomy
+  EXPECTED_ELEMENT_COUNT = 323
+
+  # Expected number of Tab 4 (Controls) elements
+  EXPECTED_TAB4_ELEMENT_COUNT = 105
+
+  # Valid element name pattern (alphanumeric + underscore, starts with letter)
+  ELEMENT_NAME_PATTERN = /\A[a-zA-Z][a-zA-Z0-9_]*\z/
+
   class << self
     # Returns Array of element definitions from XSD.
     # Each element: { name:, id:, type:, allowed_values: }
@@ -69,12 +78,51 @@ module XbrlTestHelper
       end
     end
 
+    # Validates element name is safe for XPath interpolation.
+    # Prevents XPath injection by ensuring name matches expected pattern.
+    #
+    # @param name [String] Element name to validate
+    # @return [String] The validated name
+    # @raise [ArgumentError] If name contains invalid characters
+    def validate_element_name!(name)
+      unless name.is_a?(String) && name.match?(ELEMENT_NAME_PATTERN)
+        raise ArgumentError, "Invalid element name: #{name.inspect}. " \
+          "Element names must start with a letter and contain only alphanumeric characters and underscores."
+      end
+      name
+    end
+
     private
 
     def parse_xsd_elements
-      doc = Nokogiri::XML(File.read(XSD_PATH))
-      doc.remove_namespaces!
+      validate_xsd_file_exists!
+      doc = parse_xsd_document
+      elements = extract_elements_from_doc(doc)
+      validate_elements_found!(elements)
+      elements
+    end
 
+    def validate_xsd_file_exists!
+      return if File.exist?(XSD_PATH)
+
+      raise "XBRL taxonomy XSD not found at #{XSD_PATH}. " \
+            "Please ensure the AMSF taxonomy file is present in docs/"
+    end
+
+    def parse_xsd_document
+      content = File.read(XSD_PATH)
+      doc = Nokogiri::XML(content)
+
+      if doc.errors.any?
+        error_messages = doc.errors.map(&:message).join("; ")
+        raise "XBRL taxonomy XSD contains XML errors: #{error_messages}"
+      end
+
+      doc.remove_namespaces!
+      doc
+    end
+
+    def extract_elements_from_doc(doc)
       doc.xpath("//element[@abstract='false']").map do |el|
         {
           name: el["name"],
@@ -83,6 +131,13 @@ module XbrlTestHelper
           allowed_values: extract_enum_values(el)
         }
       end
+    end
+
+    def validate_elements_found!(elements)
+      return if elements.any?
+
+      raise "No elements found in XBRL taxonomy XSD. " \
+            "The file may be corrupt or have an unexpected structure."
     end
 
     def determine_type(element_node)
@@ -158,7 +213,9 @@ module XbrlTestHelper
   # @param xbrl_doc [Nokogiri::XML::Document] Parsed XBRL document
   # @param element_name [String] Element name to find
   # @return [String, nil] Element text content or nil if not found
+  # @raise [ArgumentError] If element_name contains invalid characters
   def extract_element_value(xbrl_doc, element_name)
+    XbrlTestHelper.validate_element_name!(element_name)
     element = xbrl_doc.at_xpath("//#{element_name}")
     element&.text
   end
@@ -168,7 +225,9 @@ module XbrlTestHelper
   # @param xbrl_doc [Nokogiri::XML::Document] Parsed XBRL document
   # @param element_name [String] Element name to find
   # @return [Array<Hash>] Array of { value:, context_ref:, unit_ref: }
+  # @raise [ArgumentError] If element_name contains invalid characters
   def extract_all_element_values(xbrl_doc, element_name)
+    XbrlTestHelper.validate_element_name!(element_name)
     xbrl_doc.xpath("//#{element_name}").map do |el|
       {
         value: el.text,
@@ -183,7 +242,9 @@ module XbrlTestHelper
   # @param xbrl_doc [Nokogiri::XML::Document] Parsed XBRL document
   # @param element_name [String] Element name to check
   # @return [Boolean] True if element has valid contextRef
+  # @raise [ArgumentError] If element_name contains invalid characters
   def has_valid_context_ref?(xbrl_doc, element_name)
+    XbrlTestHelper.validate_element_name!(element_name)
     element = xbrl_doc.at_xpath("//#{element_name}")
     return false unless element
 
@@ -200,7 +261,9 @@ module XbrlTestHelper
   # @param element_name [String] Element name to check
   # @param expected_unit [String] Expected unit ID (e.g., "EUR", "pure")
   # @return [Boolean] True if element has expected unitRef
+  # @raise [ArgumentError] If element_name contains invalid characters
   def has_valid_unit_ref?(xbrl_doc, element_name, expected_unit)
+    XbrlTestHelper.validate_element_name!(element_name)
     element = xbrl_doc.at_xpath("//#{element_name}")
     return false unless element
 

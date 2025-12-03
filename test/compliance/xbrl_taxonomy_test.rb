@@ -20,12 +20,14 @@ class XbrlTaxonomyTest < XbrlComplianceTestCase
   end
 
   test "XbrlTestHelper parses taxonomy correctly" do
-    # Verify the helper is correctly parsing the XSD
-    assert_equal 323, XbrlTestHelper.taxonomy_elements.count,
-      "Taxonomy should have exactly 323 non-abstract elements"
+    expected_count = XbrlTestHelper::EXPECTED_ELEMENT_COUNT
 
-    assert_equal 323, XbrlTestHelper.valid_element_names.count,
-      "Valid element names Set should have 323 entries"
+    # Verify the helper is correctly parsing the XSD
+    assert_equal expected_count, XbrlTestHelper.taxonomy_elements.count,
+      "Taxonomy should have exactly #{expected_count} non-abstract elements"
+
+    assert_equal expected_count, XbrlTestHelper.valid_element_names.count,
+      "Valid element names Set should have #{expected_count} entries"
 
     assert XbrlTestHelper.valid_element_names.is_a?(Set),
       "valid_element_names should be a Set for O(1) lookup"
@@ -157,6 +159,8 @@ class XbrlTaxonomyTest < XbrlComplianceTestCase
     # Tab 4: Controls (aC1xx series - uses different prefix)
     tab4_elements = XbrlTestHelper.valid_element_names.select { |n| n.match?(/^aC1/) }
     assert tab4_elements.any?, "Taxonomy should contain Tab 4 (Controls) elements"
-    assert_equal 105, tab4_elements.size, "Tab 4 should have 105 control elements"
+    expected_tab4_count = XbrlTestHelper::EXPECTED_TAB4_ELEMENT_COUNT
+    assert_equal expected_tab4_count, tab4_elements.size,
+      "Tab 4 should have #{expected_tab4_count} control elements"
   end
 end
