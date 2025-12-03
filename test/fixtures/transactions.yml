@@ -147,3 +147,66 @@ check_payment:
   property_country: "MC"
   payment_method: "CHECK"
   agency_role: "SELLER_AGENT"
+
+# =============================================================================
+# XBRL Compliance Test Fixtures (T014-T015)
+# These fixtures provide deterministic transaction data for calculation tests.
+# All belong to compliance_test_org and have predictable values for assertions.
+# =============================================================================
+
+# T014: Transaction fixtures for calculation tests
+# calc_txn_1 (100K), calc_txn_2 (200K), calc_txn_3 (300K) sum to 600K
+# Used to verify a2104B (total transaction value) = 600,000
+calc_txn_1:
+  organization: compliance_test_org
+  client: calc_natural_1
+  reference: "CALC-001"
+  transaction_date: <%= Date.current - 30.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 100000.00
+  commission_amount: 3000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "BUYER_AGENT"
+  purchase_purpose: "RESIDENCE"
+
+calc_txn_2:
+  organization: compliance_test_org
+  client: calc_natural_2
+  reference: "CALC-002"
+  transaction_date: <%= Date.current - 20.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 200000.00
+  commission_amount: 6000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "BUYER_AGENT"
+  purchase_purpose: "INVESTMENT"
+
+calc_txn_3:
+  organization: compliance_test_org
+  client: calc_legal_1
+  reference: "CALC-003"
+  transaction_date: <%= Date.current - 10.days %>
+  transaction_type: "SALE"
+  transaction_value: 300000.00
+  commission_amount: 9000.00
+  property_country: "MC"
+  payment_method: "WIRE"
+  agency_role: "SELLER_AGENT"
+
+# T015: Cash transaction fixture (50K, payment_method: cash)
+# Used to verify a2201 (cash transaction count) = 1
+calc_txn_cash:
+  organization: compliance_test_org
+  client: calc_natural_3
+  reference: "CALC-CASH"
+  transaction_date: <%= Date.current - 5.days %>
+  transaction_type: "PURCHASE"
+  transaction_value: 50000.00
+  commission_amount: 1500.00
+  property_country: "MC"
+  payment_method: "CASH"
+  cash_amount: 50000.00
+  agency_role: "BUYER_AGENT"
+  purchase_purpose: "RESIDENCE"

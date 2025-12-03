@@ -116,6 +116,8 @@ Routes are modularized in `config/routes/`:
 ## Active Technologies
 - Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Devise, Pundit, Hotwire (Turbo/Stimulus), Nokogiri, Pay gem (001-mvp-immo-crm)
 - PostgreSQL 15+ (primary), SolidQueue (jobs), SolidCache (cache), SolidCable (websockets) (001-mvp-immo-crm)
+- Ruby 3.2+ / Rails 8.0 + Minitest, Nokogiri (XSD/XML parsing), existing XbrlGenerator and CalculationEngine services (011-xbrl-compliance-tests)
+- PostgreSQL (test database with fixtures) (011-xbrl-compliance-tests)
 
 ## Recent Changes
 - 001-mvp-immo-crm: Added Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Devise, Pundit, Hotwire (Turbo/Stimulus), Nokogiri, Pay gem

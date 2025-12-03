@@ -157,3 +157,209 @@ vasp_client:
   risk_level: "HIGH"
   business_sector: "Cryptocurrency"
   became_client_at: <%= 2.months.ago %>
+
+# =============================================================================
+# XBRL Compliance Test Fixtures (T010-T013)
+# These fixtures provide deterministic data for calculation verification.
+# All belong to compliance_test_org with predictable values for assertions.
+# =============================================================================
+
+# T010: Natural person clients (calc_natural_1 through calc_natural_10)
+# Used to verify a1102 (natural person count) = 10
+calc_natural_1:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 1"
+  client_type: "PP"
+  nationality: "FR"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_2:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 2"
+  client_type: "PP"
+  nationality: "DE"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_3:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 3"
+  client_type: "PP"
+  nationality: "IT"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_4:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 4"
+  client_type: "PP"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "MEDIUM"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_5:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 5"
+  client_type: "PP"
+  nationality: "FR"
+  residence_country: "FR"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_6:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 6"
+  client_type: "PP"
+  nationality: "GB"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_7:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 7"
+  client_type: "PP"
+  nationality: "ES"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_8:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 8"
+  client_type: "PP"
+  nationality: "CH"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_9:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 9"
+  client_type: "PP"
+  nationality: "BE"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+calc_natural_10:
+  organization: compliance_test_org
+  name: "Compliance Natural Person 10"
+  client_type: "PP"
+  nationality: "NL"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+
+# T011: Legal entity clients (calc_legal_1 through calc_legal_5)
+# Used to verify a11502B (legal entity count) = 5
+calc_legal_1:
+  organization: compliance_test_org
+  name: "Compliance Legal Entity 1 SARL"
+  client_type: "PM"
+  legal_person_type: "SARL"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  business_sector: "Real Estate"
+  became_client_at: <%= 6.months.ago %>
+
+calc_legal_2:
+  organization: compliance_test_org
+  name: "Compliance Legal Entity 2 SA"
+  client_type: "PM"
+  legal_person_type: "SA"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "MEDIUM"
+  business_sector: "Finance"
+  became_client_at: <%= 6.months.ago %>
+
+calc_legal_3:
+  organization: compliance_test_org
+  name: "Compliance Legal Entity 3 SCI"
+  client_type: "PM"
+  legal_person_type: "SCI"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  business_sector: "Real Estate"
+  became_client_at: <%= 6.months.ago %>
+
+calc_legal_4:
+  organization: compliance_test_org
+  name: "Compliance Legal Entity 4 SAM"
+  client_type: "PM"
+  legal_person_type: "SAM"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  business_sector: "Commerce"
+  became_client_at: <%= 6.months.ago %>
+
+calc_legal_5:
+  organization: compliance_test_org
+  name: "Compliance Legal Entity 5 LLC"
+  client_type: "PM"
+  legal_person_type: "OTHER"
+  nationality: "FR"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  business_sector: "Consulting"
+  became_client_at: <%= 6.months.ago %>
+
+# T012: PEP clients (calc_pep_1 and calc_pep_2)
+# Used to verify a1301 (PEP count) = 2
+calc_pep_1:
+  organization: compliance_test_org
+  name: "Compliance PEP Client 1"
+  client_type: "PP"
+  nationality: "FR"
+  residence_country: "MC"
+  is_pep: true
+  pep_type: "DOMESTIC"
+  risk_level: "HIGH"
+  became_client_at: <%= 6.months.ago %>
+
+calc_pep_2:
+  organization: compliance_test_org
+  name: "Compliance PEP Client 2"
+  client_type: "PP"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: true
+  pep_type: "FOREIGN"
+  risk_level: "HIGH"
+  became_client_at: <%= 6.months.ago %>
+
+# T013: Trust client (calc_trust_1)
+# Used to verify trust count calculations
+calc_trust_1:
+  organization: compliance_test_org
+  name: "Compliance Family Trust"
+  client_type: "TRUST"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "MEDIUM"
+  became_client_at: <%= 6.months.ago %>

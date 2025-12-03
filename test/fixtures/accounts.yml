@@ -30,3 +30,9 @@ subscribed:
   owner: subscribed
   name: "Subscribed User"
   personal: true
+
+# Compliance test organization for XBRL testing
+compliance_test:
+  owner: one
+  name: "Compliance Test Org"
+  personal: false
