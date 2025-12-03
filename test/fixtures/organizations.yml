@@ -18,3 +18,11 @@ company:
   name: "Monaco Company Real Estate"
   rci_number: "RCI11111"
   country: "MC"
+
+# Compliance test organization for XBRL testing (T009)
+# Uses RCI format matching AMSF requirements: 99MC12345
+compliance_test_org:
+  account: compliance_test
+  name: "Compliance Test Real Estate"
+  rci_number: "99MC12345"
+  country: "MC"

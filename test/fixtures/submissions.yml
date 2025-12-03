@@ -62,3 +62,16 @@ unvalidated_download:
   status: "draft"
   started_at: <%= 5.years.ago %>
   downloaded_unvalidated: true
+
+# =============================================================================
+# XBRL Compliance Test Fixtures
+# =============================================================================
+
+# Submission for compliance testing
+# Uses Date.current.year to match transaction fixture dates
+compliance_test_submission:
+  organization: compliance_test_org
+  year: <%= Date.current.year %>
+  taxonomy_version: "2025"
+  status: "draft"
+  started_at: <%= 1.hour.ago %>
