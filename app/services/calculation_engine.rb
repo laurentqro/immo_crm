@@ -176,16 +176,20 @@ class CalculationEngine
   # === Beneficial Owner Statistics ===
 
   def beneficial_owner_statistics
-    legal_entity_bos = organization.clients.kept.legal_entities
-      .joins(:beneficial_owners)
-      .count
-
-    trust_bos = organization.clients.kept.trusts
-      .joins(:beneficial_owners)
-      .count
-
-    pep_bos = BeneficialOwner.joins(:client)
+    # Count beneficial owners starting from BeneficialOwner for clarity
+    base_query = BeneficialOwner.joins(:client)
+      .merge(Client.kept)
       .where(clients: {organization_id: organization.id})
+
+    legal_entity_bos = base_query
+      .where(clients: {client_type: "PM"})
+      .count
+
+    trust_bos = base_query
+      .where(clients: {client_type: "TRUST"})
+      .count
+
+    pep_bos = base_query
       .where(is_pep: true)
       .count
 

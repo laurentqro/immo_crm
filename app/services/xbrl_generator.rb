@@ -123,10 +123,15 @@ class XbrlGenerator
 
   def parse_country_data(value)
     return value if value.is_a?(Hash)
-    return JSON.parse(value) if value.is_a?(String) && value.start_with?("{")
+
+    if value.is_a?(String)
+      parsed = JSON.parse(value)
+      return parsed if parsed.is_a?(Hash)
+    end
 
     nil
-  rescue JSON::ParserError
+  rescue JSON::ParserError => e
+    Rails.logger.warn("Failed to parse country data for a1103: #{e.message}")
     nil
   end
 
@@ -187,7 +192,7 @@ class XbrlGenerator
     attributes[:unitRef] = unit_ref if unit_ref
     attributes[:decimals] = "2" if monetary_element?(element_name)
 
-    xml["strix"].send(element_name, format_value(value, element_name), attributes)
+    xml["strix"].public_send(element_name, format_value(value, element_name), attributes)
   end
 
   def context_for_element(element_name)
@@ -215,8 +220,8 @@ class XbrlGenerator
   end
 
   def boolean_element?(element_name)
-    # Policy elements (a4xxx series) are typically boolean
-    element_name.start_with?("a4") && !monetary_element?(element_name)
+    # Policy/Control elements (aCxxxx series) are boolean Oui/Non questions
+    element_name.start_with?("aC")
   end
 
   def format_value(value, element_name)

@@ -245,6 +245,39 @@ class ClientTest < ActiveSupport::TestCase
     end
   end
 
+  test "residence_status must be valid when present" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      residence_status: "INVALID"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:residence_status], "is not included in the list"
+  end
+
+  test "accepts all valid residence_statuses" do
+    %w[RESIDENT NON_RESIDENT].each do |status|
+      client = Client.new(
+        organization: @organization,
+        name: "Test Client",
+        client_type: "PP",
+        residence_status: status
+      )
+      assert client.valid?, "Expected residence_status '#{status}' to be valid"
+    end
+  end
+
+  test "residence_status can be blank" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      residence_status: nil
+    )
+    assert client.valid?
+  end
+
   # === Scopes ===
 
   test "natural_persons scope returns only PP clients" do
