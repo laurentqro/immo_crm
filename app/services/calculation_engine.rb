@@ -121,23 +121,25 @@ class CalculationEngine
   def transaction_statistics
     txns = year_transactions
 
+    # Note: a2101B is a Oui/Non question ("Did you have transactions?"), not a count
+    # There is no single "total transactions" integer element in the taxonomy
+    # a2108B is the correct element for rental count (a2107B is Oui/Non)
     {
-      "a2101B" => txns.count,
       "a2102B" => txns.purchases.count,
       "a2105B" => txns.sales.count,
-      "a2107B" => txns.rentals.count
+      "a2108B" => txns.rentals.count
     }
   end
 
   def transaction_values
     txns = year_transactions
 
+    # a2109B is the correct element for total transaction value (a2104B is Oui/Non)
     {
-      "a2104B" => txns.sum(:transaction_value),
+      "a2109B" => txns.sum(:transaction_value),
       "a2102BB" => txns.purchases.sum(:transaction_value),
       "a2105BB" => txns.sales.sum(:transaction_value)
-      # Note: Rental value has no dedicated element in taxonomy
-      # It's included in the total a2104B
+      # Note: Rental value has no dedicated monetary element in taxonomy
     }
   end
 
@@ -148,11 +150,12 @@ class CalculationEngine
     cash_txns = txns.where(payment_method: %w[CASH MIXED])
     crypto_txns = txns.where(payment_method: "CRYPTO")
 
+    # a2202 and a2501A are Oui/Non questions, not counts/values
+    # a2203 is string type (free text), we store the count as string
     {
-      "a2203" => cash_txns.count,
-      "a2202" => cash_txns.sum(:cash_amount),
-      "a2501A" => crypto_txns.count
-      # Note: a2302 (crypto value) removed - taxonomy uses single a2501A element
+      "a2203" => cash_txns.count.to_s,
+      "a2202" => cash_txns.exists? ? "Oui" : "Non",
+      "a2501A" => crypto_txns.exists? ? "Oui" : "Non"
     }
   end
 
@@ -166,7 +169,8 @@ class CalculationEngine
       .where(report_date: year_start..year_end)
       .count
 
-    {"a3101" => str_count}
+    # a3102 is the integer count element (a3101 is Oui/Non question)
+    {"a3102" => str_count}
   end
 
   # === Beneficial Owner Statistics ===

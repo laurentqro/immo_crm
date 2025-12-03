@@ -19,8 +19,9 @@ class XbrlGenerator
   PURE_UNIT_ID = "unit_pure"
 
   # Monetary element patterns (elements that need currency units)
+  # a2109B = total transaction value, a2102BB/a2105BB = purchase/sale values
   MONETARY_ELEMENTS = %w[
-    a2104B a2102BB a2105BB a2107BB a2202
+    a2109B a2102BB a2105BB
   ].freeze
 
   attr_reader :submission, :organization

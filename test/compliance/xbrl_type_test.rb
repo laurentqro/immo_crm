@@ -38,8 +38,8 @@ class XbrlTypeTest < XbrlComplianceTestCase
   end
 
   test "monetary elements have decimals attribute" do
-    # Known monetary elements that should have decimals attribute
-    monetary_elements = %w[a2104B a2105 a2106 a2107 a2202 a2302]
+    # Monetary elements that should have decimals attribute
+    monetary_elements = %w[a2109B a2102BB a2105BB]
 
     monetary_elements.each do |element_name|
       element = @xbrl_doc.at_xpath("//#{element_name}")
@@ -52,7 +52,7 @@ class XbrlTypeTest < XbrlComplianceTestCase
   end
 
   test "monetary elements reference EUR unit" do
-    monetary_elements = %w[a2104B a2105 a2106 a2107 a2202 a2302]
+    monetary_elements = %w[a2109B a2102BB a2105BB]
 
     monetary_elements.each do |element_name|
       element = @xbrl_doc.at_xpath("//#{element_name}")
@@ -70,17 +70,9 @@ class XbrlTypeTest < XbrlComplianceTestCase
       allowed.sort == %w[Non Oui]
     end
 
-    # Known issue: XbrlTestHelper.determine_type() incorrectly classifies some
-    # integer/monetary elements as enum when they use complexType/simpleContent
-    # without a direct type attribute. These elements have enumerations in their
-    # type hierarchy but are actually numeric. Skip until type parser is fixed.
-    false_positive_enums = %w[a2101B a2104B a2107B a2202 a2501A a3101]
-
     invalid_values = []
 
     oui_non_elements.each do |element_name, allowed_values|
-      next if false_positive_enums.include?(element_name)
-
       value = extract_element_value(@xbrl_doc, element_name)
       next if value.nil? || value.empty?
 
@@ -102,14 +94,9 @@ class XbrlTypeTest < XbrlComplianceTestCase
       allowed.sort == %w[Non Oui]
     end
 
-    # Known issue: type parser misclassifies these numeric elements as enum
-    false_positive_enums = %w[a2101B a2104B a2107B a2202 a2501A a3101]
-
     incorrect_boolean_values = []
 
     oui_non_elements.each do |element_name, _|
-      next if false_positive_enums.include?(element_name)
-
       value = extract_element_value(@xbrl_doc, element_name)
       next if value.nil? || value.empty?
 

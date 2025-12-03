@@ -60,28 +60,25 @@ a1502B:
   type: integer
 
 # Transaction Statistics
-a2101B:
-  description: "Total number of transactions"
-  source: calculated
-  type: integer
+# Note: a2101B is a Oui/Non question, not a count - no single "total" element exists
 
 a2102B:
-  description: "Number of purchase transactions"
+  description: "Number of purchase transactions BY clients"
   source: calculated
   type: integer
 
 a2105B:
-  description: "Number of sale transactions"
+  description: "Number of sale transactions BY clients"
   source: calculated
   type: integer
 
-a2107B:
-  description: "Number of rental transactions"
+a2108B:
+  description: "Number of rental transactions BY clients"
   source: calculated
   type: integer
 
-a2104B:
-  description: "Total transaction value (EUR)"
+a2109B:
+  description: "Total transaction value BY clients (EUR)"
   source: calculated
   type: monetary
 
@@ -97,22 +94,22 @@ a2105BB:
 
 # Payment Method Statistics
 a2203:
-  description: "Number of cash transactions"
+  description: "Cash transaction details (free text)"
   source: calculated
-  type: integer
+  type: string
 
 a2202:
-  description: "Total cash amount (EUR)"
+  description: "Did you have cash transactions? (Oui/Non)"
   source: calculated
-  type: monetary
+  type: enum
 
 a2501A:
-  description: "Number of virtual asset transactions"
+  description: "Did you have virtual asset transactions? (Oui/Non)"
   source: calculated
-  type: integer
+  type: enum
 
 # STR Reports
-a3101:
+a3102:
   description: "Number of STRs filed"
   source: calculated
   type: integer

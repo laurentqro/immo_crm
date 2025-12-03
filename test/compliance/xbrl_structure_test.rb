@@ -109,8 +109,8 @@ class XbrlStructureTest < XbrlComplianceTestCase
   test "monetary facts have unitRef to EUR" do
     @xbrl_doc.remove_namespaces!
 
-    # Known monetary elements
-    monetary_elements = %w[a2104B a2105 a2106 a2107 a2202 a2302]
+    # Monetary elements that require EUR unit
+    monetary_elements = %w[a2109B a2102BB a2105BB]
 
     monetary_elements.each do |element_name|
       fact = @xbrl_doc.at_xpath("//#{element_name}")
