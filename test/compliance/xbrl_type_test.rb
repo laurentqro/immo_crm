@@ -65,12 +65,22 @@ class XbrlTypeTest < XbrlComplianceTestCase
   end
 
   test "enum elements use correct values" do
-    # Get all enum elements and their allowed values
-    enum_elements = XbrlTestHelper.enum_values
+    # Check only Oui/Non boolean elements
+    oui_non_elements = XbrlTestHelper.enum_values.select do |_, allowed|
+      allowed.sort == %w[Non Oui]
+    end
+
+    # Known issue: XbrlTestHelper.determine_type() incorrectly classifies some
+    # integer/monetary elements as enum when they use complexType/simpleContent
+    # without a direct type attribute. These elements have enumerations in their
+    # type hierarchy but are actually numeric. Skip until type parser is fixed.
+    false_positive_enums = %w[a2101B a2104B a2107B a2202 a2501A a3101]
 
     invalid_values = []
 
-    enum_elements.each do |element_name, allowed_values|
+    oui_non_elements.each do |element_name, allowed_values|
+      next if false_positive_enums.include?(element_name)
+
       value = extract_element_value(@xbrl_doc, element_name)
       next if value.nil? || value.empty?
 
@@ -79,18 +89,27 @@ class XbrlTypeTest < XbrlComplianceTestCase
       end
     end
 
-    # Expected failure per gap_analysis.md - XbrlGenerator uses true/false not Oui/Non
-    # This test documents the known issue until XbrlGenerator is updated
-    skip "Known issue: XbrlGenerator outputs boolean values instead of Oui/Non (see gap_analysis.md)" if invalid_values.any?
+    assert invalid_values.empty?,
+      "Boolean elements should use Oui/Non values:\n  #{invalid_values.join("\n  ")}"
   end
 
   test "enum elements use Oui/Non values not true/false" do
-    # Check any enum elements that might be using boolean-style values
+    # Check that Oui/Non boolean elements don't use English boolean format
     boolean_pattern = /\A(true|false|True|False|TRUE|FALSE|1|0)\z/
+
+    # Filter to actual Oui/Non elements only
+    oui_non_elements = XbrlTestHelper.enum_values.select do |_, allowed|
+      allowed.sort == %w[Non Oui]
+    end
+
+    # Known issue: type parser misclassifies these numeric elements as enum
+    false_positive_enums = %w[a2101B a2104B a2107B a2202 a2501A a3101]
 
     incorrect_boolean_values = []
 
-    XbrlTestHelper.enum_values.each do |element_name, _|
+    oui_non_elements.each do |element_name, _|
+      next if false_positive_enums.include?(element_name)
+
       value = extract_element_value(@xbrl_doc, element_name)
       next if value.nil? || value.empty?
 
@@ -99,9 +118,8 @@ class XbrlTypeTest < XbrlComplianceTestCase
       end
     end
 
-    # Expected failure per gap_analysis.md - XbrlGenerator uses boolean values
-    # This test documents the known issue until XbrlGenerator is updated
-    skip "Known issue: XbrlGenerator uses boolean format instead of Oui/Non (see gap_analysis.md)" if incorrect_boolean_values.any?
+    assert incorrect_boolean_values.empty?,
+      "Boolean elements should use French format (Oui/Non), not English:\n  #{incorrect_boolean_values.join("\n  ")}"
   end
 
   test "element type categorization is correct" do
