@@ -1,0 +1,156 @@
+# SubmissionValue fixtures for testing
+# Each submission_value belongs to a submission
+
+# Calculated client count value
+client_count:
+  submission: draft_submission
+  element_name: "a1101"
+  value: "42"
+  source: "calculated"
+  overridden: false
+
+# Calculated transaction count
+transaction_count:
+  submission: draft_submission
+  element_name: "a2101B"
+  value: "28"
+  source: "calculated"
+  overridden: false
+
+# Calculated total value
+total_transaction_value:
+  submission: draft_submission
+  element_name: "a2104B"
+  value: "15000000.00"
+  source: "calculated"
+  overridden: false
+
+# Policy setting copied from organization settings
+policy_setting:
+  submission: draft_submission
+  element_name: "a4101"
+  value: "true"
+  source: "from_settings"
+  overridden: false
+  confirmed_at: <%= 1.hour.ago %>
+
+# Manual answer (fresh question)
+manual_answer:
+  submission: draft_submission
+  element_name: "a5001"
+  value: "no"
+  source: "manual"
+  overridden: false
+
+# Overridden calculated value (user changed it)
+overridden_value:
+  submission: draft_submission
+  element_name: "a1301"
+  value: "5"
+  source: "calculated"
+  overridden: true
+
+# Confirmed value (user reviewed and confirmed)
+confirmed_value:
+  submission: draft_submission
+  element_name: "a1103"
+  value: "30"
+  source: "calculated"
+  overridden: false
+  confirmed_at: <%= 30.minutes.ago %>
+
+# Value for natural persons
+natural_persons_count:
+  submission: draft_submission
+  element_name: "a1102"
+  value: "30"
+  source: "calculated"
+  overridden: false
+
+# Value for legal entities
+legal_entities_count:
+  submission: draft_submission
+  element_name: "a11502B"
+  value: "10"
+  source: "calculated"
+  overridden: false
+
+# Value for trusts
+trusts_count:
+  submission: draft_submission
+  element_name: "a11802B"
+  value: "2"
+  source: "calculated"
+  overridden: false
+
+# Value from another submission (for uniqueness test)
+other_submission_value:
+  submission: another_submission
+  element_name: "a1101"
+  value: "35"
+  source: "calculated"
+  overridden: false
+
+# Value from other organization's submission
+other_org_value:
+  submission: other_org_submission
+  element_name: "a1101"
+  value: "10"
+  source: "calculated"
+  overridden: false
+
+# STR count
+str_count:
+  submission: draft_submission
+  element_name: "a3101"
+  value: "1"
+  source: "calculated"
+  overridden: false
+
+# Cash transaction count
+cash_transaction_count:
+  submission: draft_submission
+  element_name: "a2201"
+  value: "2"
+  source: "calculated"
+  overridden: false
+
+# Total cash amount
+cash_total:
+  submission: draft_submission
+  element_name: "a2202"
+  value: "50000.00"
+  source: "calculated"
+  overridden: false
+
+# Entity info setting
+entity_name_setting:
+  submission: draft_submission
+  element_name: "entity_name"
+  value: "Monaco Realty"
+  source: "from_settings"
+  overridden: false
+
+# RCI number setting
+rci_setting:
+  submission: draft_submission
+  element_name: "rci_number"
+  value: "12345678"
+  source: "from_settings"
+  overridden: false
+
+# Rejected clients question
+rejected_clients:
+  submission: draft_submission
+  element_name: "rejected_clients"
+  value: "false"
+  source: "manual"
+  overridden: false
+
+# Procedure changes question
+procedure_changes:
+  submission: draft_submission
+  element_name: "procedure_changes"
+  value: "false"
+  source: "manual"
+  overridden: false

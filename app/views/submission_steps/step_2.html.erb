@@ -1,0 +1,67 @@
+<%= content_for :title, "Confirm Policies - Step 2 of 4" %>
+
+<div class="container mx-auto px-4 py-8">
+  <%= render "submission_steps/progress", current_step: 2 %>
+
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Confirm Policy Values</h1>
+    <p class="text-gray-600 dark:text-gray-300 mb-6">Review and confirm the policy settings that will be included in your submission. These values come from your organization's Settings.</p>
+
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden mb-6 border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+        <div>
+          <h2 class="text-lg font-medium text-gray-900 dark:text-white">Policy Settings</h2>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">These values are derived from your organization's AML/CFT policies</p>
+        </div>
+        <% if @policy_values.any? && !@policy_values.all?(&:confirmed?) %>
+          <%= button_to "Confirm All", confirm_submission_submission_step_path(@submission, step: 2), method: :post, class: "btn btn-secondary" %>
+        <% end %>
+      </div>
+
+      <% if @policy_values.any? %>
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Question</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Value</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <% @policy_values.each do |pv| %>
+              <tr>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">
+                  <div><%= pv.description %></div>
+                  <div class="text-xs text-gray-400 font-mono"><%= pv.element_name %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white"><%= pv.value %></td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% if pv.confirmed? %>
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
+                      Confirmed
+                    </span>
+                  <% else %>
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400">
+                      Pending
+                    </span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+          <p>No policy values to confirm. You may proceed to the next step.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <%= form_with model: @submission, url: submission_submission_step_path(@submission, step: 2), method: :patch, local: true do |f| %>
+      <div class="flex justify-between">
+        <%= f.submit "Back", name: "commit", value: "back", class: "btn btn-secondary" %>
+        <%= f.submit "Continue", name: "commit", value: "continue", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

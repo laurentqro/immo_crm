@@ -1,0 +1,57 @@
+<%= content_for :title, "Annual Questions - Step 3 of 4" %>
+
+<div class="container mx-auto px-4 py-8">
+  <%= render "submission_steps/progress", current_step: 3 %>
+
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Annual Questions</h1>
+    <p class="text-gray-600 dark:text-gray-300 mb-6">Answer the following questions about your AML/CFT activities for the reporting year.</p>
+
+    <%= form_with model: @submission, url: submission_submission_step_path(@submission, step: 3), method: :patch, local: true, class: "space-y-6" do |f| %>
+      <div class="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-white">Manual Entry Questions</h2>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">These questions require manual input each reporting period</p>
+        </div>
+
+        <div class="p-6 space-y-6">
+          <% @questions.each do |question| %>
+            <div class="question-group" data-depends-on="<%= question[:depends_on] %>">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <%= question[:label] %>
+              </label>
+
+              <% existing_value = @submission.submission_values.find_by(element_name: question[:key])&.value %>
+
+              <% case question[:type] %>
+              <% when "boolean" %>
+                <div class="flex space-x-4">
+                  <label class="inline-flex items-center">
+                    <%= radio_button_tag "submission[manual_values][#{question[:key]}]", "true", existing_value == "true", class: "form-radio h-4 w-4 text-blue-600 dark:bg-gray-700 dark:border-gray-600" %>
+                    <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Yes</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <%= radio_button_tag "submission[manual_values][#{question[:key]}]", "false", existing_value == "false", class: "form-radio h-4 w-4 text-blue-600 dark:bg-gray-700 dark:border-gray-600" %>
+                    <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">No</span>
+                  </label>
+                </div>
+              <% when "number" %>
+                <%= number_field_tag "submission[manual_values][#{question[:key]}]", existing_value, min: 0, class: "mt-1 block w-32 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+              <% else %>
+                <%= text_field_tag "submission[manual_values][#{question[:key]}]", existing_value, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex justify-between">
+        <%= f.submit "Back", name: "commit", value: "back", class: "btn btn-secondary" %>
+        <div class="space-x-3">
+          <%= f.submit "Save", class: "btn btn-secondary" %>
+          <%= f.submit "Continue", name: "commit", value: "continue", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

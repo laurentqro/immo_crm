@@ -8,6 +8,28 @@
 #   - manual: Entered by user during submission wizard
 
 ---
+# Section 0: Entity Identification (from settings)
+entity_identification:
+  a0101:
+    description: "Company name"
+    source: from_settings
+    type: string
+
+  a0102:
+    description: "Number of employees"
+    source: from_settings
+    type: integer
+
+  a0103:
+    description: "Number of branch offices"
+    source: from_settings
+    type: integer
+
+  a0104:
+    description: "Annual turnover (EUR)"
+    source: from_settings
+    type: decimal
+
 # Section 1: Entity Information
 entity_info:
   a1001:
@@ -30,137 +52,126 @@ client_statistics:
   a1101:
     description: "Total number of clients"
     source: calculated
-    calculation: clients.count
     type: integer
 
   a1102:
-    description: "Number of natural person clients (PP)"
+    description: "Number of natural person clients"
     source: calculated
-    calculation: clients.where(client_type: 'PP').count
     type: integer
 
-  a1103:
-    description: "Number of legal entity clients (PM)"
+  a11502B:
+    description: "Number of legal entity clients"
     source: calculated
-    calculation: clients.where(client_type: 'PM').count
     type: integer
 
-  a1104:
-    description: "Number of trust clients (TRUST)"
+  a11802B:
+    description: "Number of trust clients"
     source: calculated
-    calculation: clients.where(client_type: 'TRUST').count
     type: integer
 
-  a1105:
-    description: "Number of high-risk clients"
-    source: calculated
-    calculation: clients.where(risk_level: 'HIGH').count
-    type: integer
-
-  a1106:
+  a1301:
     description: "Number of PEP clients"
     source: calculated
-    calculation: clients.where(is_pep: true).count
     type: integer
 
-  a1107:
-    description: "Number of domestic PEP clients"
+  a1401:
+    description: "Number of high-risk clients"
     source: calculated
-    calculation: clients.where(is_pep: true, pep_type: 'DOMESTIC').count
     type: integer
 
-  a1108:
-    description: "Number of foreign PEP clients"
+  a1501:
+    description: "Number of beneficial owners identified"
     source: calculated
-    calculation: clients.where(is_pep: true, pep_type: 'FOREIGN').count
     type: integer
 
-  a1109:
-    description: "Number of international organization PEP clients"
+  a1502:
+    description: "Number of PEP beneficial owners"
     source: calculated
-    calculation: clients.where(is_pep: true, pep_type: 'INTL_ORG').count
     type: integer
 
-  a1110:
-    description: "Number of VASP clients"
+# Nationality breakdown - dynamically generated as a1103_{COUNTRY_CODE}
+# Example: a1103_FR = French clients, a1103_GB = British clients
+client_nationalities:
+  a1103:
+    description: "Clients by nationality"
     source: calculated
-    calculation: clients.where(is_vasp: true).count
     type: integer
-
-  a1111:
-    description: "Number of new clients in reporting year"
-    source: calculated
-    calculation: clients.where(became_client_at: reporting_year_range).count
-    type: integer
-
-  a1112:
-    description: "Number of rejected clients in reporting year"
-    source: calculated
-    calculation: clients.where(rejection_reason: [:AML_CFT, :OTHER]).where(created_at: reporting_year_range).count
-    type: integer
+    note: "Suffixed with ISO country code (e.g., a1103_FR, a1103_GB)"
 
 # Section 3: Transaction Statistics
 transaction_statistics:
-  a2101:
-    description: "Total number of transactions in reporting year"
+  a2101B:
+    description: "Total number of transactions"
     source: calculated
-    calculation: transactions.for_year(reporting_year).count
     type: integer
 
   a2102:
     description: "Number of purchase transactions"
     source: calculated
-    calculation: transactions.for_year(reporting_year).purchases.count
     type: integer
 
   a2103:
     description: "Number of sale transactions"
     source: calculated
-    calculation: transactions.for_year(reporting_year).sales.count
     type: integer
 
   a2104:
     description: "Number of rental transactions"
     source: calculated
-    calculation: transactions.for_year(reporting_year).rentals.count
     type: integer
 
-  a2105:
-    description: "Total transaction value in reporting year (EUR)"
+  a2104B:
+    description: "Total transaction value (EUR)"
     source: calculated
-    calculation: transactions.for_year(reporting_year).sum(:transaction_value)
+    type: decimal
+
+  a2105:
+    description: "Total purchase value (EUR)"
+    source: calculated
     type: decimal
 
   a2106:
-    description: "Number of transactions with cash payment"
+    description: "Total sale value (EUR)"
     source: calculated
-    calculation: transactions.for_year(reporting_year).cash_transactions.count
-    type: integer
+    type: decimal
 
   a2107:
-    description: "Total cash amount in reporting year (EUR)"
+    description: "Total rental value (EUR)"
     source: calculated
-    calculation: transactions.for_year(reporting_year).sum(:cash_amount)
     type: decimal
+
+# Payment method statistics
+payment_statistics:
+  a2201:
+    description: "Number of cash transactions"
+    source: calculated
+    type: integer
+
+  a2202:
+    description: "Total cash amount (EUR)"
+    source: calculated
+    type: decimal
+
+  a2301:
+    description: "Number of crypto transactions"
+    source: calculated
+    type: integer
+
+  a2302:
+    description: "Total crypto transaction value (EUR)"
+    source: calculated
+    type: decimal
+
+  a2401:
+    description: "Number of PEP-related transactions"
+    source: calculated
+    type: integer
 
 # Section 4: STR Reports
 str_statistics:
   a3101:
-    description: "Number of STRs filed in reporting year"
+    description: "Number of STRs filed"
     source: calculated
-    calculation: str_reports.where(report_date: reporting_year_range).count
-    type: integer
-
-  a3102:
-    description: "Number of STRs related to cash transactions"
-    source: calculated
-    calculation: str_reports.where(report_date: reporting_year_range, reason: 'CASH').count
-    type: integer
-
-  a3103:
-    description: "Number of STRs related to PEPs"
-    source: calculated
-    calculation: str_reports.where(report_date: reporting_year_range, reason: 'PEP').count
     type: integer
 
 # Section 4: KYC and Compliance Policies (from settings)
@@ -258,3 +269,26 @@ training:
     source: from_settings
     setting_key: last_training_date
     type: date
+
+  a5104:
+    description: "Training records maintained"
+    source: from_settings
+    type: boolean
+
+# Section 6: Monitoring and Review
+monitoring:
+  a6101:
+    description: "Transaction monitoring frequency"
+    source: from_settings
+    type: enum
+    allowed_values: [daily, weekly, monthly, quarterly]
+
+  a6102:
+    description: "Date of last internal audit"
+    source: from_settings
+    type: date
+
+  a6103:
+    description: "Independent audit conducted"
+    source: from_settings
+    type: boolean

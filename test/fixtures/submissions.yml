@@ -1,0 +1,64 @@
+# Submission fixtures for testing
+# Each submission belongs to an organization
+
+# Draft submission in organization :one
+draft_submission:
+  organization: one
+  year: 2024
+  taxonomy_version: "2025"
+  status: "draft"
+  started_at: <%= 1.hour.ago %>
+
+# Another submission for testing uniqueness across organizations
+another_submission:
+  organization: one
+  year: 2023
+  taxonomy_version: "2025"
+  status: "completed"
+  started_at: <%= 1.year.ago %>
+  validated_at: <%= 1.year.ago + 1.hour %>
+  completed_at: <%= 1.year.ago + 2.hours %>
+
+# Submission in review status
+in_review_submission:
+  organization: one
+  year: 2022
+  taxonomy_version: "2025"
+  status: "in_review"
+  started_at: <%= 2.years.ago %>
+
+# Validated submission (ready for download)
+validated_submission:
+  organization: one
+  year: 2021
+  taxonomy_version: "2025"
+  status: "validated"
+  started_at: <%= 3.years.ago %>
+  validated_at: <%= 3.years.ago + 1.day %>
+
+# Completed submission
+completed_submission:
+  organization: one
+  year: 2020
+  taxonomy_version: "2025"
+  status: "completed"
+  started_at: <%= 4.years.ago %>
+  validated_at: <%= 4.years.ago + 1.day %>
+  completed_at: <%= 4.years.ago + 2.days %>
+
+# Submission from different organization (for cross-tenant tests)
+other_org_submission:
+  organization: two
+  year: 2024
+  taxonomy_version: "2025"
+  status: "draft"
+  started_at: <%= 1.day.ago %>
+
+# Submission downloaded without validation
+unvalidated_download:
+  organization: one
+  year: 2019
+  taxonomy_version: "2025"
+  status: "draft"
+  started_at: <%= 5.years.ago %>
+  downloaded_unvalidated: true
