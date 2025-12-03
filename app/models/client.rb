@@ -36,6 +36,7 @@ class Client < ApplicationRecord
 
   validates :risk_level, inclusion: { in: RISK_LEVELS }, allow_blank: true
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_blank: true
+  validates :residence_status, inclusion: { in: RESIDENCE_STATUSES }, allow_blank: true
 
   # === Callbacks ===
   before_save :clear_pep_type_if_not_pep
@@ -50,8 +51,14 @@ class Client < ApplicationRecord
 
   # Risk/compliance scopes
   scope :peps, -> { where(is_pep: true) }
+  scope :pep_related, -> { where(is_pep_related: true) }
+  scope :pep_associated, -> { where(is_pep_associated: true) }
   scope :high_risk, -> { where(risk_level: "HIGH") }
   scope :vasps, -> { where(is_vasp: true) }
+
+  # Residence scopes
+  scope :residents, -> { where(residence_status: "RESIDENT") }
+  scope :non_residents, -> { where(residence_status: "NON_RESIDENT") }
 
   # Relationship status scopes
   scope :active, -> { where(relationship_ended_at: nil) }

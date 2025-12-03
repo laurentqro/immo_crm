@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_03_232516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -138,11 +138,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
   create_table "beneficial_owners", force: :cascade do |t|
     t.bigint "client_id", null: false
     t.string "control_type"
+    t.string "country_code"
     t.datetime "created_at", null: false
     t.boolean "is_pep", default: false, null: false
     t.string "name", null: false
     t.string "nationality"
     t.decimal "ownership_pct", precision: 5, scale: 2
+    t.decimal "ownership_percentage", precision: 5, scale: 2
     t.string "pep_type"
     t.string "residence_country"
     t.datetime "updated_at", null: false
@@ -154,9 +156,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
     t.datetime "became_client_at"
     t.string "business_sector"
     t.string "client_type", null: false
+    t.string "country_code"
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.boolean "is_pep", default: false, null: false
+    t.boolean "is_pep_associated", default: false, null: false
+    t.boolean "is_pep_related", default: false, null: false
     t.boolean "is_vasp", default: false, null: false
     t.string "legal_person_type"
     t.string "name", null: false
@@ -167,6 +172,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
     t.string "rejection_reason"
     t.datetime "relationship_ended_at"
     t.string "residence_country"
+    t.string "residence_status"
     t.string "risk_level"
     t.datetime "updated_at", null: false
     t.string "vasp_type"
@@ -438,6 +444,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
     t.datetime "created_at", null: false
     t.boolean "downloaded_unvalidated", default: false
     t.bigint "organization_id", null: false
+    t.string "signatory_name"
+    t.string "signatory_title"
     t.datetime "started_at"
     t.string "status", default: "draft"
     t.string "taxonomy_version", default: "2025"
@@ -450,11 +458,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
 
   create_table "transactions", force: :cascade do |t|
     t.string "agency_role"
+    t.decimal "amount", precision: 15, scale: 2
     t.decimal "cash_amount", precision: 15, scale: 2
     t.bigint "client_id", null: false
     t.decimal "commission_amount", precision: 15, scale: 2
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
+    t.string "direction"
     t.text "notes"
     t.bigint "organization_id", null: false
     t.string "payment_method"

@@ -27,6 +27,7 @@ class Transaction < ApplicationRecord
   validates :payment_method, inclusion: { in: PAYMENT_METHODS }, allow_blank: true
   validates :agency_role, inclusion: { in: AGENCY_ROLES }, allow_blank: true
   validates :purchase_purpose, inclusion: { in: PURCHASE_PURPOSES }, allow_blank: true
+  validates :direction, inclusion: { in: TRANSACTION_DIRECTIONS }, allow_blank: true
 
   # Ensure client belongs to the same organization
   validate :client_belongs_to_organization
@@ -46,6 +47,10 @@ class Transaction < ApplicationRecord
   # Payment method scopes
   scope :with_cash, -> { where(payment_method: %w[CASH MIXED]).where.not(cash_amount: [nil, 0]) }
   scope :by_payment_method, ->(method) { where(payment_method: method) }
+
+  # Direction scopes (BY client vs WITH client as agent)
+  scope :by_client, -> { where(direction: "BY_CLIENT") }
+  scope :with_client, -> { where(direction: "WITH_CLIENT") }
 
   # Ordering
   scope :recent, -> { order(transaction_date: :desc) }
