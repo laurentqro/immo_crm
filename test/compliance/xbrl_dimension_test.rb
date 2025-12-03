@@ -18,17 +18,17 @@ class XbrlDimensionTest < XbrlComplianceTestCase
   end
 
   test "generates dimensional context per country" do
-    # Get nationality breakdown from engine
+    # Get nationality breakdown from engine (now returns {"a1103" => {FR: count, ...}})
     engine = CalculationEngine.new(@submission)
     nationality_breakdown = engine.send(:client_nationality_breakdown)
 
     # Skip if no nationality data
-    skip "No nationality data in submission" if nationality_breakdown.empty?
+    skip "No nationality data in submission" if nationality_breakdown.empty? || !nationality_breakdown["a1103"]
 
+    country_data = nationality_breakdown["a1103"]
     context_ids = extract_context_ids(@xbrl_doc)
 
-    nationality_breakdown.keys.each do |element_name|
-      country_code = element_name.split("_").last
+    country_data.keys.each do |country_code|
       expected_context_id = "ctx_country_#{country_code}"
 
       assert context_ids.include?(expected_context_id),
@@ -37,17 +37,18 @@ class XbrlDimensionTest < XbrlComplianceTestCase
   end
 
   test "country facts reference correct dimensional context" do
-    # Find country-specific elements in the XBRL
-    country_elements = @xbrl_doc.xpath("//*[contains(local-name(), 'a1103_')]")
+    # Find a1103 elements in the XBRL (now uses single element name with dimensional contexts)
+    a1103_elements = @xbrl_doc.xpath("//*[local-name()='a1103']")
 
-    country_elements.each do |element|
-      element_name = element.name
-      country_code = element_name.split("_").last
-      expected_context = "ctx_country_#{country_code}"
+    # Skip if no a1103 elements
+    skip "No a1103 elements in XBRL" if a1103_elements.empty?
 
-      actual_context = element["contextRef"]
-      assert_equal expected_context, actual_context,
-        "#{element_name} should reference #{expected_context}, got #{actual_context}"
+    a1103_elements.each do |element|
+      context_ref = element["contextRef"]
+
+      # Should reference a country-specific context
+      assert context_ref&.start_with?("ctx_country_"),
+        "a1103 element should reference country-specific context, got #{context_ref}"
     end
   end
 
@@ -88,8 +89,13 @@ class XbrlDimensionTest < XbrlComplianceTestCase
     engine = CalculationEngine.new(@submission)
     breakdown = engine.send(:client_nationality_breakdown)
 
+    # Skip if no nationality data
+    return if breakdown.empty? || !breakdown["a1103"]
+
+    country_data = breakdown["a1103"]
+
     # Should not have any elements with blank country code
-    blank_elements = breakdown.keys.select { |k| k.match?(/_\z/) }
+    blank_elements = country_data.keys.select { |k| k.to_s.strip.empty? }
 
     assert blank_elements.empty?,
       "Should not have elements for blank nationality: #{blank_elements}"
@@ -100,7 +106,11 @@ class XbrlDimensionTest < XbrlComplianceTestCase
     breakdown = engine.send(:client_nationality_breakdown)
     client_stats = engine.send(:client_statistics)
 
-    total_from_breakdown = breakdown.values.sum
+    # Skip if no nationality data
+    return if breakdown.empty? || !breakdown["a1103"]
+
+    country_data = breakdown["a1103"]
+    total_from_breakdown = country_data.values.sum
     total_clients = client_stats["a1101"]
 
     # The breakdown may not equal total if some clients have blank nationality

@@ -77,11 +77,11 @@ class XbrlCalculationTest < XbrlComplianceTestCase
       "Trust count (a11802B) should be #{expected}"
   end
 
-  test "PEP client count a1301 matches actual count" do
+  test "PEP client count a12002B matches actual count" do
     expected = expected_client_counts[:peps]
 
-    assert_equal expected, @calculated_values["a1301"],
-      "PEP client count (a1301) should be #{expected}"
+    assert_equal expected, @calculated_values["a12002B"],
+      "PEP client count (a12002B) should be #{expected}"
   end
 
   # === Transaction Count Tests (using public API) ===
@@ -93,18 +93,18 @@ class XbrlCalculationTest < XbrlComplianceTestCase
       "Transaction count (a2101B) should be #{expected}"
   end
 
-  test "purchase transaction count a2102 matches actual count" do
+  test "purchase transaction count a2102B matches actual count" do
     expected = expected_transaction_counts[:purchases]
 
-    assert_equal expected, @calculated_values["a2102"],
-      "Purchase count (a2102) should be #{expected}"
+    assert_equal expected, @calculated_values["a2102B"],
+      "Purchase count (a2102B) should be #{expected}"
   end
 
-  test "sale transaction count a2103 matches actual count" do
+  test "sale transaction count a2105B matches actual count" do
     expected = expected_transaction_counts[:sales]
 
-    assert_equal expected, @calculated_values["a2103"],
-      "Sale count (a2103) should be #{expected}"
+    assert_equal expected, @calculated_values["a2105B"],
+      "Sale count (a2105B) should be #{expected}"
   end
 
   # === Transaction Value Tests (using public API) ===
@@ -116,27 +116,27 @@ class XbrlCalculationTest < XbrlComplianceTestCase
       "Total transaction value (a2104B) should be #{expected}"
   end
 
-  test "purchase total a2105 equals sum of purchases" do
+  test "purchase total a2102BB equals sum of purchases" do
     expected = expected_transaction_counts[:purchase_value]
 
-    assert_equal expected, @calculated_values["a2105"],
-      "Purchase total (a2105) should be #{expected}"
+    assert_equal expected, @calculated_values["a2102BB"],
+      "Purchase total (a2102BB) should be #{expected}"
   end
 
-  test "sale total a2106 equals sum of sales" do
+  test "sale total a2105BB equals sum of sales" do
     expected = expected_transaction_counts[:sale_value]
 
-    assert_equal expected, @calculated_values["a2106"],
-      "Sale total (a2106) should be #{expected}"
+    assert_equal expected, @calculated_values["a2105BB"],
+      "Sale total (a2105BB) should be #{expected}"
   end
 
   # === Payment Method Tests (using public API) ===
 
-  test "cash transaction count a2201 matches actual count" do
+  test "cash transaction count a2203 matches actual count" do
     expected = expected_transaction_counts[:cash_count]
 
-    assert_equal expected, @calculated_values["a2201"],
-      "Cash transaction count (a2201) should be #{expected}"
+    assert_equal expected, @calculated_values["a2203"],
+      "Cash transaction count (a2203) should be #{expected}"
   end
 
   test "cash transaction amount a2202 matches actual amount" do
@@ -175,13 +175,15 @@ class XbrlCalculationTest < XbrlComplianceTestCase
   # === Nationality Breakdown Tests (using public API) ===
 
   test "nationality breakdown generates country-specific elements" do
-    # Check that calculate_all includes nationality breakdown elements
-    fr_elements = @calculated_values.keys.select { |k| k.start_with?("a1103_") }
-    assert fr_elements.any?, "Should have nationality breakdown elements"
+    # Check that calculate_all includes a1103 with nested country hash
+    assert @calculated_values.key?("a1103"), "Should have a1103 nationality breakdown element"
+    country_data = @calculated_values["a1103"]
+    assert country_data.is_a?(Hash), "a1103 should contain a hash of country codes"
+    assert country_data.any?, "a1103 should have country data"
 
     # Verify FR count matches actual data
     expected_fr = @organization.clients.kept.where(nationality: "FR").count
-    actual_fr = @calculated_values["a1103_FR"]
+    actual_fr = country_data["FR"]
     assert_equal expected_fr, actual_fr, "French nationality count should match"
   end
 

@@ -118,21 +118,29 @@ The Settings model needs **105 new boolean/enum fields** to support the Controls
 
 ## Remediation Steps
 
-### Completed
+### Completed (December 2024)
 
-1. **Updated `config/amsf_element_mapping.yml`** - Now correctly maps to all 321 taxonomy elements with proper naming
-
-### In Progress
-
-2. **Update `CalculationEngine`** - Fix element names and add new calculations
+1. **Updated `config/amsf_element_mapping.yml`** - Now correctly maps calculated elements with proper naming (flat structure, no category wrappers)
+2. **Updated `CalculationEngine`** - Fixed all 21 invalid element names:
+   - `a1301` → `a12002B` (PEP clients)
+   - `a1502` → `a1502B` (PEP beneficial owners)
+   - `a2102` → `a2102B` (purchase transactions)
+   - `a2103` → `a2105B` (sale transactions)
+   - `a2104` → `a2107B` (rental transactions)
+   - `a2105` → `a2102BB` (purchase value)
+   - `a2106` → `a2105BB` (sale value)
+   - `a2201` → `a2203` (cash transactions)
+   - `a2301` → `a2501A` (crypto transactions)
+   - Removed `a2302`, `a2401` (not in taxonomy)
+   - Changed `a1103_XX` → `a1103` with dimensional contexts
+3. **Updated `XbrlGenerator`** - Implemented proper dimensional contexts for nationality breakdowns and French boolean handling (`Oui`/`Non`)
 
 ### Pending
 
-3. **Database migrations** - Add missing fields to Client, Transaction, BeneficialOwner models
-4. **Settings expansion** - Add all Controls section fields to Settings model
-5. **XbrlGenerator updates** - Handle B/W suffix elements properly
+4. **Database migrations** - Add missing fields to Client, Transaction, BeneficialOwner models
+5. **Settings expansion** - Add all Controls section fields to Settings model (105 elements)
 6. **Wizard updates** - Add Controls and Signatories steps
-7. **Dimensional contexts** - Implement CountryDimension for nationality breakdowns
+7. **W-suffix elements** - Transaction direction tracking (BY vs WITH clients) - deferred
 
 ## Element Categories
 

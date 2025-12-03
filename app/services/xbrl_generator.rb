@@ -20,7 +20,7 @@ class XbrlGenerator
 
   # Monetary element patterns (elements that need currency units)
   MONETARY_ELEMENTS = %w[
-    a2104B a2105 a2106 a2107 a2202 a2302
+    a2104B a2102BB a2105BB a2107BB a2202
   ].freeze
 
   attr_reader :submission, :organization
@@ -71,9 +71,9 @@ class XbrlGenerator
 
   def build_contexts(xml)
     # Main entity context
-    xml.context_(:id => ENTITY_CONTEXT_ID) do
+    xml.context_(id: ENTITY_CONTEXT_ID) do
       xml.entity_ do
-        xml.identifier_(:scheme => "http://amsf.mc/rci") do
+        xml.identifier_(scheme: "http://amsf.mc/rci") do
           xml.text(organization.rci_number)
         end
       end
@@ -89,17 +89,22 @@ class XbrlGenerator
   end
 
   def build_country_contexts(xml)
-    country_values = submission.submission_values.where("element_name LIKE ?", "a1103_%")
+    # Get the a1103 submission value which contains nested country hash
+    country_value = submission.submission_values.find_by(element_name: "a1103")
+    return unless country_value&.value.present?
 
-    country_values.find_each do |value|
-      country_code = value.element_name.split("_").last
+    # Parse the stored country hash (stored as JSON string or Ruby hash)
+    country_data = parse_country_data(country_value.value)
+    return unless country_data.is_a?(Hash)
+
+    country_data.each_key do |country_code|
       next if country_code.blank?
 
       context_id = "ctx_country_#{country_code}"
 
-      xml.context_(:id => context_id) do
+      xml.context_(id: context_id) do
         xml.entity_ do
-          xml.identifier_(:scheme => "http://amsf.mc/rci") do
+          xml.identifier_(scheme: "http://amsf.mc/rci") do
             xml.text(organization.rci_number)
           end
           xml.segment_ do
@@ -115,21 +120,53 @@ class XbrlGenerator
     end
   end
 
+  def parse_country_data(value)
+    return value if value.is_a?(Hash)
+    return JSON.parse(value) if value.is_a?(String) && value.start_with?("{")
+
+    nil
+  rescue JSON::ParserError
+    nil
+  end
+
   def build_units(xml)
     # EUR currency unit for monetary values
-    xml.unit_(:id => EUR_UNIT_ID) do
+    xml.unit_(id: EUR_UNIT_ID) do
       xml["iso4217"].EUR
     end
 
     # Pure unit for counts and integers
-    xml.unit_(:id => PURE_UNIT_ID) do
+    xml.unit_(id: PURE_UNIT_ID) do
       xml["xbrli"].pure
     end
   end
 
   def build_facts(xml)
     submission.submission_values.find_each do |submission_value|
-      build_fact(xml, submission_value)
+      # Handle dimensional element (a1103 country breakdown) specially
+      if submission_value.element_name == "a1103"
+        build_country_facts(xml, submission_value)
+      else
+        build_fact(xml, submission_value)
+      end
+    end
+  end
+
+  def build_country_facts(xml, submission_value)
+    return if submission_value.value.blank?
+
+    country_data = parse_country_data(submission_value.value)
+    return unless country_data.is_a?(Hash)
+
+    country_data.each do |country_code, count|
+      context_ref = "ctx_country_#{country_code}"
+
+      attributes = {
+        contextRef: context_ref,
+        unitRef: PURE_UNIT_ID
+      }
+
+      xml["strix"].a1103(count.to_s, attributes)
     end
   end
 
@@ -153,13 +190,9 @@ class XbrlGenerator
   end
 
   def context_for_element(element_name)
-    # Country dimension elements use dimensional context
-    if element_name.start_with?("a1103_")
-      country_code = element_name.split("_").last
-      "ctx_country_#{country_code}"
-    else
-      ENTITY_CONTEXT_ID
-    end
+    # All regular elements use entity context
+    # Note: a1103 country breakdown is handled specially in build_country_facts
+    ENTITY_CONTEXT_ID
   end
 
   def unit_for_element(element_name)
@@ -189,8 +222,8 @@ class XbrlGenerator
     return value if value.blank?
 
     if boolean_element?(element_name)
-      # Normalize boolean to lowercase
-      value.to_s.downcase.in?(%w[true yes 1]) ? "true" : "false"
+      # Use French boolean values as required by AMSF taxonomy
+      value.to_s.downcase.in?(%w[true yes 1 oui]) ? "Oui" : "Non"
     elsif monetary_element?(element_name)
       # Format as decimal with 2 places
       format("%.2f", BigDecimal(value.to_s))
