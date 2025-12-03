@@ -21,9 +21,9 @@ class ValidationService
   # Base URL for the validator service
   VALIDATOR_URL = ENV.fetch("XBRL_VALIDATOR_URL", "http://localhost:8000")
 
-  # Timeout settings (seconds)
-  OPEN_TIMEOUT = 5
-  READ_TIMEOUT = 30
+  # Timeout settings (seconds) - configurable via ENV for production tuning
+  OPEN_TIMEOUT = ENV.fetch("XBRL_VALIDATOR_OPEN_TIMEOUT", 5).to_i
+  READ_TIMEOUT = ENV.fetch("XBRL_VALIDATOR_READ_TIMEOUT", 30).to_i
 
   attr_reader :xbrl_content
 
@@ -92,11 +92,27 @@ class ValidationService
     case response
     when Net::HTTPSuccess
       parse_success_response(response)
+    when Net::HTTPUnprocessableEntity
+      # RFC9110: 422 indicates the server understands the content but cannot process it
+      # This is a validation failure, not a service error - return structured errors
+      parse_unprocessable_response(response)
     when Net::HTTPServiceUnavailable
       raise ServiceUnavailableError, "Service returned 503"
     else
       error_result("Validator returned status #{response.code}")
     end
+  end
+
+  def parse_unprocessable_response(response)
+    data = JSON.parse(response.body, symbolize_names: true)
+
+    Result.new(
+      valid: false,
+      errors: normalize_errors(data[:errors] || [{ message: "Validation failed" }]),
+      warnings: normalize_errors(data[:warnings] || [])
+    )
+  rescue JSON::ParserError
+    error_result("Invalid XBRL content (422)")
   end
 
   def parse_success_response(response)
