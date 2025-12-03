@@ -148,9 +148,9 @@ class SubmissionStepsController < ApplicationController
   end
 
   def confirm_policy_values
-    @submission.submission_values.from_settings.find_each do |value|
-      value.update!(confirmed_at: Time.current) unless value.confirmed?
-    end
+    # Use bulk update for better performance
+    @submission.submission_values.from_settings.unconfirmed
+               .update_all(confirmed_at: Time.current)
   end
 
   # === Step 3: Fresh Questions ===

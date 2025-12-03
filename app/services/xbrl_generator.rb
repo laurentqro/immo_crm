@@ -197,7 +197,8 @@ class XbrlGenerator
     else
       value.to_s
     end
-  rescue ArgumentError
-    value.to_s
+  rescue ArgumentError => e
+    Rails.logger.warn("Invalid monetary value for XBRL element #{element_name}: #{value} - #{e.message}")
+    "0.00"
   end
 end

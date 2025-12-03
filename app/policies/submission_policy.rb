@@ -44,12 +44,13 @@ class SubmissionPolicy < ApplicationPolicy
   end
 
   # Define which attributes users can set
+  # Note: source and overridden are system-managed, not user-settable
   def permitted_attributes
     [
       :year,
       :taxonomy_version,
       :status,
-      submission_values_attributes: [:id, :element_name, :value, :source, :overridden, :confirmed_at]
+      submission_values_attributes: [:id, :value]
     ]
   end
 

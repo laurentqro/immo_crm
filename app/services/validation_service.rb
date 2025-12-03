@@ -33,22 +33,22 @@ class ValidationService
 
   # Validate the XBRL content against the external validator
   #
-  # @param retries [Integer] Number of retries on transient failures
-  # @return [Hash] Validation result with :valid, :errors, :warnings keys
-  def validate(retries: 1)
+  # @param retries [Integer] Maximum number of retry attempts (default: 2 means up to 3 total attempts)
+  # @return [Result] Validation result with valid?, errors, warnings
+  def validate(retries: 2)
     attempts = 0
 
     begin
       attempts += 1
       perform_validation_request
     rescue ServiceUnavailableError => e
-      if attempts < retries
-        sleep(0.1 * attempts) # Brief backoff
+      if attempts <= retries
+        sleep(0.1 * attempts) # Exponential backoff
         retry
       end
       error_result("Validation service unavailable: #{e.message}")
     rescue Timeout::Error, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-      if attempts < retries
+      if attempts <= retries
         sleep(0.1 * attempts)
         retry
       end

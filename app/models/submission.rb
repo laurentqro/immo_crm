@@ -143,13 +143,7 @@ class Submission < ApplicationRecord
 
   def set_defaults
     self.status ||= "draft"
-    self.taxonomy_version ||= "2025"
+    self.taxonomy_version ||= ENV.fetch("AMSF_TAXONOMY_VERSION", "2025")
     self.started_at ||= Time.current
   end
-end
-
-# Create AASM module alias for backwards compatibility with tests
-# that expect AASM::InvalidTransition
-module AASM
-  InvalidTransition = Submission::InvalidTransition
 end

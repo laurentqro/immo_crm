@@ -32,25 +32,28 @@ class CalculationEngine
 
   # Persist calculated values to submission_values table
   # Idempotent - updates existing values or creates new ones
+  # Wrapped in transaction for data integrity
   def populate_submission_values!
-    # Populate calculated values from CRM data
-    calculate_all.each do |element_name, value|
-      submission_value = submission.submission_values.find_or_initialize_by(
-        element_name: element_name
-      )
-
-      # Only update if not overridden by user
-      unless submission_value.persisted? && submission_value.overridden?
-        submission_value.assign_attributes(
-          value: value.to_s,
-          source: "calculated"
+    submission.transaction do
+      # Populate calculated values from CRM data
+      calculate_all.each do |element_name, value|
+        submission_value = submission.submission_values.find_or_initialize_by(
+          element_name: element_name
         )
-        submission_value.save!
-      end
-    end
 
-    # Populate settings-based values (policies, entity info)
-    populate_settings_values!
+        # Only update if not overridden by user
+        unless submission_value.persisted? && submission_value.overridden?
+          submission_value.assign_attributes(
+            value: value.to_s,
+            source: "calculated"
+          )
+          submission_value.save!
+        end
+      end
+
+      # Populate settings-based values (policies, entity info)
+      populate_settings_values!
+    end
   end
 
   # Copy organization settings with XBRL mappings to submission values
@@ -96,7 +99,11 @@ class CalculationEngine
     clients.group(:nationality).count.each do |nationality, count|
       next if nationality.blank?
 
-      result["a1103_#{nationality}"] = count
+      # Sanitize nationality to ISO 3166-1 alpha-2 format (2 uppercase letters only)
+      safe_nationality = nationality.to_s.upcase.gsub(/[^A-Z]/, "")
+      next if safe_nationality.blank? || safe_nationality.length != 2
+
+      result["a1103_#{safe_nationality}"] = count
     end
 
     result
@@ -144,8 +151,10 @@ class CalculationEngine
   # === PEP Transaction Statistics ===
 
   def pep_transaction_statistics
-    pep_client_ids = organization.clients.kept.peps.pluck(:id)
-    pep_txns = year_transactions.where(client_id: pep_client_ids)
+    # Use subquery instead of pluck to avoid loading IDs into memory
+    pep_txns = year_transactions.where(
+      client_id: organization.clients.kept.peps.select(:id)
+    )
 
     {
       "a2401" => pep_txns.count

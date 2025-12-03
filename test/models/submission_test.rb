@@ -172,7 +172,7 @@ class SubmissionTest < ActiveSupport::TestCase
   test "cannot transition from draft directly to validated" do
     submission = Submission.create!(organization: @organization, year: 2025)
 
-    assert_raises(AASM::InvalidTransition) do
+    assert_raises(Submission::InvalidTransition) do
       submission.validate_submission!
     end
   end
@@ -185,7 +185,7 @@ class SubmissionTest < ActiveSupport::TestCase
       completed_at: Time.current
     )
 
-    assert_raises(AASM::InvalidTransition) do
+    assert_raises(Submission::InvalidTransition) do
       submission.start_review!
     end
   end

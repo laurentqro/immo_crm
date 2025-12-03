@@ -63,7 +63,7 @@ class ValidationServiceTest < ActiveSupport::TestCase
       )
 
     result = @service.validate
-    assert_includes result.keys, :valid
+    assert_includes result.members, :valid
   end
 
   test "returns errors array" do
@@ -210,9 +210,9 @@ class ValidationServiceTest < ActiveSupport::TestCase
     result = @service.validate
 
     assert_respond_to result, :[]
-    assert_includes result.keys, :valid
-    assert_includes result.keys, :errors
-    assert_includes result.keys, :warnings
+    assert_includes result.members, :valid
+    assert_includes result.members, :errors
+    assert_includes result.members, :warnings
   end
 
   test "error objects have code message and element" do
@@ -293,6 +293,6 @@ class ValidationServiceTest < ActiveSupport::TestCase
 
     service = ValidationService.new(xbrl_with_special)
     result = service.validate
-    assert_kind_of Hash, result
+    assert_kind_of ValidationService::Result, result
   end
 end
