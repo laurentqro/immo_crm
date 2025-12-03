@@ -38,6 +38,18 @@ class ElementMappingTest < XbrlComplianceTestCase
   test "mapping types match taxonomy types" do
     skip "No element mapping config found" unless mapping_exists?
 
+    # Known issue: XbrlTestHelper.determine_type() incorrectly classifies some
+    # integer/monetary elements as enum when they use complexType/simpleContent
+    # without a direct type attribute. These elements have enumerations in their
+    # type hierarchy but are actually numeric. Skip until type parser is fixed.
+    false_positive_enums = %w[a2101B a2104B a2107B a2202 a2501A a3101]
+
+    # a2203 has type="string" in taxonomy but we correctly treat as integer
+    # (it's a count of cash transactions, semantically an integer)
+    semantic_overrides = %w[a2203]
+
+    known_mismatches = false_positive_enums + semantic_overrides
+
     mismatched_types = []
 
     @mapping.each do |element_name, config|
@@ -45,6 +57,7 @@ class ElementMappingTest < XbrlComplianceTestCase
       next if name.start_with?("_")
       next unless config.is_a?(Hash) && config["type"]
       next unless XbrlTestHelper.valid_element_names.include?(name)
+      next if known_mismatches.include?(name)
 
       mapping_type = config["type"].to_sym
       taxonomy_type = XbrlTestHelper.element_types[name]
@@ -54,11 +67,8 @@ class ElementMappingTest < XbrlComplianceTestCase
       end
     end
 
-    # Expected issue - type mapping may use different conventions than taxonomy
-    # Skip if mismatches found - this documents the known issue
-    skip "Type conventions differ between mapping and taxonomy (#{mismatched_types.size} elements)" if mismatched_types.any?
-
-    assert mismatched_types.empty?, "Type conventions should match"
+    assert mismatched_types.empty?,
+      "Unexpected type mismatches (excluding #{known_mismatches.size} known parser issues):\n  #{mismatched_types.join("\n  ")}"
   end
 
   test "no obsolete elements in mapping" do
