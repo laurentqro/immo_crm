@@ -68,7 +68,8 @@ class BeneficialOwnersController < ApplicationController
   def set_client
     @client = policy_scope(Client).find_by(id: params[:client_id])
     return render_not_found unless @client
-    return render_not_found unless @client.can_have_beneficial_owners?
+
+    render_not_found unless @client.can_have_beneficial_owners?
   end
 
   # For member actions (edit, update, destroy) - shallow route, find owner first then get client
@@ -79,7 +80,8 @@ class BeneficialOwnersController < ApplicationController
     # Get client and verify authorization
     @client = @beneficial_owner.client
     return render_not_found unless policy_scope(Client).exists?(id: @client.id)
-    return render_not_found unless @client.can_have_beneficial_owners?
+
+    render_not_found unless @client.can_have_beneficial_owners?
   end
 
   def beneficial_owner_params
