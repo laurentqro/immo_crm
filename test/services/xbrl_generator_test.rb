@@ -293,4 +293,45 @@ class XbrlGeneratorTest < ActiveSupport::TestCase
     # Boolean should be true/false in XBRL
     assert_match(/true|false/i, xml_content)
   end
+
+  # === Strict Mode Tests ===
+
+  test "strict mode raises XbrlDataError for invalid monetary values" do
+    SubmissionValue.create!(
+      submission: @submission,
+      element_name: "a2109B",  # Monetary element
+      value: "not-a-number",
+      source: "calculated"
+    )
+
+    # Strict mode (default in test env) should raise
+    generator = XbrlGenerator.new(@submission, strict: true)
+    assert_raises(XbrlGenerator::XbrlDataError) do
+      generator.generate
+    end
+  end
+
+  test "lenient mode returns 0.00 for invalid monetary values" do
+    SubmissionValue.create!(
+      submission: @submission,
+      element_name: "a2109B",  # Monetary element
+      value: "not-a-number",
+      source: "calculated"
+    )
+
+    # Lenient mode should not raise
+    generator = XbrlGenerator.new(@submission, strict: false)
+    xml_content = nil
+    assert_nothing_raised do
+      xml_content = generator.generate
+    end
+
+    # Should contain 0.00 as fallback
+    assert_includes xml_content, "0.00"
+  end
+
+  test "strict mode defaults to true in non-production environments" do
+    generator = XbrlGenerator.new(@submission)
+    assert generator.strict, "Strict mode should be true by default in test env"
+  end
 end

@@ -34,11 +34,14 @@ class XbrlGenerator
   # Maximum JSON payload size to prevent abuse
   MAX_JSON_SIZE = 100_000
 
-  attr_reader :submission, :organization
+  attr_reader :submission, :organization, :strict
 
-  def initialize(submission)
+  # @param submission [Submission] The submission to generate XBRL for
+  # @param strict [Boolean] If true, raise on invalid data. Default: true in test/dev, false in production.
+  def initialize(submission, strict: nil)
     @submission = submission
     @organization = submission.organization
+    @strict = strict.nil? ? !Rails.env.production? : strict
   end
 
   # Generate complete XBRL XML document
@@ -250,7 +253,13 @@ class XbrlGenerator
       value.to_s
     end
   rescue ArgumentError => e
-    Rails.logger.warn("Invalid monetary value for XBRL element #{element_name}: #{value} - #{e.message}")
+    message = "Invalid monetary value for XBRL element #{element_name}: #{value} - #{e.message}"
+    raise XbrlDataError, message if strict
+
+    Rails.logger.warn(message)
     "0.00"
   end
+
+  # Custom error for invalid XBRL data (raised in strict mode)
+  class XbrlDataError < StandardError; end
 end
