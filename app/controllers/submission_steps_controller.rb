@@ -73,9 +73,15 @@ class SubmissionStepsController < ApplicationController
   end
 
   def unlock
-    authorize @submission, :update?
+    # Force unlock requires admin permissions
+    if params[:force].present?
+      authorize @submission, :force_unlock?
+      @submission.release_lock!(Current.user, force: true)
+    else
+      authorize @submission, :update?
+      @submission.release_lock!(Current.user)
+    end
 
-    @submission.release_lock!(Current.user)
     redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
       notice: "Submission unlocked.", status: :see_other
   rescue Submission::LockError => e
@@ -308,7 +314,9 @@ class SubmissionStepsController < ApplicationController
 
     xbrl_content = XbrlGenerator.new(@submission).generate
     @cached_validation = ValidationService.new(xbrl_content).validate
-  rescue => e
+  rescue XbrlGenerator::XbrlDataError,
+    ValidationService::ServiceUnavailableError,
+    Nokogiri::XML::SyntaxError => e
     @cached_validation = ValidationService::Result.new(
       valid: false,
       errors: [{code: "SYS001", message: "Validation service unavailable: #{e.message}"}],
@@ -318,7 +326,7 @@ class SubmissionStepsController < ApplicationController
 
   def generate_xbrl_preview
     XbrlGenerator.new(@submission).generate
-  rescue
+  rescue XbrlGenerator::XbrlDataError, Nokogiri::XML::SyntaxError
     nil
   end
 
@@ -362,10 +370,16 @@ class SubmissionStepsController < ApplicationController
   end
 
   def update_submission_values(attributes)
+    # Preload all submission values by ID to avoid N+1 queries
+    ids = attributes.values.filter_map { |attrs| attrs[:id] }
+    return if ids.empty?
+
+    values_by_id = @submission.submission_values.where(id: ids).index_by(&:id)
+
     attributes.each_value do |attrs|
       next unless attrs[:id].present?
 
-      value = @submission.submission_values.find_by(id: attrs[:id])
+      value = values_by_id[attrs[:id].to_i]
       next unless value
 
       if attrs[:value].present? && attrs[:value] != value.value

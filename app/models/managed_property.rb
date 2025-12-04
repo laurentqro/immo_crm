@@ -91,8 +91,11 @@ class ManagedProperty < ApplicationRecord
     effective_start = [management_start_date, year_start].max
     effective_end = management_end_date.present? ? [management_end_date, year_end].min : year_end
 
-    # Calculate months (rounded)
-    ((effective_end - effective_start).to_i / 30.0).ceil.clamp(1, 12)
+    # Calculate actual month difference using proper date arithmetic
+    # Add 1 because a property active in Jan only should count as 1 month
+    months = ((effective_end.year - effective_start.year) * 12) +
+      (effective_end.month - effective_start.month) + 1
+    months.clamp(1, 12)
   end
 
   private
