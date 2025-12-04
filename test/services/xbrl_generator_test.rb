@@ -175,24 +175,23 @@ class XbrlGeneratorTest < ActiveSupport::TestCase
   # === Dimensional Contexts ===
 
   test "generates country dimension contexts when needed" do
-    # Add a country-specific value
-    SubmissionValue.create!(
-      submission: @submission,
-      element_name: "a1103_MC",  # Clients with Monaco nationality
-      value: "10",
-      source: "calculated"
-    )
+    # Update a1103 with country breakdown as JSON hash
+    country_value = @submission.submission_values.find_or_create_by!(element_name: "a1103") do |sv|
+      sv.source = "calculated"
+    end
+    country_value.update!(value: {MC: 10, FR: 5}.to_json)
 
     xml_content = @generator.generate
     doc = Nokogiri::XML(xml_content)
 
-    # Should have dimensional contexts for countries
+    # Should have dimensional contexts for each country
     contexts = doc.xpath("//*[local-name()='context']")
-    country_contexts = contexts.select { |c| c["id"]&.include?("MC") || c.to_s.include?("CountryDimension") }
+    mc_context = contexts.find { |c| c["id"] == "ctx_country_MC" }
+    fr_context = contexts.find { |c| c["id"] == "ctx_country_FR" }
 
-    # Either has country-specific contexts or dimensional elements
-    assert(country_contexts.any? || xml_content.include?("Dimension"),
-           "Should handle dimensional data for country breakdowns")
+    assert mc_context, "Should have context for MC country dimension"
+    assert fr_context, "Should have context for FR country dimension"
+    assert xml_content.include?("CountryDimension"), "Should include CountryDimension elements"
   end
 
   # === Complete Document Structure ===

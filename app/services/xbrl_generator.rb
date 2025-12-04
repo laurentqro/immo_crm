@@ -18,11 +18,13 @@ class XbrlGenerator
   EUR_UNIT_ID = "unit_EUR"
   PURE_UNIT_ID = "unit_pure"
 
-  # Monetary element patterns (elements that need currency units)
-  # a2109B = total transaction value, a2102BB/a2105BB = purchase/sale values
-  MONETARY_ELEMENTS = %w[
-    a2109B a2102BB a2105BB
-  ].freeze
+  # Monetary elements derived from config/amsf_element_mapping.yml
+  # Elements with type: monetary need EUR currency units and decimals
+  MONETARY_ELEMENTS = begin
+    mapping_path = Rails.root.join("config", "amsf_element_mapping.yml")
+    mapping = YAML.load_file(mapping_path)
+    mapping.select { |_, config| config["type"] == "monetary" }.keys.freeze
+  end
 
   # AMSF taxonomy uses French boolean values
   AMSF_BOOLEAN_TRUE = "Oui"

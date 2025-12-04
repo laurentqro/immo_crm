@@ -153,8 +153,9 @@ class Setting < ApplicationRecord
   validates :key, presence: true, uniqueness: {scope: :organization_id}
   validates :value_type, presence: true, inclusion: {in: VALUE_TYPES}
   validates :category, presence: true, inclusion: {in: CATEGORIES}
-  # XBRL element codes: aC1101Z, a2102B, aS1, etc.
-  validates :xbrl_element, format: {with: /\Aa[A-Z]?\d+[A-Z]*\z/, allow_blank: true}
+  # XBRL element codes: aC1101Z, a2102B, a11502B, etc.
+  # Pattern: a + optional letter (C for controls) + 3-5 digits + 0-2 trailing letters
+  validates :xbrl_element, format: {with: /\Aa[A-Z]?\d{3,5}[A-Z]{0,2}\z/, allow_blank: true}
   validate :value_matches_type
 
   # === Scopes ===
