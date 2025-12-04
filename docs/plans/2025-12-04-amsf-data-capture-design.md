@@ -22,6 +22,22 @@ Current state:
 - ~105 aC* control elements mapped to Settings
 - ~196 elements not yet handled
 
+## Monaco Market Context
+
+**Property management (gestion locative) is the primary revenue source for Monaco real estate agencies.**
+
+Due to Monaco's extremely high property values (highest in the world), most agents make only a handful of sales per year. Property management provides the recurring revenue that covers fixed costs (office rent, salaries). Sales are the "icing on the cake" - significant when they happen, but not the foundation of the business.
+
+This market reality has important implications for this design:
+
+1. **ManagedProperty is core infrastructure**, not a nice-to-have feature
+2. **Revenue breakdown** (a3804 management revenue) is often larger than sales revenue (a3802)
+3. **UI should prioritize property management** equally with or above transactions
+4. **Dashboard metrics** should highlight portfolio size and management revenue
+5. **Client relationships are long-term** - landlords stay for years, not single transactions
+
+The AMSF survey reflects this reality with dedicated elements for property management activity (aACTIVEPS) and revenue (a3804).
+
 ## Design Principle
 
 **Capture data at the point of the event, not at survey time.**
@@ -144,9 +160,11 @@ TRAINING_PROVIDERS = %w[INTERNAL EXTERNAL AMSF ONLINE].freeze
 
 **Survey elements covered:** a3201, a3202, a3203, a3204, a3205, a3301, a3302, a3303
 
-### 5. New Model: ManagedProperty
+### 5. New Model: ManagedProperty (Core Feature)
 
-Tracks ongoing property management contracts (gestion locative):
+**This is the foundation of the business model for Monaco real estate agencies.**
+
+Tracks ongoing property management contracts (gestion locative) - the recurring revenue that sustains agency operations:
 
 ```ruby
 # db/migrate/xxx_create_managed_properties.rb
@@ -281,9 +299,9 @@ Step 4: Training & Compliance Review
 └── Review and confirm
 
 Step 5: Revenue Review
-├── Sales revenue (from commission_amount)
+├── Management revenue (from ManagedProperty) ← Primary revenue source
 ├── Rental revenue (from commission_amount)
-├── Management revenue (from ManagedProperty)
+├── Sales revenue (from commission_amount)
 ├── Total calculated
 └── Review and confirm
 
@@ -307,25 +325,26 @@ Step 7: Review & Sign
 3. **Override sparingly** - Possible but not prominent
 4. **Progress persistence** - Auto-save, allow resume
 5. **Year-over-year comparison** - Help user spot anomalies
+6. **Property management first** - In Monaco, management is the bread and butter; sales are icing on the cake
 
 ---
 
 ## Implementation Order
 
-### Phase 1: Model Extensions
-1. Add fields to Client model + migration
-2. Add fields to Transaction model + migration
-3. Add fields to BeneficialOwner model + migration
-4. Create Training model + migration
-5. Create ManagedProperty model + migration
+### Phase 1: Core Models (Property Management First)
+1. **Create ManagedProperty model + migration** ← Foundation of business model
+2. Add fields to Client model + migration
+3. Add fields to Transaction model + migration
+4. Add fields to BeneficialOwner model + migration
+5. Create Training model + migration
 6. Add new Settings keys to schema
 
 ### Phase 2: CalculationEngine
-1. Add revenue calculations
-2. Add training calculations
-3. Add extended client statistics
-4. Add extended transaction statistics
-5. Add managed property statistics
+1. **Add managed property statistics** ← Primary revenue calculation
+2. Add revenue calculations (sales, rentals)
+3. Add training calculations
+4. Add extended client statistics
+5. Add extended transaction statistics
 6. Update populate_submission_values! to include all
 
 ### Phase 3: UI
