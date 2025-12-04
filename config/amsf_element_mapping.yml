@@ -59,6 +59,12 @@ a1502B:
   source: calculated
   type: integer
 
+a1204O:
+  description: "Do you have beneficial owners with ownership > 25%? (Oui/Non)"
+  source: calculated
+  type: enum
+  note: "AMSF beneficial ownership threshold is 25%"
+
 # Transaction Statistics
 # Note: a2101B is a Oui/Non question, not a count - no single "total" element exists
 

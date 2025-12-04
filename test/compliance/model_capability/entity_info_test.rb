@@ -50,7 +50,7 @@ class EntityInfoTest < ModelCapabilityTestCase
   test "aB1801B: business TOLA operations value" do
     # Related to trust/TOLA business volume
     assert_can_compute("aB1801B") do
-      Transaction.joins(:client).where(clients: {client_type: "TRUST"}).sum(:amount)
+      Transaction.joins(:client).where(clients: {client_type: "TRUST"}).sum(:transaction_value)
     end
   end
 
@@ -70,12 +70,12 @@ class EntityInfoTest < ModelCapabilityTestCase
 
   test "aG24010B: global transaction value BY clients" do
     # Total value across all transaction types BY clients
-    assert_can_compute("aG24010B") { Transaction.by_client.sum(:amount) }
+    assert_can_compute("aG24010B") { Transaction.by_client.sum(:transaction_value) }
   end
 
   test "aG24010W: global transaction value WITH clients" do
     # Total value across all transaction types WITH clients
-    assert_can_compute("aG24010W") { Transaction.with_client.sum(:amount) }
+    assert_can_compute("aG24010W") { Transaction.with_client.sum(:transaction_value) }
   end
 
   # =========================================================================

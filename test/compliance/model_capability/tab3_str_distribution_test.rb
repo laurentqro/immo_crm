@@ -222,12 +222,12 @@ class Tab3StrDistributionTest < ModelCapabilityTestCase
   end
 
   test "a3803: cross-border transaction value" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
     assert_model_has_column Client, :country_code
   end
 
   test "a3804: cross-border high-risk transactions" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a381: international wire transfers" do

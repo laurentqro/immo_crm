@@ -62,15 +62,15 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
   end
 
   test "a1106B: operations BY clients value" do
-    assert_can_compute("a1106B") { Transaction.by_client.sum(:amount) }
+    assert_can_compute("a1106B") { Transaction.by_client.sum(:transaction_value) }
   end
 
   test "a1106BRENTALS: rental operations BY clients value" do
-    assert_can_compute("a1106BRENTALS") { Transaction.by_client.rentals.sum(:amount) }
+    assert_can_compute("a1106BRENTALS") { Transaction.by_client.rentals.sum(:transaction_value) }
   end
 
   test "a1106W: operations WITH clients value" do
-    assert_can_compute("a1106W") { Transaction.with_client.sum(:amount) }
+    assert_can_compute("a1106W") { Transaction.with_client.sum(:transaction_value) }
   end
 
   test "a11006: new clients in period" do
@@ -98,7 +98,7 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
 
   test "a11206B: value of operations with high-risk country clients" do
     assert_model_has_column Client, :country_code
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a11301: resident clients" do
@@ -119,7 +119,7 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
 
   test "a11305B: non-resident clients BY client value" do
     # Join transactions to non-resident clients
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a11307: nationality breakdown" do
@@ -128,7 +128,7 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
 
   test "a11309B: specific country client value" do
     assert_model_has_column Client, :country_code
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   # =========================================================================
@@ -146,7 +146,7 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
 
   test "a11702B: legal entity operations value" do
     assert_can_compute("a11702B") do
-      Transaction.joins(:client).where(clients: {client_type: "PM"}).sum(:amount)
+      Transaction.joins(:client).where(clients: {client_type: "PM"}).sum(:transaction_value)
     end
   end
 
@@ -160,7 +160,7 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
 
   test "a11001BTOLA: TOLA operations value" do
     assert_can_compute("a11001BTOLA") do
-      Transaction.joins(:client).where(clients: {client_type: "TRUST"}).sum(:amount)
+      Transaction.joins(:client).where(clients: {client_type: "TRUST"}).sum(:transaction_value)
     end
   end
 
@@ -222,19 +222,19 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
 
   test "a13202B: PEP operations value" do
     assert_can_compute("a13202B") do
-      Transaction.joins(:client).where(clients: {is_pep: true}).sum(:amount)
+      Transaction.joins(:client).where(clients: {is_pep: true}).sum(:transaction_value)
     end
   end
 
   test "a13302B: PEP-related operations value" do
     assert_can_compute("a13302B") do
-      Transaction.joins(:client).where(clients: {is_pep_related: true}).sum(:amount)
+      Transaction.joins(:client).where(clients: {is_pep_related: true}).sum(:transaction_value)
     end
   end
 
   test "a13402B: PEP-associated operations value" do
     assert_can_compute("a13402B") do
-      Transaction.joins(:client).where(clients: {is_pep_associated: true}).sum(:amount)
+      Transaction.joins(:client).where(clients: {is_pep_associated: true}).sum(:transaction_value)
     end
   end
 
@@ -260,9 +260,11 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
     assert BeneficialOwner.column_names.present?
   end
 
-  test "a1204O: beneficial owner count with ownership > 25%" do
+  test "a1204O: beneficial owners with ownership > 25% (Oui/Non)" do
     assert_model_has_column BeneficialOwner, :ownership_percentage
-    assert_can_compute("a1204O") { BeneficialOwner.where("ownership_percentage > 25").count }
+    assert_can_compute("a1204O") do
+      BeneficialOwner.where("ownership_percentage > 25").exists? ? "Oui" : "Non"
+    end
   end
 
   test "a1204S: beneficial owner with significant control" do
@@ -353,24 +355,24 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
   # EDD monetary values
   test "a13603AB: EDD natural person operations value" do
     assert_can_compute("a13603AB") do
-      Transaction.joins(:client).where(clients: {risk_level: "HIGH", client_type: "PP"}).sum(:amount)
+      Transaction.joins(:client).where(clients: {risk_level: "HIGH", client_type: "PP"}).sum(:transaction_value)
     end
   end
 
   test "a13603BB: EDD legal entity operations value" do
     assert_can_compute("a13603BB") do
-      Transaction.joins(:client).where(clients: {risk_level: "HIGH", client_type: "PM"}).sum(:amount)
+      Transaction.joins(:client).where(clients: {risk_level: "HIGH", client_type: "PM"}).sum(:transaction_value)
     end
   end
 
   test "a13603CACB: EDD trust operations value" do
     assert_can_compute("a13603CACB") do
-      Transaction.joins(:client).where(clients: {risk_level: "HIGH", client_type: "TRUST"}).sum(:amount)
+      Transaction.joins(:client).where(clients: {risk_level: "HIGH", client_type: "TRUST"}).sum(:transaction_value)
     end
   end
 
   test "a13603DB: EDD complex structure value" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   # More EDD breakdowns
@@ -404,12 +406,12 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
 
   test "a13802B: VASP client operations value" do
     assert_can_compute("a13802B") do
-      Transaction.joins(:client).where(clients: {is_vasp: true}).sum(:amount)
+      Transaction.joins(:client).where(clients: {is_vasp: true}).sum(:transaction_value)
     end
   end
 
   test "a13902B: complex structure operations" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   # =========================================================================
@@ -518,7 +520,7 @@ class Tab1CustomerRiskTest < ModelCapabilityTestCase
 
   test "a1802BTOLA: TOLA operations BY value" do
     assert_can_compute("a1802BTOLA") do
-      Transaction.joins(:client).where(clients: {client_type: "TRUST"}).by_client.sum(:amount)
+      Transaction.joins(:client).where(clients: {client_type: "TRUST"}).by_client.sum(:transaction_value)
     end
   end
 

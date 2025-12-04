@@ -39,7 +39,7 @@ class Tab2ProductsServicesTest < ModelCapabilityTestCase
   end
 
   test "a2102BB: purchase value BY clients" do
-    assert_can_compute("a2102BB") { Transaction.by_client.purchases.sum(:amount) }
+    assert_can_compute("a2102BB") { Transaction.by_client.purchases.sum(:transaction_value) }
   end
 
   test "a2104B: rental count BY clients" do
@@ -52,7 +52,7 @@ class Tab2ProductsServicesTest < ModelCapabilityTestCase
   end
 
   test "a2105BB: sale value BY clients" do
-    assert_can_compute("a2105BB") { Transaction.by_client.sales.sum(:amount) }
+    assert_can_compute("a2105BB") { Transaction.by_client.sales.sum(:transaction_value) }
   end
 
   test "a2107B: rental presence BY clients (Oui/Non)" do
@@ -64,33 +64,33 @@ class Tab2ProductsServicesTest < ModelCapabilityTestCase
   end
 
   test "a2109B: total transaction value BY clients" do
-    assert_can_compute("a2109B") { Transaction.by_client.sum(:amount) }
+    assert_can_compute("a2109B") { Transaction.by_client.sum(:transaction_value) }
   end
 
   test "a2110B: average transaction value BY clients" do
     # average returns nil when no records exist; use 0 as default
-    assert_can_compute("a2110B") { Transaction.by_client.average(:amount) || 0 }
+    assert_can_compute("a2110B") { Transaction.by_client.average(:transaction_value) || 0 }
   end
 
   test "a2113B: high-value transaction count BY clients" do
     # High-value threshold typically defined by regulation
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a2113AB: high-value transaction value BY clients" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a2114A: threshold transaction count" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a2114AB: threshold transaction value" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a2115AB: specific threshold transactions BY clients" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   # =========================================================================
@@ -111,7 +111,7 @@ class Tab2ProductsServicesTest < ModelCapabilityTestCase
   end
 
   test "a2102BW: purchase value WITH clients" do
-    assert_can_compute("a2102BW") { Transaction.with_client.purchases.sum(:amount) }
+    assert_can_compute("a2102BW") { Transaction.with_client.purchases.sum(:transaction_value) }
   end
 
   test "a2104W: rental count WITH clients" do
@@ -128,7 +128,7 @@ class Tab2ProductsServicesTest < ModelCapabilityTestCase
   end
 
   test "a2105BW: sale value WITH clients" do
-    assert_can_compute("a2105BW") { Transaction.with_client.sales.sum(:amount) }
+    assert_can_compute("a2105BW") { Transaction.with_client.sales.sum(:transaction_value) }
   end
 
   test "a2107W: rental presence WITH clients (Oui/Non)" do
@@ -144,24 +144,24 @@ class Tab2ProductsServicesTest < ModelCapabilityTestCase
   end
 
   test "a2109W: total transaction value WITH clients" do
-    assert_can_compute("a2109W") { Transaction.with_client.sum(:amount) }
+    assert_can_compute("a2109W") { Transaction.with_client.sum(:transaction_value) }
   end
 
   test "a2110W: average transaction value WITH clients" do
     # average returns nil when no records exist; use 0 as default
-    assert_can_compute("a2110W") { Transaction.with_client.average(:amount) || 0 }
+    assert_can_compute("a2110W") { Transaction.with_client.average(:transaction_value) || 0 }
   end
 
   test "a2113W: high-value transaction count WITH clients" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a2113AW: high-value transaction value WITH clients" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   test "a2115AW: specific threshold transactions WITH clients" do
-    assert_model_has_column Transaction, :amount
+    assert_model_has_column Transaction, :transaction_value
   end
 
   # =========================================================================

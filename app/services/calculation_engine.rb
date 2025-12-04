@@ -192,9 +192,15 @@ class CalculationEngine
 
     pep_bos = base_query.where(is_pep: true).count
 
+    # a1204O: Do you have beneficial owners with ownership > 25%? (Oui/Non)
+    has_owners_above_threshold = base_query
+      .where("ownership_percentage > ?", 25)
+      .exists?
+
     {
       "a1501" => counts_by_type.values.sum,
-      "a1502B" => pep_bos
+      "a1502B" => pep_bos,
+      "a1204O" => has_owners_above_threshold ? "Oui" : "Non"
     }
   end
 
