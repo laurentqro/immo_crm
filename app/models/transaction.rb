@@ -28,7 +28,7 @@ class Transaction < ApplicationRecord
   validates :agency_role, inclusion: { in: AGENCY_ROLES }, allow_blank: true
   validates :purchase_purpose, inclusion: { in: PURCHASE_PURPOSES }, allow_blank: true
   validates :direction, inclusion: { in: TRANSACTION_DIRECTIONS }, allow_blank: true
-  validates :amount, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :transaction_value, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
   # Ensure client belongs to the same organization
   validate :client_belongs_to_organization

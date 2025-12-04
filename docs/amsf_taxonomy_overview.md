@@ -64,7 +64,7 @@ The following fields support taxonomy compliance:
 | `clients` | `country_code` | string | Geographic risk elements |
 | `clients` | `residence_status` | string | a11302: Resident classification |
 | `transactions` | `direction` | string | BY_CLIENT vs WITH_CLIENT |
-| `transactions` | `amount` | decimal | Transaction values |
+| `transactions` | `transaction_value` | decimal | Transaction values (a2102BB, a2105BB, a2109B) |
 | `beneficial_owners` | `country_code` | string | a1207O: BO geographic risk |
 | `beneficial_owners` | `ownership_percentage` | decimal | a1204O: 25% threshold |
 
