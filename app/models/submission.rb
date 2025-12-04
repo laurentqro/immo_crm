@@ -223,6 +223,11 @@ class Submission < ApplicationRecord
     end
   end
 
+  # Render submission as Markdown for `render markdown: @submission`
+  def to_markdown
+    SubmissionRenderer.new(self).to_markdown
+  end
+
   # === Custom Exception ===
   # Named to match AASM-style exception pattern for consistency
   class InvalidTransition < StandardError; end

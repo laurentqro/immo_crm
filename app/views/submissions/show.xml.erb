@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<%#
+  XBRL Instance Document for AMSF Real Estate AML/CFT Survey
+
+  This template generates valid XBRL from submission values.
+  Element metadata comes from Xbrl::Taxonomy (parsed from AMSF taxonomy files).
+  Values come from stored SubmissionValues via Xbrl::ElementManifest.
+
+  Structure:
+  1. Namespace declarations
+  2. Schema reference
+  3. Contexts (entity + dimensional)
+  4. Units (EUR, pure)
+  5. Facts (element values)
+-%>
+<xbrl
+  xmlns="http://www.xbrl.org/2003/instance"
+  xmlns:link="http://www.xbrl.org/2003/linkbase"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+  xmlns:strix="https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr"
+  xmlns:xbrli="http://www.xbrl.org/2003/instance">
+
+  <%# === Schema Reference === -%>
+  <link:schemaRef
+    xlink:type="simple"
+    xlink:href="https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr/strix_Real_Estate_AML_CFT_survey_2025.xsd"/>
+
+  <%# === Entity Context === -%>
+  <context id="ctx_entity">
+    <entity>
+      <identifier scheme="http://amsf.mc/rci"><%= @organization.rci_number %></identifier>
+    </entity>
+    <period>
+      <instant><%= Date.new(@submission.year, 12, 31).iso8601 %></instant>
+    </period>
+  </context>
+
+  <%# === Country Dimensional Contexts (for a1103 breakdown) === -%>
+  <% country_value = @manifest.submission_value_for("a1103") -%>
+  <% if country_value&.value.present? -%>
+    <% country_data = parse_country_data(country_value.value) -%>
+    <% country_data&.each_key do |country_code| -%>
+      <% next if country_code.blank? -%>
+  <context id="ctx_country_<%= country_code %>">
+    <entity>
+      <identifier scheme="http://amsf.mc/rci"><%= @organization.rci_number %></identifier>
+      <segment>
+        <strix:CountryDimension><%= country_code %></strix:CountryDimension>
+      </segment>
+    </entity>
+    <period>
+      <instant><%= Date.new(@submission.year, 12, 31).iso8601 %></instant>
+    </period>
+  </context>
+    <% end -%>
+  <% end -%>
+
+  <%# === Units === -%>
+  <unit id="unit_EUR">
+    <iso4217:EUR/>
+  </unit>
+  <unit id="unit_pure">
+    <xbrli:pure/>
+  </unit>
+
+  <%# === Facts === -%>
+  <% @manifest.all_elements_with_values.each do |ev| -%>
+    <% next if ev.blank? -%>
+    <%# Handle dimensional element (a1103) specially -%>
+    <% if ev.name == "a1103" && ev.value.present? -%>
+      <% country_data = parse_country_data(ev.value) -%>
+      <% country_data&.each do |country_code, count| -%>
+  <strix:a1103 contextRef="ctx_country_<%= country_code %>" unitRef="unit_pure"><%= count %></strix:a1103>
+      <% end -%>
+    <% else -%>
+  <strix:<%= ev.name %> contextRef="ctx_entity"<%= ev.numeric? ? " unitRef=\"#{ev.element.unit_ref}\"" : "" %><%= ev.monetary? ? ' decimals="2"' : "" %>><%= @manifest.formatted_value(ev.name, format: :xbrl) %></strix:<%= ev.name %>>
+    <% end -%>
+  <% end -%>
+
+</xbrl>

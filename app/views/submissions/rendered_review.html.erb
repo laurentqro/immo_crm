@@ -1,0 +1,80 @@
+<%#
+  HTML Review Template for Submission Values
+
+  Displays all submission values grouped by section.
+  Uses Taxonomy for labels and sections, SubmissionValues for data.
+-%>
+
+<div class="max-w-4xl mx-auto py-8">
+  <%# Header -%>
+  <header class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">
+      AMSF Submission Review — <%= @submission.year %>
+    </h1>
+    <p class="text-gray-600 mt-2">
+      <%= @organization.name %> (RCI: <%= @organization.rci_number %>)
+    </p>
+    <p class="text-sm text-gray-500 mt-1">
+      Status:
+      <span class="px-2 py-1 rounded-full text-xs font-medium <%= @submission.status_badge_class %>">
+        <%= @submission.status_label %>
+      </span>
+    </p>
+  </header>
+
+  <%# Sections -%>
+  <% @manifest.elements_by_section.each do |section, elements| -%>
+    <section class="mb-8 bg-white rounded-lg shadow">
+      <header class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800"><%= section %></h2>
+      </header>
+
+      <div class="divide-y divide-gray-100">
+        <% elements.each do |ev| -%>
+          <% next if ev.blank? -%>
+          <div class="px-6 py-4 hover:bg-gray-50">
+            <div class="flex items-start justify-between">
+              <%# Element info -%>
+              <div class="flex-1 min-w-0 pr-4">
+                <div class="flex items-center gap-2 mb-1">
+                  <code class="text-xs font-mono text-gray-500 bg-gray-100 px-1 py-0.5 rounded">
+                    <%= ev.name %>
+                  </code>
+                  <span class="text-xs px-1.5 py-0.5 rounded <%= type_badge_class(ev.type) %>">
+                    <%= type_label(ev.type) %>
+                  </span>
+                  <% if ev.source -%>
+                    <span class="text-xs px-1.5 py-0.5 rounded <%= source_badge_class(ev.source) %>">
+                      <%= source_label(ev.source) %>
+                    </span>
+                  <% end -%>
+                  <% if ev.overridden? -%>
+                    <span class="text-xs px-1.5 py-0.5 rounded bg-orange-100 text-orange-800">
+                      Overridden
+                    </span>
+                  <% end -%>
+                </div>
+                <p class="text-sm text-gray-700">
+                  <%= ev.label_text || ev.name.humanize %>
+                </p>
+              </div>
+
+              <%# Value -%>
+              <div class="flex-shrink-0 text-right">
+                <span class="text-lg font-medium text-gray-900">
+                  <%= format_html_value(ev.value, ev.element) %>
+                </span>
+              </div>
+            </div>
+          </div>
+        <% end -%>
+      </div>
+    </section>
+  <% end -%>
+
+  <%# Footer -%>
+  <footer class="mt-8 text-center text-sm text-gray-500">
+    Generated from AMSF taxonomy version <%= @submission.taxonomy_version %>
+    on <%= Time.current.strftime("%Y-%m-%d %H:%M") %>
+  </footer>
+</div>

@@ -21,6 +21,14 @@ class SubmissionsController < ApplicationController
 
   def show
     authorize @submission
+    @organization = current_organization
+    @manifest = Xbrl::ElementManifest.new(@submission)
+
+    respond_to do |format|
+      format.html
+      format.xml
+      format.md { render markdown: @submission }
+    end
   end
 
   def new
