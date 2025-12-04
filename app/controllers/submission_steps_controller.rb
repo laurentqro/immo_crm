@@ -16,7 +16,7 @@ class SubmissionStepsController < ApplicationController
 
   before_action :set_submission
   before_action :validate_step, except: [:lock, :unlock]
-  before_action :check_lock_status, only: [:update, :confirm]
+  # Note: Lock check moved to with_lock_verification helper for atomic check+update
 
   def show
     authorize @submission, :show?
@@ -48,14 +48,17 @@ class SubmissionStepsController < ApplicationController
       return
     end
 
-    case @step
-    when 1 then update_step_1
-    when 2 then update_step_2
-    when 3 then update_step_3
-    when 4 then update_step_4
-    when 5 then update_step_5
-    when 6 then update_step_6
-    when 7 then update_step_7
+    # Use pessimistic locking to prevent race conditions during update
+    with_lock_verification do
+      case @step
+      when 1 then update_step_1
+      when 2 then update_step_2
+      when 3 then update_step_3
+      when 4 then update_step_4
+      when 5 then update_step_5
+      when 6 then update_step_6
+      when 7 then update_step_7
+      end
     end
   end
 
@@ -63,6 +66,13 @@ class SubmissionStepsController < ApplicationController
 
   def lock
     authorize @submission, :update?
+
+    # Only allow locking editable submissions (draft or in_review)
+    unless @submission.editable?
+      redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
+        alert: "Cannot lock a #{@submission.status} submission.", status: :see_other
+      return
+    end
 
     @submission.acquire_lock!(Current.user)
     redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
@@ -92,15 +102,18 @@ class SubmissionStepsController < ApplicationController
   def confirm
     authorize @submission, :confirm?
 
-    case @step
-    when 2
-      confirm_policy_values
-      redirect_to submission_submission_step_path(@submission, step: @step),
-        notice: "Policy values confirmed.", status: :see_other
-    when 7
-      handle_step_7_confirm
-    else
-      redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
+    # Use pessimistic locking to prevent race conditions during confirm
+    with_lock_verification do
+      case @step
+      when 2
+        confirm_policy_values
+        redirect_to submission_submission_step_path(@submission, step: @step),
+          notice: "Policy values confirmed.", status: :see_other
+      when 7
+        handle_step_7_confirm
+      else
+        redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
+      end
     end
   end
 
@@ -132,10 +145,17 @@ class SubmissionStepsController < ApplicationController
     redirect_to submission_submission_step_path(@submission, step: next_step), status: :see_other
   end
 
-  def check_lock_status
-    if @submission.locked? && !@submission.locked_by?(Current.user)
-      redirect_to submission_submission_step_path(@submission, step: @step),
-        alert: "Submission is being edited by another user.", status: :see_other
+  # Execute block with pessimistic locking to prevent race conditions.
+  # Uses SELECT FOR UPDATE to atomically check lock state AND perform update.
+  # Redirects with alert if locked by another user.
+  def with_lock_verification
+    @submission.with_lock do
+      if @submission.locked? && !@submission.locked_by?(Current.user)
+        redirect_to submission_submission_step_path(@submission, step: @step),
+          alert: "Submission is being edited by another user.", status: :see_other
+        return
+      end
+      yield
     end
   end
 
@@ -374,17 +394,20 @@ class SubmissionStepsController < ApplicationController
     ids = attributes.values.filter_map { |attrs| attrs[:id] }
     return if ids.empty?
 
-    values_by_id = @submission.submission_values.where(id: ids).index_by(&:id)
+    # Wrap in transaction to ensure all-or-nothing updates
+    @submission.transaction do
+      values_by_id = @submission.submission_values.where(id: ids).index_by(&:id)
 
-    attributes.each_value do |attrs|
-      next unless attrs[:id].present?
+      attributes.each_value do |attrs|
+        next unless attrs[:id].present?
 
-      value = values_by_id[attrs[:id].to_i]
-      next unless value
+        value = values_by_id[attrs[:id].to_i]
+        next unless value
 
-      if attrs[:value].present? && attrs[:value] != value.value
-        # Use update_value! which handles override_reason automatically
-        value.update_value!(attrs[:value])
+        if attrs[:value].present? && attrs[:value] != value.value
+          # Use update_value! which handles override_reason automatically
+          value.update_value!(attrs[:value])
+        end
       end
     end
   end

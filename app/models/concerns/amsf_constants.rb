@@ -119,7 +119,8 @@ module AmsfConstants
   SIGNIFICANCE_THRESHOLD = 25.0
 
   # Valid submission year range (AMSF established 2009, reasonable future)
-  MIN_SUBMISSION_YEAR = 2000
+  # Note: MIN set to 2009 when AMSF was established in Monaco
+  MIN_SUBMISSION_YEAR = 2009
   MAX_SUBMISSION_YEAR = 2099
 
   # Note: Audit log action types are defined as a Rails enum in AuditLog model.

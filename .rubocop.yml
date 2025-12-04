@@ -1638,7 +1638,7 @@ Style/RescueModifier:
 
 Style/RescueStandardError:
   Enabled: true
-  EnforcedStyle: implicit
+  EnforcedStyle: explicit
 
 Style/ReturnNil:
   Enabled: false

@@ -7,12 +7,13 @@
 #     title: "Client Statistics",
 #     description: "Overview of client data for the submission year"
 #   ) do |group| %>
-#     <% group.card(label: "Total Clients", value: 120, element_name: "a1101") %>
-#     <% group.card(label: "Natural Persons", value: 80, element_name: "a1102") %>
+#     <% group.with_card(label: "Total Clients", value: 120, element_name: "a1101") %>
+#     <% group.with_card(label: "Natural Persons", value: 80, element_name: "a1102") %>
 #   <% end %>
 #
 class StatisticGroupComponent < JumpstartComponent
-  renders_many :cards
+  # Use ViewComponent's built-in slot management to avoid memory leaks
+  renders_many :cards, StatisticCardComponent
 
   attr_reader :title, :description, :collapsible, :collapsed, :columns
 
@@ -23,7 +24,6 @@ class StatisticGroupComponent < JumpstartComponent
     @collapsible = opts.fetch(:collapsible, false)
     @collapsed = opts.fetch(:collapsed, false)
     @columns = opts.fetch(:columns, 3)
-    @cards = []
   end
 
   def collapsible?
@@ -32,11 +32,6 @@ class StatisticGroupComponent < JumpstartComponent
 
   def collapsed?
     collapsible? && !!@collapsed
-  end
-
-  # Add a statistic card to the group
-  def card(opts = {})
-    @cards << StatisticCardComponent.new(opts)
   end
 
   def grid_class

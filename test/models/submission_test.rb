@@ -45,13 +45,13 @@ class SubmissionTest < ActiveSupport::TestCase
   end
 
   test "year must be within reasonable range" do
-    # Too old
+    # Too old (before AMSF was established in 2009)
     submission = Submission.new(
       organization: @organization,
-      year: 1999
+      year: 2008
     )
     assert_not submission.valid?
-    assert_includes submission.errors[:year], "must be greater than or equal to 2000"
+    assert_includes submission.errors[:year], "must be greater than or equal to 2009"
 
     # Too future
     submission = Submission.new(

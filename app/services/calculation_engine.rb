@@ -116,6 +116,9 @@ class CalculationEngine
   # Note: Management revenue is calculated in Ruby due to complex date-based proration logic.
   # SQL aggregation would require complex DATE_PART/EXTRACT expressions for month counting.
   # For typical agency property counts (<100), Ruby iteration is acceptable.
+  #
+  # Memory consideration: .to_a loads all properties into memory. For agencies with
+  # thousands of properties, consider batch processing with find_each or SQL aggregation.
   # Future optimization: Add SQL window function if performance becomes an issue.
   def revenue_statistics
     year_sales = year_transactions.sales

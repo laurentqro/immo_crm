@@ -25,7 +25,7 @@ module Account::Transfer
 
     # Notify the new owner of the change
     Account::OwnershipNotifier.with(account: self, record: previous_owner).deliver(user)
-  rescue
+  rescue StandardError
     false
   end
 end
