@@ -101,13 +101,13 @@ class StatisticCardComponent < JumpstartComponent
 
   def numeric_value
     BigDecimal(value.to_s)
-  rescue ArgumentError, TypeError
+  rescue ArgumentError, TypeError, FloatDomainError
     nil
   end
 
   def numeric_previous
     BigDecimal(previous_value.to_s)
-  rescue ArgumentError, TypeError
+  rescue ArgumentError, TypeError, FloatDomainError
     nil
   end
 

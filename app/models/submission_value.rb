@@ -61,7 +61,9 @@ class SubmissionValue < ApplicationRecord
   # Update value - marks as overridden if source is calculated
   def update_value!(new_value, override_reason: nil)
     if calculated? && value != new_value
-      update!(value: new_value, overridden: true, override_reason: override_reason || "Value changed from #{value} to #{new_value}")
+      # Ensure auto-generated reason meets 10-char minimum validation
+      auto_reason = "Manual override: value changed from '#{value}' to '#{new_value}'"
+      update!(value: new_value, overridden: true, override_reason: override_reason || auto_reason)
     else
       update!(value: new_value)
     end

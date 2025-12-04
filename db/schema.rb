@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_04_151744) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_04_155027) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -478,6 +478,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_151744) do
     t.string "value"
     t.index ["override_user_id"], name: "index_submission_values_on_override_user_id"
     t.index ["submission_id", "element_name"], name: "index_submission_values_on_submission_id_and_element_name", unique: true
+    t.index ["submission_id", "source", "confirmed_at"], name: "index_submission_values_on_source_confirmation"
     t.index ["submission_id"], name: "index_submission_values_on_submission_id"
   end
 

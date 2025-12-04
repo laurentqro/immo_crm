@@ -20,8 +20,8 @@ class Submission < ApplicationRecord
   validates :year, presence: true,
     numericality: {
       only_integer: true,
-      greater_than_or_equal_to: 2000,
-      less_than_or_equal_to: 2099
+      greater_than_or_equal_to: MIN_SUBMISSION_YEAR,
+      less_than_or_equal_to: MAX_SUBMISSION_YEAR
     }
   validates :year, uniqueness: {scope: :organization_id}
   validates :status, presence: true, inclusion: {in: SUBMISSION_STATUSES}
@@ -113,14 +113,21 @@ class Submission < ApplicationRecord
 
   # === Locking Methods (FR-029) ===
 
+  # Lock timeout in minutes - stale locks are automatically released
+  LOCK_TIMEOUT = 30.minutes
+
   # Atomically lock the submission to prevent race conditions.
   # Uses database-level row locking (SELECT FOR UPDATE) to ensure atomicity.
+  # Automatically releases stale locks (older than LOCK_TIMEOUT).
   # Returns true if lock was acquired, raises LockError if already locked by another user.
   def acquire_lock!(user)
     transaction do
       reload(lock: true) # SELECT ... FOR UPDATE
 
-      if locked? && !locked_by?(user)
+      # Release stale locks automatically
+      if stale_lock?
+        update!(locked_by_user_id: nil, locked_at: nil)
+      elsif locked? && !locked_by?(user)
         raise LockError, "Submission is already locked by another user"
       end
 
@@ -145,11 +152,17 @@ class Submission < ApplicationRecord
   end
 
   def locked?
-    locked_by_user_id.present? && locked_at.present?
+    locked_by_user_id.present? && locked_at.present? && !stale_lock?
   end
 
   def locked_by?(user)
     locked_by_user_id == user.id
+  end
+
+  # Check if lock is stale (older than LOCK_TIMEOUT)
+  # Stale locks should be released to prevent indefinite blocking
+  def stale_lock?
+    locked_at.present? && locked_at < LOCK_TIMEOUT.ago
   end
 
   # Custom exception for locking errors

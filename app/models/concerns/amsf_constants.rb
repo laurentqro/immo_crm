@@ -118,6 +118,10 @@ module AmsfConstants
   # Changes greater than this percentage require additional review
   SIGNIFICANCE_THRESHOLD = 25.0
 
+  # Valid submission year range (AMSF established 2009, reasonable future)
+  MIN_SUBMISSION_YEAR = 2000
+  MAX_SUBMISSION_YEAR = 2099
+
   # Note: Audit log action types are defined as a Rails enum in AuditLog model.
   # Use AuditLog.actions.keys to get the list of valid actions.
 end

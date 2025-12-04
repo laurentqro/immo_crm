@@ -87,8 +87,8 @@ class CalculationEngine
     {
       "aACTIVEPS" => properties.count,
       "a1802TOLA" => properties.where.not(tenant_type: nil).count,
-      "a1802TOLA_NP" => properties.where(tenant_type: "PP").count,
-      "a1802TOLA_LE" => properties.where(tenant_type: "PM").count,
+      "a1802TOLA_NP" => properties.where(tenant_type: "NATURAL_PERSON").count,
+      "a1802TOLA_LE" => properties.where(tenant_type: "LEGAL_ENTITY").count,
       "a1802PEP" => properties.where(tenant_is_pep: true).count
     }
   end
@@ -112,10 +112,15 @@ class CalculationEngine
 
   # Calculate revenue statistics from transactions and property management
   # Elements: a3802 (sales commission), a3803 (rental commission), a3804 (mgmt revenue), a381 (total)
+  #
+  # Note: Management revenue is calculated in Ruby due to complex date-based proration logic.
+  # SQL aggregation would require complex DATE_PART/EXTRACT expressions for month counting.
+  # For typical agency property counts (<100), Ruby iteration is acceptable.
+  # Future optimization: Add SQL window function if performance becomes an issue.
   def revenue_statistics
     year_sales = year_transactions.sales
     year_rentals = year_transactions.rentals
-    properties = organization.managed_properties.active_in_year(year)
+    properties = organization.managed_properties.active_in_year(year).to_a
 
     sales_commission = year_sales.sum(:commission_amount)
     rental_commission = year_rentals.sum(:commission_amount)

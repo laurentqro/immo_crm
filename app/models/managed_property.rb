@@ -34,7 +34,7 @@ class ManagedProperty < ApplicationRecord
   scope :active_in_year, ->(year) {
     # Validate year input to prevent ArgumentError from Date.new
     validated_year = year.to_i
-    return none unless validated_year.between?(1900, 2100)
+    return none unless validated_year.between?(MIN_SUBMISSION_YEAR, MAX_SUBMISSION_YEAR)
 
     year_start = Date.new(validated_year, 1, 1)
     year_end = Date.new(validated_year, 12, 31)
