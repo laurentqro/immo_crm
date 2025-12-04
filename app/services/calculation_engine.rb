@@ -105,7 +105,10 @@ class CalculationEngine
 
       # Sanitize nationality to ISO 3166-1 alpha-2 format (2 uppercase letters only)
       safe_nationality = nationality.to_s.upcase.gsub(/[^A-Z]/, "")
-      next if safe_nationality.blank? || safe_nationality.length != 2
+      if safe_nationality.blank? || safe_nationality.length != 2
+        Rails.logger.warn("CalculationEngine: Invalid nationality code skipped: '#{nationality}' (#{count} clients)")
+        next
+      end
 
       country_counts[safe_nationality] = count
     end
