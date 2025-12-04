@@ -58,7 +58,7 @@ module OrganizationScoped
         "from organization #{current_organization.id}"
       )
     end
-  rescue StandardError => e
+  rescue => e
     # Don't let logging failures affect the main flow
     Rails.logger.error("Failed to log unauthorized access: #{e.message}")
   end
