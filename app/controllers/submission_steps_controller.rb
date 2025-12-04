@@ -416,7 +416,8 @@ class SubmissionStepsController < ApplicationController
 
         # Update the value with user-provided reason or auto-generate one
         if value.calculated?
-          reason = override_reason.presence || "Manual override: value changed from '#{old_value}' to '#{new_value}'"
+          # Use .inspect for safe serialization of user-controlled values
+          reason = override_reason.presence || "Manual override: value changed from #{old_value.inspect} to #{new_value.inspect}"
           value.update!(
             value: new_value,
             overridden: true,
@@ -428,14 +429,17 @@ class SubmissionStepsController < ApplicationController
           value.update!(value: new_value)
         end
       end
-    end
 
-    # Create audit logs for overridden values (outside transaction for performance)
-    create_override_audit_logs(overridden_values) if overridden_values.any?
+      # Create audit logs inside transaction for compliance reliability (FR-028)
+      create_override_audit_logs(overridden_values) if overridden_values.any?
+    end
   end
 
   def create_override_audit_logs(overridden_values)
-    return unless defined?(AuditLog)
+    unless defined?(AuditLog)
+      Rails.logger.warn("[SubmissionSteps] AuditLog not defined, skipping audit trail for overrides")
+      return
+    end
 
     overridden_values.each do |override_data|
       AuditLog.create!(
@@ -444,8 +448,9 @@ class SubmissionStepsController < ApplicationController
         organization: current_organization,
         action: "update",
         metadata: {
+          # Use changed_fields array format per AuditLog validation rules
           changed_fields: [
-            "#{override_data[:value].element_name}: #{override_data[:old_value]} -> #{override_data[:new_value]}"
+            "#{override_data[:value].element_name}: #{override_data[:old_value].inspect} -> #{override_data[:new_value].inspect}"
           ]
         }
       )

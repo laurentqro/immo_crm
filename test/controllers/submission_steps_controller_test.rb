@@ -63,8 +63,8 @@ class SubmissionStepsControllerTest < ActionDispatch::IntegrationTest
     # First populate values
     CalculationEngine.new(@submission).populate_submission_values!
 
-    # Capture the specific value we're testing (use order for deterministic results)
-    target_value = @submission.submission_values.order(:id).first
+    # Capture the specific value we're testing - must be calculated source
+    target_value = @submission.submission_values.calculated.order(:id).first
 
     patch submission_submission_step_path(@submission, step: 1), params: {
       submission: {

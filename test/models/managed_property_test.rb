@@ -269,6 +269,45 @@ class ManagedPropertyTest < ActiveSupport::TestCase
     assert_includes property.errors[:management_fee_fixed], "must be greater than or equal to 0"
   end
 
+  # === Date Validation ===
+
+  test "management_end_date cannot be before management_start_date" do
+    property = ManagedProperty.new(
+      organization: @organization,
+      client: @client,
+      property_address: "4 Avenue de Monte-Carlo",
+      management_start_date: Date.new(2024, 6, 1),
+      management_end_date: Date.new(2024, 1, 1),  # Before start date
+      management_fee_percent: 8.0
+    )
+    assert_not property.valid?
+    assert_includes property.errors[:management_end_date], "must be on or after start date"
+  end
+
+  test "management_end_date can equal management_start_date" do
+    property = ManagedProperty.new(
+      organization: @organization,
+      client: @client,
+      property_address: "4 Avenue de Monte-Carlo",
+      management_start_date: Date.new(2024, 6, 1),
+      management_end_date: Date.new(2024, 6, 1),  # Same date is valid
+      management_fee_percent: 8.0
+    )
+    assert property.valid?
+  end
+
+  test "management_end_date can be after management_start_date" do
+    property = ManagedProperty.new(
+      organization: @organization,
+      client: @client,
+      property_address: "4 Avenue de Monte-Carlo",
+      management_start_date: Date.new(2024, 1, 1),
+      management_end_date: Date.new(2024, 12, 31),
+      management_fee_percent: 8.0
+    )
+    assert property.valid?
+  end
+
   # === Client Organization Validation ===
 
   test "client must belong to same organization" do

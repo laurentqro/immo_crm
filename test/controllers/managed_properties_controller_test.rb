@@ -162,6 +162,40 @@ class ManagedPropertiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "prevents creating property with client from different organization" do
+    other_org_client = clients(:other_org_client)
+    sign_in @user
+
+    assert_no_difference "ManagedProperty.count" do
+      post managed_properties_path, params: {
+        managed_property: {
+          client_id: other_org_client.id,
+          property_address: "Cross-Org Property Test",
+          property_type: "RESIDENTIAL",
+          management_start_date: Date.current,
+          management_fee_percent: 8.0
+        }
+      }
+    end
+
+    assert_response :unprocessable_entity
+  end
+
+  test "prevents updating property to use client from different organization" do
+    other_org_client = clients(:other_org_client)
+    sign_in @user
+
+    patch managed_property_path(@managed_property), params: {
+      managed_property: {
+        client_id: other_org_client.id
+      }
+    }
+
+    assert_response :unprocessable_entity
+    @managed_property.reload
+    assert_not_equal other_org_client.id, @managed_property.client_id
+  end
+
   # === Edit ===
 
   test "shows edit form for managed property" do

@@ -63,7 +63,7 @@ class ManagedPropertiesController < ApplicationController
   private
 
   def set_managed_property
-    @managed_property = policy_scope(ManagedProperty).find_by(id: params[:id])
+    @managed_property = policy_scope(ManagedProperty).includes(:client).find_by(id: params[:id])
     render_not_found unless @managed_property
   end
 

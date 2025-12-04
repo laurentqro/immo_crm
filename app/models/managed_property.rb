@@ -27,6 +27,7 @@ class ManagedProperty < ApplicationRecord
 
   validate :client_belongs_to_organization
   validate :fee_structure_present
+  validate :end_date_after_start_date
 
   # === Scopes ===
   scope :active, -> { where(management_end_date: nil) }
@@ -112,5 +113,12 @@ class ManagedProperty < ApplicationRecord
     return if management_fee_percent.present? || management_fee_fixed.present?
 
     errors.add(:base, "Either percentage or fixed fee must be specified")
+  end
+
+  def end_date_after_start_date
+    return unless management_end_date.present? && management_start_date.present?
+    return if management_end_date >= management_start_date
+
+    errors.add(:management_end_date, "must be on or after start date")
   end
 end
