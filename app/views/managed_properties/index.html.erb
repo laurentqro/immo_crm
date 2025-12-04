@@ -1,0 +1,120 @@
+<% Current.meta_tags.set(title: "Managed Properties") %>
+
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">Managed Properties</h1>
+      <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+        Property management contracts (gestion locative) for AMSF reporting.
+      </p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <%= link_to "Add Property", new_managed_property_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <%# Filters %>
+  <div class="mt-6 flex gap-4">
+    <%= form_with url: managed_properties_path, method: :get, local: true, class: "flex gap-4" do |f| %>
+      <%= f.select :property_type,
+          options_for_select([
+            ["All Types", ""],
+            ["Residential", "RESIDENTIAL"],
+            ["Commercial", "COMMERCIAL"]
+          ], params[:property_type]),
+          {},
+          { onchange: "this.form.submit()" } %>
+      <%= f.select :status,
+          options_for_select([
+            ["All Status", ""],
+            ["Active", "active"],
+            ["Ended", "ended"]
+          ], params[:status]),
+          {},
+          { onchange: "this.form.submit()" } %>
+    <% end %>
+  </div>
+
+  <%# Property list %>
+  <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <% if @managed_properties.any? %>
+          <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+            <thead>
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-0">Property</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Landlord</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Type</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Monthly Rent</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Fee</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                  <span class="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+              <% @managed_properties.each do |property| %>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0">
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <%= link_to property.property_address, managed_property_path(property), class: "hover:underline" %>
+                    </div>
+                    <% if property.tenant_name.present? %>
+                      <div class="text-gray-500 dark:text-gray-400">Tenant: <%= property.tenant_name %></div>
+                    <% end %>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <%= property.client&.name %>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <%= property.property_type&.titleize %>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <% if property.monthly_rent.present? %>
+                      <%= number_to_currency(property.monthly_rent, unit: "€") %>
+                    <% end %>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <% if property.management_fee_fixed.present? %>
+                      <%= number_to_currency(property.management_fee_fixed, unit: "€") %>/mo
+                    <% elsif property.management_fee_percent.present? %>
+                      <%= property.management_fee_percent %>%
+                    <% end %>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm">
+                    <% if property.active? %>
+                      <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">Active</span>
+                    <% else %>
+                      <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">Ended</span>
+                    <% end %>
+                  </td>
+                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <%= link_to "Edit", edit_managed_property_path(property), class: "text-indigo-600 hover:text-indigo-900 dark:text-indigo-400" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="empty-state text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            <h3 class="mt-2 text-sm font-semibold text-gray-900 dark:text-white">No managed properties</h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by adding your first property management contract.</p>
+            <div class="mt-6">
+              <%= link_to new_managed_property_path, class: "btn btn-primary" do %>
+                <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                </svg>
+                Add Property
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -107,6 +107,88 @@
           { include_blank: "Select risk level..." } %>
     </div>
 
+    <%# Due Diligence Section %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <h3 class="text-sm font-medium mb-4" style="color: var(--base-text-secondary);">Due Diligence</h3>
+
+      <div class="form-group">
+        <%= form.label :due_diligence_level, "Due diligence level" %>
+        <%= form.select :due_diligence_level,
+            options_for_select([
+              ["Standard", "STANDARD"],
+              ["Simplified", "SIMPLIFIED"],
+              ["Reinforced (Enhanced)", "REINFORCED"]
+            ], client.due_diligence_level),
+            { include_blank: "Select level..." },
+            {
+              data: {
+                client_form_target: "dueDiligenceLevel",
+                action: "change->client-form#toggleSimplifiedReason"
+              }
+            } %>
+        <p class="form-hint">AMSF requirement: Standard for most clients, Simplified for low-risk regulated entities, Reinforced for high-risk or PEPs.</p>
+      </div>
+
+      <div class="form-group <%= 'hidden' unless client.due_diligence_level == 'SIMPLIFIED' %>" data-client-form-target="simplifiedDdReason">
+        <%= form.label :simplified_dd_reason, "Simplified DD justification" %>
+        <%= form.text_area :simplified_dd_reason,
+            rows: 2,
+            class: "form-control",
+            placeholder: "Explain why simplified due diligence applies (e.g., regulated entity, low-risk profile)..." %>
+        <p class="form-hint">Required when using simplified due diligence.</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4">
+        <div class="form-picker-group">
+          <%= form.check_box :source_of_funds_verified %>
+          <div>
+            <%= form.label :source_of_funds_verified, "Source of funds verified" %>
+            <p class="form-hint">Origin of funds for transactions has been documented.</p>
+          </div>
+        </div>
+
+        <div class="form-picker-group">
+          <%= form.check_box :source_of_wealth_verified %>
+          <div>
+            <%= form.label :source_of_wealth_verified, "Source of wealth verified" %>
+            <p class="form-hint">Overall wealth origin has been documented.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# Professional Category %>
+    <div class="form-group">
+      <%= form.label :professional_category, "Professional category" %>
+      <%= form.select :professional_category,
+          options_for_select([
+            ["Legal professional", "LEGAL"],
+            ["Accountant", "ACCOUNTANT"],
+            ["Notary", "NOTARY"],
+            ["Real estate professional", "REAL_ESTATE"],
+            ["Financial professional", "FINANCIAL"],
+            ["Other regulated professional", "OTHER"],
+            ["None / Not applicable", "NONE"]
+          ], client.professional_category),
+          { include_blank: "Select category..." } %>
+      <p class="form-hint">If the client is a regulated professional subject to their own AML/CFT obligations.</p>
+    </div>
+
+    <%# Relationship End Section %>
+    <div class="form-group">
+      <%= form.label :relationship_end_reason, "Relationship end reason" %>
+      <%= form.select :relationship_end_reason,
+          options_for_select([
+            ["Client request", "CLIENT_REQUEST"],
+            ["AML/CFT concern", "AML_CONCERN"],
+            ["Inactivity", "INACTIVITY"],
+            ["Business decision", "BUSINESS_DECISION"],
+            ["Other", "OTHER"]
+          ], client.relationship_end_reason),
+          { include_blank: "Still active client..." } %>
+      <p class="form-hint">Reason for ending the business relationship (if applicable).</p>
+    </div>
+
     <%# Business Sector (optional) %>
     <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="businessSector">
       <%= form.label :business_sector %>

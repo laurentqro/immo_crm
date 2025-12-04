@@ -1,0 +1,87 @@
+<%= form_with model: training, local: true do |form| %>
+  <%= render "application/error_messages", resource: training %>
+
+  <div class="space-y-6">
+    <%# Training Details %>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :training_date, "Training date" %>
+        <%= form.date_field :training_date, required: true, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :training_type, "Training type" %>
+        <%= form.select :training_type,
+            options_for_select([
+              ["Initial Training", "INITIAL"],
+              ["Refresher Training", "REFRESHER"],
+              ["Specialized Training", "SPECIALIZED"]
+            ], training.training_type || "REFRESHER"),
+            {},
+            { required: true, class: "form-control" } %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :topic, "Topic" %>
+        <%= form.select :topic,
+            options_for_select([
+              ["AML Fundamentals", "AML_BASICS"],
+              ["PEP Screening", "PEP_SCREENING"],
+              ["STR Filing", "STR_FILING"],
+              ["Risk Assessment", "RISK_ASSESSMENT"],
+              ["Sanctions", "SANCTIONS"],
+              ["KYC Procedures", "KYC_PROCEDURES"],
+              ["Other", "OTHER"]
+            ], training.topic || "AML_BASICS"),
+            {},
+            { required: true, class: "form-control" } %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :provider, "Provider" %>
+        <%= form.select :provider,
+            options_for_select([
+              ["Internal", "INTERNAL"],
+              ["External Provider", "EXTERNAL"],
+              ["AMSF", "AMSF"],
+              ["Online", "ONLINE"]
+            ], training.provider || "INTERNAL"),
+            {},
+            { required: true, class: "form-control" } %>
+      </div>
+    </div>
+
+    <%# Attendance %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <h3 class="text-sm font-medium mb-4" style="color: var(--base-text-secondary);">Attendance</h3>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div class="form-group">
+          <%= form.label :staff_count, "Staff trained" %>
+          <%= form.number_field :staff_count, required: true, min: 1, class: "form-control",
+              placeholder: "Number of staff who attended" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :duration_hours, "Duration (hours)" %>
+          <%= form.number_field :duration_hours, step: 0.5, min: 0, class: "form-control",
+              placeholder: "e.g., 2.5" %>
+        </div>
+      </div>
+    </div>
+
+    <%# Notes %>
+    <div class="form-group">
+      <%= form.label :notes %>
+      <%= form.text_area :notes, rows: 3, class: "form-control",
+          placeholder: "Additional notes about this training session..." %>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", trainings_path, class: "btn btn-secondary" %>
+    <%= form.submit training.persisted? ? "Update Training" : "Add Training", class: "btn btn-primary" %>
+  </div>
+<% end %>

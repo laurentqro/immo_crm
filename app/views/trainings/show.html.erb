@@ -1,0 +1,87 @@
+<% Current.meta_tags.set(title: "Training - #{@training.training_date.strftime('%b %d, %Y')}") %>
+
+<div class="px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
+  <div class="mb-6">
+    <%= link_to trainings_path, class: "text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 inline-flex items-center gap-1" do %>
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      Back to Training Records
+    <% end %>
+  </div>
+
+  <div class="sm:flex sm:items-center sm:justify-between mb-8">
+    <div>
+      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">
+        <%= @training.topic_label %>
+      </h1>
+      <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+        <%= @training.training_date.strftime("%B %d, %Y") %>
+      </p>
+    </div>
+    <div class="mt-4 sm:mt-0 flex gap-2">
+      <%= link_to "Edit", edit_training_path(@training), class: "btn btn-secondary" %>
+      <%= button_to "Delete", training_path(@training), method: :delete,
+          class: "btn btn-danger",
+          data: { turbo_confirm: "Are you sure you want to delete this training record?" } %>
+    </div>
+  </div>
+
+  <div class="bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
+    <div class="px-4 py-5 sm:p-6">
+      <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Training Type</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
+              <%= case @training.training_type
+                  when 'INITIAL' then 'bg-blue-100 text-blue-800'
+                  when 'REFRESHER' then 'bg-green-100 text-green-800'
+                  when 'SPECIALIZED' then 'bg-purple-100 text-purple-800'
+                  end %>">
+              <%= @training.training_type_label %>
+            </span>
+          </dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Topic</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @training.topic_label %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Provider</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @training.provider_label %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Date</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @training.training_date.strftime("%B %d, %Y") %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Staff Trained</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @training.staff_count %> staff members</dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Duration</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+            <% if @training.duration_hours.present? %>
+              <%= @training.duration_hours %> hours
+            <% else %>
+              <span class="text-gray-400">Not specified</span>
+            <% end %>
+          </dd>
+        </div>
+
+        <% if @training.notes.present? %>
+          <div class="sm:col-span-2">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Notes</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @training.notes %></dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+</div>

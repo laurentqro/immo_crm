@@ -1,0 +1,144 @@
+<% Current.meta_tags.set(title: @managed_property.property_address) %>
+
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center sm:justify-between">
+    <div>
+      <div class="flex items-center gap-x-3">
+        <%= link_to managed_properties_path, class: "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" do %>
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+          </svg>
+        <% end %>
+        <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white"><%= @managed_property.property_address %></h1>
+      </div>
+      <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+        <%= @managed_property.property_type&.titleize %> property managed since <%= @managed_property.management_start_date.strftime("%B %Y") %>
+      </p>
+    </div>
+    <div class="mt-4 flex gap-x-3 sm:mt-0">
+      <%= link_to "Edit", edit_managed_property_path(@managed_property), class: "btn btn-secondary" %>
+      <%= button_to "Delete", managed_property_path(@managed_property), method: :delete,
+          class: "btn btn-danger",
+          data: { turbo_confirm: "Are you sure you want to delete this property?" } %>
+    </div>
+  </div>
+
+  <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <%# Property Details Card %>
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Property Details</h2>
+      <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Address</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @managed_property.property_address %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Type</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @managed_property.property_type&.titleize %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Landlord</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+            <%= link_to @managed_property.client&.name, client_path(@managed_property.client), class: "text-indigo-600 hover:underline" %>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
+          <dd class="mt-1">
+            <% if @managed_property.active? %>
+              <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">Active</span>
+            <% else %>
+              <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">Ended <%= @managed_property.management_end_date %></span>
+            <% end %>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Start Date</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @managed_property.management_start_date %></dd>
+        </div>
+        <% if @managed_property.management_end_date.present? %>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">End Date</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @managed_property.management_end_date %></dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+
+    <%# Financial Details Card %>
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Financial Details</h2>
+      <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Monthly Rent</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+            <% if @managed_property.monthly_rent.present? %>
+              <%= number_to_currency(@managed_property.monthly_rent, unit: "€") %>
+            <% else %>
+              <span class="text-gray-400">Not specified</span>
+            <% end %>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Management Fee</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+            <% if @managed_property.management_fee_fixed.present? %>
+              <%= number_to_currency(@managed_property.management_fee_fixed, unit: "€") %>/month (fixed)
+            <% elsif @managed_property.management_fee_percent.present? %>
+              <%= @managed_property.management_fee_percent %>% of rent
+            <% end %>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Monthly Fee Amount</dt>
+          <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+            <%= number_to_currency(@managed_property.monthly_fee, unit: "€") %>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Est. Annual Revenue</dt>
+          <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+            <%= number_to_currency(@managed_property.annual_revenue, unit: "€") %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <%# Tenant Details Card %>
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 lg:col-span-2">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Tenant Information</h2>
+      <dl class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tenant Name</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @managed_property.tenant_name || "—" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tenant Type</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @managed_property.tenant_type&.titleize&.gsub("_", " ") || "—" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tenant Country</dt>
+          <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @managed_property.tenant_country || "—" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">PEP Status</dt>
+          <dd class="mt-1">
+            <% if @managed_property.tenant_is_pep? %>
+              <span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">PEP</span>
+            <% else %>
+              <span class="text-sm text-gray-500 dark:text-gray-400">Not a PEP</span>
+            <% end %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <%# Notes Card %>
+    <% if @managed_property.notes.present? %>
+      <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 lg:col-span-2">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Notes</h2>
+        <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap"><%= @managed_property.notes %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -187,7 +187,7 @@ class SubmissionStepsController < ApplicationController
 
   def step_1_params
     params.fetch(:submission, {}).permit(
-      submission_values_attributes: [:id, :value]
+      submission_values_attributes: [:id, :value, :override_reason]
     )
   end
 
@@ -394,6 +394,8 @@ class SubmissionStepsController < ApplicationController
     ids = attributes.values.filter_map { |attrs| attrs[:id] }
     return if ids.empty?
 
+    overridden_values = []
+
     # Wrap in transaction to ensure all-or-nothing updates
     @submission.transaction do
       values_by_id = @submission.submission_values.where(id: ids).index_by(&:id)
@@ -404,11 +406,54 @@ class SubmissionStepsController < ApplicationController
         value = values_by_id[attrs[:id].to_i]
         next unless value
 
-        if attrs[:value].present? && attrs[:value] != value.value
-          # Use update_value! which handles override_reason automatically
-          value.update_value!(attrs[:value])
+        new_value = attrs[:value]
+        override_reason = attrs[:override_reason]
+
+        # Only process if new value provided and different from current
+        next unless new_value.present? && new_value != value.value
+
+        old_value = value.value
+
+        # Update the value with user-provided reason or auto-generate one
+        if value.calculated?
+          # Use .inspect for safe serialization of user-controlled values
+          reason = override_reason.presence || "Manual override: value changed from #{old_value.inspect} to #{new_value.inspect}"
+          value.update!(
+            value: new_value,
+            overridden: true,
+            override_reason: reason,
+            override_user: Current.user
+          )
+          overridden_values << {value: value, old_value: old_value, new_value: new_value}
+        else
+          value.update!(value: new_value)
         end
       end
+
+      # Create audit logs inside transaction for compliance reliability (FR-028)
+      create_override_audit_logs(overridden_values) if overridden_values.any?
+    end
+  end
+
+  def create_override_audit_logs(overridden_values)
+    unless defined?(AuditLog)
+      Rails.logger.warn("[SubmissionSteps] AuditLog not defined, skipping audit trail for overrides")
+      return
+    end
+
+    overridden_values.each do |override_data|
+      AuditLog.create!(
+        auditable: override_data[:value],
+        user: Current.user,
+        organization: current_organization,
+        action: "update",
+        metadata: {
+          # Use changed_fields array format per AuditLog validation rules
+          changed_fields: [
+            "#{override_data[:value].element_name}: #{override_data[:old_value].inspect} -> #{override_data[:new_value].inspect}"
+          ]
+        }
+      )
     end
   end
 

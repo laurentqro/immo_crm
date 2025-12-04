@@ -1,12 +1,22 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Manages dynamic field visibility in the client form based on client type and PEP status
+// Manages dynamic field visibility in the client form based on client type, PEP status,
+// and due diligence level
 export default class extends Controller {
-  static targets = ["clientType", "legalPersonType", "businessSector", "isPep", "pepType"]
+  static targets = [
+    "clientType",
+    "legalPersonType",
+    "businessSector",
+    "isPep",
+    "pepType",
+    "dueDiligenceLevel",
+    "simplifiedDdReason"
+  ]
 
   connect() {
     this.toggleFields()
     this.togglePepType()
+    this.toggleSimplifiedReason()
   }
 
   toggleFields() {
@@ -28,5 +38,12 @@ export default class extends Controller {
     if (this.hasPepTypeTarget) {
       this.pepTypeTarget.classList.toggle("hidden", !isPep)
     }
+  }
+
+  toggleSimplifiedReason() {
+    if (!this.hasDueDiligenceLevelTarget || !this.hasSimplifiedDdReasonTarget) return
+
+    const isSimplified = this.dueDiligenceLevelTarget.value === "SIMPLIFIED"
+    this.simplifiedDdReasonTarget.classList.toggle("hidden", !isSimplified)
   }
 }

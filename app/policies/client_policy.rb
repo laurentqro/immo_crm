@@ -54,7 +54,14 @@ class ClientPolicy < ApplicationPolicy
       :became_client_at,
       :relationship_ended_at,
       :rejection_reason,
-      :notes
+      :notes,
+      # AMSF Compliance fields (US2)
+      :due_diligence_level,
+      :simplified_dd_reason,
+      :professional_category,
+      :relationship_end_reason,
+      :source_of_funds_verified,
+      :source_of_wealth_verified
     ]
   end
 
