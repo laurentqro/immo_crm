@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -138,15 +138,18 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
   create_table "beneficial_owners", force: :cascade do |t|
     t.bigint "client_id", null: false
     t.string "control_type"
+    t.string "country_code"
     t.datetime "created_at", null: false
     t.boolean "is_pep", default: false, null: false
     t.string "name", null: false
     t.string "nationality"
     t.decimal "ownership_pct", precision: 5, scale: 2
+    t.decimal "ownership_percentage", precision: 5, scale: 2
     t.string "pep_type"
     t.string "residence_country"
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_beneficial_owners_on_client_id"
+    t.index ["country_code"], name: "index_beneficial_owners_on_country_code"
     t.index ["is_pep"], name: "index_beneficial_owners_on_is_pep"
   end
 
@@ -154,9 +157,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
     t.datetime "became_client_at"
     t.string "business_sector"
     t.string "client_type", null: false
+    t.string "country_code"
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.boolean "is_pep", default: false, null: false
+    t.boolean "is_pep_associated"
+    t.boolean "is_pep_related"
     t.boolean "is_vasp", default: false, null: false
     t.string "legal_person_type"
     t.string "name", null: false
@@ -167,16 +173,21 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
     t.string "rejection_reason"
     t.datetime "relationship_ended_at"
     t.string "residence_country"
+    t.string "residence_status"
     t.string "risk_level"
     t.datetime "updated_at", null: false
     t.string "vasp_type"
     t.index ["client_type"], name: "index_clients_on_client_type"
+    t.index ["country_code"], name: "index_clients_on_country_code"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
     t.index ["is_pep"], name: "index_clients_on_is_pep"
+    t.index ["is_pep_associated"], name: "index_clients_on_is_pep_associated"
+    t.index ["is_pep_related"], name: "index_clients_on_is_pep_related"
     t.index ["organization_id", "client_type"], name: "index_clients_on_org_and_type"
     t.index ["organization_id", "deleted_at"], name: "index_clients_on_organization_id_and_deleted_at"
     t.index ["organization_id", "risk_level"], name: "index_clients_on_org_and_risk"
     t.index ["organization_id"], name: "index_clients_on_organization_id"
+    t.index ["residence_status"], name: "index_clients_on_residence_status"
     t.index ["risk_level"], name: "index_clients_on_risk_level"
   end
 
@@ -438,6 +449,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
     t.datetime "created_at", null: false
     t.boolean "downloaded_unvalidated", default: false
     t.bigint "organization_id", null: false
+    t.string "signatory_name"
+    t.string "signatory_title"
     t.datetime "started_at"
     t.string "status", default: "draft"
     t.string "taxonomy_version", default: "2025"
@@ -455,6 +468,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
     t.decimal "commission_amount", precision: 15, scale: 2
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
+    t.string "direction"
     t.text "notes"
     t.bigint "organization_id", null: false
     t.string "payment_method"
@@ -467,6 +481,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_02_220329) do
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_transactions_on_client_id"
     t.index ["deleted_at"], name: "index_transactions_on_deleted_at"
+    t.index ["direction"], name: "index_transactions_on_direction"
     t.index ["organization_id", "transaction_date"], name: "index_transactions_on_organization_id_and_transaction_date"
     t.index ["organization_id", "transaction_type"], name: "index_transactions_on_org_and_type"
     t.index ["organization_id"], name: "index_transactions_on_organization_id"

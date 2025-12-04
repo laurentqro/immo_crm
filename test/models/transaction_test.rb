@@ -162,6 +162,87 @@ class TransactionTest < ActiveSupport::TestCase
     end
   end
 
+  test "direction must be valid when present" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      direction: "INVALID"
+    )
+    assert_not transaction.valid?
+    assert_includes transaction.errors[:direction], "is not included in the list"
+  end
+
+  test "accepts all valid directions" do
+    %w[BY_CLIENT WITH_CLIENT].each do |direction|
+      transaction = Transaction.new(
+        organization: @organization,
+        client: @client,
+        transaction_date: Date.current,
+        transaction_type: "PURCHASE",
+        direction: direction
+      )
+      assert transaction.valid?, "Expected direction '#{direction}' to be valid"
+    end
+  end
+
+  test "direction can be blank" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      direction: nil
+    )
+    assert transaction.valid?
+  end
+
+  test "transaction_value must be non-negative when present" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      transaction_value: -100
+    )
+    assert_not transaction.valid?
+    assert_includes transaction.errors[:transaction_value], "must be greater than or equal to 0"
+  end
+
+  test "accepts valid positive transaction_value" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      transaction_value: 500_000.50
+    )
+    assert transaction.valid?
+  end
+
+  test "transaction_value can be zero" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      transaction_value: 0
+    )
+    assert transaction.valid?
+  end
+
+  test "transaction_value can be blank" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      transaction_value: nil
+    )
+    assert transaction.valid?
+  end
+
   # === Scopes ===
 
   test "purchases scope returns only PURCHASE transactions" do

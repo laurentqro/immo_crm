@@ -24,10 +24,10 @@ class CalculationEngine
       transaction_statistics,
       transaction_values,
       payment_method_statistics,
-      pep_transaction_statistics,
       str_statistics,
       beneficial_owner_statistics
     )
+    # Note: pep_transaction_statistics removed - a2401 not in AMSF taxonomy
   end
 
   # Persist calculated values to submission_values table
@@ -43,8 +43,11 @@ class CalculationEngine
 
         # Only update if not overridden by user
         unless submission_value.persisted? && submission_value.overridden?
+          # Serialize hashes as JSON for dimensional elements like a1103
+          serialized_value = value.is_a?(Hash) ? value.to_json : value.to_s
+
           submission_value.assign_attributes(
-            value: value.to_s,
+            value: serialized_value,
             source: "calculated"
           )
           submission_value.save!
@@ -86,7 +89,7 @@ class CalculationEngine
       "a1102" => clients.natural_persons.count,
       "a11502B" => clients.legal_entities.count,
       "a11802B" => clients.trusts.count,
-      "a1301" => clients.peps.count,
+      "a12002B" => clients.peps.count,
       "a1401" => clients.high_risk.count
     }
   end
@@ -95,16 +98,23 @@ class CalculationEngine
     result = {}
     clients = organization.clients.kept
 
-    # Group by nationality and count
+    # Group by nationality and count - return nested hash for dimensional contexts
+    country_counts = {}
     clients.group(:nationality).count.each do |nationality, count|
       next if nationality.blank?
 
       # Sanitize nationality to ISO 3166-1 alpha-2 format (2 uppercase letters only)
       safe_nationality = nationality.to_s.upcase.gsub(/[^A-Z]/, "")
-      next if safe_nationality.blank? || safe_nationality.length != 2
+      if safe_nationality.blank? || safe_nationality.length != 2
+        Rails.logger.warn("CalculationEngine: Invalid nationality code skipped: '#{nationality}' (#{count} clients)")
+        next
+      end
 
-      result["a1103_#{safe_nationality}"] = count
+      country_counts[safe_nationality] = count
     end
+
+    # Return single element with nested hash for XbrlGenerator to create dimensional contexts
+    result["a1103"] = country_counts if country_counts.any?
 
     result
   end
@@ -114,22 +124,25 @@ class CalculationEngine
   def transaction_statistics
     txns = year_transactions
 
+    # Note: a2101B is a Oui/Non question ("Did you have transactions?"), not a count
+    # There is no single "total transactions" integer element in the taxonomy
+    # a2108B is the correct element for rental count (a2107B is Oui/Non)
     {
-      "a2101B" => txns.count,
-      "a2102" => txns.purchases.count,
-      "a2103" => txns.sales.count,
-      "a2104" => txns.rentals.count
+      "a2102B" => txns.purchases.count,
+      "a2105B" => txns.sales.count,
+      "a2108B" => txns.rentals.count
     }
   end
 
   def transaction_values
     txns = year_transactions
 
+    # a2109B is the correct element for total transaction value (a2104B is Oui/Non)
     {
-      "a2104B" => txns.sum(:transaction_value),
-      "a2105" => txns.purchases.sum(:transaction_value),
-      "a2106" => txns.sales.sum(:transaction_value),
-      "a2107" => txns.rentals.sum(:transaction_value)
+      "a2109B" => txns.sum(:transaction_value),
+      "a2102BB" => txns.purchases.sum(:transaction_value),
+      "a2105BB" => txns.sales.sum(:transaction_value)
+      # Note: Rental value has no dedicated monetary element in taxonomy
     }
   end
 
@@ -140,24 +153,12 @@ class CalculationEngine
     cash_txns = txns.where(payment_method: %w[CASH MIXED])
     crypto_txns = txns.where(payment_method: "CRYPTO")
 
+    # a2202 and a2501A are Oui/Non questions, not counts/values
+    # a2203 is string type (free text), we store the count as string
     {
-      "a2201" => cash_txns.count,
-      "a2202" => cash_txns.sum(:cash_amount),
-      "a2301" => crypto_txns.count,
-      "a2302" => crypto_txns.sum(:transaction_value)
-    }
-  end
-
-  # === PEP Transaction Statistics ===
-
-  def pep_transaction_statistics
-    # Use subquery instead of pluck to avoid loading IDs into memory
-    pep_txns = year_transactions.where(
-      client_id: organization.clients.kept.peps.select(:id)
-    )
-
-    {
-      "a2401" => pep_txns.count
+      "a2203" => cash_txns.count.to_s,
+      "a2202" => cash_txns.exists? ? "Oui" : "Non",
+      "a2501A" => crypto_txns.exists? ? "Oui" : "Non"
     }
   end
 
@@ -168,31 +169,38 @@ class CalculationEngine
     year_end = Date.new(year, 12, 31)
 
     str_count = organization.str_reports.kept
-                            .where(report_date: year_start..year_end)
-                            .count
+      .where(report_date: year_start..year_end)
+      .count
 
-    { "a3101" => str_count }
+    # a3102 is the integer count element (a3101 is Oui/Non question)
+    {"a3102" => str_count}
   end
 
   # === Beneficial Owner Statistics ===
 
   def beneficial_owner_statistics
-    legal_entity_bos = organization.clients.kept.legal_entities
-                                   .joins(:beneficial_owners)
-                                   .count
+    # Count beneficial owners starting from BeneficialOwner for clarity
+    base_query = BeneficialOwner.joins(:client)
+      .merge(Client.kept)
+      .where(clients: {organization_id: organization.id})
 
-    trust_bos = organization.clients.kept.trusts
-                            .joins(:beneficial_owners)
-                            .count
+    # Single query with grouping for PM and TRUST types
+    counts_by_type = base_query
+      .where(clients: {client_type: %w[PM TRUST]})
+      .group("clients.client_type")
+      .count
 
-    pep_bos = BeneficialOwner.joins(:client)
-                             .where(clients: { organization_id: organization.id })
-                             .where(is_pep: true)
-                             .count
+    pep_bos = base_query.where(is_pep: true).count
+
+    # a1204O: Do you have beneficial owners with ownership > 25%? (Oui/Non)
+    has_owners_above_threshold = base_query
+      .where("ownership_percentage > ?", 25)
+      .exists?
 
     {
-      "a1501" => legal_entity_bos + trust_bos,
-      "a1502" => pep_bos
+      "a1501" => counts_by_type.values.sum,
+      "a1502B" => pep_bos,
+      "a1204O" => has_owners_above_threshold ? "Oui" : "Non"
     }
   end
 

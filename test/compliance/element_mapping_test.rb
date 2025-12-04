@@ -54,11 +54,8 @@ class ElementMappingTest < XbrlComplianceTestCase
       end
     end
 
-    # Expected issue - type mapping may use different conventions than taxonomy
-    # Skip if mismatches found - this documents the known issue
-    skip "Type conventions differ between mapping and taxonomy (#{mismatched_types.size} elements)" if mismatched_types.any?
-
-    assert mismatched_types.empty?, "Type conventions should match"
+    assert mismatched_types.empty?,
+      "Type mismatches found:\n  #{mismatched_types.join("\n  ")}"
   end
 
   test "no obsolete elements in mapping" do

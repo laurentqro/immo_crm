@@ -77,73 +77,69 @@ class XbrlCalculationTest < XbrlComplianceTestCase
       "Trust count (a11802B) should be #{expected}"
   end
 
-  test "PEP client count a1301 matches actual count" do
+  test "PEP client count a12002B matches actual count" do
     expected = expected_client_counts[:peps]
 
-    assert_equal expected, @calculated_values["a1301"],
-      "PEP client count (a1301) should be #{expected}"
+    assert_equal expected, @calculated_values["a12002B"],
+      "PEP client count (a12002B) should be #{expected}"
   end
 
   # === Transaction Count Tests (using public API) ===
+  # Note: a2101B is a Oui/Non question in taxonomy, not a count
+  # There is no single "total transactions" element - use individual counts
 
-  test "transaction count a2101B matches actual count" do
-    expected = expected_transaction_counts[:total]
-
-    assert_equal expected, @calculated_values["a2101B"],
-      "Transaction count (a2101B) should be #{expected}"
-  end
-
-  test "purchase transaction count a2102 matches actual count" do
+  test "purchase transaction count a2102B matches actual count" do
     expected = expected_transaction_counts[:purchases]
 
-    assert_equal expected, @calculated_values["a2102"],
-      "Purchase count (a2102) should be #{expected}"
+    assert_equal expected, @calculated_values["a2102B"],
+      "Purchase count (a2102B) should be #{expected}"
   end
 
-  test "sale transaction count a2103 matches actual count" do
+  test "sale transaction count a2105B matches actual count" do
     expected = expected_transaction_counts[:sales]
 
-    assert_equal expected, @calculated_values["a2103"],
-      "Sale count (a2103) should be #{expected}"
+    assert_equal expected, @calculated_values["a2105B"],
+      "Sale count (a2105B) should be #{expected}"
   end
 
   # === Transaction Value Tests (using public API) ===
 
-  test "transaction total a2104B equals sum of all transactions" do
+  test "transaction total a2109B equals sum of all transactions" do
     expected = expected_transaction_counts[:total_value]
 
-    assert_equal expected, @calculated_values["a2104B"],
-      "Total transaction value (a2104B) should be #{expected}"
+    assert_equal expected, @calculated_values["a2109B"],
+      "Total transaction value (a2109B) should be #{expected}"
   end
 
-  test "purchase total a2105 equals sum of purchases" do
+  test "purchase total a2102BB equals sum of purchases" do
     expected = expected_transaction_counts[:purchase_value]
 
-    assert_equal expected, @calculated_values["a2105"],
-      "Purchase total (a2105) should be #{expected}"
+    assert_equal expected, @calculated_values["a2102BB"],
+      "Purchase total (a2102BB) should be #{expected}"
   end
 
-  test "sale total a2106 equals sum of sales" do
+  test "sale total a2105BB equals sum of sales" do
     expected = expected_transaction_counts[:sale_value]
 
-    assert_equal expected, @calculated_values["a2106"],
-      "Sale total (a2106) should be #{expected}"
+    assert_equal expected, @calculated_values["a2105BB"],
+      "Sale total (a2105BB) should be #{expected}"
   end
 
   # === Payment Method Tests (using public API) ===
 
-  test "cash transaction count a2201 matches actual count" do
-    expected = expected_transaction_counts[:cash_count]
+  test "cash transaction count a2203 is stored as string" do
+    expected = expected_transaction_counts[:cash_count].to_s
 
-    assert_equal expected, @calculated_values["a2201"],
-      "Cash transaction count (a2201) should be #{expected}"
+    assert_equal expected, @calculated_values["a2203"],
+      "Cash transaction count (a2203) should be '#{expected}' (string)"
   end
 
-  test "cash transaction amount a2202 matches actual amount" do
-    expected = expected_transaction_counts[:cash_amount]
+  test "cash transactions indicator a2202 is Oui/Non" do
+    has_cash = expected_transaction_counts[:cash_count] > 0
+    expected = has_cash ? "Oui" : "Non"
 
     assert_equal expected, @calculated_values["a2202"],
-      "Cash transaction amount (a2202) should be #{expected}"
+      "Cash transactions indicator (a2202) should be '#{expected}'"
   end
 
   # === Full Calculation Test ===
@@ -152,8 +148,8 @@ class XbrlCalculationTest < XbrlComplianceTestCase
     # Verify structure includes expected keys
     assert @calculated_values.is_a?(Hash), "calculate_all should return a Hash"
     assert @calculated_values.key?("a1101"), "Should include client count"
-    assert @calculated_values.key?("a2101B"), "Should include transaction count"
-    assert @calculated_values.key?("a2104B"), "Should include transaction total"
+    assert @calculated_values.key?("a2102B"), "Should include purchase count"
+    assert @calculated_values.key?("a2109B"), "Should include transaction total value"
   end
 
   test "populate_submission_values creates submission_value records" do
@@ -175,13 +171,15 @@ class XbrlCalculationTest < XbrlComplianceTestCase
   # === Nationality Breakdown Tests (using public API) ===
 
   test "nationality breakdown generates country-specific elements" do
-    # Check that calculate_all includes nationality breakdown elements
-    fr_elements = @calculated_values.keys.select { |k| k.start_with?("a1103_") }
-    assert fr_elements.any?, "Should have nationality breakdown elements"
+    # Check that calculate_all includes a1103 with nested country hash
+    assert @calculated_values.key?("a1103"), "Should have a1103 nationality breakdown element"
+    country_data = @calculated_values["a1103"]
+    assert country_data.is_a?(Hash), "a1103 should contain a hash of country codes"
+    assert country_data.any?, "a1103 should have country data"
 
     # Verify FR count matches actual data
     expected_fr = @organization.clients.kept.where(nationality: "FR").count
-    actual_fr = @calculated_values["a1103_FR"]
+    actual_fr = country_data["FR"]
     assert_equal expected_fr, actual_fr, "French nationality count should match"
   end
 

@@ -332,10 +332,65 @@ class SettingTest < ActiveSupport::TestCase
     assert_includes setting.errors[:xbrl_element], "is invalid"
   end
 
+  test "xbrl_element accepts valid element patterns" do
+    valid_elements = %w[a1101 aC1102 a11502B aC1209C a2102BB aC1814W a114 aC168]
+
+    valid_elements.each do |element|
+      setting = Setting.new(
+        organization: @organization,
+        key: "test_#{element}",
+        value: "test",
+        value_type: "string",
+        category: "entity_info",
+        xbrl_element: element
+      )
+      assert setting.valid?, "Expected xbrl_element '#{element}' to be valid"
+    end
+  end
+
+  test "xbrl_element rejects elements with too few digits" do
+    setting = Setting.new(
+      organization: @organization,
+      key: "bad_xbrl",
+      value: "test",
+      value_type: "string",
+      category: "entity_info",
+      xbrl_element: "a12"
+    )
+    assert_not setting.valid?
+    assert_includes setting.errors[:xbrl_element], "is invalid"
+  end
+
+  test "xbrl_element rejects elements with too many digits" do
+    setting = Setting.new(
+      organization: @organization,
+      key: "bad_xbrl",
+      value: "test",
+      value_type: "string",
+      category: "entity_info",
+      xbrl_element: "a123456"
+    )
+    assert_not setting.valid?
+    assert_includes setting.errors[:xbrl_element], "is invalid"
+  end
+
+  test "xbrl_element rejects elements with too many trailing letters" do
+    setting = Setting.new(
+      organization: @organization,
+      key: "bad_xbrl",
+      value: "test",
+      value_type: "string",
+      category: "entity_info",
+      xbrl_element: "a1101ABC"
+    )
+    assert_not setting.valid?
+    assert_includes setting.errors[:xbrl_element], "is invalid"
+  end
+
   # === Category Constants ===
 
   test "CATEGORIES constant includes all valid categories" do
-    expected = %w[entity_info kyc_procedures compliance_policies training]
+    expected = %w[entity_info kyc_procedures compliance_policies training controls]
     assert_equal expected.sort, Setting::CATEGORIES.sort
   end
 
@@ -346,13 +401,17 @@ class SettingTest < ActiveSupport::TestCase
 
   test "SCHEMA constant includes all setting definitions" do
     assert_kind_of Hash, Setting::SCHEMA
-    assert_equal 15, Setting::SCHEMA.keys.count
+    # 4 entity_info + 105 controls = 109 entries
+    assert_equal 109, Setting::SCHEMA.keys.count
 
     # Verify each schema entry has required keys
     Setting::SCHEMA.each do |key, schema|
       assert_includes Setting::VALUE_TYPES, schema[:value_type], "#{key} has invalid value_type"
       assert_includes Setting::CATEGORIES, schema[:category], "#{key} has invalid category"
-      assert schema[:xbrl].present?, "#{key} is missing xbrl element"
+      # Entity info settings don't require xbrl, controls do
+      if schema[:category] == "controls"
+        assert schema[:xbrl].present?, "#{key} is missing xbrl element"
+      end
     end
   end
 

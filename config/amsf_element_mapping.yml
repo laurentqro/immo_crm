@@ -2,293 +2,124 @@
 # Taxonomy Version: 2025
 # Maps internal CRM data to XBRL elements for annual submission
 #
+# IMPORTANT: All top-level keys must be valid AMSF taxonomy element names.
+# Category wrappers (like "client_statistics") are not allowed.
+#
 # Sources:
 #   - calculated: Derived from CRM data (clients, transactions)
 #   - from_settings: Pulled from organization settings
 #   - manual: Entered by user during submission wizard
 
 ---
-# Section 0: Entity Identification (from settings)
-entity_identification:
-  a0101:
-    description: "Company name"
-    source: from_settings
-    type: string
+# Client Statistics (calculated from CRM)
+a1101:
+  description: "Total number of clients"
+  source: calculated
+  type: integer
 
-  a0102:
-    description: "Number of employees"
-    source: from_settings
-    type: integer
+a1102:
+  description: "Number of natural person clients"
+  source: calculated
+  type: integer
 
-  a0103:
-    description: "Number of branch offices"
-    source: from_settings
-    type: integer
+a1103:
+  description: "Clients by nationality (dimensional - uses country contexts)"
+  source: calculated
+  type: integer
+  note: "Uses dimensional contexts for each country code"
 
-  a0104:
-    description: "Annual turnover (EUR)"
-    source: from_settings
-    type: decimal
+a11502B:
+  description: "Number of legal entity clients"
+  source: calculated
+  type: integer
 
-# Section 1: Entity Information
-entity_info:
-  a1001:
-    description: "Company name"
-    source: organization.name
-    type: string
+a11802B:
+  description: "Number of trust clients"
+  source: calculated
+  type: integer
 
-  a1002:
-    description: "RCI number (Monaco business registry)"
-    source: organization.rci_number
-    type: string
+a12002B:
+  description: "Number of PEP clients"
+  source: calculated
+  type: integer
 
-  a1003:
-    description: "Country of registration"
-    source: organization.country
-    type: string
+a1401:
+  description: "Number of high-risk clients"
+  source: calculated
+  type: integer
 
-# Section 2: Client Statistics
-client_statistics:
-  a1101:
-    description: "Total number of clients"
-    source: calculated
-    type: integer
+# Beneficial Owner Statistics
+a1501:
+  description: "Number of beneficial owners identified"
+  source: calculated
+  type: integer
 
-  a1102:
-    description: "Number of natural person clients"
-    source: calculated
-    type: integer
+a1502B:
+  description: "Number of PEP beneficial owners"
+  source: calculated
+  type: integer
 
-  a11502B:
-    description: "Number of legal entity clients"
-    source: calculated
-    type: integer
+a1204O:
+  description: "Do you have beneficial owners with ownership > 25%? (Oui/Non)"
+  source: calculated
+  type: enum
+  note: "AMSF beneficial ownership threshold is 25%"
 
-  a11802B:
-    description: "Number of trust clients"
-    source: calculated
-    type: integer
+# Transaction Statistics
+# Note: a2101B is a Oui/Non question, not a count - no single "total" element exists
 
-  a1301:
-    description: "Number of PEP clients"
-    source: calculated
-    type: integer
+a2102B:
+  description: "Number of purchase transactions BY clients"
+  source: calculated
+  type: integer
 
-  a1401:
-    description: "Number of high-risk clients"
-    source: calculated
-    type: integer
+a2105B:
+  description: "Number of sale transactions BY clients"
+  source: calculated
+  type: integer
 
-  a1501:
-    description: "Number of beneficial owners identified"
-    source: calculated
-    type: integer
+a2108B:
+  description: "Number of rental transactions BY clients"
+  source: calculated
+  type: integer
 
-  a1502:
-    description: "Number of PEP beneficial owners"
-    source: calculated
-    type: integer
+a2109B:
+  description: "Total transaction value BY clients (EUR)"
+  source: calculated
+  type: monetary
 
-# Nationality breakdown - dynamically generated as a1103_{COUNTRY_CODE}
-# Example: a1103_FR = French clients, a1103_GB = British clients
-client_nationalities:
-  a1103:
-    description: "Clients by nationality"
-    source: calculated
-    type: integer
-    note: "Suffixed with ISO country code (e.g., a1103_FR, a1103_GB)"
+a2102BB:
+  description: "Total purchase value (EUR)"
+  source: calculated
+  type: monetary
 
-# Section 3: Transaction Statistics
-transaction_statistics:
-  a2101B:
-    description: "Total number of transactions"
-    source: calculated
-    type: integer
+a2105BB:
+  description: "Total sale value (EUR)"
+  source: calculated
+  type: monetary
 
-  a2102:
-    description: "Number of purchase transactions"
-    source: calculated
-    type: integer
+# Payment Method Statistics
+a2203:
+  description: "Cash transaction details (free text)"
+  source: calculated
+  type: string
 
-  a2103:
-    description: "Number of sale transactions"
-    source: calculated
-    type: integer
+a2202:
+  description: "Did you have cash transactions? (Oui/Non)"
+  source: calculated
+  type: enum
 
-  a2104:
-    description: "Number of rental transactions"
-    source: calculated
-    type: integer
+a2501A:
+  description: "Did you have virtual asset transactions? (Oui/Non)"
+  source: calculated
+  type: enum
 
-  a2104B:
-    description: "Total transaction value (EUR)"
-    source: calculated
-    type: decimal
+# STR Reports
+a3102:
+  description: "Number of STRs filed"
+  source: calculated
+  type: integer
 
-  a2105:
-    description: "Total purchase value (EUR)"
-    source: calculated
-    type: decimal
-
-  a2106:
-    description: "Total sale value (EUR)"
-    source: calculated
-    type: decimal
-
-  a2107:
-    description: "Total rental value (EUR)"
-    source: calculated
-    type: decimal
-
-# Payment method statistics
-payment_statistics:
-  a2201:
-    description: "Number of cash transactions"
-    source: calculated
-    type: integer
-
-  a2202:
-    description: "Total cash amount (EUR)"
-    source: calculated
-    type: decimal
-
-  a2301:
-    description: "Number of crypto transactions"
-    source: calculated
-    type: integer
-
-  a2302:
-    description: "Total crypto transaction value (EUR)"
-    source: calculated
-    type: decimal
-
-  a2401:
-    description: "Number of PEP-related transactions"
-    source: calculated
-    type: integer
-
-# Section 4: STR Reports
-str_statistics:
-  a3101:
-    description: "Number of STRs filed"
-    source: calculated
-    type: integer
-
-# Section 4: KYC and Compliance Policies (from settings)
-kyc_procedures:
-  a4101:
-    description: "Enhanced due diligence for PEPs"
-    source: from_settings
-    setting_key: edd_for_peps
-    type: boolean
-
-  a4102:
-    description: "Enhanced due diligence for high-risk countries"
-    source: from_settings
-    setting_key: edd_for_high_risk_countries
-    type: boolean
-
-  a4103:
-    description: "Enhanced due diligence for complex structures"
-    source: from_settings
-    setting_key: edd_for_complex_structures
-    type: boolean
-
-  a4104:
-    description: "Beneficial ownership verification procedure"
-    source: from_settings
-    setting_key: beneficial_ownership_verification
-    type: boolean
-
-  a4105:
-    description: "Client identity verification method"
-    source: from_settings
-    setting_key: identity_verification_method
-    type: enum
-    allowed_values: [DOCUMENT, ELECTRONIC, BOTH]
-
-  a4106:
-    description: "Ongoing monitoring implemented"
-    source: from_settings
-    setting_key: ongoing_monitoring
-    type: boolean
-
-compliance_policies:
-  a4201:
-    description: "Written AML/CFT policy exists"
-    source: from_settings
-    setting_key: written_aml_policy
-    type: boolean
-
-  a4202:
-    description: "Risk-based approach implemented"
-    source: from_settings
-    setting_key: risk_based_approach
-    type: boolean
-
-  a4203:
-    description: "Compliance officer appointed"
-    source: from_settings
-    setting_key: compliance_officer_appointed
-    type: boolean
-
-  a4204:
-    description: "Compliance officer name"
-    source: from_settings
-    setting_key: compliance_officer_name
-    type: string
-
-  a4205:
-    description: "Internal controls implemented"
-    source: from_settings
-    setting_key: internal_controls
-    type: boolean
-
-  a4206:
-    description: "Suspicious transaction reporting procedure exists"
-    source: from_settings
-    setting_key: str_procedure
-    type: boolean
-
-# Section 5: Training
-training:
-  a5101:
-    description: "Staff AML/CFT training conducted in reporting year"
-    source: from_settings
-    setting_key: staff_training_conducted
-    type: boolean
-
-  a5102:
-    description: "Number of staff trained"
-    source: from_settings
-    setting_key: staff_trained_count
-    type: integer
-
-  a5103:
-    description: "Date of last training"
-    source: from_settings
-    setting_key: last_training_date
-    type: date
-
-  a5104:
-    description: "Training records maintained"
-    source: from_settings
-    type: boolean
-
-# Section 6: Monitoring and Review
-monitoring:
-  a6101:
-    description: "Transaction monitoring frequency"
-    source: from_settings
-    type: enum
-    allowed_values: [daily, weekly, monthly, quarterly]
-
-  a6102:
-    description: "Date of last internal audit"
-    source: from_settings
-    type: date
-
-  a6103:
-    description: "Independent audit conducted"
-    source: from_settings
-    type: boolean
+# Note: The following Control elements (aCxxxx prefix) are populated from organization settings
+# They are not included here as they require expanding the Settings model
+# See gap_analysis.md for the full list of 105 control elements

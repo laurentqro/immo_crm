@@ -175,24 +175,23 @@ class XbrlGeneratorTest < ActiveSupport::TestCase
   # === Dimensional Contexts ===
 
   test "generates country dimension contexts when needed" do
-    # Add a country-specific value
-    SubmissionValue.create!(
-      submission: @submission,
-      element_name: "a1103_MC",  # Clients with Monaco nationality
-      value: "10",
-      source: "calculated"
-    )
+    # Update a1103 with country breakdown as JSON hash
+    country_value = @submission.submission_values.find_or_create_by!(element_name: "a1103") do |sv|
+      sv.source = "calculated"
+    end
+    country_value.update!(value: {MC: 10, FR: 5}.to_json)
 
     xml_content = @generator.generate
     doc = Nokogiri::XML(xml_content)
 
-    # Should have dimensional contexts for countries
+    # Should have dimensional contexts for each country
     contexts = doc.xpath("//*[local-name()='context']")
-    country_contexts = contexts.select { |c| c["id"]&.include?("MC") || c.to_s.include?("CountryDimension") }
+    mc_context = contexts.find { |c| c["id"] == "ctx_country_MC" }
+    fr_context = contexts.find { |c| c["id"] == "ctx_country_FR" }
 
-    # Either has country-specific contexts or dimensional elements
-    assert(country_contexts.any? || xml_content.include?("Dimension"),
-           "Should handle dimensional data for country breakdowns")
+    assert mc_context, "Should have context for MC country dimension"
+    assert fr_context, "Should have context for FR country dimension"
+    assert xml_content.include?("CountryDimension"), "Should include CountryDimension elements"
   end
 
   # === Complete Document Structure ===
@@ -293,5 +292,46 @@ class XbrlGeneratorTest < ActiveSupport::TestCase
 
     # Boolean should be true/false in XBRL
     assert_match(/true|false/i, xml_content)
+  end
+
+  # === Strict Mode Tests ===
+
+  test "strict mode raises XbrlDataError for invalid monetary values" do
+    SubmissionValue.create!(
+      submission: @submission,
+      element_name: "a2109B",  # Monetary element
+      value: "not-a-number",
+      source: "calculated"
+    )
+
+    # Strict mode (default in test env) should raise
+    generator = XbrlGenerator.new(@submission, strict: true)
+    assert_raises(XbrlGenerator::XbrlDataError) do
+      generator.generate
+    end
+  end
+
+  test "lenient mode returns 0.00 for invalid monetary values" do
+    SubmissionValue.create!(
+      submission: @submission,
+      element_name: "a2109B",  # Monetary element
+      value: "not-a-number",
+      source: "calculated"
+    )
+
+    # Lenient mode should not raise
+    generator = XbrlGenerator.new(@submission, strict: false)
+    xml_content = nil
+    assert_nothing_raised do
+      xml_content = generator.generate
+    end
+
+    # Should contain 0.00 as fallback
+    assert_includes xml_content, "0.00"
+  end
+
+  test "strict mode defaults to true in non-production environments" do
+    generator = XbrlGenerator.new(@submission)
+    assert generator.strict, "Strict mode should be true by default in test env"
   end
 end

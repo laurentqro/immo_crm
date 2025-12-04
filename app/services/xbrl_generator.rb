@@ -18,16 +18,30 @@ class XbrlGenerator
   EUR_UNIT_ID = "unit_EUR"
   PURE_UNIT_ID = "unit_pure"
 
-  # Monetary element patterns (elements that need currency units)
-  MONETARY_ELEMENTS = %w[
-    a2104B a2105 a2106 a2107 a2202 a2302
-  ].freeze
+  # Monetary elements derived from config/amsf_element_mapping.yml
+  # Elements with type: monetary need EUR currency units and decimals
+  MONETARY_ELEMENTS = begin
+    mapping_path = Rails.root.join("config", "amsf_element_mapping.yml")
+    mapping = YAML.load_file(mapping_path)
+    mapping.select { |_, config| config["type"] == "monetary" }.keys.freeze
+  end
 
-  attr_reader :submission, :organization
+  # AMSF taxonomy uses French boolean values
+  AMSF_BOOLEAN_TRUE = "Oui"
+  AMSF_BOOLEAN_FALSE = "Non"
+  TRUTHY_VALUES = %w[true yes 1 oui].freeze
 
-  def initialize(submission)
+  # Maximum JSON payload size to prevent abuse
+  MAX_JSON_SIZE = 100_000
+
+  attr_reader :submission, :organization, :strict
+
+  # @param submission [Submission] The submission to generate XBRL for
+  # @param strict [Boolean] If true, raise on invalid data. Default: true in test/dev, false in production.
+  def initialize(submission, strict: nil)
     @submission = submission
     @organization = submission.organization
+    @strict = strict.nil? ? !Rails.env.production? : strict
   end
 
   # Generate complete XBRL XML document
@@ -71,9 +85,9 @@ class XbrlGenerator
 
   def build_contexts(xml)
     # Main entity context
-    xml.context_(:id => ENTITY_CONTEXT_ID) do
+    xml.context_(id: ENTITY_CONTEXT_ID) do
       xml.entity_ do
-        xml.identifier_(:scheme => "http://amsf.mc/rci") do
+        xml.identifier_(scheme: "http://amsf.mc/rci") do
           xml.text(organization.rci_number)
         end
       end
@@ -89,17 +103,22 @@ class XbrlGenerator
   end
 
   def build_country_contexts(xml)
-    country_values = submission.submission_values.where("element_name LIKE ?", "a1103_%")
+    # Get the a1103 submission value which contains nested country hash
+    country_value = submission.submission_values.find_by(element_name: "a1103")
+    return unless country_value&.value.present?
 
-    country_values.find_each do |value|
-      country_code = value.element_name.split("_").last
+    # Parse the stored country hash (stored as JSON string or Ruby hash)
+    country_data = parse_country_data(country_value.value)
+    return unless country_data.is_a?(Hash)
+
+    country_data.each_key do |country_code|
       next if country_code.blank?
 
       context_id = "ctx_country_#{country_code}"
 
-      xml.context_(:id => context_id) do
+      xml.context_(id: context_id) do
         xml.entity_ do
-          xml.identifier_(:scheme => "http://amsf.mc/rci") do
+          xml.identifier_(scheme: "http://amsf.mc/rci") do
             xml.text(organization.rci_number)
           end
           xml.segment_ do
@@ -115,21 +134,63 @@ class XbrlGenerator
     end
   end
 
+  def parse_country_data(value)
+    return value if value.is_a?(Hash)
+
+    if value.is_a?(String)
+      if value.bytesize > MAX_JSON_SIZE
+        Rails.logger.warn("Country data for a1103 exceeds size limit: #{value.bytesize} bytes")
+        return nil
+      end
+
+      parsed = JSON.parse(value)
+      return parsed if parsed.is_a?(Hash)
+    end
+
+    nil
+  rescue JSON::ParserError => e
+    Rails.logger.warn("Failed to parse country data for a1103: #{e.message}")
+    nil
+  end
+
   def build_units(xml)
     # EUR currency unit for monetary values
-    xml.unit_(:id => EUR_UNIT_ID) do
+    xml.unit_(id: EUR_UNIT_ID) do
       xml["iso4217"].EUR
     end
 
     # Pure unit for counts and integers
-    xml.unit_(:id => PURE_UNIT_ID) do
+    xml.unit_(id: PURE_UNIT_ID) do
       xml["xbrli"].pure
     end
   end
 
   def build_facts(xml)
     submission.submission_values.find_each do |submission_value|
-      build_fact(xml, submission_value)
+      # Handle dimensional element (a1103 country breakdown) specially
+      if submission_value.element_name == "a1103"
+        build_country_facts(xml, submission_value)
+      else
+        build_fact(xml, submission_value)
+      end
+    end
+  end
+
+  def build_country_facts(xml, submission_value)
+    return if submission_value.value.blank?
+
+    country_data = parse_country_data(submission_value.value)
+    return unless country_data.is_a?(Hash)
+
+    country_data.each do |country_code, count|
+      context_ref = "ctx_country_#{country_code}"
+
+      attributes = {
+        contextRef: context_ref,
+        unitRef: PURE_UNIT_ID
+      }
+
+      xml["strix"].a1103(count.to_s, attributes)
     end
   end
 
@@ -149,17 +210,13 @@ class XbrlGenerator
     attributes[:unitRef] = unit_ref if unit_ref
     attributes[:decimals] = "2" if monetary_element?(element_name)
 
-    xml["strix"].send(element_name, format_value(value, element_name), attributes)
+    xml["strix"].public_send(element_name, format_value(value, element_name), attributes)
   end
 
   def context_for_element(element_name)
-    # Country dimension elements use dimensional context
-    if element_name.start_with?("a1103_")
-      country_code = element_name.split("_").last
-      "ctx_country_#{country_code}"
-    else
-      ENTITY_CONTEXT_ID
-    end
+    # All regular elements use entity context
+    # Note: a1103 country breakdown is handled specially in build_country_facts
+    ENTITY_CONTEXT_ID
   end
 
   def unit_for_element(element_name)
@@ -181,24 +238,28 @@ class XbrlGenerator
   end
 
   def boolean_element?(element_name)
-    # Policy elements (a4xxx series) are typically boolean
-    element_name.start_with?("a4") && !monetary_element?(element_name)
+    # Policy/Control elements (aCxxxx series) are boolean Oui/Non questions
+    element_name.start_with?("aC")
   end
 
   def format_value(value, element_name)
     return value if value.blank?
 
     if boolean_element?(element_name)
-      # Normalize boolean to lowercase
-      value.to_s.downcase.in?(%w[true yes 1]) ? "true" : "false"
+      value.to_s.downcase.in?(TRUTHY_VALUES) ? AMSF_BOOLEAN_TRUE : AMSF_BOOLEAN_FALSE
     elsif monetary_element?(element_name)
-      # Format as decimal with 2 places
       format("%.2f", BigDecimal(value.to_s))
     else
       value.to_s
     end
   rescue ArgumentError => e
-    Rails.logger.warn("Invalid monetary value for XBRL element #{element_name}: #{value} - #{e.message}")
+    message = "Invalid monetary value for XBRL element #{element_name}: #{value} - #{e.message}"
+    raise XbrlDataError, message if strict
+
+    Rails.logger.warn(message)
     "0.00"
   end
+
+  # Custom error for invalid XBRL data (raised in strict mode)
+  class XbrlDataError < StandardError; end
 end

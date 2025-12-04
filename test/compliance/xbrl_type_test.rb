@@ -38,8 +38,8 @@ class XbrlTypeTest < XbrlComplianceTestCase
   end
 
   test "monetary elements have decimals attribute" do
-    # Known monetary elements that should have decimals attribute
-    monetary_elements = %w[a2104B a2105 a2106 a2107 a2202 a2302]
+    # Monetary elements that should have decimals attribute
+    monetary_elements = %w[a2109B a2102BB a2105BB]
 
     monetary_elements.each do |element_name|
       element = @xbrl_doc.at_xpath("//#{element_name}")
@@ -52,7 +52,7 @@ class XbrlTypeTest < XbrlComplianceTestCase
   end
 
   test "monetary elements reference EUR unit" do
-    monetary_elements = %w[a2104B a2105 a2106 a2107 a2202 a2302]
+    monetary_elements = %w[a2109B a2102BB a2105BB]
 
     monetary_elements.each do |element_name|
       element = @xbrl_doc.at_xpath("//#{element_name}")
@@ -65,12 +65,14 @@ class XbrlTypeTest < XbrlComplianceTestCase
   end
 
   test "enum elements use correct values" do
-    # Get all enum elements and their allowed values
-    enum_elements = XbrlTestHelper.enum_values
+    # Check only Oui/Non boolean elements
+    oui_non_elements = XbrlTestHelper.enum_values.select do |_, allowed|
+      allowed.sort == %w[Non Oui]
+    end
 
     invalid_values = []
 
-    enum_elements.each do |element_name, allowed_values|
+    oui_non_elements.each do |element_name, allowed_values|
       value = extract_element_value(@xbrl_doc, element_name)
       next if value.nil? || value.empty?
 
@@ -79,18 +81,22 @@ class XbrlTypeTest < XbrlComplianceTestCase
       end
     end
 
-    # Expected failure per gap_analysis.md - XbrlGenerator uses true/false not Oui/Non
-    # This test documents the known issue until XbrlGenerator is updated
-    skip "Known issue: XbrlGenerator outputs boolean values instead of Oui/Non (see gap_analysis.md)" if invalid_values.any?
+    assert invalid_values.empty?,
+      "Boolean elements should use Oui/Non values:\n  #{invalid_values.join("\n  ")}"
   end
 
   test "enum elements use Oui/Non values not true/false" do
-    # Check any enum elements that might be using boolean-style values
+    # Check that Oui/Non boolean elements don't use English boolean format
     boolean_pattern = /\A(true|false|True|False|TRUE|FALSE|1|0)\z/
+
+    # Filter to actual Oui/Non elements only
+    oui_non_elements = XbrlTestHelper.enum_values.select do |_, allowed|
+      allowed.sort == %w[Non Oui]
+    end
 
     incorrect_boolean_values = []
 
-    XbrlTestHelper.enum_values.each do |element_name, _|
+    oui_non_elements.each do |element_name, _|
       value = extract_element_value(@xbrl_doc, element_name)
       next if value.nil? || value.empty?
 
@@ -99,9 +105,8 @@ class XbrlTypeTest < XbrlComplianceTestCase
       end
     end
 
-    # Expected failure per gap_analysis.md - XbrlGenerator uses boolean values
-    # This test documents the known issue until XbrlGenerator is updated
-    skip "Known issue: XbrlGenerator uses boolean format instead of Oui/Non (see gap_analysis.md)" if incorrect_boolean_values.any?
+    assert incorrect_boolean_values.empty?,
+      "Boolean elements should use French format (Oui/Non), not English:\n  #{incorrect_boolean_values.join("\n  ")}"
   end
 
   test "element type categorization is correct" do

@@ -41,6 +41,12 @@ module AmsfConstants
   # Purchase purpose
   PURCHASE_PURPOSES = %w[RESIDENCE INVESTMENT].freeze
 
+  # Client residence status
+  RESIDENCE_STATUSES = %w[RESIDENT NON_RESIDENT].freeze
+
+  # Transaction direction (BY client vs WITH client as agent)
+  TRANSACTION_DIRECTIONS = %w[BY_CLIENT WITH_CLIENT].freeze
+
   # Suspicious Transaction Report reasons
   STR_REASONS = %w[CASH PEP UNUSUAL_PATTERN OTHER].freeze
 
