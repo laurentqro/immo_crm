@@ -16,7 +16,8 @@ class SubmissionValue < ApplicationRecord
   belongs_to :override_user, class_name: "User", optional: true
 
   # === Validations ===
-  validates :element_name, presence: true
+  validates :element_name, presence: true,
+    format: {with: /\A[a-zA-Z0-9_]+\z/, message: "only allows alphanumeric characters and underscores"}
   validates :element_name, uniqueness: {scope: :submission_id}
   validates :source, presence: true, inclusion: {in: SUBMISSION_VALUE_SOURCES}
   validates :override_reason, presence: true, length: {minimum: 10}, if: :overridden?
@@ -127,12 +128,12 @@ class SubmissionValue < ApplicationRecord
     ((curr - prev) / prev * 100).round(2)
   end
 
-  # Check if change exceeds 25% threshold (FR-019)
+  # Check if change exceeds threshold (FR-019)
   def significant_change?
     change = change_from_previous_year
     return false if change.nil?
 
-    change.abs > 25
+    change.abs > SIGNIFICANCE_THRESHOLD
   end
 
   # Display-friendly source label
