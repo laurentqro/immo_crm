@@ -401,17 +401,17 @@ class SubmissionTest < ActiveSupport::TestCase
     assert_not completed.editable?
   end
 
-  test "lock! acquires lock for user" do
+  test "acquire_lock! acquires lock for user" do
     submission = Submission.create!(organization: @organization, year: 2036)
     assert_nil submission.locked_by_user_id
     assert_nil submission.locked_at
 
-    submission.lock!(@user)
+    submission.acquire_lock!(@user)
     assert_equal @user.id, submission.locked_by_user_id
     assert_not_nil submission.locked_at
   end
 
-  test "unlock! releases lock" do
+  test "release_lock! releases lock" do
     submission = Submission.create!(
       organization: @organization,
       year: 2037,
@@ -419,7 +419,7 @@ class SubmissionTest < ActiveSupport::TestCase
       locked_at: Time.current
     )
 
-    submission.unlock!
+    submission.release_lock!
     assert_nil submission.locked_by_user_id
     assert_nil submission.locked_at
   end

@@ -18,13 +18,13 @@ class Submission < ApplicationRecord
 
   # === Validations ===
   validates :year, presence: true,
-                   numericality: {
-                     only_integer: true,
-                     greater_than_or_equal_to: 2000,
-                     less_than_or_equal_to: 2099
-                   }
-  validates :year, uniqueness: { scope: :organization_id }
-  validates :status, presence: true, inclusion: { in: SUBMISSION_STATUSES }
+    numericality: {
+      only_integer: true,
+      greater_than_or_equal_to: 2000,
+      less_than_or_equal_to: 2099
+    }
+  validates :year, uniqueness: {scope: :organization_id}
+  validates :status, presence: true, inclusion: {in: SUBMISSION_STATUSES}
   validates :taxonomy_version, presence: true
 
   # === Callbacks ===
@@ -113,12 +113,35 @@ class Submission < ApplicationRecord
 
   # === Locking Methods (FR-029) ===
 
-  def lock!(user)
-    update!(locked_by_user_id: user.id, locked_at: Time.current)
+  # Atomically lock the submission to prevent race conditions.
+  # Uses database-level row locking (SELECT FOR UPDATE) to ensure atomicity.
+  # Returns true if lock was acquired, raises LockError if already locked by another user.
+  def acquire_lock!(user)
+    transaction do
+      reload(lock: true) # SELECT ... FOR UPDATE
+
+      if locked? && !locked_by?(user)
+        raise LockError, "Submission is already locked by another user"
+      end
+
+      update!(locked_by_user_id: user.id, locked_at: Time.current)
+    end
+    true
   end
 
-  def unlock!
-    update!(locked_by_user_id: nil, locked_at: nil)
+  # Atomically unlock the submission.
+  # Only the user who holds the lock (or force unlock) can release it.
+  def release_lock!(user = nil, force: false)
+    transaction do
+      reload(lock: true) # SELECT ... FOR UPDATE
+
+      if locked? && !force && user.present? && !locked_by?(user)
+        raise LockError, "Cannot unlock submission locked by another user"
+      end
+
+      update!(locked_by_user_id: nil, locked_at: nil)
+    end
+    true
   end
 
   def locked?
@@ -129,16 +152,25 @@ class Submission < ApplicationRecord
     locked_by_user_id == user.id
   end
 
+  # Custom exception for locking errors
+  class LockError < StandardError; end
+
   # === Reopen Method (FR-025) ===
 
   def reopen!
     raise InvalidTransition, "Can only reopen completed submissions" unless completed?
 
-    update!(
-      status: "draft",
-      reopened_count: reopened_count + 1,
-      generated_at: nil
-    )
+    transaction do
+      previous_status = status
+      update!(
+        status: "draft",
+        reopened_count: reopened_count + 1,
+        generated_at: nil
+      )
+
+      # Create audit log entry for compliance tracking
+      log_audit("reopen", previous_status: previous_status, reopened_count: reopened_count)
+    end
   end
 
   # === Generate Method (FR-024) ===

@@ -550,7 +550,7 @@ class SubmissionWizardTest < ApplicationSystemTestCase
   test "shows lock indicator when submission is locked by another user" do
     submission = create_draft_submission
     other_user = users(:two)
-    submission.lock!(other_user)
+    submission.acquire_lock!(other_user)
 
     login_as @user, scope: :user
 

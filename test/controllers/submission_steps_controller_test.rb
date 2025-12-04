@@ -602,7 +602,7 @@ class SubmissionStepsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "unlock action releases lock" do
-    @submission.lock!(@user)
+    @submission.acquire_lock!(@user)
     sign_in @user
 
     post unlock_submission_submission_steps_path(@submission)
@@ -613,7 +613,7 @@ class SubmissionStepsControllerTest < ActionDispatch::IntegrationTest
 
   test "locked submission shows lock indicator" do
     other_user = users(:two)
-    @submission.lock!(other_user)
+    @submission.acquire_lock!(other_user)
     sign_in @user
 
     # Test on step 4 which has the lock indicator

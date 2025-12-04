@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_04_133849) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_04_151744) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -499,6 +499,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_133849) do
     t.datetime "updated_at", null: false
     t.datetime "validated_at"
     t.integer "year", null: false
+    t.index ["locked_at"], name: "index_submissions_on_locked_at"
     t.index ["locked_by_user_id"], name: "index_submissions_on_locked_by_user_id"
     t.index ["organization_id", "year"], name: "index_submissions_on_organization_id_and_year", unique: true
     t.index ["organization_id"], name: "index_submissions_on_organization_id"

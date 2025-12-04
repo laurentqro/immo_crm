@@ -12,7 +12,7 @@
 #   comparator.significant_changes  # => [{element_name: "a2101B", ...}]
 #
 class YearOverYearComparator
-  SIGNIFICANCE_THRESHOLD = 25.0
+  include AmsfConstants
 
   attr_reader :submission, :organization, :year
 
@@ -79,12 +79,19 @@ class YearOverYearComparator
   def calculate_change_percent(current_value, previous_value)
     return nil if current_value.nil? || previous_value.nil?
 
-    current_num = BigDecimal(current_value.to_s) rescue nil
-    previous_num = BigDecimal(previous_value.to_s) rescue nil
+    current_num = safe_to_decimal(current_value)
+    previous_num = safe_to_decimal(previous_value)
 
     return nil if current_num.nil? || previous_num.nil?
     return nil if previous_num.zero?
 
     ((current_num - previous_num) / previous_num * 100).to_f.round(2)
+  end
+
+  # Safely convert value to BigDecimal, returning nil on failure
+  def safe_to_decimal(value)
+    BigDecimal(value.to_s)
+  rescue ArgumentError, TypeError
+    nil
   end
 end

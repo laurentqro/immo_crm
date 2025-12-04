@@ -12,10 +12,10 @@
 #   ) %>
 #
 class StatisticCardComponent < JumpstartComponent
-  attr_reader :label, :value, :previous_value, :element_name,
-              :editable, :unit, :tooltip
+  include AmsfConstants
 
-  SIGNIFICANCE_THRESHOLD = 25.0
+  attr_reader :label, :value, :previous_value, :element_name,
+    :editable, :unit, :tooltip
 
   def initialize(opts = {})
     opts.deep_symbolize_keys!
@@ -101,13 +101,13 @@ class StatisticCardComponent < JumpstartComponent
 
   def numeric_value
     BigDecimal(value.to_s)
-  rescue ArgumentError
+  rescue ArgumentError, TypeError
     nil
   end
 
   def numeric_previous
     BigDecimal(previous_value.to_s)
-  rescue ArgumentError
+  rescue ArgumentError, TypeError
     nil
   end
 

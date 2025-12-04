@@ -114,6 +114,10 @@ module AmsfConstants
   # Managed Property Types
   MANAGED_PROPERTY_TYPES = %w[RESIDENTIAL COMMERCIAL].freeze
 
+  # Year-over-year comparison threshold (FR-019)
+  # Changes greater than this percentage require additional review
+  SIGNIFICANCE_THRESHOLD = 25.0
+
   # Note: Audit log action types are defined as a Rails enum in AuditLog model.
   # Use AuditLog.actions.keys to get the list of valid actions.
 end

@@ -17,9 +17,9 @@ class SubmissionValue < ApplicationRecord
 
   # === Validations ===
   validates :element_name, presence: true
-  validates :element_name, uniqueness: { scope: :submission_id }
-  validates :source, presence: true, inclusion: { in: SUBMISSION_VALUE_SOURCES }
-  validates :override_reason, presence: true, if: :overridden?
+  validates :element_name, uniqueness: {scope: :submission_id}
+  validates :source, presence: true, inclusion: {in: SUBMISSION_VALUE_SOURCES}
+  validates :override_reason, presence: true, length: {minimum: 10}, if: :overridden?
 
   # === Scopes ===
   scope :calculated, -> { where(source: "calculated") }

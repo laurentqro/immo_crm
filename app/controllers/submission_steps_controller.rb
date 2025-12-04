@@ -64,17 +64,23 @@ class SubmissionStepsController < ApplicationController
   def lock
     authorize @submission, :update?
 
-    @submission.lock!(Current.user)
+    @submission.acquire_lock!(Current.user)
     redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
       notice: "Submission locked for editing.", status: :see_other
+  rescue Submission::LockError => e
+    redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
+      alert: e.message, status: :see_other
   end
 
   def unlock
     authorize @submission, :update?
 
-    @submission.unlock!
+    @submission.release_lock!(Current.user)
     redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
       notice: "Submission unlocked.", status: :see_other
+  rescue Submission::LockError => e
+    redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
+      alert: e.message, status: :see_other
   end
 
   def confirm
