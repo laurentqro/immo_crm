@@ -65,6 +65,64 @@ module AmsfConstants
   # Source of submission values
   SUBMISSION_VALUE_SOURCES = %w[calculated from_settings manual].freeze
 
+  # Due Diligence Levels (FR-001)
+  DUE_DILIGENCE_LEVELS = %w[STANDARD SIMPLIFIED REINFORCED].freeze
+
+  # Relationship End Reasons
+  RELATIONSHIP_END_REASONS = %w[
+    CLIENT_REQUEST
+    AML_CONCERN
+    INACTIVITY
+    BUSINESS_DECISION
+    OTHER
+  ].freeze
+
+  # Professional Categories (FR-002)
+  PROFESSIONAL_CATEGORIES = %w[
+    LEGAL
+    ACCOUNTANT
+    NOTARY
+    REAL_ESTATE
+    FINANCIAL
+    OTHER
+    NONE
+  ].freeze
+
+  # Property Types (FR-008)
+  PROPERTY_TYPES = %w[RESIDENTIAL COMMERCIAL LAND MIXED].freeze
+
+  # Tenant Types (FR-006)
+  TENANT_TYPES = %w[NATURAL_PERSON LEGAL_ENTITY].freeze
+
+  # Training Types (FR-007)
+  TRAINING_TYPES = %w[INITIAL REFRESHER SPECIALIZED].freeze
+
+  # Training Topics
+  TRAINING_TOPICS = %w[
+    AML_BASICS
+    PEP_SCREENING
+    STR_FILING
+    RISK_ASSESSMENT
+    SANCTIONS
+    KYC_PROCEDURES
+    OTHER
+  ].freeze
+
+  # Training Providers
+  TRAINING_PROVIDERS = %w[INTERNAL EXTERNAL AMSF ONLINE].freeze
+
+  # Managed Property Types
+  MANAGED_PROPERTY_TYPES = %w[RESIDENTIAL COMMERCIAL].freeze
+
+  # Year-over-year comparison threshold (FR-019)
+  # Changes greater than this percentage require additional review
+  SIGNIFICANCE_THRESHOLD = 25.0
+
+  # Valid submission year range (AMSF established 2009, reasonable future)
+  # Note: MIN set to 2009 when AMSF was established in Monaco
+  MIN_SUBMISSION_YEAR = 2009
+  MAX_SUBMISSION_YEAR = 2099
+
   # Note: Audit log action types are defined as a Rails enum in AuditLog model.
   # Use AuditLog.actions.keys to get the list of valid actions.
 end

@@ -68,7 +68,7 @@ module Auditable
         user_agent: Current.user_agent
       ).compact
     )
-  rescue => e
+  rescue StandardError => e
     # Don't let audit logging failures break the main operation
     Rails.logger.error("Audit logging failed: #{e.message}")
   end

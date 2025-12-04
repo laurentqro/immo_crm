@@ -77,6 +77,89 @@ class CalculationEngine
     end
   end
 
+  # === Managed Property Statistics (US1 - AMSF Data Capture) ===
+
+  # Calculate statistics for managed properties (gestion locative)
+  # Elements: a1802TOLA (tenant count), a1802TOLA_NP/LE (by type), a1802PEP (PEP tenants), aACTIVEPS (active count)
+  def managed_property_statistics
+    properties = organization.managed_properties.active_in_year(year)
+
+    {
+      "aACTIVEPS" => properties.count,
+      "a1802TOLA" => properties.where.not(tenant_type: nil).count,
+      "a1802TOLA_NP" => properties.where(tenant_type: "NATURAL_PERSON").count,
+      "a1802TOLA_LE" => properties.where(tenant_type: "LEGAL_ENTITY").count,
+      "a1802PEP" => properties.where(tenant_is_pep: true).count
+    }
+  end
+
+  # === Training Statistics (US1 - AMSF Data Capture) ===
+
+  # Calculate training statistics for the submission year
+  # Elements: a3201 (conducted flag), a3202 (staff count), a3203 (session count), a3303 (hours)
+  def training_statistics
+    trainings = organization.trainings.for_year(year)
+
+    {
+      "a3201" => trainings.exists? ? "Oui" : "Non",
+      "a3202" => trainings.sum(:staff_count),
+      "a3203" => trainings.count,
+      "a3303" => trainings.sum(:duration_hours)
+    }
+  end
+
+  # === Revenue Statistics (US1 - AMSF Data Capture) ===
+
+  # Calculate revenue statistics from transactions and property management
+  # Elements: a3802 (sales commission), a3803 (rental commission), a3804 (mgmt revenue), a381 (total)
+  #
+  # Note: Management revenue is calculated in Ruby due to complex date-based proration logic.
+  # SQL aggregation would require complex DATE_PART/EXTRACT expressions for month counting.
+  # For typical agency property counts (<100), Ruby iteration is acceptable.
+  #
+  # Memory consideration: .to_a loads all properties into memory. For agencies with
+  # thousands of properties, consider batch processing with find_each or SQL aggregation.
+  # Future optimization: Add SQL window function if performance becomes an issue.
+  def revenue_statistics
+    year_sales = year_transactions.sales
+    year_rentals = year_transactions.rentals
+    properties = organization.managed_properties.active_in_year(year).to_a
+
+    sales_commission = year_sales.sum(:commission_amount)
+    rental_commission = year_rentals.sum(:commission_amount)
+    management_revenue = properties.sum { |prop| prop.annual_revenue(year) }
+    total_revenue = sales_commission + rental_commission + management_revenue
+
+    {
+      "a3802" => sales_commission,
+      "a3803" => rental_commission,
+      "a3804" => management_revenue,
+      "a381" => total_revenue
+    }
+  end
+
+  # === Extended Client Statistics (US1 - AMSF Data Capture) ===
+
+  # Calculate extended client statistics for due diligence and professional categories
+  # Elements: a1203 (simplified DD), a1203D (reinforced DD), a11301-a11302 (professional cats), etc.
+  def extended_client_statistics
+    clients = organization.clients.kept
+
+    {
+      # Due diligence level breakdowns
+      "a1203" => clients.where(due_diligence_level: "SIMPLIFIED").count,
+      "a1203D" => clients.where(due_diligence_level: "REINFORCED").count,
+
+      # Professional category breakdowns
+      "a11301" => clients.where(professional_category: "REAL_ESTATE").count,
+      "a11302" => clients.where(professional_category: "FINANCIAL_SERVICES").count,
+
+      # Source verification counts
+      "a1204S" => clients.where(source_of_funds_verified: true).count,
+      "a14001" => clients.where(source_of_wealth_verified: true).count
+    }
+  end
+
   private
 
   # === Client Statistics ===

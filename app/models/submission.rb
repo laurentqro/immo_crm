@@ -12,18 +12,19 @@ class Submission < ApplicationRecord
 
   # === Associations ===
   belongs_to :organization
+  belongs_to :locked_by_user, class_name: "User", optional: true
   has_many :submission_values, dependent: :destroy
   accepts_nested_attributes_for :submission_values
 
   # === Validations ===
   validates :year, presence: true,
-                   numericality: {
-                     only_integer: true,
-                     greater_than_or_equal_to: 2000,
-                     less_than_or_equal_to: 2099
-                   }
-  validates :year, uniqueness: { scope: :organization_id }
-  validates :status, presence: true, inclusion: { in: SUBMISSION_STATUSES }
+    numericality: {
+      only_integer: true,
+      greater_than_or_equal_to: MIN_SUBMISSION_YEAR,
+      less_than_or_equal_to: MAX_SUBMISSION_YEAR
+    }
+  validates :year, uniqueness: {scope: :organization_id}
+  validates :status, presence: true, inclusion: {in: SUBMISSION_STATUSES}
   validates :taxonomy_version, presence: true
 
   # === Callbacks ===
@@ -108,6 +109,93 @@ class Submission < ApplicationRecord
 
   def downloadable?
     validated? || completed? || downloaded_unvalidated?
+  end
+
+  # === Locking Methods (FR-029) ===
+
+  # Lock timeout in minutes - stale locks are automatically released
+  LOCK_TIMEOUT = 30.minutes
+
+  # Atomically lock the submission to prevent race conditions.
+  # Uses database-level row locking (SELECT FOR UPDATE) to ensure atomicity.
+  # Automatically releases stale locks (older than LOCK_TIMEOUT).
+  # Returns true if lock was acquired, raises LockError if already locked by another user.
+  def acquire_lock!(user)
+    transaction do
+      reload(lock: true) # SELECT ... FOR UPDATE
+
+      # Release stale locks automatically
+      if stale_lock?
+        update!(locked_by_user_id: nil, locked_at: nil)
+      elsif locked? && !locked_by?(user)
+        raise LockError, "Submission is already locked by another user"
+      end
+
+      update!(locked_by_user_id: user.id, locked_at: Time.current)
+    end
+    true
+  end
+
+  # Atomically unlock the submission.
+  # Only the user who holds the lock (or force unlock) can release it.
+  def release_lock!(user = nil, force: false)
+    transaction do
+      reload(lock: true) # SELECT ... FOR UPDATE
+
+      if locked? && !force && user.present? && !locked_by?(user)
+        raise LockError, "Cannot unlock submission locked by another user"
+      end
+
+      update!(locked_by_user_id: nil, locked_at: nil)
+    end
+    true
+  end
+
+  def locked?
+    locked_by_user_id.present? && locked_at.present? && !stale_lock?
+  end
+
+  def locked_by?(user)
+    locked_by_user_id == user.id
+  end
+
+  # Check if lock is stale (older than LOCK_TIMEOUT)
+  # Stale locks should be released to prevent indefinite blocking
+  def stale_lock?
+    locked_at.present? && locked_at < LOCK_TIMEOUT.ago
+  end
+
+  # Custom exception for locking errors
+  class LockError < StandardError; end
+
+  # === Reopen Method (FR-025) ===
+
+  def reopen!
+    raise InvalidTransition, "Can only reopen completed submissions" unless completed?
+
+    transaction do
+      previous_status = status
+      update!(
+        status: "draft",
+        reopened_count: reopened_count + 1,
+        generated_at: nil
+      )
+
+      # Create audit log entry for compliance tracking
+      log_audit("reopen", previous_status: previous_status, reopened_count: reopened_count)
+    end
+  end
+
+  # === Generate Method (FR-024) ===
+
+  def generate!
+    raise InvalidTransition, "Can only generate from validated status" unless validated?
+
+    update!(
+      status: "completed",
+      generated_at: Time.current,
+      completed_at: Time.current
+    )
   end
 
   # Returns the end of year date for this submission

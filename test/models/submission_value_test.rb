@@ -242,7 +242,7 @@ class SubmissionValueTest < ActiveSupport::TestCase
 
   # === Override Tracking ===
 
-  test "mark_overridden! sets overridden flag" do
+  test "mark_overridden! sets overridden flag with reason" do
     value = SubmissionValue.create!(
       submission: @submission,
       element_name: "test_override",
@@ -251,8 +251,9 @@ class SubmissionValueTest < ActiveSupport::TestCase
     )
     assert_not value.overridden
 
-    value.mark_overridden!
+    value.mark_overridden!(reason: "User correction")
     assert value.overridden
+    assert_equal "User correction", value.override_reason
   end
 
   test "updating value from calculated source marks as overridden" do
@@ -266,6 +267,7 @@ class SubmissionValueTest < ActiveSupport::TestCase
     value.update_value!("50")
     assert value.overridden
     assert_equal "50", value.value
+    assert_equal "Value changed from 42 to 50", value.override_reason
   end
 
   test "updating value from manual source does not mark as overridden" do
@@ -321,5 +323,95 @@ class SubmissionValueTest < ActiveSupport::TestCase
 
   test "includes AmsfConstants" do
     assert SubmissionValue.include?(AmsfConstants)
+  end
+
+  # === Override Tracking Fields (AMSF Data Capture) ===
+
+  test "requires override_reason when overridden is true" do
+    value = SubmissionValue.new(
+      submission: @submission,
+      element_name: "test_override_reason",
+      source: "calculated",
+      value: "42",
+      overridden: true
+    )
+    assert_not value.valid?
+    assert_includes value.errors[:override_reason], "can't be blank"
+  end
+
+  test "override_reason not required when overridden is false" do
+    value = SubmissionValue.new(
+      submission: @submission,
+      element_name: "test_override_not_required",
+      source: "calculated",
+      value: "42",
+      overridden: false
+    )
+    assert value.valid?
+  end
+
+  test "override_user belongs to users" do
+    value = SubmissionValue.create!(
+      submission: @submission,
+      element_name: "test_override_user",
+      source: "calculated",
+      value: "42",
+      overridden: true,
+      override_reason: "Corrected per accountant",
+      override_user_id: @user.id
+    )
+
+    value.reload
+    assert_equal @user, value.override_user
+  end
+
+  test "previous_year_value stores previous year comparison" do
+    value = SubmissionValue.create!(
+      submission: @submission,
+      element_name: "test_previous_year",
+      source: "calculated",
+      value: "50",
+      previous_year_value: "42"
+    )
+
+    value.reload
+    assert_equal "42", value.previous_year_value
+  end
+
+  test "change_from_previous_year calculates percentage change" do
+    value = SubmissionValue.new(
+      value: "50",
+      previous_year_value: "40"
+    )
+
+    # (50-40)/40 * 100 = 25%
+    assert_equal 25.0, value.change_from_previous_year
+  end
+
+  test "change_from_previous_year returns nil when previous_year_value is blank" do
+    value = SubmissionValue.new(value: "50", previous_year_value: nil)
+    assert_nil value.change_from_previous_year
+  end
+
+  test "change_from_previous_year returns nil when previous_year_value is zero" do
+    value = SubmissionValue.new(value: "50", previous_year_value: "0")
+    assert_nil value.change_from_previous_year
+  end
+
+  test "significant_change? returns true when change exceeds 25%" do
+    value = SubmissionValue.new(value: "50", previous_year_value: "30")
+    # (50-30)/30 * 100 = 66.67% > 25%
+    assert value.significant_change?
+  end
+
+  test "significant_change? returns false when change under 25%" do
+    value = SubmissionValue.new(value: "50", previous_year_value: "45")
+    # (50-45)/45 * 100 = 11.11% < 25%
+    assert_not value.significant_change?
+  end
+
+  test "significant_change? returns false when no previous year value" do
+    value = SubmissionValue.new(value: "50", previous_year_value: nil)
+    assert_not value.significant_change?
   end
 end

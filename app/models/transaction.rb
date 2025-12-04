@@ -30,6 +30,14 @@ class Transaction < ApplicationRecord
   validates :direction, inclusion: { in: TRANSACTION_DIRECTIONS }, allow_blank: true
   validates :transaction_value, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
+  # AMSF Data Capture validations
+  validates :property_type, inclusion: { in: PROPERTY_TYPES }, allow_blank: true
+  validates :counterparty_country,
+    format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
+    allow_blank: true
+  validates :rental_annual_value, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :rental_tenant_type, inclusion: { in: TENANT_TYPES }, allow_blank: true
+
   # Ensure client belongs to the same organization
   validate :client_belongs_to_organization
 

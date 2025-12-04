@@ -1,0 +1,57 @@
+# Training fixtures for testing AML/CFT staff training records
+# These fixtures support AMSF Data Capture feature tests
+
+# Refresher training in 2025 for org one
+refresher_2025:
+  organization: one
+  training_date: <%= Date.new(2025, 3, 15) %>
+  training_type: "REFRESHER"
+  topic: "AML_BASICS"
+  provider: "EXTERNAL"
+  staff_count: 5
+  duration_hours: <%= 4.0 %>
+  notes: "Annual AML refresher training"
+
+# Initial training in 2024 for org one
+initial_2024:
+  organization: one
+  training_date: <%= Date.new(2024, 2, 10) %>
+  training_type: "INITIAL"
+  topic: "KYC_PROCEDURES"
+  provider: "INTERNAL"
+  staff_count: 3
+  duration_hours: <%= 8.0 %>
+  notes: "New employee onboarding"
+
+# Specialized PEP training for org one
+specialized_pep:
+  organization: one
+  training_date: <%= Date.new(2025, 6, 1) %>
+  training_type: "SPECIALIZED"
+  topic: "PEP_SCREENING"
+  provider: "AMSF"
+  staff_count: 4
+  duration_hours: <%= 2.0 %>
+  notes: "AMSF-provided PEP screening workshop"
+
+# STR filing training for org one
+str_training:
+  organization: one
+  training_date: <%= Date.new(2025, 4, 20) %>
+  training_type: "REFRESHER"
+  topic: "STR_FILING"
+  provider: "ONLINE"
+  staff_count: 6
+  duration_hours: <%= 1.5 %>
+  notes: "Online STR filing procedures update"
+
+# Training in other organization (for cross-tenant isolation tests)
+other_org_training:
+  organization: two
+  training_date: <%= Date.new(2025, 5, 1) %>
+  training_type: "REFRESHER"
+  topic: "RISK_ASSESSMENT"
+  provider: "EXTERNAL"
+  staff_count: 2
+  duration_hours: <%= 3.0 %>
+  notes: "Risk assessment methodology update"

@@ -1,0 +1,246 @@
+<%= content_for :title, "Training & Compliance - Step 6 of 7" %>
+
+<div class="container mx-auto px-4 py-8">
+  <%= render "submission_steps/progress", current_step: 6 %>
+
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Training & Compliance Statistics</h1>
+    <p class="text-gray-600 dark:text-gray-300 mb-6">Review AML training and client due diligence statistics for <%= @submission.year %>.</p>
+
+    <%# Lock status banner %>
+    <% if @submission.locked? && @submission.locked_by?(Current.user) %>
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-4 mb-6">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-blue-700 dark:text-blue-300">
+              You have locked this submission for editing.
+              <%= button_to "Unlock", unlock_submission_submission_steps_path(@submission, step: 6), method: :post, class: "underline ml-2", data: { turbo_confirm: "Unlock this submission?" } %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% elsif @submission.locked? %>
+      <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-4 mb-6">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-yellow-700 dark:text-yellow-300">
+              This submission is being edited by another user.
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Training Statistics Section %>
+    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">AML Training</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Staff training sessions completed during the year</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <%# Training Conducted %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Training Conducted</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @training_stats["a3201"] %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a3201</p>
+            </div>
+          </div>
+        </div>
+
+        <%# Staff Trained %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Staff Trained</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @training_stats["a3202"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a3202</p>
+            </div>
+            <% yoy = @yoy_comparison["a3202"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Training Sessions %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Sessions</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @training_stats["a3203"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a3203</p>
+            </div>
+            <% yoy = @yoy_comparison["a3203"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Total Hours %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Total Hours</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @training_stats["a3303"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a3303</p>
+            </div>
+            <% yoy = @yoy_comparison["a3303"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# Due Diligence Statistics Section %>
+    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Client Due Diligence</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Due diligence levels and verification status</p>
+        </div>
+        <% extended_yoy = @yoy_comparison.slice(*@extended_stats.keys) %>
+        <% if extended_yoy.values.any? { |c| c[:significant] } %>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+            Review Required
+          </span>
+        <% end %>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <%# Simplified Due Diligence %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Simplified DD</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @extended_stats["a1203"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a1203</p>
+            </div>
+            <% yoy = @yoy_comparison["a1203"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Reinforced Due Diligence %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 <%= @yoy_comparison["a1203D"]&.dig(:significant) ? 'ring-2 ring-amber-400' : '' %>">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Reinforced DD</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @extended_stats["a1203D"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a1203D</p>
+            </div>
+            <% yoy = @yoy_comparison["a1203D"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:significant] ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' : (yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300') %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Real Estate Professionals %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Real Estate Pros</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @extended_stats["a11301"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a11301</p>
+            </div>
+            <% yoy = @yoy_comparison["a11301"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Financial Services %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Financial Services</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @extended_stats["a11302"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a11302</p>
+            </div>
+            <% yoy = @yoy_comparison["a11302"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Source of Funds Verified %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Funds Verified</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @extended_stats["a1204S"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a1204S</p>
+            </div>
+            <% yoy = @yoy_comparison["a1204S"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Source of Wealth Verified %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Wealth Verified</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= @extended_stats["a14001"] || 0 %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a14001</p>
+            </div>
+            <% yoy = @yoy_comparison["a14001"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# Navigation %>
+    <%= form_with model: @submission, url: submission_submission_step_path(@submission, step: 6), method: :patch, local: true do |f| %>
+      <div class="flex justify-between">
+        <%= f.submit "Back", name: "commit", value: "back", class: "btn btn-secondary" %>
+        <%= f.submit "Continue", name: "commit", value: "continue", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

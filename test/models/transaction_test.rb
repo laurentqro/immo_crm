@@ -425,4 +425,158 @@ class TransactionTest < ActiveSupport::TestCase
   test "includes AmsfConstants" do
     assert Transaction.include?(AmsfConstants)
   end
+
+  # === Compliance Fields (AMSF Data Capture) ===
+
+  test "property_type must be valid when present" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      property_type: "INVALID"
+    )
+    assert_not transaction.valid?
+    assert_includes transaction.errors[:property_type], "is not included in the list"
+  end
+
+  test "accepts all valid property_types" do
+    %w[RESIDENTIAL COMMERCIAL LAND MIXED].each do |type|
+      transaction = Transaction.new(
+        organization: @organization,
+        client: @client,
+        transaction_date: Date.current,
+        transaction_type: "PURCHASE",
+        property_type: type
+      )
+      assert transaction.valid?, "Expected property_type '#{type}' to be valid"
+    end
+  end
+
+  test "property_type can be blank" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      property_type: nil
+    )
+    assert transaction.valid?
+  end
+
+  test "is_new_construction defaults to false" do
+    transaction = Transaction.new
+    assert_equal false, transaction.is_new_construction
+  end
+
+  test "counterparty_is_pep defaults to false" do
+    transaction = Transaction.new
+    assert_equal false, transaction.counterparty_is_pep
+  end
+
+  test "counterparty_country must be ISO 3166-1 alpha-2 format when present" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      counterparty_country: "INVALID"
+    )
+    assert_not transaction.valid?
+    assert transaction.errors[:counterparty_country].any?
+  end
+
+  test "accepts valid ISO country codes for counterparty_country" do
+    %w[FR MC US GB DE].each do |code|
+      transaction = Transaction.new(
+        organization: @organization,
+        client: @client,
+        transaction_date: Date.current,
+        transaction_type: "PURCHASE",
+        counterparty_country: code
+      )
+      assert transaction.valid?, "Expected counterparty_country '#{code}' to be valid"
+    end
+  end
+
+  test "counterparty_country can be blank" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      counterparty_country: nil
+    )
+    assert transaction.valid?
+  end
+
+  test "rental_annual_value must be non-negative when present" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "RENTAL",
+      rental_annual_value: -1000
+    )
+    assert_not transaction.valid?
+    assert_includes transaction.errors[:rental_annual_value], "must be greater than or equal to 0"
+  end
+
+  test "rental_annual_value can be zero" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "RENTAL",
+      rental_annual_value: 0
+    )
+    assert transaction.valid?
+  end
+
+  test "rental_annual_value can be blank" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "RENTAL",
+      rental_annual_value: nil
+    )
+    assert transaction.valid?
+  end
+
+  test "rental_tenant_type must be valid when present" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "RENTAL",
+      rental_tenant_type: "INVALID"
+    )
+    assert_not transaction.valid?
+    assert_includes transaction.errors[:rental_tenant_type], "is not included in the list"
+  end
+
+  test "accepts all valid rental_tenant_types" do
+    %w[NATURAL_PERSON LEGAL_ENTITY].each do |type|
+      transaction = Transaction.new(
+        organization: @organization,
+        client: @client,
+        transaction_date: Date.current,
+        transaction_type: "RENTAL",
+        rental_tenant_type: type
+      )
+      assert transaction.valid?, "Expected rental_tenant_type '#{type}' to be valid"
+    end
+  end
+
+  test "rental_tenant_type can be blank" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "RENTAL",
+      rental_tenant_type: nil
+    )
+    assert transaction.valid?
+  end
 end

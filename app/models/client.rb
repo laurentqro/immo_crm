@@ -41,6 +41,12 @@ class Client < ApplicationRecord
     format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
     allow_blank: true
 
+  # AMSF Data Capture validations
+  validates :due_diligence_level, inclusion: { in: DUE_DILIGENCE_LEVELS }, allow_blank: true
+  validates :simplified_dd_reason, presence: true, if: -> { due_diligence_level == "SIMPLIFIED" }
+  validates :relationship_end_reason, inclusion: { in: RELATIONSHIP_END_REASONS }, allow_blank: true
+  validates :professional_category, inclusion: { in: PROFESSIONAL_CATEGORIES }, allow_blank: true
+
   # === Callbacks ===
   before_save :clear_pep_type_if_not_pep
   before_save :clear_vasp_type_if_not_vasp

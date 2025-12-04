@@ -6,7 +6,10 @@ module SubmissionStepsHelper
     1 => "Review",
     2 => "Policies",
     3 => "Questions",
-    4 => "Validate"
+    4 => "Properties",
+    5 => "Revenue",
+    6 => "Training",
+    7 => "Validate"
   }.freeze
 
   def step_name(step_num)

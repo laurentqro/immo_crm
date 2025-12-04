@@ -5,7 +5,7 @@
 class SubmissionsController < ApplicationController
   include OrganizationScoped
 
-  before_action :set_submission, only: [:show, :edit, :update, :destroy, :download]
+  before_action :set_submission, only: [:show, :edit, :update, :destroy, :download, :reopen]
 
   def index
     @submissions = policy_scope(Submission)
@@ -93,6 +93,28 @@ class SubmissionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to submissions_path, notice: "Submission was successfully deleted." }
       format.turbo_stream { flash.now[:notice] = "Submission was successfully deleted." }
+    end
+  end
+
+  # FR-025: Reopen a completed submission for editing
+  def reopen
+    authorize @submission, :reopen?
+
+    @submission.reopen!
+
+    respond_to do |format|
+      format.html do
+        redirect_to submission_submission_step_path(@submission, step: 1),
+                    notice: "Submission reopened for editing."
+      end
+      format.turbo_stream { flash.now[:notice] = "Submission reopened for editing." }
+    end
+  rescue Submission::InvalidTransition => e
+    respond_to do |format|
+      format.html do
+        redirect_to @submission, alert: "Cannot reopen: #{e.message}"
+      end
+      format.turbo_stream { head :unprocessable_entity }
     end
   end
 

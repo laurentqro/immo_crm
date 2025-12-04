@@ -1,0 +1,44 @@
+<%# StatisticCardComponent - displays a single statistic value with optional YoY comparison %>
+<div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow"
+     data-element="<%= component.element_name %>"
+     <% if component.tooltip.present? %>title="<%= component.tooltip %>"<% end %>>
+  <div class="flex justify-between items-start">
+    <div class="flex-1">
+      <dt class="text-sm font-medium text-gray-500 truncate">
+        <%= component.label %>
+        <% if component.element_name.present? %>
+          <span class="text-xs text-gray-400 font-mono ml-1">(<%= component.element_name %>)</span>
+        <% end %>
+      </dt>
+      <dd class="mt-1 text-2xl font-semibold text-gray-900">
+        <%= component.formatted_value %>
+        <% if component.unit == :currency %>
+          <span class="text-sm text-gray-500 font-normal ml-1"></span>
+        <% end %>
+      </dd>
+    </div>
+    <% if component.editable? %>
+      <button type="button"
+              class="text-gray-400 hover:text-gray-600 p-1"
+              data-action="click->submission-wizard#editValue"
+              data-element="<%= component.element_name %>">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      </button>
+    <% end %>
+  </div>
+
+  <% if component.has_comparison? %>
+    <div class="mt-2 flex items-center text-sm <%= component.trend_class %>">
+      <%= component.trend_icon %>
+      <span class="ml-1">
+        <%= component.formatted_change %>
+        <% if component.significant? %>
+          <span class="text-amber-600 font-medium ml-1">(significant)</span>
+        <% end %>
+      </span>
+      <span class="text-gray-500 ml-2">vs last year</span>
+    </div>
+  <% end %>
+</div>

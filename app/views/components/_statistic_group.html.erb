@@ -1,0 +1,44 @@
+<%# StatisticGroupComponent - groups multiple statistic cards with title and description %>
+<div class="bg-gray-50 rounded-lg p-4 mb-6"
+     <% if component.collapsible? %>data-controller="disclosure"<% end %>>
+  <%# Header %>
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-900">
+        <%= component.title %>
+        <% if component.has_significant_changes? %>
+          <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+            Review Required
+          </span>
+        <% end %>
+      </h3>
+      <% if component.description.present? %>
+        <p class="mt-1 text-sm text-gray-500"><%= component.description %></p>
+      <% end %>
+    </div>
+    <% if component.collapsible? %>
+      <button type="button"
+              class="text-gray-400 hover:text-gray-600"
+              data-action="click->disclosure#toggle"
+              data-disclosure-target="button">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="h-5 w-5 transition-transform <%= 'rotate-180' if component.collapsed? %>"
+             data-disclosure-target="icon"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+    <% end %>
+  </div>
+
+  <%# Cards Grid %>
+  <div class="grid <%= component.grid_class %> gap-4"
+       <% if component.collapsible? %>data-disclosure-target="content"<% end %>
+       <% if component.collapsed? %>style="display: none;"<% end %>>
+    <% component.cards.each do |card| %>
+      <%= render card %>
+    <% end %>
+  </div>
+</div>

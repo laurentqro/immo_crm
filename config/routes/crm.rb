@@ -44,11 +44,16 @@ authenticate :user do
   resources :submissions do
     member do
       get :download
+      post :reopen  # FR-025: Reopen completed submission
     end
 
     resources :submission_steps, only: [:show, :update], param: :step do
       member do
         post :confirm
+      end
+      collection do
+        post :lock    # FR-029: Lock submission for editing
+        post :unlock  # FR-029: Unlock submission
       end
     end
   end

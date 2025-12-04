@@ -69,7 +69,23 @@ class SubmissionPolicy < ApplicationPolicy
     belongs_to_organization? && record.validated?
   end
 
+  # FR-025: Reopen a completed submission for editing
+  def reopen?
+    belongs_to_organization? && record.completed?
+  end
+
+  # FR-029: Force unlock a submission locked by another user
+  # Only admins can force unlock to prevent accidental data loss
+  def force_unlock?
+    belongs_to_organization? && admin?
+  end
+
   private
+
+  # Check if the current user is an admin of the account
+  def admin?
+    account_user&.admin?
+  end
 
   # Check if the submission belongs to the user's current organization
   def belongs_to_organization?

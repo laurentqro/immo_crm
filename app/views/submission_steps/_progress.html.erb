@@ -1,38 +1,38 @@
 <%# Progress indicator for submission wizard steps %>
 <nav class="mb-8" aria-label="Progress">
-  <ol class="step-indicator flex items-center justify-center space-x-8">
-    <% (1..4).each do |step_num| %>
+  <ol class="step-indicator flex flex-wrap items-center justify-center gap-2 md:gap-4">
+    <% (1..7).each do |step_num| %>
       <li class="flex items-center">
         <% if step_num < current_step %>
           <%# Completed step %>
           <span class="flex items-center">
-            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
-              <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <span class="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-blue-600">
+              <svg class="h-4 w-4 md:h-6 md:w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
             </span>
-            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-white"><%= step_name(step_num) %></span>
+            <span class="ml-2 text-xs md:text-sm font-medium text-gray-900 dark:text-white hidden lg:inline"><%= step_name(step_num) %></span>
           </span>
         <% elsif step_num == current_step %>
           <%# Current step %>
           <span class="flex items-center">
-            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-600 bg-white dark:bg-gray-800">
-              <span class="text-sm font-semibold text-blue-600"><%= step_num %></span>
+            <span class="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border-2 border-blue-600 bg-white dark:bg-gray-800">
+              <span class="text-xs md:text-sm font-semibold text-blue-600"><%= step_num %></span>
             </span>
-            <span class="ml-3 text-sm font-medium text-blue-600"><%= step_name(step_num) %></span>
+            <span class="ml-2 text-xs md:text-sm font-medium text-blue-600 hidden lg:inline"><%= step_name(step_num) %></span>
           </span>
         <% else %>
           <%# Upcoming step %>
           <span class="flex items-center">
-            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800">
-              <span class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= step_num %></span>
+            <span class="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800">
+              <span class="text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400"><%= step_num %></span>
             </span>
-            <span class="ml-3 text-sm font-medium text-gray-500 dark:text-gray-400"><%= step_name(step_num) %></span>
+            <span class="ml-2 text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400 hidden lg:inline"><%= step_name(step_num) %></span>
           </span>
         <% end %>
 
-        <% if step_num < 4 %>
-          <div class="ml-8 h-0.5 w-16 bg-gray-200 dark:bg-gray-700"></div>
+        <% if step_num < 7 %>
+          <div class="ml-2 md:ml-4 h-0.5 w-4 md:w-8 bg-gray-200 dark:bg-gray-700"></div>
         <% end %>
       </li>
     <% end %>
