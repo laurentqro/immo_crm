@@ -53,39 +53,94 @@
       </div>
     </div>
 
+    <%# Override summary if any values are overridden %>
+    <% overridden_count = @submission_values.count(&:overridden?) %>
+    <% if overridden_count > 0 %>
+      <div class="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+        <div class="flex items-center">
+          <svg class="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span class="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+            <%= pluralize(overridden_count, "value has", plural: "values have") %> been manually overridden
+          </span>
+        </div>
+      </div>
+    <% end %>
+
     <%= form_with model: @submission, url: submission_submission_step_path(@submission, step: 1), method: :patch, local: true, class: "space-y-6" do |f| %>
       <div class="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
         <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
           <h2 class="text-lg font-medium text-gray-900 dark:text-white">XBRL Element Values</h2>
-          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Edit values below if they need correction</p>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            To override a value, enter the new value and provide a reason (minimum 10 characters).
+          </p>
         </div>
 
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead class="bg-gray-50 dark:bg-gray-700">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Question</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Calculated Value</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Override</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            <% @submission_values.each_with_index do |sv, index| %>
-              <tr class="<%= sv.overridden? ? 'bg-yellow-50 dark:bg-yellow-900/20' : '' %>">
-                <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">
-                  <div><%= sv.description %></div>
-                  <div class="text-xs text-gray-400 font-mono"><%= sv.element_name %></div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"><%= sv.value %></td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <%= f.fields_for :submission_values_attributes, sv, index: index do |sv_fields| %>
-                    <%= sv_fields.hidden_field :id %>
-                    <%= sv_fields.text_field :value, class: "w-32 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm", placeholder: "Override" %>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+          <% @submission_values.each_with_index do |sv, index| %>
+            <div class="p-4 <%= sv.overridden? ? 'bg-yellow-50 dark:bg-yellow-900/20' : '' %>" id="value-<%= sv.id %>">
+              <%= f.fields_for :submission_values_attributes, sv, index: index do |sv_fields| %>
+                <%= sv_fields.hidden_field :id %>
+
+                <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+                  <%# Element info %>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-medium text-gray-900 dark:text-white"><%= sv.description %></div>
+                    <div class="text-xs text-gray-400 font-mono mt-1"><%= sv.element_name %></div>
+                  </div>
+
+                  <%# Current value %>
+                  <div class="sm:w-32 text-right">
+                    <div class="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">Current</div>
+                    <div class="text-sm font-medium text-gray-900 dark:text-white"><%= sv.value.presence || "—" %></div>
+                  </div>
+
+                  <%# Override input %>
+                  <div class="sm:w-48">
+                    <div class="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">Override Value</div>
+                    <%= sv_fields.text_field :value,
+                        value: sv.overridden? ? sv.value : "",
+                        class: "w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm",
+                        placeholder: "New value",
+                        data: { original_value: sv.value } %>
+                  </div>
+                </div>
+
+                <%# Override reason input (shown for all, but highlighted if overridden) %>
+                <div class="mt-3">
+                  <div class="flex items-center gap-2 mb-1">
+                    <label class="text-xs text-gray-500 dark:text-gray-400 uppercase">Override Reason</label>
+                    <% if sv.overridden? %>
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
+                        Overridden
+                      </span>
+                    <% end %>
+                  </div>
+                  <%= sv_fields.text_field :override_reason,
+                      class: "w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm",
+                      placeholder: "Why is this value being changed? (min 10 characters)",
+                      minlength: 10 %>
+                </div>
+
+                <%# Override audit info %>
+                <% if sv.overridden? && sv.override_user.present? %>
+                  <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    <span class="inline-flex items-center">
+                      <svg class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Overridden by <%= sv.override_user.name %>
+                      <% if sv.updated_at %>
+                        on <%= sv.updated_at.strftime("%b %d, %Y at %H:%M") %>
+                      <% end %>
+                    </span>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
       </div>
 
       <div class="flex justify-between">

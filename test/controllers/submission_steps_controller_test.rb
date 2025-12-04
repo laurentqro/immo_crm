@@ -92,6 +92,169 @@ class SubmissionStepsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to submission_submission_step_path(@submission, step: 2)
   end
 
+  # === US5: Override Calculated Values ===
+
+  test "step 1 override saves user-provided reason" do
+    sign_in @user
+
+    # Populate values first
+    CalculationEngine.new(@submission).populate_submission_values!
+    target_value = @submission.submission_values.calculated.order(:id).first
+
+    patch submission_submission_step_path(@submission, step: 1), params: {
+      submission: {
+        submission_values_attributes: {
+          "0" => {
+            id: target_value.id,
+            value: "999",
+            override_reason: "Accountant verified different count"
+          }
+        }
+      }
+    }
+
+    target_value.reload
+    assert_equal "999", target_value.value
+    assert target_value.overridden
+    assert_equal "Accountant verified different count", target_value.override_reason
+  end
+
+  test "step 1 override sets override_user to current user" do
+    sign_in @user
+
+    CalculationEngine.new(@submission).populate_submission_values!
+    target_value = @submission.submission_values.calculated.order(:id).first
+
+    patch submission_submission_step_path(@submission, step: 1), params: {
+      submission: {
+        submission_values_attributes: {
+          "0" => {
+            id: target_value.id,
+            value: "888",
+            override_reason: "Manual correction required"
+          }
+        }
+      }
+    }
+
+    target_value.reload
+    assert_equal @user, target_value.override_user
+  end
+
+  test "step 1 override creates audit log entry" do
+    sign_in @user
+
+    CalculationEngine.new(@submission).populate_submission_values!
+    target_value = @submission.submission_values.calculated.order(:id).first
+    original_value = target_value.value
+
+    assert_difference "AuditLog.count" do
+      patch submission_submission_step_path(@submission, step: 1), params: {
+        submission: {
+          submission_values_attributes: {
+            "0" => {
+              id: target_value.id,
+              value: "777",
+              override_reason: "Audit correction"
+            }
+          }
+        }
+      }
+    end
+
+    audit_log = AuditLog.last
+    assert_equal target_value, audit_log.auditable
+    assert_equal @user, audit_log.user
+    assert_equal "update", audit_log.action
+    assert_includes audit_log.metadata["changed_fields"].first, target_value.element_name
+  end
+
+  test "step 1 override auto-generates reason if not provided" do
+    sign_in @user
+
+    CalculationEngine.new(@submission).populate_submission_values!
+    target_value = @submission.submission_values.calculated.order(:id).first
+    original_value = target_value.value
+
+    patch submission_submission_step_path(@submission, step: 1), params: {
+      submission: {
+        submission_values_attributes: {
+          "0" => {
+            id: target_value.id,
+            value: "666"
+          }
+        }
+      }
+    }
+
+    target_value.reload
+    assert target_value.overridden
+    assert_match /Manual override.*#{original_value}.*666/, target_value.override_reason
+  end
+
+  test "step 1 displays override summary when values are overridden" do
+    sign_in @user
+
+    CalculationEngine.new(@submission).populate_submission_values!
+    target_value = @submission.submission_values.calculated.first
+    target_value.update!(
+      value: "999",
+      overridden: true,
+      override_reason: "Test override",
+      override_user: @user
+    )
+
+    get submission_submission_step_path(@submission, step: 1)
+
+    assert_response :success
+    assert_match /manually overridden/i, response.body
+  end
+
+  test "step 1 displays override user info for overridden values" do
+    sign_in @user
+
+    CalculationEngine.new(@submission).populate_submission_values!
+    target_value = @submission.submission_values.calculated.first
+    target_value.update!(
+      value: "999",
+      overridden: true,
+      override_reason: "Test override for display",
+      override_user: @user
+    )
+
+    get submission_submission_step_path(@submission, step: 1)
+
+    assert_response :success
+    assert_match /Overridden by/i, response.body
+    assert_match @user.name, response.body
+  end
+
+  test "step 1 does not mark non-calculated values as overridden" do
+    sign_in @user
+
+    # Create a manual value
+    manual_value = @submission.submission_values.create!(
+      element_name: "test_manual_element",
+      source: "manual",
+      value: "original"
+    )
+
+    patch submission_submission_step_path(@submission, step: 1), params: {
+      submission: {
+        submission_values_attributes: {
+          "0" => {
+            id: manual_value.id,
+            value: "updated"
+          }
+        }
+      }
+    }
+
+    manual_value.reload
+    assert_equal "updated", manual_value.value
+    assert_not manual_value.overridden
+  end
+
   # === Step 2: Confirm Policies ===
 
   test "shows step 2 confirm policies" do
