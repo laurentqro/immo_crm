@@ -13,6 +13,7 @@
 #
 class StatisticCardComponent < JumpstartComponent
   include AmsfConstants
+  include IconsHelper
 
   attr_reader :label, :value, :previous_value, :element_name,
     :editable, :unit, :tooltip
@@ -126,38 +127,5 @@ class StatisticCardComponent < JumpstartComponent
     end
   end
 
-  # SVG icons built with tag helper to avoid html_safe XSS concerns
-  def arrow_up_icon
-    tag.svg(
-      xmlns: "http://www.w3.org/2000/svg",
-      class: "h-4 w-4 inline",
-      fill: "none",
-      viewBox: "0 0 24 24",
-      stroke: "currentColor"
-    ) do
-      tag.path(
-        "stroke-linecap": "round",
-        "stroke-linejoin": "round",
-        "stroke-width": "2",
-        d: "M5 10l7-7m0 0l7 7m-7-7v18"
-      )
-    end
-  end
-
-  def arrow_down_icon
-    tag.svg(
-      xmlns: "http://www.w3.org/2000/svg",
-      class: "h-4 w-4 inline",
-      fill: "none",
-      viewBox: "0 0 24 24",
-      stroke: "currentColor"
-    ) do
-      tag.path(
-        "stroke-linecap": "round",
-        "stroke-linejoin": "round",
-        "stroke-width": "2",
-        d: "M19 14l-7 7m0 0l-7-7m7 7V3"
-      )
-    end
-  end
+  # Icon methods provided by IconsHelper
 end
