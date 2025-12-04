@@ -30,6 +30,7 @@ class ManagedProperty < ApplicationRecord
 
   # === Scopes ===
   scope :active, -> { where(management_end_date: nil) }
+  scope :ended, -> { where.not(management_end_date: nil) }
 
   scope :active_in_year, ->(year) {
     # Validate year input to prevent ArgumentError from Date.new

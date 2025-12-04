@@ -1,0 +1,139 @@
+<%= form_with model: managed_property, local: true do |form| %>
+  <%= render "application/error_messages", resource: managed_property %>
+
+  <div class="space-y-6">
+    <%# Property Information %>
+    <div class="form-group">
+      <%= form.label :property_address, "Property address" %>
+      <%= form.text_field :property_address, required: true, class: "form-control",
+          placeholder: "e.g., 4 Avenue de Monte-Carlo, Monaco" %>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :property_type, "Property type" %>
+        <%= form.select :property_type,
+            options_for_select([
+              ["Residential", "RESIDENTIAL"],
+              ["Commercial", "COMMERCIAL"]
+            ], managed_property.property_type || "RESIDENTIAL"),
+            { include_blank: false } %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :client_id, "Landlord (client)" %>
+        <%= form.collection_select :client_id,
+            current_organization.clients.kept.order(:name), :id, :name,
+            { include_blank: "Select landlord..." },
+            { required: true } %>
+      </div>
+    </div>
+
+    <%# Management Period %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <h3 class="text-sm font-medium mb-4" style="color: var(--base-text-secondary);">Management Period</h3>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div class="form-group">
+          <%= form.label :management_start_date, "Start date" %>
+          <%= form.date_field :management_start_date, required: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :management_end_date, "End date (leave blank if active)" %>
+          <%= form.date_field :management_end_date, class: "form-control" %>
+        </div>
+      </div>
+    </div>
+
+    <%# Financial Details %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <h3 class="text-sm font-medium mb-4" style="color: var(--base-text-secondary);">Financial Details</h3>
+
+      <div class="form-group">
+        <%= form.label :monthly_rent, "Monthly rent" %>
+        <div class="relative">
+          <%= form.number_field :monthly_rent, class: "form-control", step: "0.01", min: "0",
+              placeholder: "0.00" %>
+          <span class="absolute right-3 top-2 text-gray-500">EUR</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-4">
+        <div class="form-group">
+          <%= form.label :management_fee_percent, "Management fee (%)" %>
+          <%= form.number_field :management_fee_percent, class: "form-control", step: "0.01",
+              min: "0", max: "100", placeholder: "e.g., 8.0" %>
+          <p class="form-hint">Percentage of monthly rent as fee.</p>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :management_fee_fixed, "OR Fixed fee (EUR/month)" %>
+          <%= form.number_field :management_fee_fixed, class: "form-control", step: "0.01",
+              min: "0", placeholder: "e.g., 500.00" %>
+          <p class="form-hint">Fixed monthly management fee.</p>
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+        Specify either a percentage fee or a fixed fee (at least one is required).
+      </p>
+    </div>
+
+    <%# Tenant Information %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <h3 class="text-sm font-medium mb-4" style="color: var(--base-text-secondary);">Tenant Information</h3>
+
+      <div class="form-group">
+        <%= form.label :tenant_name, "Tenant name" %>
+        <%= form.text_field :tenant_name, class: "form-control", placeholder: "Name of current tenant" %>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-4">
+        <div class="form-group">
+          <%= form.label :tenant_type, "Tenant type" %>
+          <%= form.select :tenant_type,
+              options_for_select([
+                ["Natural Person", "NATURAL_PERSON"],
+                ["Legal Entity", "LEGAL_ENTITY"]
+              ], managed_property.tenant_type),
+              { include_blank: "Select type..." } %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :tenant_country, "Tenant country" %>
+          <%= form.select :tenant_country,
+              options_for_select([
+                ["Monaco", "MC"],
+                ["France", "FR"],
+                ["Italy", "IT"],
+                ["Switzerland", "CH"],
+                ["United Kingdom", "GB"],
+                ["United States", "US"],
+                ["Other", ""]
+              ], managed_property.tenant_country),
+              { include_blank: "Select country..." } %>
+        </div>
+      </div>
+
+      <div class="form-picker-group mt-4">
+        <%= form.check_box :tenant_is_pep %>
+        <div>
+          <%= form.label :tenant_is_pep, "Tenant is PEP" %>
+          <p class="form-hint">Tenant is a Politically Exposed Person or related to one.</p>
+        </div>
+      </div>
+    </div>
+
+    <%# Notes %>
+    <div class="form-group">
+      <%= form.label :notes %>
+      <%= form.text_area :notes, rows: 3, class: "form-control",
+          placeholder: "Additional notes about this property..." %>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", managed_properties_path, class: "btn btn-secondary" %>
+    <%= form.submit managed_property.persisted? ? "Update Property" : "Add Property", class: "btn btn-primary" %>
+  </div>
+<% end %>
