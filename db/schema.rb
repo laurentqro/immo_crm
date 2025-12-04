@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_04_111946) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_04_112747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -149,6 +149,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_111946) do
     t.string "residence_country"
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_beneficial_owners_on_client_id"
+    t.index ["country_code"], name: "index_beneficial_owners_on_country_code"
     t.index ["is_pep"], name: "index_beneficial_owners_on_is_pep"
   end
 
@@ -177,12 +178,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_111946) do
     t.datetime "updated_at", null: false
     t.string "vasp_type"
     t.index ["client_type"], name: "index_clients_on_client_type"
+    t.index ["country_code"], name: "index_clients_on_country_code"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
     t.index ["is_pep"], name: "index_clients_on_is_pep"
+    t.index ["is_pep_associated"], name: "index_clients_on_is_pep_associated"
+    t.index ["is_pep_related"], name: "index_clients_on_is_pep_related"
     t.index ["organization_id", "client_type"], name: "index_clients_on_org_and_type"
     t.index ["organization_id", "deleted_at"], name: "index_clients_on_organization_id_and_deleted_at"
     t.index ["organization_id", "risk_level"], name: "index_clients_on_org_and_risk"
     t.index ["organization_id"], name: "index_clients_on_organization_id"
+    t.index ["residence_status"], name: "index_clients_on_residence_status"
     t.index ["risk_level"], name: "index_clients_on_risk_level"
   end
 
@@ -477,6 +482,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_111946) do
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_transactions_on_client_id"
     t.index ["deleted_at"], name: "index_transactions_on_deleted_at"
+    t.index ["direction"], name: "index_transactions_on_direction"
     t.index ["organization_id", "transaction_date"], name: "index_transactions_on_organization_id_and_transaction_date"
     t.index ["organization_id", "transaction_type"], name: "index_transactions_on_org_and_type"
     t.index ["organization_id"], name: "index_transactions_on_organization_id"
