@@ -30,6 +30,11 @@ class Setting < ApplicationRecord
   #
   # Controls (aC*) are Tab 4 policy questions from AMSF taxonomy - all Oui/Non.
   # Keys use format: ctrl_<element> for easy identification and future renaming.
+  #
+  # Migration Note: When exposing controls in the UI, consider:
+  # - Adding human-readable labels from taxonomy label file
+  # - Grouping by AMSF sections (1.1 Risk Policy, 1.2 KYC, etc.)
+  # - Adding help text from taxonomy definition file
   SCHEMA = {
     # === Entity Info ===
     # Note: These need to be mapped to actual taxonomy elements when identified
