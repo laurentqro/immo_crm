@@ -198,6 +198,51 @@ class TransactionTest < ActiveSupport::TestCase
     assert transaction.valid?
   end
 
+  test "amount must be non-negative when present" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      amount: -100
+    )
+    assert_not transaction.valid?
+    assert_includes transaction.errors[:amount], "must be greater than or equal to 0"
+  end
+
+  test "accepts valid positive amounts" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      amount: 500_000.50
+    )
+    assert transaction.valid?
+  end
+
+  test "amount can be zero" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      amount: 0
+    )
+    assert transaction.valid?
+  end
+
+  test "amount can be blank" do
+    transaction = Transaction.new(
+      organization: @organization,
+      client: @client,
+      transaction_date: Date.current,
+      transaction_type: "PURCHASE",
+      amount: nil
+    )
+    assert transaction.valid?
+  end
+
   # === Scopes ===
 
   test "purchases scope returns only PURCHASE transactions" do

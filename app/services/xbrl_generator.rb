@@ -24,6 +24,14 @@ class XbrlGenerator
     a2109B a2102BB a2105BB
   ].freeze
 
+  # AMSF taxonomy uses French boolean values
+  AMSF_BOOLEAN_TRUE = "Oui"
+  AMSF_BOOLEAN_FALSE = "Non"
+  TRUTHY_VALUES = %w[true yes 1 oui].freeze
+
+  # Maximum JSON payload size to prevent abuse
+  MAX_JSON_SIZE = 100_000
+
   attr_reader :submission, :organization
 
   def initialize(submission)
@@ -125,6 +133,11 @@ class XbrlGenerator
     return value if value.is_a?(Hash)
 
     if value.is_a?(String)
+      if value.bytesize > MAX_JSON_SIZE
+        Rails.logger.warn("Country data for a1103 exceeds size limit: #{value.bytesize} bytes")
+        return nil
+      end
+
       parsed = JSON.parse(value)
       return parsed if parsed.is_a?(Hash)
     end
@@ -228,10 +241,8 @@ class XbrlGenerator
     return value if value.blank?
 
     if boolean_element?(element_name)
-      # Use French boolean values as required by AMSF taxonomy
-      value.to_s.downcase.in?(%w[true yes 1 oui]) ? "Oui" : "Non"
+      value.to_s.downcase.in?(TRUTHY_VALUES) ? AMSF_BOOLEAN_TRUE : AMSF_BOOLEAN_FALSE
     elsif monetary_element?(element_name)
-      # Format as decimal with 2 places
       format("%.2f", BigDecimal(value.to_s))
     else
       value.to_s

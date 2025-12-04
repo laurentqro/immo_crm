@@ -181,20 +181,16 @@ class CalculationEngine
       .merge(Client.kept)
       .where(clients: {organization_id: organization.id})
 
-    legal_entity_bos = base_query
-      .where(clients: {client_type: "PM"})
+    # Single query with grouping for PM and TRUST types
+    counts_by_type = base_query
+      .where(clients: {client_type: %w[PM TRUST]})
+      .group("clients.client_type")
       .count
 
-    trust_bos = base_query
-      .where(clients: {client_type: "TRUST"})
-      .count
-
-    pep_bos = base_query
-      .where(is_pep: true)
-      .count
+    pep_bos = base_query.where(is_pep: true).count
 
     {
-      "a1501" => legal_entity_bos + trust_bos,
+      "a1501" => counts_by_type.values.sum,
       "a1502B" => pep_bos
     }
   end

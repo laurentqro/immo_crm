@@ -37,6 +37,9 @@ class Client < ApplicationRecord
   validates :risk_level, inclusion: { in: RISK_LEVELS }, allow_blank: true
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_blank: true
   validates :residence_status, inclusion: { in: RESIDENCE_STATUSES }, allow_blank: true
+  validates :country_code,
+    format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
+    allow_blank: true
 
   # === Callbacks ===
   before_save :clear_pep_type_if_not_pep
