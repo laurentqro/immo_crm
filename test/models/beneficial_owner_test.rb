@@ -238,4 +238,16 @@ class BeneficialOwnerTest < ActiveSupport::TestCase
   test "includes AmsfConstants" do
     assert BeneficialOwner.include?(AmsfConstants)
   end
+
+  # === Verification Fields (AMSF Data Capture) ===
+
+  test "source_of_wealth_verified defaults to false" do
+    owner = BeneficialOwner.new
+    assert_equal false, owner.source_of_wealth_verified
+  end
+
+  test "identification_verified defaults to false" do
+    owner = BeneficialOwner.new
+    assert_equal false, owner.identification_verified
+  end
 end

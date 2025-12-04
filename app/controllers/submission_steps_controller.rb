@@ -5,27 +5,30 @@
 #   1. Review Aggregates - Review calculated values from transactions/clients
 #   2. Confirm Policies - Confirm settings-based policy values
 #   3. Fresh Questions - Answer manual entry questions
-#   4. Validate & Download - Validate XBRL and download file
+#   4. Property Management - Review managed property statistics (US1)
+#   5. Revenue Review - Review revenue statistics (US1)
+#   6. Training Statistics - Review training data (US1)
+#   7. Validate & Download - Validate XBRL and download file
 class SubmissionStepsController < ApplicationController
   include OrganizationScoped
 
-  VALID_STEPS = (1..4).to_a.freeze
+  VALID_STEPS = (1..7).to_a.freeze
 
   before_action :set_submission
-  before_action :validate_step
+  before_action :validate_step, except: [:lock, :unlock]
+  before_action :check_lock_status, only: [:update, :confirm]
 
   def show
     authorize @submission, :show?
 
     case @step
-    when 1
-      show_step_1
-    when 2
-      show_step_2
-    when 3
-      show_step_3
-    when 4
-      show_step_4
+    when 1 then show_step_1
+    when 2 then show_step_2
+    when 3 then show_step_3
+    when 4 then show_step_4
+    when 5 then show_step_5
+    when 6 then show_step_6
+    when 7 then show_step_7
     end
 
     # Always render HTML - this is a full page wizard, not turbo stream updates
@@ -33,8 +36,8 @@ class SubmissionStepsController < ApplicationController
   end
 
   def update
-    # For step 4 complete action, check complete? policy instead of update?
-    if @step == 4 && params[:commit] == "complete"
+    # For step 7 complete action, check complete? policy instead of update?
+    if @step == 7 && params[:commit] == "complete"
       authorize @submission, :complete?
     else
       authorize @submission, :update?
@@ -46,15 +49,32 @@ class SubmissionStepsController < ApplicationController
     end
 
     case @step
-    when 1
-      update_step_1
-    when 2
-      update_step_2
-    when 3
-      update_step_3
-    when 4
-      update_step_4
+    when 1 then update_step_1
+    when 2 then update_step_2
+    when 3 then update_step_3
+    when 4 then update_step_4
+    when 5 then update_step_5
+    when 6 then update_step_6
+    when 7 then update_step_7
     end
+  end
+
+  # === Lock/Unlock Actions (FR-029) ===
+
+  def lock
+    authorize @submission, :update?
+
+    @submission.lock!(Current.user)
+    redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
+      notice: "Submission locked for editing.", status: :see_other
+  end
+
+  def unlock
+    authorize @submission, :update?
+
+    @submission.unlock!
+    redirect_to submission_submission_step_path(@submission, step: params[:step] || 1),
+      notice: "Submission unlocked.", status: :see_other
   end
 
   def confirm
@@ -64,9 +84,9 @@ class SubmissionStepsController < ApplicationController
     when 2
       confirm_policy_values
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Policy values confirmed.", status: :see_other
-    when 4
-      handle_step_4_confirm
+        notice: "Policy values confirmed.", status: :see_other
+    when 7
+      handle_step_7_confirm
     else
       redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
     end
@@ -90,14 +110,21 @@ class SubmissionStepsController < ApplicationController
 
   def redirect_to_previous_step
     create_step_audit_log("back")
-    previous = @step > 1 ? @step - 1 : 1
+    previous = (@step > 1) ? @step - 1 : 1
     redirect_to submission_submission_step_path(@submission, step: previous), status: :see_other
   end
 
   def redirect_to_next_step
     create_step_audit_log("continue")
-    next_step = @step < 4 ? @step + 1 : 4
+    next_step = (@step < 7) ? @step + 1 : 7
     redirect_to submission_submission_step_path(@submission, step: next_step), status: :see_other
+  end
+
+  def check_lock_status
+    if @submission.locked? && !@submission.locked_by?(Current.user)
+      redirect_to submission_submission_step_path(@submission, step: @step),
+        alert: "Submission is being edited by another user.", status: :see_other
+    end
   end
 
   # === Step 1: Review Aggregates ===
@@ -122,7 +149,7 @@ class SubmissionStepsController < ApplicationController
       redirect_to_next_step
     else
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Changes saved.", status: :see_other
+        notice: "Changes saved.", status: :see_other
     end
   end
 
@@ -150,7 +177,7 @@ class SubmissionStepsController < ApplicationController
   def confirm_policy_values
     # Use bulk update for better performance
     @submission.submission_values.from_settings.unconfirmed
-               .update_all(confirmed_at: Time.current)
+      .update_all(confirmed_at: Time.current)
   end
 
   # === Step 3: Fresh Questions ===
@@ -169,7 +196,7 @@ class SubmissionStepsController < ApplicationController
       redirect_to_next_step
     else
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Answers saved.", status: :see_other
+        notice: "Answers saved.", status: :see_other
     end
   end
 
@@ -186,14 +213,66 @@ class SubmissionStepsController < ApplicationController
     end
   end
 
-  # === Step 4: Validate & Download ===
+  # === Step 4: Property Management Statistics (US1) ===
 
   def show_step_4
+    @engine = CalculationEngine.new(@submission)
+    @property_stats = @engine.managed_property_statistics
+    @comparator = YearOverYearComparator.new(@submission)
+    @yoy_comparison = build_yoy_comparison(@property_stats.keys)
+  end
+
+  def update_step_4
+    if params[:commit] == "continue"
+      redirect_to_next_step
+    else
+      redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
+    end
+  end
+
+  # === Step 5: Revenue Review (US1) ===
+
+  def show_step_5
+    @engine = CalculationEngine.new(@submission)
+    @revenue_stats = @engine.revenue_statistics
+    @comparator = YearOverYearComparator.new(@submission)
+    @yoy_comparison = build_yoy_comparison(@revenue_stats.keys)
+  end
+
+  def update_step_5
+    if params[:commit] == "continue"
+      redirect_to_next_step
+    else
+      redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
+    end
+  end
+
+  # === Step 6: Training Statistics (US1) ===
+
+  def show_step_6
+    @engine = CalculationEngine.new(@submission)
+    @training_stats = @engine.training_statistics
+    @extended_stats = @engine.extended_client_statistics
+    @comparator = YearOverYearComparator.new(@submission)
+    @yoy_comparison = build_yoy_comparison(@training_stats.keys + @extended_stats.keys)
+  end
+
+  def update_step_6
+    if params[:commit] == "continue"
+      redirect_to_next_step
+    else
+      redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
+    end
+  end
+
+  # === Step 7: Validate & Download ===
+
+  def show_step_7
     @validation_result = perform_validation
     @xbrl_preview = generate_xbrl_preview
   end
 
-  def update_step_4
+  def update_step_7
     if params[:commit] == "complete" && @submission.may_complete?
       @submission.complete!
       redirect_to @submission, notice: "Submission completed successfully.", status: :see_other
@@ -204,15 +283,15 @@ class SubmissionStepsController < ApplicationController
     end
   end
 
-  def handle_step_4_confirm
+  def handle_step_7_confirm
     if params[:action_type] == "revalidate"
       @validation_result = perform_validation(force: true)
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Validation re-run.", status: :see_other
+        notice: "Validation re-run.", status: :see_other
     elsif @submission.in_review? && @validation_result&.valid?
       @submission.validate_submission!
       redirect_to submission_submission_step_path(@submission, step: @step),
-                  notice: "Submission validated successfully.", status: :see_other
+        notice: "Submission validated successfully.", status: :see_other
     else
       redirect_to submission_submission_step_path(@submission, step: @step), status: :see_other
     end
@@ -223,17 +302,17 @@ class SubmissionStepsController < ApplicationController
 
     xbrl_content = XbrlGenerator.new(@submission).generate
     @cached_validation = ValidationService.new(xbrl_content).validate
-  rescue StandardError => e
+  rescue => e
     @cached_validation = ValidationService::Result.new(
       valid: false,
-      errors: [{ code: "SYS001", message: "Validation service unavailable: #{e.message}" }],
+      errors: [{code: "SYS001", message: "Validation service unavailable: #{e.message}"}],
       warnings: []
     )
   end
 
   def generate_xbrl_preview
     XbrlGenerator.new(@submission).generate
-  rescue StandardError
+  rescue
     nil
   end
 
@@ -267,12 +346,12 @@ class SubmissionStepsController < ApplicationController
   def manual_questions
     # Questions that require manual input each year
     [
-      { key: "rejected_clients", label: "Were any clients rejected this year?", type: "boolean" },
-      { key: "rejected_count", label: "How many clients were rejected?", type: "number", depends_on: "rejected_clients" },
-      { key: "sar_filed", label: "Were any SARs filed this year?", type: "boolean" },
-      { key: "sar_count", label: "How many SARs were filed?", type: "number", depends_on: "sar_filed" },
-      { key: "training_completed", label: "Was AML training completed this year?", type: "boolean" },
-      { key: "procedure_updates", label: "Were internal procedures updated?", type: "boolean" }
+      {key: "rejected_clients", label: "Were any clients rejected this year?", type: "boolean"},
+      {key: "rejected_count", label: "How many clients were rejected?", type: "number", depends_on: "rejected_clients"},
+      {key: "sar_filed", label: "Were any SARs filed this year?", type: "boolean"},
+      {key: "sar_count", label: "How many SARs were filed?", type: "number", depends_on: "sar_filed"},
+      {key: "training_completed", label: "Was AML training completed this year?", type: "boolean"},
+      {key: "procedure_updates", label: "Were internal procedures updated?", type: "boolean"}
     ]
   end
 
@@ -284,7 +363,8 @@ class SubmissionStepsController < ApplicationController
       next unless value
 
       if attrs[:value].present? && attrs[:value] != value.value
-        value.update!(value: attrs[:value], overridden: true)
+        # Use update_value! which handles override_reason automatically
+        value.update_value!(attrs[:value])
       end
     end
   end
@@ -301,5 +381,14 @@ class SubmissionStepsController < ApplicationController
         changed_fields: ["step_#{@step}_#{action}"]
       }
     )
+  end
+
+  # Build year-over-year comparison data for given element names
+  def build_yoy_comparison(element_names)
+    comparisons = {}
+    element_names.each do |element_name|
+      comparisons[element_name] = @comparator.comparison_for(element_name)
+    end
+    comparisons
   end
 end

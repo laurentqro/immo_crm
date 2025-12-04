@@ -1,0 +1,77 @@
+# ManagedProperty fixtures for testing property management (gestion locative)
+# These fixtures support AMSF Data Capture feature tests
+
+# Active residential property in org one
+active_residential:
+  organization: one
+  client: natural_person
+  property_address: "4 Avenue de Monte-Carlo, Monaco"
+  property_type: "RESIDENTIAL"
+  management_start_date: <%= Date.new(2024, 1, 1) %>
+  management_end_date: null
+  monthly_rent: <%= 5000.00 %>
+  management_fee_percent: <%= 8.0 %>
+  tenant_name: "Marie Tenant"
+  tenant_type: "NATURAL_PERSON"
+  tenant_country: "FR"
+  tenant_is_pep: false
+
+# Commercial property in org one
+commercial_property:
+  organization: one
+  client: legal_entity
+  property_address: "10 Boulevard Albert Premier, Monaco"
+  property_type: "COMMERCIAL"
+  management_start_date: <%= Date.new(2023, 6, 1) %>
+  management_end_date: null
+  monthly_rent: <%= 12000.00 %>
+  management_fee_fixed: <%= 1000.00 %>
+  tenant_name: "Monaco Boutique SARL"
+  tenant_type: "LEGAL_ENTITY"
+  tenant_country: "MC"
+  tenant_is_pep: false
+
+# Ended property (management terminated)
+ended_property:
+  organization: one
+  client: natural_person
+  property_address: "15 Rue Grimaldi, Monaco"
+  property_type: "RESIDENTIAL"
+  management_start_date: <%= Date.new(2022, 1, 1) %>
+  management_end_date: <%= Date.new(2024, 6, 30) %>
+  monthly_rent: <%= 3500.00 %>
+  management_fee_percent: <%= 10.0 %>
+  tenant_name: "Former Tenant"
+  tenant_type: "NATURAL_PERSON"
+  tenant_country: "IT"
+  tenant_is_pep: false
+
+# Property with PEP tenant
+pep_tenant_property:
+  organization: one
+  client: legal_entity
+  property_address: "1 Place du Casino, Monaco"
+  property_type: "RESIDENTIAL"
+  management_start_date: <%= Date.new(2024, 3, 1) %>
+  management_end_date: null
+  monthly_rent: <%= 25000.00 %>
+  management_fee_percent: <%= 5.0 %>
+  tenant_name: "Political Figure"
+  tenant_type: "NATURAL_PERSON"
+  tenant_country: "MC"
+  tenant_is_pep: true
+
+# Property in other organization (for cross-tenant isolation tests)
+other_org_property:
+  organization: two
+  client: other_org_client
+  property_address: "20 Avenue de la Costa, Monaco"
+  property_type: "RESIDENTIAL"
+  management_start_date: <%= Date.new(2024, 1, 1) %>
+  management_end_date: null
+  monthly_rent: <%= 4500.00 %>
+  management_fee_percent: <%= 8.0 %>
+  tenant_name: "Other Org Tenant"
+  tenant_type: "NATURAL_PERSON"
+  tenant_country: "FR"
+  tenant_is_pep: false

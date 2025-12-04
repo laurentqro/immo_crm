@@ -12,6 +12,7 @@ class Submission < ApplicationRecord
 
   # === Associations ===
   belongs_to :organization
+  belongs_to :locked_by_user, class_name: "User", optional: true
   has_many :submission_values, dependent: :destroy
   accepts_nested_attributes_for :submission_values
 
@@ -108,6 +109,48 @@ class Submission < ApplicationRecord
 
   def downloadable?
     validated? || completed? || downloaded_unvalidated?
+  end
+
+  # === Locking Methods (FR-029) ===
+
+  def lock!(user)
+    update!(locked_by_user_id: user.id, locked_at: Time.current)
+  end
+
+  def unlock!
+    update!(locked_by_user_id: nil, locked_at: nil)
+  end
+
+  def locked?
+    locked_by_user_id.present? && locked_at.present?
+  end
+
+  def locked_by?(user)
+    locked_by_user_id == user.id
+  end
+
+  # === Reopen Method (FR-025) ===
+
+  def reopen!
+    raise InvalidTransition, "Can only reopen completed submissions" unless completed?
+
+    update!(
+      status: "draft",
+      reopened_count: reopened_count + 1,
+      generated_at: nil
+    )
+  end
+
+  # === Generate Method (FR-024) ===
+
+  def generate!
+    raise InvalidTransition, "Can only generate from validated status" unless validated?
+
+    update!(
+      status: "completed",
+      generated_at: Time.current,
+      completed_at: Time.current
+    )
   end
 
   # Returns the end of year date for this submission

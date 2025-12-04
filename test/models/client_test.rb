@@ -472,4 +472,140 @@ class ClientTest < ActiveSupport::TestCase
   test "includes AmsfConstants" do
     assert Client.include?(AmsfConstants)
   end
+
+  # === Due Diligence Fields (AMSF Data Capture) ===
+
+  test "due_diligence_level must be valid when present" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      due_diligence_level: "INVALID"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:due_diligence_level], "is not included in the list"
+  end
+
+  test "accepts all valid due_diligence_levels" do
+    %w[STANDARD SIMPLIFIED REINFORCED].each do |level|
+      attrs = {
+        organization: @organization,
+        name: "Test Client",
+        client_type: "PP",
+        due_diligence_level: level
+      }
+      # SIMPLIFIED requires a reason
+      attrs[:simplified_dd_reason] = "Low-risk domestic client" if level == "SIMPLIFIED"
+
+      client = Client.new(attrs)
+      assert client.valid?, "Expected due_diligence_level '#{level}' to be valid"
+    end
+  end
+
+  test "due_diligence_level can be blank" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      due_diligence_level: nil
+    )
+    assert client.valid?
+  end
+
+  test "requires simplified_dd_reason when due_diligence_level is SIMPLIFIED" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      due_diligence_level: "SIMPLIFIED"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:simplified_dd_reason], "can't be blank"
+  end
+
+  test "simplified_dd_reason not required when due_diligence_level is not SIMPLIFIED" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      due_diligence_level: "STANDARD"
+    )
+    assert client.valid?
+  end
+
+  test "relationship_end_reason must be valid when present" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      relationship_end_reason: "INVALID"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:relationship_end_reason], "is not included in the list"
+  end
+
+  test "accepts all valid relationship_end_reasons" do
+    %w[CLIENT_REQUEST AML_CONCERN INACTIVITY BUSINESS_DECISION OTHER].each do |reason|
+      client = Client.new(
+        organization: @organization,
+        name: "Test Client",
+        client_type: "PP",
+        relationship_end_reason: reason
+      )
+      assert client.valid?, "Expected relationship_end_reason '#{reason}' to be valid"
+    end
+  end
+
+  test "relationship_end_reason can be blank" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      relationship_end_reason: nil
+    )
+    assert client.valid?
+  end
+
+  test "professional_category must be valid when present" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      professional_category: "INVALID"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:professional_category], "is not included in the list"
+  end
+
+  test "accepts all valid professional_categories" do
+    %w[LEGAL ACCOUNTANT NOTARY REAL_ESTATE FINANCIAL OTHER NONE].each do |category|
+      client = Client.new(
+        organization: @organization,
+        name: "Test Client",
+        client_type: "PP",
+        professional_category: category
+      )
+      assert client.valid?, "Expected professional_category '#{category}' to be valid"
+    end
+  end
+
+  test "professional_category can be blank" do
+    client = Client.new(
+      organization: @organization,
+      name: "John Doe",
+      client_type: "PP",
+      professional_category: nil
+    )
+    assert client.valid?
+  end
+
+  test "source_of_funds_verified defaults to false" do
+    client = Client.new
+    assert_equal false, client.source_of_funds_verified
+  end
+
+  test "source_of_wealth_verified defaults to false" do
+    client = Client.new
+    assert_equal false, client.source_of_wealth_verified
+  end
 end

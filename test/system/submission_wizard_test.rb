@@ -362,6 +362,227 @@ class SubmissionWizardTest < ApplicationSystemTestCase
     # Should show summary without edit options
   end
 
+  # ==========================================================================
+  # US1 - 7-Step Wizard Tests (AMSF Data Capture)
+  # ==========================================================================
+
+  # === Full 7-Step Flow ===
+
+  test "complete 7-step wizard flow with all new steps" do
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    # Step 1: Activity Confirmation
+    visit submission_submission_step_path(submission, step: 1)
+    assert_text "Step 1"
+    click_button "Continue"
+
+    # Step 2: Client Statistics
+    assert_text "Step 2"
+    assert_selector "[data-element='a1101']" # Total clients
+    click_button "Continue"
+
+    # Step 3: Transaction Statistics
+    assert_text "Step 3"
+    click_button "Continue"
+
+    # Step 4: Training & Compliance
+    assert_text "Step 4"
+    assert_text "Training"
+    click_button "Continue"
+
+    # Step 5: Revenue Review
+    assert_text "Step 5"
+    assert_text "Revenue"
+    click_button "Continue"
+
+    # Step 6: Policy Confirmation
+    assert_text "Step 6"
+    assert_text "Policy"
+    click_button "Confirm All" if page.has_button?("Confirm All")
+    click_button "Continue"
+
+    # Step 7: Review & Sign
+    assert_text "Step 7"
+    assert_text "Review" || assert_text "Sign"
+  end
+
+  # === Step 5: Revenue Review ===
+
+  test "step 5 displays revenue breakdown" do
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 5)
+
+    assert_text "Step 5"
+    assert_text "Revenue"
+    # Should show revenue by type
+    assert_text "Sales" || assert_selector "[data-element='a3802']"
+    assert_text "Rental" || assert_selector "[data-element='a3803']"
+    assert_text "Management" || assert_selector "[data-element='a3804']"
+    assert_text "Total" || assert_selector "[data-element='a381']"
+  end
+
+  test "step 5 shows year-over-year revenue comparison" do
+    # Create previous year submission
+    prev_submission = Submission.create!(
+      organization: @organization,
+      year: Date.current.year - 1,
+      status: "completed"
+    )
+    prev_submission.submission_values.create!(
+      element_name: "a381",
+      value: "100000",
+      source: "calculated"
+    )
+
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 5)
+
+    # Should show previous year column
+    assert_text "Previous" || assert_selector "[data-previous-value]"
+  end
+
+  # === Step 6: Policy Confirmation ===
+
+  test "step 6 displays all compliance policies" do
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 6)
+
+    assert_text "Step 6"
+    assert_text "Policy"
+    # Should show KYC/AML policies
+    assert_text "KYC" || assert_text "procedure" || assert_text "compliance"
+  end
+
+  test "step 6 confirm all button marks policies as confirmed" do
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 6)
+
+    click_button "Confirm All"
+
+    assert_text "confirmed" || assert_selector ".confirmed"
+  end
+
+  # === Step 7: Review & Sign ===
+
+  test "step 7 displays full submission summary" do
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 7)
+
+    assert_text "Step 7"
+    assert_text "Review" || assert_text "Summary"
+    # Should show all sections
+    assert_text "Client" || assert_selector "[data-section='clients']"
+    assert_text "Transaction" || assert_selector "[data-section='transactions']"
+    assert_text "Revenue" || assert_selector "[data-section='revenue']"
+  end
+
+  test "step 7 shows validation status summary" do
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 7)
+
+    assert_text "Valid" || assert_text "Status" || assert_selector ".validation-status"
+  end
+
+  test "step 7 displays signatory input fields" do
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 7)
+
+    assert_selector "input[name*='signatory']" || assert_text "Signatory"
+  end
+
+  test "step 7 highlights significant YoY changes" do
+    # Create significant change scenario
+    prev_submission = Submission.create!(
+      organization: @organization,
+      year: Date.current.year - 1,
+      status: "completed"
+    )
+    prev_submission.submission_values.create!(
+      element_name: "a1101",
+      value: "100",
+      source: "calculated"
+    )
+
+    submission = create_draft_submission
+    submission.submission_values.find_or_create_by!(element_name: "a1101") do |sv|
+      sv.value = "200" # 100% increase = significant
+      sv.source = "calculated"
+    end
+
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 7)
+
+    # Should show warning about significant changes
+    assert_text "significant" || assert_selector ".significant-change"
+  end
+
+  test "step 7 generate button creates XBRL for validated submission" do
+    submission = create_validated_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 7)
+
+    click_button "Generate XBRL"
+
+    submission.reload
+    assert submission.completed?
+    assert_not_nil submission.generated_at
+  end
+
+  # === Locking Tests (FR-029) ===
+
+  test "shows lock indicator when submission is locked by another user" do
+    submission = create_draft_submission
+    other_user = users(:two)
+    submission.lock!(other_user)
+
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 1)
+
+    assert_text "locked" || assert_text other_user.name
+  end
+
+  # === Year-over-Year Comparison ===
+
+  test "wizard shows YoY change percentages for calculated values" do
+    # Setup previous year
+    prev_submission = Submission.create!(
+      organization: @organization,
+      year: Date.current.year - 1,
+      status: "completed"
+    )
+    prev_submission.submission_values.create!(
+      element_name: "a1101",
+      value: "100",
+      source: "calculated"
+    )
+
+    submission = create_draft_submission
+    login_as @user, scope: :user
+
+    visit submission_submission_step_path(submission, step: 2)
+
+    # Should show change percentage
+    assert_text "%" || assert_selector "[data-change-percent]"
+  end
+
   private
 
   def create_draft_submission

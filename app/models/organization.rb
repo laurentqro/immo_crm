@@ -24,6 +24,8 @@ class Organization < ApplicationRecord
   has_many :str_reports, dependent: :destroy
   has_many :audit_logs, dependent: :nullify
   has_many :settings, dependent: :destroy
+  has_many :managed_properties, dependent: :destroy
+  has_many :trainings, dependent: :destroy
 
   has_many :submissions, dependent: :destroy
 

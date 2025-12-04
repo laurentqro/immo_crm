@@ -1,0 +1,147 @@
+<%= content_for :title, "Revenue Review - Step 5 of 7" %>
+
+<div class="container mx-auto px-4 py-8">
+  <%= render "submission_steps/progress", current_step: 5 %>
+
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Revenue Review</h1>
+    <p class="text-gray-600 dark:text-gray-300 mb-6">Review commission and management revenue statistics for <%= @submission.year %>.</p>
+
+    <%# Lock status banner %>
+    <% if @submission.locked? && @submission.locked_by?(Current.user) %>
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-4 mb-6">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-blue-700 dark:text-blue-300">
+              You have locked this submission for editing.
+              <%= button_to "Unlock", unlock_submission_submission_steps_path(@submission, step: 5), method: :post, class: "underline ml-2", data: { turbo_confirm: "Unlock this submission?" } %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% elsif @submission.locked? %>
+      <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-4 mb-6">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-yellow-700 dark:text-yellow-300">
+              This submission is being edited by another user.
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Revenue Statistics Cards %>
+    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Revenue Breakdown</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Commission and management fee revenue for the year</p>
+        </div>
+        <% if @yoy_comparison.values.any? { |c| c[:significant] } %>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+            Review Required
+          </span>
+        <% end %>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <%# Total Revenue %>
+        <div class="md:col-span-2 bg-white dark:bg-gray-800 rounded-lg p-4 border-2 border-blue-200 dark:border-blue-700">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Total Revenue</p>
+              <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1"><%= number_to_currency(@revenue_stats["a381"] || 0, unit: "\u20ac", format: "%n %u") %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a381</p>
+            </div>
+            <% yoy = @yoy_comparison["a381"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-3 py-1.5 rounded text-sm font-medium <%= yoy[:significant] ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' : (yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300') %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+                <% if yoy[:significant] %>
+                  <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                <% end %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Sales Commission %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 <%= @yoy_comparison["a3802"]&.dig(:significant) ? 'ring-2 ring-amber-400' : '' %>">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Sales Commission</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= number_to_currency(@revenue_stats["a3802"] || 0, unit: "\u20ac", format: "%n %u") %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a3802</p>
+            </div>
+            <% yoy = @yoy_comparison["a3802"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:significant] ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' : (yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300') %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Rental Commission %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 <%= @yoy_comparison["a3803"]&.dig(:significant) ? 'ring-2 ring-amber-400' : '' %>">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Rental Commission</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= number_to_currency(@revenue_stats["a3803"] || 0, unit: "\u20ac", format: "%n %u") %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a3803</p>
+            </div>
+            <% yoy = @yoy_comparison["a3803"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:significant] ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' : (yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300') %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Management Revenue %>
+        <div class="md:col-span-2 bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 <%= @yoy_comparison["a3804"]&.dig(:significant) ? 'ring-2 ring-amber-400' : '' %>">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Property Management Revenue (Gestion Locative)</p>
+              <p class="text-2xl font-semibold text-gray-900 dark:text-white mt-1"><%= number_to_currency(@revenue_stats["a3804"] || 0, unit: "\u20ac", format: "%n %u") %></p>
+              <p class="text-xs text-gray-400 font-mono mt-1">a3804</p>
+            </div>
+            <% yoy = @yoy_comparison["a3804"] %>
+            <% if yoy && yoy[:change_percent] %>
+              <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium <%= yoy[:significant] ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' : (yoy[:change_percent] >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300') %>">
+                <%= yoy[:change_percent] >= 0 ? '+' : '' %><%= yoy[:change_percent] %>%
+                <% if yoy[:significant] %>
+                  <svg class="ml-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                <% end %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# Navigation %>
+    <%= form_with model: @submission, url: submission_submission_step_path(@submission, step: 5), method: :patch, local: true do |f| %>
+      <div class="flex justify-between">
+        <%= f.submit "Back", name: "commit", value: "back", class: "btn btn-secondary" %>
+        <%= f.submit "Continue", name: "commit", value: "continue", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

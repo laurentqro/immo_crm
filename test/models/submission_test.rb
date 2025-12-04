@@ -368,4 +368,103 @@ class SubmissionTest < ActiveSupport::TestCase
   test "includes AmsfConstants" do
     assert Submission.include?(AmsfConstants)
   end
+
+  # === Lifecycle Fields (AMSF Data Capture) ===
+
+  test "current_step defaults to 1" do
+    submission = Submission.new
+    assert_equal 1, submission.current_step
+  end
+
+  test "reopened_count defaults to 0" do
+    submission = Submission.new
+    assert_equal 0, submission.reopened_count
+  end
+
+  test "locked_by_user belongs to users" do
+    submission = Submission.create!(organization: @organization, year: 2035)
+    submission.update!(locked_by_user_id: @user.id, locked_at: Time.current)
+
+    submission.reload
+    assert_equal @user, submission.locked_by_user
+  end
+
+  test "editable? returns true for draft or in_review status" do
+    draft = Submission.new(status: "draft")
+    in_review = Submission.new(status: "in_review")
+    validated = Submission.new(status: "validated")
+    completed = Submission.new(status: "completed")
+
+    assert draft.editable?
+    assert in_review.editable?
+    assert_not validated.editable?
+    assert_not completed.editable?
+  end
+
+  test "lock! acquires lock for user" do
+    submission = Submission.create!(organization: @organization, year: 2036)
+    assert_nil submission.locked_by_user_id
+    assert_nil submission.locked_at
+
+    submission.lock!(@user)
+    assert_equal @user.id, submission.locked_by_user_id
+    assert_not_nil submission.locked_at
+  end
+
+  test "unlock! releases lock" do
+    submission = Submission.create!(
+      organization: @organization,
+      year: 2037,
+      locked_by_user_id: @user.id,
+      locked_at: Time.current
+    )
+
+    submission.unlock!
+    assert_nil submission.locked_by_user_id
+    assert_nil submission.locked_at
+  end
+
+  test "locked? returns true when locked" do
+    locked = Submission.new(locked_by_user_id: 1, locked_at: Time.current)
+    unlocked = Submission.new
+
+    assert locked.locked?
+    assert_not unlocked.locked?
+  end
+
+  test "locked_by? returns true when locked by specific user" do
+    submission = Submission.new(locked_by_user_id: @user.id, locked_at: Time.current)
+
+    assert submission.locked_by?(@user)
+    assert_not submission.locked_by?(users(:two))
+  end
+
+  test "reopen! increments reopened_count" do
+    submission = Submission.create!(
+      organization: @organization,
+      year: 2038,
+      status: "completed",
+      completed_at: Time.current,
+      generated_at: Time.current,
+      reopened_count: 0
+    )
+
+    submission.reopen!
+    assert_equal 1, submission.reopened_count
+    assert_equal "draft", submission.status
+    assert_nil submission.generated_at
+  end
+
+  test "generate! sets generated_at" do
+    submission = Submission.create!(
+      organization: @organization,
+      year: 2039,
+      status: "validated"
+    )
+    assert_nil submission.generated_at
+
+    submission.generate!
+    assert_not_nil submission.generated_at
+    assert_equal "completed", submission.status
+  end
 end

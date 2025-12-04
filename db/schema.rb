@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_04_133849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -140,6 +140,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.string "control_type"
     t.string "country_code"
     t.datetime "created_at", null: false
+    t.boolean "identification_verified", default: false
     t.boolean "is_pep", default: false, null: false
     t.string "name", null: false
     t.string "nationality"
@@ -147,6 +148,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.decimal "ownership_percentage", precision: 5, scale: 2
     t.string "pep_type"
     t.string "residence_country"
+    t.boolean "source_of_wealth_verified", default: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_beneficial_owners_on_client_id"
     t.index ["country_code"], name: "index_beneficial_owners_on_country_code"
@@ -160,6 +162,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.string "country_code"
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
+    t.string "due_diligence_level"
     t.boolean "is_pep", default: false, null: false
     t.boolean "is_pep_associated"
     t.boolean "is_pep_related"
@@ -170,16 +173,22 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.text "notes"
     t.bigint "organization_id", null: false
     t.string "pep_type"
+    t.string "professional_category"
     t.string "rejection_reason"
+    t.string "relationship_end_reason"
     t.datetime "relationship_ended_at"
     t.string "residence_country"
     t.string "residence_status"
     t.string "risk_level"
+    t.text "simplified_dd_reason"
+    t.boolean "source_of_funds_verified", default: false
+    t.boolean "source_of_wealth_verified", default: false
     t.datetime "updated_at", null: false
     t.string "vasp_type"
     t.index ["client_type"], name: "index_clients_on_client_type"
     t.index ["country_code"], name: "index_clients_on_country_code"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
+    t.index ["due_diligence_level"], name: "index_clients_on_due_diligence_level"
     t.index ["is_pep"], name: "index_clients_on_is_pep"
     t.index ["is_pep_associated"], name: "index_clients_on_is_pep_associated"
     t.index ["is_pep_related"], name: "index_clients_on_is_pep_related"
@@ -187,6 +196,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.index ["organization_id", "deleted_at"], name: "index_clients_on_organization_id_and_deleted_at"
     t.index ["organization_id", "risk_level"], name: "index_clients_on_org_and_risk"
     t.index ["organization_id"], name: "index_clients_on_organization_id"
+    t.index ["professional_category"], name: "index_clients_on_professional_category"
     t.index ["residence_status"], name: "index_clients_on_residence_status"
     t.index ["risk_level"], name: "index_clients_on_risk_level"
   end
@@ -211,6 +221,29 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.datetime "created_at", null: false
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "managed_properties", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.date "management_end_date"
+    t.decimal "management_fee_fixed", precision: 15, scale: 2
+    t.decimal "management_fee_percent", precision: 5, scale: 2
+    t.date "management_start_date", null: false
+    t.decimal "monthly_rent", precision: 15, scale: 2
+    t.text "notes"
+    t.bigint "organization_id", null: false
+    t.string "property_address", null: false
+    t.string "property_type", default: "RESIDENTIAL"
+    t.string "tenant_country", limit: 2
+    t.boolean "tenant_is_pep", default: false, null: false
+    t.string "tenant_name"
+    t.string "tenant_type"
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_managed_properties_on_client_id"
+    t.index ["management_start_date"], name: "index_managed_properties_on_management_start_date"
+    t.index ["organization_id", "management_end_date"], name: "idx_managed_props_org_active"
+    t.index ["organization_id"], name: "index_managed_properties_on_organization_id"
   end
 
   create_table "noticed_events", force: :cascade do |t|
@@ -436,10 +469,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.datetime "created_at", null: false
     t.string "element_name", null: false
     t.boolean "overridden", default: false
+    t.text "override_reason"
+    t.bigint "override_user_id"
+    t.string "previous_year_value"
     t.string "source", null: false
     t.bigint "submission_id", null: false
     t.datetime "updated_at", null: false
     t.string "value"
+    t.index ["override_user_id"], name: "index_submission_values_on_override_user_id"
     t.index ["submission_id", "element_name"], name: "index_submission_values_on_submission_id_and_element_name", unique: true
     t.index ["submission_id"], name: "index_submission_values_on_submission_id"
   end
@@ -447,8 +484,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
   create_table "submissions", force: :cascade do |t|
     t.datetime "completed_at"
     t.datetime "created_at", null: false
+    t.integer "current_step", default: 1
     t.boolean "downloaded_unvalidated", default: false
+    t.datetime "generated_at"
+    t.datetime "locked_at"
+    t.bigint "locked_by_user_id"
     t.bigint "organization_id", null: false
+    t.integer "reopened_count", default: 0, null: false
     t.string "signatory_name"
     t.string "signatory_title"
     t.datetime "started_at"
@@ -457,8 +499,25 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.datetime "updated_at", null: false
     t.datetime "validated_at"
     t.integer "year", null: false
+    t.index ["locked_by_user_id"], name: "index_submissions_on_locked_by_user_id"
     t.index ["organization_id", "year"], name: "index_submissions_on_organization_id_and_year", unique: true
     t.index ["organization_id"], name: "index_submissions_on_organization_id"
+  end
+
+  create_table "trainings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "duration_hours", precision: 4, scale: 2
+    t.text "notes"
+    t.bigint "organization_id", null: false
+    t.string "provider", null: false
+    t.integer "staff_count", null: false
+    t.string "topic", null: false
+    t.date "training_date", null: false
+    t.string "training_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id", "training_date"], name: "index_trainings_on_organization_id_and_training_date"
+    t.index ["organization_id"], name: "index_trainings_on_organization_id"
+    t.index ["training_type"], name: "index_trainings_on_training_type"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -466,25 +525,33 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
     t.decimal "cash_amount", precision: 15, scale: 2
     t.bigint "client_id", null: false
     t.decimal "commission_amount", precision: 15, scale: 2
+    t.string "counterparty_country", limit: 2
+    t.boolean "counterparty_is_pep", default: false
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.string "direction"
+    t.boolean "is_new_construction", default: false
     t.text "notes"
     t.bigint "organization_id", null: false
     t.string "payment_method"
     t.string "property_country", default: "MC"
+    t.string "property_type"
     t.string "purchase_purpose"
     t.string "reference"
+    t.decimal "rental_annual_value", precision: 15, scale: 2
+    t.string "rental_tenant_type"
     t.date "transaction_date", null: false
     t.string "transaction_type", null: false
     t.decimal "transaction_value", precision: 15, scale: 2
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_transactions_on_client_id"
+    t.index ["counterparty_country"], name: "index_transactions_on_counterparty_country"
     t.index ["deleted_at"], name: "index_transactions_on_deleted_at"
     t.index ["direction"], name: "index_transactions_on_direction"
     t.index ["organization_id", "transaction_date"], name: "index_transactions_on_organization_id_and_transaction_date"
     t.index ["organization_id", "transaction_type"], name: "index_transactions_on_org_and_type"
     t.index ["organization_id"], name: "index_transactions_on_organization_id"
+    t.index ["property_type"], name: "index_transactions_on_property_type"
     t.index ["transaction_date"], name: "index_transactions_on_transaction_date"
     t.index ["transaction_type"], name: "index_transactions_on_transaction_type"
   end
@@ -542,6 +609,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
   add_foreign_key "audit_logs", "users", on_delete: :nullify
   add_foreign_key "beneficial_owners", "clients"
   add_foreign_key "clients", "organizations"
+  add_foreign_key "managed_properties", "clients"
+  add_foreign_key "managed_properties", "organizations"
   add_foreign_key "organizations", "accounts"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
@@ -551,7 +620,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_04_113342) do
   add_foreign_key "str_reports", "organizations"
   add_foreign_key "str_reports", "transactions"
   add_foreign_key "submission_values", "submissions"
+  add_foreign_key "submission_values", "users", column: "override_user_id", on_delete: :nullify
   add_foreign_key "submissions", "organizations"
+  add_foreign_key "submissions", "users", column: "locked_by_user_id", on_delete: :nullify
+  add_foreign_key "trainings", "organizations"
   add_foreign_key "transactions", "clients"
   add_foreign_key "transactions", "organizations"
 end

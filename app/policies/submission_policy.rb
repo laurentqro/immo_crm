@@ -69,6 +69,11 @@ class SubmissionPolicy < ApplicationPolicy
     belongs_to_organization? && record.validated?
   end
 
+  # FR-025: Reopen a completed submission for editing
+  def reopen?
+    belongs_to_organization? && record.completed?
+  end
+
   private
 
   # Check if the submission belongs to the user's current organization

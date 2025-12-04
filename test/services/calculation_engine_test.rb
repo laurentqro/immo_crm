@@ -308,4 +308,196 @@ class CalculationEngineTest < ActiveSupport::TestCase
     @engine.populate_submission_values!
     assert_equal initial_count, @submission.submission_values.count
   end
+
+  # === Managed Property Statistics (US1 - AMSF Data Capture) ===
+
+  test "calculates managed property statistics" do
+    # Use the submission created in setup (for current year)
+    results = @engine.managed_property_statistics
+
+    # Should return hash with management statistics
+    assert_kind_of Hash, results
+    assert results.key?("a1802TOLA"), "Expected tenant count element a1802TOLA"
+  end
+
+  test "calculates active property count" do
+    results = @engine.managed_property_statistics
+    year = @submission.year
+
+    # Count properties active in submission year for org one
+    expected = @organization.managed_properties.active_in_year(year).count
+    assert_equal expected, results["aACTIVEPS"].to_i
+  end
+
+  test "calculates tenant by type breakdown" do
+    results = @engine.managed_property_statistics
+
+    # Should have natural person and legal entity tenant counts
+    assert results.key?("a1802TOLA_NP") || results.key?("a1802TOLA_LE"),
+           "Expected tenant type breakdown elements"
+  end
+
+  test "calculates PEP tenant count" do
+    results = @engine.managed_property_statistics
+    year = @submission.year
+
+    # Count PEP tenants in active properties
+    expected = @organization.managed_properties
+                            .active_in_year(year)
+                            .where(tenant_is_pep: true).count
+    assert_equal expected, results["a1802PEP"].to_i
+  end
+
+  # === Training Statistics (US1 - AMSF Data Capture) ===
+
+  test "calculates training statistics" do
+    results = @engine.training_statistics
+
+    # Should return hash with training statistics
+    assert_kind_of Hash, results
+    assert results.key?("a3201"), "Expected training conducted element a3201"
+  end
+
+  test "calculates training conducted flag" do
+    results = @engine.training_statistics
+    year = @submission.year
+
+    # a3201 is Oui/Non flag - did organization conduct training?
+    trainings_exist = @organization.trainings.for_year(year).exists?
+    expected = trainings_exist ? "Oui" : "Non"
+    assert_equal expected, results["a3201"]
+  end
+
+  test "calculates staff trained count" do
+    results = @engine.training_statistics
+    year = @submission.year
+
+    # a3202 is total staff trained (sum of staff_count from all trainings)
+    expected = @organization.trainings.for_year(year).sum(:staff_count)
+    assert_equal expected, results["a3202"].to_i
+  end
+
+  test "calculates training session count" do
+    results = @engine.training_statistics
+    year = @submission.year
+
+    # a3203 is number of training sessions
+    expected = @organization.trainings.for_year(year).count
+    assert_equal expected, results["a3203"].to_i
+  end
+
+  test "calculates training hours" do
+    results = @engine.training_statistics
+    year = @submission.year
+
+    # a3303 is total training hours
+    expected = @organization.trainings.for_year(year).sum(:duration_hours)
+    assert_equal expected, BigDecimal(results["a3303"].to_s)
+  end
+
+  # === Revenue Statistics (US1 - AMSF Data Capture) ===
+
+  test "calculates revenue statistics" do
+    results = @engine.revenue_statistics
+
+    # Should return hash with revenue elements
+    assert_kind_of Hash, results
+    assert results.key?("a381"), "Expected total revenue element a381"
+  end
+
+  test "calculates sales commission revenue" do
+    results = @engine.revenue_statistics
+    year = @submission.year
+
+    # a3802 is sales commission revenue
+    # Calculated from sales transactions' commission_amount
+    year_sales = @organization.transactions.kept.for_year(year).sales
+    expected = year_sales.sum(:commission_amount)
+    assert_equal expected, BigDecimal(results["a3802"].to_s)
+  end
+
+  test "calculates rental commission revenue" do
+    results = @engine.revenue_statistics
+    year = @submission.year
+
+    # a3803 is rental commission revenue
+    year_rentals = @organization.transactions.kept.for_year(year).rentals
+    expected = year_rentals.sum(:commission_amount)
+    assert_equal expected, BigDecimal(results["a3803"].to_s)
+  end
+
+  test "calculates property management revenue" do
+    results = @engine.revenue_statistics
+    year = @submission.year
+
+    # a3804 is property management revenue (calculated from managed properties)
+    expected = @organization.managed_properties.active_in_year(year).sum do |prop|
+      prop.annual_revenue(year)
+    end
+    assert_equal expected, BigDecimal(results["a3804"].to_s)
+  end
+
+  test "calculates total revenue" do
+    results = @engine.revenue_statistics
+
+    # a381 is total of a3802 + a3803 + a3804
+    sales_rev = BigDecimal(results["a3802"].to_s)
+    rental_rev = BigDecimal(results["a3803"].to_s)
+    mgmt_rev = BigDecimal(results["a3804"].to_s)
+    expected = sales_rev + rental_rev + mgmt_rev
+    assert_equal expected, BigDecimal(results["a381"].to_s)
+  end
+
+  # === Extended Client Statistics (US1 - AMSF Data Capture) ===
+
+  test "calculates extended client statistics" do
+    results = @engine.extended_client_statistics
+
+    # Should return hash with extended client elements
+    assert_kind_of Hash, results
+    assert results.key?("a1203") || results.key?("a1203D"),
+           "Expected due diligence level elements"
+  end
+
+  test "calculates clients by due diligence level" do
+    results = @engine.extended_client_statistics
+
+    # a1203 is count of SIMPLIFIED due diligence clients
+    simplified_count = @organization.clients.kept
+                                    .where(due_diligence_level: "SIMPLIFIED").count
+    assert_equal simplified_count, results["a1203"].to_i
+
+    # a1203D is count of REINFORCED due diligence clients
+    reinforced_count = @organization.clients.kept
+                                    .where(due_diligence_level: "REINFORCED").count
+    assert_equal reinforced_count, results["a1203D"].to_i
+  end
+
+  test "calculates clients by professional category" do
+    results = @engine.extended_client_statistics
+
+    # a11301 is count of REAL_ESTATE professional category clients
+    real_estate_count = @organization.clients.kept
+                                     .where(professional_category: "REAL_ESTATE").count
+    assert_equal real_estate_count, results["a11301"].to_i
+
+    # a11302 is count of FINANCIAL_SERVICES professional category clients
+    financial_count = @organization.clients.kept
+                                   .where(professional_category: "FINANCIAL_SERVICES").count
+    assert_equal financial_count, results["a11302"].to_i
+  end
+
+  test "calculates source verification counts" do
+    results = @engine.extended_client_statistics
+
+    # Count clients with verified source of funds
+    sof_verified = @organization.clients.kept
+                                .where(source_of_funds_verified: true).count
+    assert_equal sof_verified, results["a1204S"].to_i
+
+    # Count clients with verified source of wealth
+    sow_verified = @organization.clients.kept
+                                .where(source_of_wealth_verified: true).count
+    assert_equal sow_verified, results["a14001"].to_i
+  end
 end
