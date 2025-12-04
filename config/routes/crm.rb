@@ -35,6 +35,9 @@ authenticate :user do
   # Managed Properties (US3 - AMSF Data Capture)
   resources :managed_properties
 
+  # Trainings (US4 - AMSF Data Capture)
+  resources :trainings
+
   # Transaction management (US3) - Phase 3
   resources :transactions
   resources :str_reports

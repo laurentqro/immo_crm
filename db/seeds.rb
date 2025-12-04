@@ -19,6 +19,8 @@ end
 
 # Clean up existing data (be careful in production!)
 puts "Cleaning existing data..."
+Training.destroy_all
+ManagedProperty.destroy_all
 StrReport.destroy_all
 Transaction.destroy_all
 BeneficialOwner.destroy_all
@@ -195,6 +197,104 @@ ended_client = Client.create!(
   notes: "Relationship ended - client relocated"
 )
 puts "  - Created ended relationship: #{ended_client.name}"
+
+# ============================================
+# Managed Properties (Property Management Contracts)
+# ============================================
+puts ""
+puts "Creating managed properties..."
+
+# Monaco addresses for realistic property data
+MONACO_STREETS = [
+  "Avenue Princesse Grace",
+  "Boulevard des Moulins",
+  "Avenue de Monte-Carlo",
+  "Rue Grimaldi",
+  "Boulevard Albert 1er",
+  "Avenue de la Costa",
+  "Rue du Portier",
+  "Avenue Saint-Michel",
+  "Boulevard du Larvotto",
+  "Rue des Roses"
+].freeze
+
+MONACO_DISTRICTS = %w[Monte-Carlo Fontvieille La\ Condamine Monaco-Ville Larvotto].freeze
+
+# Get clients who can be landlords (legal entities and wealthy individuals)
+potential_landlords = Client.where(client_type: %w[PM TRUST])
+                            .or(Client.where(client_type: "PP", risk_level: %w[HIGH MEDIUM]))
+                            .to_a
+
+current_year = Date.current.year
+
+# Create 12 active managed properties
+12.times do |i|
+  landlord = potential_landlords.sample
+  property_type = i < 9 ? "RESIDENTIAL" : "COMMERCIAL"
+
+  # Monaco rental values
+  monthly_rent = case property_type
+                 when "RESIDENTIAL"
+                   [3500, 5000, 6500, 8000, 12000, 18000, 25000, 35000].sample
+                 when "COMMERCIAL"
+                   [8000, 12000, 20000, 35000, 50000].sample
+                 end
+
+  # Fee structure: either percentage (8-12%) or fixed
+  use_percentage = rand < 0.7
+  fee_percent = use_percentage ? [8, 9, 10, 12].sample : nil
+  fee_fixed = use_percentage ? nil : [500, 750, 1000, 1500, 2000].sample
+
+  street = MONACO_STREETS.sample
+  building_number = rand(1..100)
+  apartment = property_type == "RESIDENTIAL" ? ", Apt #{rand(1..50)}" : ""
+
+  # Start date between 3 years ago and 6 months ago
+  start_date = Faker::Date.between(from: 3.years.ago, to: 6.months.ago)
+
+  property = ManagedProperty.create!(
+    organization: organization,
+    client: landlord,
+    property_address: "#{building_number} #{street}#{apartment}, #{MONACO_DISTRICTS.sample}",
+    property_type: property_type,
+    management_start_date: start_date,
+    monthly_rent: monthly_rent,
+    management_fee_percent: fee_percent,
+    management_fee_fixed: fee_fixed,
+    tenant_type: %w[NATURAL_PERSON LEGAL_ENTITY].sample,
+    tenant_country: COUNTRIES.sample,
+    notes: rand < 0.3 ? Faker::Lorem.sentence : nil
+  )
+
+  puts "  - #{property.property_type.downcase.capitalize}: #{property.property_address[0..40]}... (€#{property.monthly_rent}/month)"
+end
+
+# Create 3 ended management contracts
+3.times do |i|
+  landlord = potential_landlords.sample
+  start_date = Faker::Date.between(from: 4.years.ago, to: 2.years.ago)
+  end_date = Faker::Date.between(from: start_date + 6.months, to: 6.months.ago)
+
+  street = MONACO_STREETS.sample
+
+  property = ManagedProperty.create!(
+    organization: organization,
+    client: landlord,
+    property_address: "#{rand(1..100)} #{street}, Apt #{rand(1..30)}, #{MONACO_DISTRICTS.sample}",
+    property_type: "RESIDENTIAL",
+    management_start_date: start_date,
+    management_end_date: end_date,
+    monthly_rent: [4000, 5500, 7000, 9000].sample,
+    management_fee_percent: 10,
+    tenant_type: "NATURAL_PERSON",
+    tenant_country: %w[FR IT CH GB].sample,
+    notes: "Contract ended - tenant relocated"
+  )
+
+  puts "  - Ended contract: #{property.property_address[0..40]}..."
+end
+
+puts "  Created #{ManagedProperty.active.count} active + #{ManagedProperty.ended.count} ended properties"
 
 # ============================================
 # Transactions
@@ -383,6 +483,93 @@ StrReport.create!(
 str_count += 1
 puts "  - STR for unusual pattern"
 
+# ============================================
+# Staff Training Records
+# ============================================
+puts ""
+puts "Creating training records..."
+
+current_year = Date.current.year
+previous_year = current_year - 1
+
+# Training topics with weights (some more common than others)
+TOPIC_WEIGHTS = {
+  "AML_BASICS" => 3,
+  "PEP_SCREENING" => 2,
+  "STR_FILING" => 2,
+  "RISK_ASSESSMENT" => 2,
+  "SANCTIONS" => 1,
+  "KYC_PROCEDURES" => 2,
+  "OTHER" => 1
+}.freeze
+
+weighted_topics = TOPIC_WEIGHTS.flat_map { |topic, weight| [topic] * weight }
+
+# Current year trainings (4-6 sessions)
+current_year_trainings = rand(4..6)
+current_year_trainings.times do |i|
+  # First training of year is often a refresher, others vary
+  training_type = if i == 0
+                    "REFRESHER"
+                  else
+                    %w[REFRESHER SPECIALIZED].sample
+                  end
+
+  # More internal trainings than external
+  provider = case rand(10)
+             when 0..5 then "INTERNAL"
+             when 6..7 then "EXTERNAL"
+             when 8 then "AMSF"
+             else "ONLINE"
+             end
+
+  training_date = Faker::Date.between(
+    from: Date.new(current_year, 1, 1),
+    to: [Date.new(current_year, 12, 31), Date.current].min
+  )
+
+  training = Training.create!(
+    organization: organization,
+    training_date: training_date,
+    training_type: training_type,
+    topic: weighted_topics.sample,
+    provider: provider,
+    staff_count: rand(3..8),
+    duration_hours: [1.0, 1.5, 2.0, 2.5, 3.0, 4.0].sample,
+    notes: rand < 0.3 ? Faker::Lorem.sentence : nil
+  )
+
+  puts "  - #{training.training_date.strftime('%b %Y')}: #{training.topic_label} (#{training.training_type_label})"
+end
+
+# Previous year trainings (3-5 sessions)
+previous_year_trainings = rand(3..5)
+previous_year_trainings.times do |i|
+  training_type = if i == 0
+                    "REFRESHER"
+                  else
+                    %w[REFRESHER SPECIALIZED INITIAL].sample
+                  end
+
+  provider = %w[INTERNAL INTERNAL INTERNAL EXTERNAL AMSF ONLINE].sample
+
+  Training.create!(
+    organization: organization,
+    training_date: Faker::Date.between(
+      from: Date.new(previous_year, 1, 1),
+      to: Date.new(previous_year, 12, 31)
+    ),
+    training_type: training_type,
+    topic: weighted_topics.sample,
+    provider: provider,
+    staff_count: rand(3..8),
+    duration_hours: [1.0, 1.5, 2.0, 2.5, 3.0].sample
+  )
+end
+
+puts "  Created #{Training.for_year(current_year).count} trainings for #{current_year}"
+puts "  Created #{Training.for_year(previous_year).count} trainings for #{previous_year}"
+
 # Summary
 puts ""
 puts "=" * 50
@@ -407,6 +594,16 @@ puts "    - Sales: #{Transaction.for_year(current_year).sales.count}"
 puts "    - Rentals: #{Transaction.for_year(current_year).rentals.count}"
 puts ""
 puts "  STR Reports: #{StrReport.count}"
+puts ""
+puts "  Managed Properties:"
+puts "    - Active: #{ManagedProperty.active.count}"
+puts "    - Ended: #{ManagedProperty.ended.count}"
+puts "    - Residential: #{ManagedProperty.residential.count}"
+puts "    - Commercial: #{ManagedProperty.commercial.count}"
+puts ""
+puts "  Training Records:"
+puts "    - #{current_year}: #{Training.for_year(current_year).count} sessions"
+puts "    - #{previous_year}: #{Training.for_year(previous_year).count} sessions"
 puts ""
 puts "Risk distribution:"
 puts "  - HIGH: #{Client.where(risk_level: 'HIGH').count}"

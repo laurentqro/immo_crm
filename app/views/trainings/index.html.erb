@@ -1,0 +1,117 @@
+<% Current.meta_tags.set(title: "Training Records") %>
+
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">Training Records</h1>
+      <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+        AML/CFT staff training sessions for AMSF reporting.
+      </p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+      <%= link_to "Add Training", new_training_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+
+  <%# Filters %>
+  <div class="mt-6 flex gap-4">
+    <%= form_with url: trainings_path, method: :get, local: true, class: "flex gap-4" do |f| %>
+      <%= f.select :training_type,
+          options_for_select([
+            ["All Types", ""],
+            ["Initial", "INITIAL"],
+            ["Refresher", "REFRESHER"],
+            ["Specialized", "SPECIALIZED"]
+          ], params[:training_type]),
+          {},
+          { onchange: "this.form.submit()" } %>
+      <%= f.select :year,
+          options_for_select([
+            ["All Years", ""],
+            [Date.current.year.to_s, Date.current.year],
+            [(Date.current.year - 1).to_s, Date.current.year - 1]
+          ], params[:year]),
+          {},
+          { onchange: "this.form.submit()" } %>
+    <% end %>
+  </div>
+
+  <%# Training list %>
+  <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <% if @trainings.any? %>
+          <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+            <thead>
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-0">Date</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Type</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Topic</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Provider</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Staff</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Duration</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                  <span class="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+              <% @trainings.each do |training| %>
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0">
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      <%= link_to training.training_date.strftime("%b %d, %Y"), training_path(training), class: "hover:underline" %>
+                    </div>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
+                      <%= case training.training_type
+                          when 'INITIAL' then 'bg-blue-100 text-blue-800'
+                          when 'REFRESHER' then 'bg-green-100 text-green-800'
+                          when 'SPECIALIZED' then 'bg-purple-100 text-purple-800'
+                          end %>">
+                      <%= training.training_type_label %>
+                    </span>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <%= training.topic_label %>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <%= training.provider_label %>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <%= training.staff_count %> staff
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <% if training.duration_hours.present? %>
+                      <%= training.duration_hours %> hrs
+                    <% end %>
+                  </td>
+                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <%= link_to "Edit", edit_training_path(training), class: "text-indigo-600 hover:text-indigo-900 dark:text-indigo-400" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="empty-state text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <h3 class="mt-2 text-sm font-semibold text-gray-900 dark:text-white">No training records</h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by recording your first AML/CFT training session.</p>
+            <div class="mt-6">
+              <%= link_to new_training_path, class: "btn btn-primary" do %>
+                <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                </svg>
+                Add Training
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
