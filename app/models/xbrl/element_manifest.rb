@@ -158,6 +158,10 @@ module Xbrl
       def string?
         element.string?
       end
+
+      def type_label
+        element.type_label
+      end
     end
   end
 end

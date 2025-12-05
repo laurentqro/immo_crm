@@ -72,6 +72,18 @@ module Xbrl
       verbose_label_text.presence || label_text
     end
 
+    # Human-readable type label for display
+    def type_label
+      case type
+      when :monetary then "EUR"
+      when :integer then "Count"
+      when :boolean then "Yes/No"
+      when :decimal then "Decimal"
+      when :string then "Text"
+      else type.to_s.humanize
+      end
+    end
+
     # XBRL unit reference based on type
     def unit_ref
       case type

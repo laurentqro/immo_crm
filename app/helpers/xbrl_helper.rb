@@ -101,15 +101,13 @@ module XbrlHelper
     end
   end
 
-  # Type label for display
-  def type_label(type)
-    case type
-    when :monetary then "EUR"
-    when :integer then "Count"
-    when :boolean then "Yes/No"
-    when :decimal then "Decimal"
-    when :string then "Text"
-    else type.to_s.humanize
+  # Type label for display - delegates to TaxonomyElement#type_label
+  def type_label(element_or_type)
+    if element_or_type.respond_to?(:type_label)
+      element_or_type.type_label
+    else
+      # Fallback for raw type symbol
+      Xbrl::TaxonomyElement.new(name: "", type: element_or_type).type_label
     end
   end
 

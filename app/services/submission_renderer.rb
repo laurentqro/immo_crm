@@ -83,7 +83,7 @@ class SubmissionRenderer
         next if ev.blank?
 
         desc = ev.label_text&.truncate(60) || ev.name.humanize
-        type = format_type_label(ev.type)
+        type = ev.element.type_label
         value = format_markdown_value(ev.value, ev.element)
         source = ev.source || "—"
 
@@ -122,17 +122,6 @@ class SubmissionRenderer
       organization: submission.organization,
       taxonomy: Xbrl::Taxonomy
     }
-  end
-
-  def format_type_label(type)
-    case type
-    when :monetary then "EUR"
-    when :integer then "Count"
-    when :boolean then "Yes/No"
-    when :decimal then "Decimal"
-    when :string then "Text"
-    else type.to_s.humanize
-    end
   end
 
   def format_markdown_value(value, element)
