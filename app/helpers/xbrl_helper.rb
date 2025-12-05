@@ -39,7 +39,8 @@ module XbrlHelper
     when :boolean
       parse_boolean(value) ? "Oui" : "Non"
     when :monetary
-      format("%.2f", BigDecimal(value.to_s))
+      precision = element.decimals&.to_i || 2
+      format("%.#{precision}f", BigDecimal(value.to_s))
     when :integer
       value.to_i.to_s
     else

@@ -70,7 +70,7 @@ module Xbrl
         parse_schema
         parse_labels
         parse_presentation
-        @elements = @elements_by_name.values.sort_by(&:order).freeze
+        @elements = @elements_by_name.values.sort_by { |e| e.order || 0 }.freeze
         @elements_by_section = @elements.group_by(&:section).freeze
         @short_labels = load_short_labels.freeze
         true
@@ -104,6 +104,11 @@ module Xbrl
           Rails.logger.warn "XML parsing warnings in #{filename}: #{doc.errors.map(&:message).join(', ')}"
         end
 
+        # Remove namespaces to simplify XPath queries.
+        # Safe here because AMSF taxonomy files use distinct element names
+        # across namespaces (element, label, labelArc, presentationArc, etc.)
+        # with no collisions. Namespaced XPath would be more "correct" but
+        # adds complexity for no practical benefit with these known files.
         doc.remove_namespaces!
         doc
       rescue Errno::EACCES => e

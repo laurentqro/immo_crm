@@ -51,10 +51,11 @@ module Xbrl
 
     # Get all elements with their values, in presentation order.
     # Only returns elements that have actual values stored.
+    # Memoized since @stored_values doesn't change after initialization.
     def all_elements_with_values
-      @stored_values.keys.filter_map do |element_name|
+      @all_elements_with_values ||= @stored_values.keys.filter_map do |element_name|
         element_with_value(element_name)
-      end.sort_by { |ev| ev.element.order }
+      end.sort_by { |ev| ev.element.order || 0 }.freeze
     end
 
     # Get elements grouped by section with their values
