@@ -49,11 +49,13 @@ module Xbrl
       )
     end
 
-    # Get all elements with their values, in presentation order
+    # Get all elements with their values, in presentation order.
+    # Only returns elements that have actual values stored.
     def all_elements_with_values
-      Taxonomy.elements.map do |element|
-        element_with_value(element.name)
-      end.compact
+      Taxonomy.elements.filter_map do |element|
+        ev = element_with_value(element.name)
+        ev if ev&.present?
+      end
     end
 
     # Get elements grouped by section with their values
@@ -89,10 +91,10 @@ module Xbrl
       when :integer
         value.to_i.to_s
       else
-        value.to_s
+        CGI.escapeHTML(value.to_s)
       end
     rescue ArgumentError
-      value.to_s
+      CGI.escapeHTML(value.to_s)
     end
 
     def format_for_html(value, element)
