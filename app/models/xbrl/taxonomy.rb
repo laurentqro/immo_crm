@@ -15,6 +15,9 @@ module Xbrl
   # Taxonomy parses AMSF XBRL taxonomy files and provides element metadata.
   # This is the single source of truth for element types, labels, and ordering.
   #
+  # Loaded at boot time via config/initializers/xbrl_taxonomy.rb.
+  # Fails fast if taxonomy files are missing or corrupt.
+  #
   # Usage:
   #   Xbrl::Taxonomy.element("a1101")       # => TaxonomyElement
   #   Xbrl::Taxonomy.elements               # => Array of all elements
@@ -41,65 +44,48 @@ module Xbrl
     # mark dimensional elements in a parseable way.
     DIMENSIONAL_ELEMENTS = %w[a1103].freeze
 
-    # Mutex for thread-safe taxonomy loading in multi-threaded servers (Puma)
-    LOAD_MUTEX = Mutex.new
-
     class << self
-      def element(name)
-        elements_by_name[name]
-      end
+      attr_reader :elements, :short_labels
 
-      def elements
-        load_taxonomy
-        @sorted_elements ||= @elements.values.sort_by(&:order).freeze
+      def element(name)
+        @elements_by_name[name]
       end
 
       def elements_by_name
-        load_taxonomy
-        @elements
+        @elements_by_name
       end
 
       def elements_by_section
-        elements.group_by(&:section)
-      end
-
-      # Manual short labels from config/xbrl_short_labels.yml
-      def short_labels
-        @short_labels ||= load_short_labels
+        @elements_by_section
       end
 
       def short_label_for(element_name)
-        short_labels[element_name]
+        @short_labels[element_name]
       end
 
-      def reload!
-        LOAD_MUTEX.synchronize do
-          @elements = nil
-          @sorted_elements = nil
-          @short_labels = nil
-          @loaded = false
-          do_load_taxonomy
-        end
-      end
-
-      private
-
-      def load_taxonomy
-        return if @loaded
-
-        LOAD_MUTEX.synchronize do
-          return if @loaded # Double-check after acquiring lock
-          do_load_taxonomy
-        end
-      end
-
-      def do_load_taxonomy
-        @elements = {}
+      # Load taxonomy at boot time. Called from initializer.
+      # Raises TaxonomyLoadError if files are missing or corrupt.
+      def load!
+        @elements_by_name = {}
         parse_schema
         parse_labels
         parse_presentation
-        @loaded = true
+        @elements = @elements_by_name.values.sort_by(&:order).freeze
+        @elements_by_section = @elements.group_by(&:section).freeze
+        @short_labels = load_short_labels.freeze
+        true
       end
+
+      # Reload taxonomy (for development/testing)
+      def reload!
+        load!
+      end
+
+      def loaded?
+        @elements.present?
+      end
+
+      private
 
       # Load and parse an XML file with error handling
       def load_xml_file(filename)
@@ -145,7 +131,7 @@ module Xbrl
           type = determine_type(el)
           dimensional = DIMENSIONAL_ELEMENTS.include?(name)
 
-          @elements[name] = TaxonomyElement.new(
+          @elements_by_name[name] = TaxonomyElement.new(
             name: name,
             type: type,
             dimensional: dimensional
@@ -200,7 +186,7 @@ module Xbrl
           # Extract element name from locator reference (strix_a1101 -> a1101)
           element_name = from.sub(/^strix_/, "")
 
-          element = @elements[element_name]
+          element = @elements_by_name[element_name]
           next unless element
 
           # Update element attributes in place
@@ -226,7 +212,7 @@ module Xbrl
             # Extract element name (strix_a1101 -> a1101)
             element_name = to.sub(/^strix_/, "")
 
-            element = @elements[element_name]
+            element = @elements_by_name[element_name]
             next unless element
 
             # Update element attributes in place
