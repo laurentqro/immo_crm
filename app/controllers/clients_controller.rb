@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # CRUD controller for Client management.
-# Handles natural persons (PP), legal entities (PM), and trusts.
+# Handles natural persons (NATURAL_PERSON), legal entities (LEGAL_ENTITY), and trusts (TRUST).
 class ClientsController < ApplicationController
   include OrganizationScoped
 
@@ -40,10 +40,8 @@ class ClientsController < ApplicationController
     respond_to do |format|
       if @client.save
         format.html { redirect_to @client, notice: "Client was successfully created." }
-        format.turbo_stream { flash.now[:notice] = "Client was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream { render :form_errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,10 +52,8 @@ class ClientsController < ApplicationController
     respond_to do |format|
       if @client.update(client_params)
         format.html { redirect_to @client, notice: "Client was successfully updated." }
-        format.turbo_stream { flash.now[:notice] = "Client was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.turbo_stream { render :form_errors, status: :unprocessable_entity }
       end
     end
   end
@@ -68,7 +64,6 @@ class ClientsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to clients_path, notice: "Client was successfully deleted." }
-      format.turbo_stream { flash.now[:notice] = "Client was successfully deleted." }
     end
   end
 

@@ -4,9 +4,9 @@
 # Part of the CRM for Monaco real estate AML/CFT compliance.
 #
 # Client types (AMSF terminology):
-# - PP (Personne Physique): Natural person
-# - PM (Personne Morale): Legal entity (company)
-# - TRUST: Trust structure
+# - NATURAL_PERSON (Personne Physique): Natural person
+# - LEGAL_ENTITY (Personne Morale): Legal entity (company)
+# - TRUST (Trust): Trust structure
 #
 class Client < ApplicationRecord
   include AmsfConstants
@@ -54,8 +54,8 @@ class Client < ApplicationRecord
   # === Scopes ===
 
   # Client type scopes
-  scope :natural_persons, -> { where(client_type: "PP") }
-  scope :legal_entities, -> { where(client_type: "PM") }
+  scope :natural_persons, -> { where(client_type: "NATURAL_PERSON") }
+  scope :legal_entities, -> { where(client_type: "LEGAL_ENTITY") }
   scope :trusts, -> { where(client_type: "TRUST") }
 
   # Risk/compliance scopes
@@ -86,11 +86,11 @@ class Client < ApplicationRecord
   # === Instance Methods ===
 
   def natural_person?
-    client_type == "PP"
+    client_type == "NATURAL_PERSON"
   end
 
   def legal_entity?
-    client_type == "PM"
+    client_type == "LEGAL_ENTITY"
   end
 
   def trust?
@@ -112,12 +112,7 @@ class Client < ApplicationRecord
 
   # For display purposes
   def client_type_label
-    case client_type
-    when "PP" then "Natural Person"
-    when "PM" then "Legal Entity"
-    when "TRUST" then "Trust"
-    else client_type
-    end
+    client_type.humanize
   end
 
   def risk_badge_class

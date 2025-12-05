@@ -21,7 +21,7 @@ export default class extends Controller {
 
   toggleFields() {
     const clientType = this.clientTypeTarget.value
-    const isLegalEntity = clientType === "PM"
+    const isLegalEntity = clientType === "LEGAL_ENTITY"
 
     // Show/hide legal entity specific fields
     if (this.hasLegalPersonTypeTarget) {

@@ -12,7 +12,7 @@ module AmsfConstants
   extend ActiveSupport::Concern
 
   # Client types (Personne Physique, Personne Morale, Trust)
-  CLIENT_TYPES = %w[PP PM TRUST].freeze
+  CLIENT_TYPES = %w[NATURAL_PERSON LEGAL_ENTITY TRUST].freeze
 
   # Transaction types
   TRANSACTION_TYPES = %w[PURCHASE SALE RENTAL].freeze

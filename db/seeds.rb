@@ -94,7 +94,7 @@ puts "Creating clients..."
   client = Client.create!(
     organization: organization,
     name: Faker::Name.name,
-    client_type: "PP",
+    client_type: "NATURAL_PERSON",
     nationality: NATIONALITIES.sample,
     residence_country: COUNTRIES.sample,
     risk_level: risk,
@@ -121,7 +121,7 @@ end
   client = Client.create!(
     organization: organization,
     name: "#{Faker::Company.name} #{legal_type}",
-    client_type: "PM",
+    client_type: "LEGAL_ENTITY",
     legal_person_type: legal_type,
     nationality: NATIONALITIES.sample,
     residence_country: COUNTRIES.sample,
@@ -188,7 +188,7 @@ end
 ended_client = Client.create!(
   organization: organization,
   name: Faker::Name.name,
-  client_type: "PP",
+  client_type: "NATURAL_PERSON",
   nationality: "FR",
   residence_country: "FR",
   risk_level: "LOW",
@@ -221,8 +221,8 @@ MONACO_STREETS = [
 MONACO_DISTRICTS = %w[Monte-Carlo Fontvieille La\ Condamine Monaco-Ville Larvotto].freeze
 
 # Get clients who can be landlords (legal entities and wealthy individuals)
-potential_landlords = Client.where(client_type: %w[PM TRUST])
-                            .or(Client.where(client_type: "PP", risk_level: %w[HIGH MEDIUM]))
+potential_landlords = Client.where(client_type: %w[LEGAL_ENTITY TRUST])
+                            .or(Client.where(client_type: "NATURAL_PERSON", risk_level: %w[HIGH MEDIUM]))
                             .to_a
 
 current_year = Date.current.year
