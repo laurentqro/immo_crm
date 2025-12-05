@@ -68,15 +68,14 @@
   <% @manifest.all_elements_with_values.each do |ev| -%>
     <% next if ev.blank? -%>
     <%# Handle dimensional elements specially (require per-country breakdown) -%>
+    <%# Element names come from trusted taxonomy - no escaping needed for tag names -%>
     <% if ev.element.dimensional? && ev.value.present? -%>
       <% country_data = parse_country_data(ev.value) -%>
-      <% element_name = CGI.escapeHTML(ev.name.to_s) -%>
       <% country_data&.each do |country_code, count| -%>
-  <strix:<%= element_name %> contextRef="ctx_country_<%= CGI.escapeHTML(country_code.to_s) %>" unitRef="unit_pure"><%= CGI.escapeHTML(count.to_s) %></strix:<%= element_name %>>
+  <strix:<%= ev.name %> contextRef="ctx_country_<%= CGI.escapeHTML(country_code.to_s) %>" unitRef="unit_pure"><%= CGI.escapeHTML(count.to_s) %></strix:<%= ev.name %>>
       <% end -%>
     <% else -%>
-  <% element_name = CGI.escapeHTML(ev.name.to_s) -%>
-  <strix:<%= element_name %> contextRef="ctx_entity"<%== ev.element.unit_ref.present? ? " unitRef=\"#{ev.element.unit_ref}\"" : "" %><%== ev.monetary? ? ' decimals="2"' : "" %>><%= format_xbrl_value(ev.value, ev.element) %></strix:<%= element_name %>>
+  <strix:<%= ev.name %> contextRef="ctx_entity"<%== ev.element.unit_ref.present? ? " unitRef=\"#{ev.element.unit_ref}\"" : "" %><%== ev.monetary? ? ' decimals="2"' : "" %>><%= format_xbrl_value(ev.value, ev.element) %></strix:<%= ev.name %>>
     <% end -%>
   <% end -%>
 
