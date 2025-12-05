@@ -15,6 +15,17 @@
 #   renderer.to_markdown  # => Markdown string
 #
 class SubmissionRenderer
+  # Raised when rendering fails due to template or data errors
+  class RenderError < StandardError
+    attr_reader :format, :cause
+
+    def initialize(message, format: nil, cause: nil)
+      @format = format
+      @cause = cause
+      super(message)
+    end
+  end
+
   attr_reader :submission, :manifest
 
   def initialize(submission)
@@ -25,11 +36,15 @@ class SubmissionRenderer
   # Render XBRL XML document
   def to_xbrl
     render_template("submissions/show", format: :xml)
+  rescue ActionView::Template::Error => e
+    raise RenderError.new("Failed to render XBRL: #{e.message}", format: :xbrl, cause: e)
   end
 
   # Render HTML review page
   def to_html
     render_template("submissions/rendered_review", format: :html)
+  rescue ActionView::Template::Error => e
+    raise RenderError.new("Failed to render HTML: #{e.message}", format: :html, cause: e)
   end
 
   # Render Markdown export

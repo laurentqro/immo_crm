@@ -30,20 +30,6 @@ module XbrlHelper
     validated.presence
   end
 
-  private
-
-  def parse_country_json(value)
-    return value if value.is_a?(Hash)
-    return nil if value.blank?
-
-    parsed = JSON.parse(value)
-    parsed.is_a?(Hash) ? parsed : nil
-  rescue JSON::ParserError, TypeError
-    nil
-  end
-
-  public
-
   # Format value for XBRL instance document output
   def format_xbrl_value(value, element)
     return "" if value.blank?
@@ -82,10 +68,6 @@ module XbrlHelper
     end
   rescue ArgumentError
     h(value.to_s)
-  end
-
-  def parse_boolean(value)
-    value.to_s.downcase.in?(%w[true 1 yes oui])
   end
 
   # Badge CSS classes for element source
@@ -205,5 +187,21 @@ module XbrlHelper
       }) do
       "?"
     end
+  end
+
+  private
+
+  def parse_country_json(value)
+    return value if value.is_a?(Hash)
+    return nil if value.blank?
+
+    parsed = JSON.parse(value)
+    parsed.is_a?(Hash) ? parsed : nil
+  rescue JSON::ParserError, TypeError
+    nil
+  end
+
+  def parse_boolean(value)
+    value.to_s.downcase.in?(%w[true 1 yes oui])
   end
 end

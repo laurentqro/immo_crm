@@ -74,7 +74,7 @@
   <strix:a1103 contextRef="ctx_country_<%= CGI.escapeHTML(country_code.to_s) %>" unitRef="unit_pure"><%= CGI.escapeHTML(count.to_s) %></strix:a1103>
       <% end -%>
     <% else -%>
-  <strix:<%= ev.name %> contextRef="ctx_entity"<%== ev.numeric? ? " unitRef=\"#{ev.element.unit_ref}\"" : "" %><%== ev.monetary? ? ' decimals="2"' : "" %>><%= format_xbrl_value(ev.value, ev.element) %></strix:<%= ev.name %>>
+  <strix:<%= ev.name %> contextRef="ctx_entity"<%== ev.element.unit_ref.present? ? " unitRef=\"#{ev.element.unit_ref}\"" : "" %><%== ev.monetary? ? ' decimals="2"' : "" %>><%= format_xbrl_value(ev.value, ev.element) %></strix:<%= ev.name %>>
     <% end -%>
   <% end -%>
 

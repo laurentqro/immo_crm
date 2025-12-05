@@ -52,10 +52,9 @@ module Xbrl
     # Get all elements with their values, in presentation order.
     # Only returns elements that have actual values stored.
     def all_elements_with_values
-      Taxonomy.elements.filter_map do |element|
-        ev = element_with_value(element.name)
-        ev if ev&.present?
-      end
+      @stored_values.keys.filter_map do |element_name|
+        element_with_value(element_name)
+      end.sort_by { |ev| ev.element.order }
     end
 
     # Get elements grouped by section with their values
