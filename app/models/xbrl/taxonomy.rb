@@ -194,9 +194,9 @@ module Xbrl
           element = @elements_by_name[element_name]
           next unless element
 
-          # Update element attributes in place
-          element.label = labels[to]
-          element.verbose_label = verbose_labels[to] || labels[to]
+          # Only set if not already assigned (avoids verbose arc overwriting standard)
+          element.label ||= labels[to]
+          element.verbose_label ||= verbose_labels[to]
         end
       end
 
