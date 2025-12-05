@@ -335,7 +335,7 @@ class SubmissionStepsController < ApplicationController
     xbrl_content = SubmissionRenderer.new(@submission).to_xbrl
     @cached_validation = ValidationService.new(xbrl_content).validate
   rescue ValidationService::ServiceUnavailableError,
-    ActionView::Template::Error,
+    SubmissionRenderer::RenderError,
     Nokogiri::XML::SyntaxError => e
     @cached_validation = ValidationService::Result.new(
       valid: false,
@@ -346,7 +346,7 @@ class SubmissionStepsController < ApplicationController
 
   def generate_xbrl_preview
     SubmissionRenderer.new(@submission).to_xbrl
-  rescue ActionView::Template::Error, Nokogiri::XML::SyntaxError
+  rescue SubmissionRenderer::RenderError, Nokogiri::XML::SyntaxError
     nil
   end
 
