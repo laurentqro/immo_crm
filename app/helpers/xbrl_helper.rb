@@ -4,19 +4,22 @@
 # Used by both XBRL XML templates and HTML review pages.
 #
 module XbrlHelper
-  # Parse country data from JSON string or return hash as-is
+  # Parse country data from JSON string or return hash as-is.
+  # Returns nil if value is not a valid country breakdown hash.
   def parse_country_data(value)
     return value if value.is_a?(Hash)
     return nil if value.blank?
 
-    JSON.parse(value)
-  rescue JSON::ParserError
+    parsed = JSON.parse(value)
+    parsed.is_a?(Hash) ? parsed : nil
+  rescue JSON::ParserError, TypeError
     nil
   end
 
   # Format value for XBRL output
   def format_xbrl_value(value, element)
     return "" if value.blank?
+    return CGI.escapeHTML(value.to_s) if element.nil?
 
     case element.type
     when :boolean
@@ -35,8 +38,9 @@ module XbrlHelper
   # Format value for HTML display
   def format_html_value(value, element)
     return content_tag(:span, "—", class: "text-gray-400") if value.blank?
+    return h(value.to_s) if element.nil?
 
-    formatted = case element.type
+    case element.type
     when :boolean
       value.to_s.downcase.in?(%w[true 1 yes oui]) ? "Yes" : "No"
     when :monetary
@@ -46,10 +50,8 @@ module XbrlHelper
     when :decimal
       number_with_precision(value.to_f, precision: 2)
     else
-      value.to_s
+      h(value.to_s)
     end
-
-    formatted.html_safe
   rescue ArgumentError
     h(value.to_s)
   end

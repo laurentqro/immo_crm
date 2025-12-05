@@ -23,6 +23,15 @@ module Xbrl
       "xbrli:pureItemType" => :decimal
     }.freeze
 
+    # a1103 is the only dimensional element in the AMSF taxonomy.
+    # It requires per-country breakdown using XBRL dimensional contexts.
+    # This is hardcoded because the taxonomy definition files don't explicitly
+    # mark dimensional elements in a parseable way.
+    DIMENSIONAL_ELEMENTS = %w[a1103].freeze
+
+    # Mutex for thread-safe taxonomy loading in multi-threaded servers (Puma)
+    LOAD_MUTEX = Mutex.new
+
     class << self
       def element(name)
         elements_by_name[name]
@@ -43,9 +52,11 @@ module Xbrl
       end
 
       def reload!
-        @elements = nil
-        @loaded = false
-        load_taxonomy
+        LOAD_MUTEX.synchronize do
+          @elements = nil
+          @loaded = false
+          do_load_taxonomy
+        end
       end
 
       private
@@ -53,6 +64,13 @@ module Xbrl
       def load_taxonomy
         return if @loaded
 
+        LOAD_MUTEX.synchronize do
+          return if @loaded # Double-check after acquiring lock
+          do_load_taxonomy
+        end
+      end
+
+      def do_load_taxonomy
         @elements = {}
         parse_schema
         parse_labels
@@ -70,7 +88,7 @@ module Xbrl
           next if name.blank?
 
           type = determine_type(el)
-          dimensional = name == "a1103" # Country breakdown element
+          dimensional = DIMENSIONAL_ELEMENTS.include?(name)
 
           @elements[name] = TaxonomyElement.new(
             name: name,
