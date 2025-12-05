@@ -10,7 +10,8 @@ module Xbrl
   # - order, section: from _pre.xml presentation linkbase
   #
   class TaxonomyElement
-    attr_reader :name, :type, :label, :verbose_label, :section, :order, :dimensional
+    attr_reader :name, :type, :dimensional
+    attr_accessor :label, :verbose_label, :section, :order
 
     def initialize(name:, type:, label: nil, verbose_label: nil, section: nil, order: 0, dimensional: false)
       @name = name

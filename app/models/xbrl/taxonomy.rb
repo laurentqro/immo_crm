@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 module Xbrl
+  # Raised when taxonomy files cannot be loaded or parsed
+  class TaxonomyLoadError < StandardError
+    attr_reader :file_path, :cause
+
+    def initialize(message, file_path: nil, cause: nil)
+      @file_path = file_path
+      @cause = cause
+      super(message)
+    end
+  end
+
   # Taxonomy parses AMSF XBRL taxonomy files and provides element metadata.
   # This is the single source of truth for element types, labels, and ordering.
   #
@@ -40,7 +51,7 @@ module Xbrl
 
       def elements
         load_taxonomy
-        @elements.values.sort_by(&:order)
+        @sorted_elements ||= @elements.values.sort_by(&:order).freeze
       end
 
       def elements_by_name
@@ -64,6 +75,7 @@ module Xbrl
       def reload!
         LOAD_MUTEX.synchronize do
           @elements = nil
+          @sorted_elements = nil
           @short_labels = nil
           @loaded = false
           do_load_taxonomy
@@ -89,10 +101,42 @@ module Xbrl
         @loaded = true
       end
 
+      # Load and parse an XML file with error handling
+      def load_xml_file(filename)
+        file_path = TAXONOMY_DIR.join(filename)
+
+        unless File.exist?(file_path)
+          raise TaxonomyLoadError.new(
+            "Taxonomy file not found: #{filename}",
+            file_path: file_path.to_s
+          )
+        end
+
+        doc = Nokogiri::XML(File.read(file_path))
+
+        if doc.errors.any?
+          Rails.logger.warn "XML parsing warnings in #{filename}: #{doc.errors.map(&:message).join(', ')}"
+        end
+
+        doc.remove_namespaces!
+        doc
+      rescue Errno::EACCES => e
+        raise TaxonomyLoadError.new(
+          "Permission denied reading taxonomy file: #{filename}",
+          file_path: file_path.to_s,
+          cause: e
+        )
+      rescue Nokogiri::XML::SyntaxError => e
+        raise TaxonomyLoadError.new(
+          "Invalid XML in taxonomy file: #{filename} - #{e.message}",
+          file_path: file_path.to_s,
+          cause: e
+        )
+      end
+
       # Parse XSD to extract element names and types
       def parse_schema
-        doc = Nokogiri::XML(File.read(TAXONOMY_DIR.join(SCHEMA_FILE)))
-        doc.remove_namespaces!
+        doc = load_xml_file(SCHEMA_FILE)
 
         doc.xpath("//element[@abstract='false']").each do |el|
           name = el["name"]
@@ -130,8 +174,7 @@ module Xbrl
 
       # Parse label linkbase for French labels
       def parse_labels
-        doc = Nokogiri::XML(File.read(TAXONOMY_DIR.join(LABEL_FILE)))
-        doc.remove_namespaces!
+        doc = load_xml_file(LABEL_FILE)
 
         # Build a map of label IDs to their text content
         labels = {}
@@ -157,29 +200,18 @@ module Xbrl
           # Extract element name from locator reference (strix_a1101 -> a1101)
           element_name = from.sub(/^strix_/, "")
 
-          next unless @elements.key?(element_name)
-
           element = @elements[element_name]
-          label_text = labels[to]
-          verbose_text = verbose_labels[to]
+          next unless element
 
-          # Create new element with labels added
-          @elements[element_name] = TaxonomyElement.new(
-            name: element.name,
-            type: element.type,
-            label: label_text,
-            verbose_label: verbose_text || label_text,
-            section: element.section,
-            order: element.order,
-            dimensional: element.dimensional
-          )
+          # Update element attributes in place
+          element.label = labels[to]
+          element.verbose_label = verbose_labels[to] || labels[to]
         end
       end
 
       # Parse presentation linkbase for ordering and sections
       def parse_presentation
-        doc = Nokogiri::XML(File.read(TAXONOMY_DIR.join(PRESENTATION_FILE)))
-        doc.remove_namespaces!
+        doc = load_xml_file(PRESENTATION_FILE)
 
         # Track order within each section
         global_order = 0
@@ -190,25 +222,17 @@ module Xbrl
 
           link.xpath(".//presentationArc").each do |arc|
             to = arc["to"]
-            order = arc["order"].to_f
 
             # Extract element name (strix_a1101 -> a1101)
             element_name = to.sub(/^strix_/, "")
 
-            next unless @elements.key?(element_name)
-
             element = @elements[element_name]
-            global_order += 1
+            next unless element
 
-            @elements[element_name] = TaxonomyElement.new(
-              name: element.name,
-              type: element.type,
-              label: element.label,
-              verbose_label: element.verbose_label,
-              section: section,
-              order: global_order,
-              dimensional: element.dimensional
-            )
+            # Update element attributes in place
+            global_order += 1
+            element.section = section
+            element.order = global_order
           end
         end
       end
@@ -223,8 +247,8 @@ module Xbrl
       def load_short_labels
         return {} unless File.exist?(SHORT_LABELS_FILE)
 
-        YAML.load_file(SHORT_LABELS_FILE) || {}
-      rescue Psych::SyntaxError => e
+        YAML.safe_load_file(SHORT_LABELS_FILE, permitted_classes: []) || {}
+      rescue Psych::SyntaxError, Psych::DisallowedClass => e
         Rails.logger.warn "Failed to parse short labels YAML: #{e.message}"
         {}
       end

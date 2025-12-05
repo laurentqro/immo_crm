@@ -4,9 +4,35 @@
 # Used by both XBRL XML templates and HTML review pages.
 #
 module XbrlHelper
+  # Check if a string is a valid ISO 3166-1 alpha-2 country code
+  # Uses the countries gem for authoritative validation
+  def valid_country_code?(code)
+    code.is_a?(String) && ISO3166::Country.new(code).present?
+  end
+
   # Parse country data from JSON string or return hash as-is.
   # Returns nil if value is not a valid country breakdown hash.
+  # Filters out invalid country codes with a warning.
   def parse_country_data(value)
+    raw_data = parse_country_json(value)
+    return nil unless raw_data.is_a?(Hash)
+
+    # Filter to valid ISO country codes only
+    validated = raw_data.select do |code, _count|
+      if valid_country_code?(code)
+        true
+      else
+        Rails.logger.warn "Invalid country code in XBRL data: #{code.inspect}"
+        false
+      end
+    end
+
+    validated.presence
+  end
+
+  private
+
+  def parse_country_json(value)
     return value if value.is_a?(Hash)
     return nil if value.blank?
 
@@ -15,6 +41,8 @@ module XbrlHelper
   rescue JSON::ParserError, TypeError
     nil
   end
+
+  public
 
   # Format value for XBRL output
   def format_xbrl_value(value, element)

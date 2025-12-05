@@ -29,7 +29,7 @@
   <%# === Entity Context === -%>
   <context id="ctx_entity">
     <entity>
-      <identifier scheme="http://amsf.mc/rci"><%= @organization.rci_number %></identifier>
+      <identifier scheme="http://amsf.mc/rci"><%= CGI.escapeHTML(@organization.rci_number.to_s) %></identifier>
     </entity>
     <period>
       <instant><%= Date.new(@submission.year, 12, 31).iso8601 %></instant>
@@ -42,11 +42,11 @@
     <% country_data = parse_country_data(country_value.value) -%>
     <% country_data&.each_key do |country_code| -%>
       <% next if country_code.blank? -%>
-  <context id="ctx_country_<%= country_code %>">
+  <context id="ctx_country_<%= CGI.escapeHTML(country_code.to_s) %>">
     <entity>
-      <identifier scheme="http://amsf.mc/rci"><%= @organization.rci_number %></identifier>
+      <identifier scheme="http://amsf.mc/rci"><%= CGI.escapeHTML(@organization.rci_number.to_s) %></identifier>
       <segment>
-        <strix:CountryDimension><%= country_code %></strix:CountryDimension>
+        <strix:CountryDimension><%= CGI.escapeHTML(country_code.to_s) %></strix:CountryDimension>
       </segment>
     </entity>
     <period>
@@ -71,7 +71,7 @@
     <% if ev.name == "a1103" && ev.value.present? -%>
       <% country_data = parse_country_data(ev.value) -%>
       <% country_data&.each do |country_code, count| -%>
-  <strix:a1103 contextRef="ctx_country_<%= country_code %>" unitRef="unit_pure"><%= count %></strix:a1103>
+  <strix:a1103 contextRef="ctx_country_<%= CGI.escapeHTML(country_code.to_s) %>" unitRef="unit_pure"><%= CGI.escapeHTML(count.to_s) %></strix:a1103>
       <% end -%>
     <% else -%>
   <strix:<%= ev.name %> contextRef="ctx_entity"<%== ev.numeric? ? " unitRef=\"#{ev.element.unit_ref}\"" : "" %><%== ev.monetary? ? ' decimals="2"' : "" %>><%= @manifest.formatted_value(ev.name, format: :xbrl) %></strix:<%= ev.name %>>
