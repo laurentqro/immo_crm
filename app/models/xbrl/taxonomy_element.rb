@@ -53,6 +53,24 @@ module Xbrl
       ActionController::Base.helpers.strip_tags(label).squish
     end
 
+    # Strip HTML tags from verbose label
+    def verbose_label_text
+      return nil if verbose_label.blank?
+
+      ActionController::Base.helpers.strip_tags(verbose_label).squish
+    end
+
+    # Manual short label from config/xbrl_short_labels.yml
+    # Falls back to humanized element name if not defined
+    def short_label
+      Xbrl::Taxonomy.short_label_for(name) || name.humanize
+    end
+
+    # Label for tooltip display - prefers verbose label, falls back to regular label
+    def tooltip_label
+      verbose_label_text.presence || label_text
+    end
+
     # XBRL unit reference based on type
     def unit_ref
       case type

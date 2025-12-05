@@ -173,6 +173,22 @@ module Xbrl
         element.label_text
       end
 
+      def verbose_label
+        element.verbose_label
+      end
+
+      def verbose_label_text
+        element.verbose_label_text
+      end
+
+      def short_label
+        element.short_label
+      end
+
+      def tooltip_label
+        element.tooltip_label
+      end
+
       def section
         element.section
       end

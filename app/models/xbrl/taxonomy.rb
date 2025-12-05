@@ -14,6 +14,7 @@ module Xbrl
     SCHEMA_FILE = "strix_Real_Estate_AML_CFT_survey_2025.xsd"
     LABEL_FILE = "strix_Real_Estate_AML_CFT_survey_2025_lab.xml"
     PRESENTATION_FILE = "strix_Real_Estate_AML_CFT_survey_2025_pre.xml"
+    SHORT_LABELS_FILE = Rails.root.join("config", "xbrl_short_labels.yml")
 
     # XSD type mappings to Ruby symbols
     TYPE_MAPPINGS = {
@@ -51,9 +52,19 @@ module Xbrl
         elements.group_by(&:section)
       end
 
+      # Manual short labels from config/xbrl_short_labels.yml
+      def short_labels
+        @short_labels ||= load_short_labels
+      end
+
+      def short_label_for(element_name)
+        short_labels[element_name]
+      end
+
       def reload!
         LOAD_MUTEX.synchronize do
           @elements = nil
+          @short_labels = nil
           @loaded = false
           do_load_taxonomy
         end
@@ -207,6 +218,15 @@ module Xbrl
         # e.g., ".../role/Link_NoCountryDimension" -> "NoCountryDimension"
         match = role_uri.match(%r{/role/Link_(\w+)})
         match ? match[1].gsub("_", " ").strip : "General"
+      end
+
+      def load_short_labels
+        return {} unless File.exist?(SHORT_LABELS_FILE)
+
+        YAML.load_file(SHORT_LABELS_FILE) || {}
+      rescue Psych::SyntaxError => e
+        Rails.logger.warn "Failed to parse short labels YAML: #{e.message}"
+        {}
       end
     end
   end

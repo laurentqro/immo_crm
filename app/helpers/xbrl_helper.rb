@@ -98,4 +98,80 @@ module XbrlHelper
     else type.to_s.humanize
     end
   end
+
+  # Render element label with tooltip icon showing full description.
+  # Uses short_label as display text and a question mark icon for the tooltip.
+  #
+  # @param element [Xbrl::TaxonomyElement, Xbrl::ElementManifest::ElementValue] Element with label methods
+  # @param show_code [Boolean] Whether to show element code below label
+  # @return [String] HTML for label with tooltip icon
+  def element_label_with_tooltip(element, show_code: true)
+    return "" if element.nil?
+
+    label_html = content_tag(:span, class: "inline-flex items-center gap-1") do
+      short_label = content_tag(:span, element.short_label)
+      tooltip_icon = tooltip_question_mark(element.tooltip_label)
+      safe_join([short_label, tooltip_icon])
+    end
+
+    if show_code
+      code_html = content_tag(:div, element.name,
+        class: "text-xs text-gray-400 dark:text-gray-500 font-mono mt-1")
+      safe_join([label_html, code_html])
+    else
+      label_html
+    end
+  end
+
+  # Simple tooltip span for inline use
+  #
+  # @param element [Xbrl::TaxonomyElement, Xbrl::ElementManifest::ElementValue] Element with label methods
+  # @return [String] HTML span with short label and tooltip icon
+  def element_tooltip_label(element)
+    return "" if element.nil?
+
+    content_tag(:span, class: "inline-flex items-center gap-1") do
+      short_label = content_tag(:span, element.short_label)
+      tooltip_icon = tooltip_question_mark(element.tooltip_label)
+      safe_join([short_label, tooltip_icon])
+    end
+  end
+
+  # Render short label with tooltip icon for a stat card, given element name
+  # Use this in stat cards where you have the element code as a string
+  #
+  # @param element_name [String] XBRL element name (e.g., "a1101")
+  # @param fallback [String] Fallback label if element not found
+  # @return [String] HTML span with short label and tooltip icon
+  def stat_label(element_name, fallback: nil)
+    element = Xbrl::Taxonomy.element(element_name)
+
+    if element
+      content_tag(:span, class: "inline-flex items-center gap-1") do
+        short_label = content_tag(:span, element.short_label)
+        tooltip_icon = tooltip_question_mark(element.tooltip_label)
+        safe_join([short_label, tooltip_icon])
+      end
+    else
+      fallback || element_name.humanize
+    end
+  end
+
+  # Render a question mark icon with tooltip
+  #
+  # @param tooltip_text [String] Text to show in tooltip
+  # @return [String] HTML for question mark icon with tooltip
+  def tooltip_question_mark(tooltip_text)
+    return "" if tooltip_text.blank?
+
+    content_tag(:span,
+      class: "inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 text-xs cursor-help",
+      data: {
+        controller: "tooltip",
+        tooltip_content_value: tooltip_text,
+        tooltip_allow_html_value: false
+      }) do
+      "?"
+    end
+  end
 end
