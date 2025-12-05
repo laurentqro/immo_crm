@@ -1,0 +1,65 @@
+# Manual short labels for XBRL taxonomy elements.
+# These provide concise display names for the wizard UI.
+#
+# Format:
+#   element_name: "Short Label"
+#
+# The full verbose label is shown as a tooltip on hover.
+# Elements not listed here will use a humanized version of the element name.
+#
+# Sections:
+# - a11xx, a12xx, a13xx, a14xx, a15xx: Tab 1 (Customer Risk)
+# - a21xx, a22xx, a25xx: Tab 2 (Products/Services)
+# - a31xx, a32xx, a33xx, a34xx, a35xx: Tab 3 (Distribution)
+# - aC1xx: Tab 4 (Controls)
+#
+# TODO: Add short labels for elements as needed.
+# Example entries shown below - add more as you work through the wizard.
+
+# --- Tab 1: Customer Risk ---
+a1101: "Natural Person Clients"
+a1102: "Legal Entity Clients"
+a1103: "Trust Clients"
+a1104: "Total Clients"
+
+a1105: "Total Clients (BY)"
+a1105B: "Clients BY Type"
+a1105W: "Clients WITH Type"
+
+a1106: "Monaco Residents"
+a1107: "Non-Residents"
+a1108: "Low Risk Clients"
+a1109: "Medium Risk Clients"
+a1110: "High Risk Clients"
+
+# PEP-related
+a1201: "Domestic PEPs"
+a1202: "Foreign PEPs"
+a1203: "Intl Org PEPs"
+a1204: "Total PEPs"
+
+# --- Tab 2: Products/Services ---
+a2101: "Purchase Transactions"
+a2102: "Sale Transactions"
+a2103: "Rental Transactions"
+a2104: "Total Transactions"
+
+# Transaction values
+a2201: "Purchase Volume (EUR)"
+a2202: "Sale Volume (EUR)"
+a2203: "Rental Volume (EUR)"
+a2204: "Total Volume (EUR)"
+
+# --- Tab 3: Distribution ---
+a3101: "Countries Count"
+
+# --- Tab 4: Controls ---
+aC101: "AML Policy Exists"
+aC102: "Risk Assessment Done"
+aC103: "Training Provided"
+aC104: "Internal Audit Done"
+
+# Policy questions (TOLA suffix = boolean policy)
+a11001BTOLA: "KYC Policy"
+a11002BTOLA: "Risk Policy"
+a11003BTOLA: "PEP Policy"

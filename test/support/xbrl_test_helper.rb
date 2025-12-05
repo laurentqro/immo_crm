@@ -16,7 +16,7 @@
 #   - extract_element_names: Get all element names from XBRL document
 #   - extract_element_value: Get value of specific element
 module XbrlTestHelper
-  XSD_PATH = Rails.root.join("docs/strix_Real_Estate_AML_CFT_survey_2025.xsd")
+  XSD_PATH = Rails.root.join("docs/taxonomy/strix_Real_Estate_AML_CFT_survey_2025.xsd")
   STRIX_NAMESPACE = "https://amlcft.amsf.mc/dcm/DTS/strix_Real_Estate_AML_CFT_survey_2025/fr"
 
   # Expected number of non-abstract elements in AMSF taxonomy

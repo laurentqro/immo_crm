@@ -81,6 +81,46 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_match @submission.status, response.body
   end
 
+  # === Show (XML Format) ===
+
+  test "renders XBRL XML when requesting XML format" do
+    sign_in @user
+
+    get submission_path(@submission, format: :xml)
+    assert_response :success
+    assert_equal "application/xml; charset=utf-8", response.content_type
+    assert_match %r{<xbrl}, response.body
+    assert_match %r{xmlns.*xbrl}, response.body
+  end
+
+  test "XML format includes organization RCI number in context" do
+    sign_in @user
+
+    get submission_path(@submission, format: :xml)
+    assert_response :success
+    assert_match @organization.rci_number, response.body
+  end
+
+  # === Show (Markdown Format) ===
+
+  test "renders Markdown when requesting MD format" do
+    sign_in @user
+
+    get submission_path(@submission, format: :md)
+    assert_response :success
+    assert_equal "text/markdown; charset=utf-8", response.content_type
+    assert_match /^# AMSF Submission/, response.body
+  end
+
+  test "Markdown format includes organization details" do
+    sign_in @user
+
+    get submission_path(@submission, format: :md)
+    assert_response :success
+    assert_match @organization.name, response.body
+    assert_match @organization.rci_number, response.body
+  end
+
   # === Create (Start New Submission) ===
 
   test "creates new submission for current year" do

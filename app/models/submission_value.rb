@@ -148,12 +148,11 @@ class SubmissionValue < ApplicationRecord
     end
   end
 
-  # Human-readable description from AMSF element mapping
+  # Human-readable description from AMSF taxonomy
   def description
-    # Check for exact match in YAML
-    if (desc = self.class.element_metadata.dig(element_name, "description"))
-      return desc
-    end
+    # Get description from taxonomy (parsed from AMSF label linkbase)
+    element = Xbrl::Taxonomy.element(element_name)
+    return element.label_text if element&.label_text.present?
 
     # Handle dynamic nationality codes like a1103_FR, a1103_GB
     if element_name.match?(/\Aa1103_([A-Z]{2})\z/)
@@ -169,37 +168,6 @@ class SubmissionValue < ApplicationRecord
 
     # Fallback to humanized element name
     element_name.humanize
-  end
-
-  # Thread-safe mutex for element_metadata initialization
-  @element_metadata_mutex = Mutex.new
-
-  # Load and cache AMSF element mapping (thread-safe)
-  def self.element_metadata
-    return @element_metadata if @element_metadata
-
-    @element_metadata_mutex.synchronize do
-      # Double-check after acquiring lock
-      return @element_metadata if @element_metadata
-
-      @element_metadata = begin
-        yaml = YAML.safe_load_file(
-          Rails.root.join("config/amsf_element_mapping.yml"),
-          permitted_classes: [],
-          permitted_symbols: [],
-          aliases: true
-        )
-        # Flatten nested sections into a single hash keyed by element code
-        yaml.each_with_object({}) do |(section, elements), result|
-          next unless elements.is_a?(Hash)
-
-          elements.each { |code, meta| result[code] = meta }
-        end
-      rescue Psych::SyntaxError => e
-        Rails.logger.warn("Failed to parse AMSF element mapping: #{e.message}")
-        {}
-      end
-    end
   end
 
   def source_badge_class

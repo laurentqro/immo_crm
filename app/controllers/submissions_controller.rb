@@ -21,6 +21,14 @@ class SubmissionsController < ApplicationController
 
   def show
     authorize @submission
+    @organization = current_organization
+    @manifest = Xbrl::ElementManifest.new(@submission)
+
+    respond_to do |format|
+      format.html
+      format.xml
+      format.md { render markdown: @submission }
+    end
   end
 
   def new
@@ -132,10 +140,10 @@ class SubmissionsController < ApplicationController
     # Log the download
     create_download_audit_log
 
-    # Generate and send XBRL (reuse generator instance)
-    generator = XbrlGenerator.new(@submission)
-    xbrl_content = generator.generate
-    filename = generator.suggested_filename
+    # Generate and send XBRL
+    renderer = SubmissionRenderer.new(@submission)
+    xbrl_content = renderer.to_xbrl
+    filename = renderer.suggested_filename
 
     send_data xbrl_content,
               filename: filename,

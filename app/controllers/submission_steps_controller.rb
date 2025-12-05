@@ -332,10 +332,10 @@ class SubmissionStepsController < ApplicationController
   def perform_validation(force: false)
     return @cached_validation if @cached_validation && !force
 
-    xbrl_content = XbrlGenerator.new(@submission).generate
+    xbrl_content = SubmissionRenderer.new(@submission).to_xbrl
     @cached_validation = ValidationService.new(xbrl_content).validate
-  rescue XbrlGenerator::XbrlDataError,
-    ValidationService::ServiceUnavailableError,
+  rescue ValidationService::ServiceUnavailableError,
+    SubmissionRenderer::RenderError,
     Nokogiri::XML::SyntaxError => e
     @cached_validation = ValidationService::Result.new(
       valid: false,
@@ -345,8 +345,8 @@ class SubmissionStepsController < ApplicationController
   end
 
   def generate_xbrl_preview
-    XbrlGenerator.new(@submission).generate
-  rescue XbrlGenerator::XbrlDataError, Nokogiri::XML::SyntaxError
+    SubmissionRenderer.new(@submission).to_xbrl
+  rescue SubmissionRenderer::RenderError, Nokogiri::XML::SyntaxError
     nil
   end
 

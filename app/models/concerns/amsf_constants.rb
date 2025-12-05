@@ -6,7 +6,7 @@
 # Reference: Monaco AMSF Real Estate Professionals AML/CFT Survey
 # Taxonomy: strix_Real_Estate_AML_CFT_survey_2025
 # See: docs/strix_Real_Estate_AML_CFT_survey_2025.xsd for full schema
-# See: config/amsf_element_mapping.yml for element-to-field mappings
+# See: Xbrl::Taxonomy for element metadata parsed from AMSF taxonomy
 #
 module AmsfConstants
   extend ActiveSupport::Concern

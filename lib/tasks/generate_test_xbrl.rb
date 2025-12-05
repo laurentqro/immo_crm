@@ -74,13 +74,13 @@ end
 
 # Generate XBRL
 puts "\n🔧 Generating XBRL instance document..."
-generator = XbrlGenerator.new(submission)
-xbrl_content = generator.generate
+renderer = SubmissionRenderer.new(submission)
+xbrl_content = renderer.to_xbrl
 
 # Save to file
 output_dir = Rails.root.join("tmp", "xbrl")
 FileUtils.mkdir_p(output_dir)
-output_file = output_dir.join(generator.suggested_filename)
+output_file = output_dir.join(renderer.suggested_filename)
 
 File.write(output_file, xbrl_content)
 

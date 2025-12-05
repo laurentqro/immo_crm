@@ -46,7 +46,7 @@ class SubmissionBuilder
   def generate_xbrl
     raise NotBuiltError, "Call build before generate_xbrl" unless @built
 
-    XbrlGenerator.new(submission).generate
+    SubmissionRenderer.new(submission).to_xbrl
   end
 
   # Validate the XBRL content against the external validator
