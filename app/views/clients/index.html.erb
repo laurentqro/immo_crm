@@ -9,7 +9,7 @@
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <%= link_to "Add Client", new_client_path, class: "btn btn-primary", data: { turbo_frame: "modal" } %>
+      <%= link_to "Add Client", new_client_path, class: "btn btn-primary" %>
     </div>
   </div>
 
@@ -49,8 +49,6 @@
     <% end %>
   </div>
 
-  <%# Client list %>
-  <%= turbo_frame_tag "clients_list" do %>
     <div class="mt-8 flow-root">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -93,8 +91,4 @@
         </div>
       </div>
     </div>
-  <% end %>
 </div>
-
-<%# Modal frame for new/edit forms %>
-<%= turbo_frame_tag "modal" %>

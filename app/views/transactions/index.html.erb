@@ -9,7 +9,7 @@
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-      <%= link_to "Add Transaction", new_transaction_path, class: "btn btn-primary", data: { turbo_frame: "modal" } %>
+      <%= link_to "Add Transaction", new_transaction_path, class: "btn btn-primary" %>
     </div>
   </div>
 
@@ -100,6 +100,3 @@
     </div>
   <% end %>
 </div>
-
-<%# Modal frame for new/edit forms %>
-<%= turbo_frame_tag "modal" %>
