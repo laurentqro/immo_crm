@@ -82,20 +82,11 @@ class SubmissionRenderer
   private
 
   def render_template(template_path, format:)
-    lookup_context = ActionView::LookupContext.new(ActionController::Base.view_paths)
-    renderer = ActionView::Base.with_empty_template_cache.new(
-      lookup_context,
-      assigns,
-      nil
+    ApplicationController.render(
+      template: template_path,
+      formats: [format],
+      assigns: assigns
     )
-
-    # Include helpers
-    renderer.class.include(ActionView::Helpers)
-    renderer.class.include(XbrlHelper) if defined?(XbrlHelper)
-    renderer.class.include(Rails.application.routes.url_helpers)
-
-    template = "#{template_path}.#{format}.erb"
-    renderer.render(template: template)
   end
 
   def assigns

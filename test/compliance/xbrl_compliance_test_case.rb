@@ -27,7 +27,7 @@ class XbrlComplianceTestCase < ActiveSupport::TestCase
   # @return [String] Generated XBRL XML string
   def generate_xbrl_for(submission)
     CalculationEngine.new(submission).populate_submission_values!
-    XbrlGenerator.new(submission).generate
+    SubmissionRenderer.new(submission).to_xbrl
   end
 
   # Create a submission for the current year with the compliance test organization.

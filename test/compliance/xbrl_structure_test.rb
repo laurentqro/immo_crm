@@ -13,7 +13,7 @@ class XbrlStructureTest < XbrlComplianceTestCase
     super
     @submission = submissions(:compliance_test_submission)
     CalculationEngine.new(@submission).populate_submission_values!
-    @xbrl_xml = XbrlGenerator.new(@submission).generate
+    @xbrl_xml = SubmissionRenderer.new(@submission).to_xbrl
     @xbrl_doc = Nokogiri::XML(@xbrl_xml)
   end
 

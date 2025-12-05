@@ -196,7 +196,7 @@ class CalculationEngine
       country_counts[safe_nationality] = count
     end
 
-    # Return single element with nested hash for XbrlGenerator to create dimensional contexts
+    # Return single element with nested hash for dimensional contexts in XBRL output
     result["a1103"] = country_counts if country_counts.any?
 
     result

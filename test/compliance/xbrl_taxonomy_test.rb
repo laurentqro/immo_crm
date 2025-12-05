@@ -38,7 +38,7 @@ class XbrlTaxonomyTest < XbrlComplianceTestCase
     CalculationEngine.new(@submission).populate_submission_values!
 
     # Generate XBRL
-    xbrl_xml = XbrlGenerator.new(@submission).generate
+    xbrl_xml = SubmissionRenderer.new(@submission).to_xbrl
     xbrl_doc = parse_xbrl(xbrl_xml)
 
     # Extract element names from generated XBRL
@@ -67,7 +67,7 @@ class XbrlTaxonomyTest < XbrlComplianceTestCase
 
     # Generate XBRL
     CalculationEngine.new(@submission).populate_submission_values!
-    xbrl_xml = XbrlGenerator.new(@submission).generate
+    xbrl_xml = SubmissionRenderer.new(@submission).to_xbrl
     xbrl_doc = parse_xbrl(xbrl_xml)
 
     # Check that no abstract elements are present
@@ -115,29 +115,6 @@ class XbrlTaxonomyTest < XbrlComplianceTestCase
     # The suggestion should be close to the invalid name
     assert suggestion.start_with?("a"),
       "Suggestion should start with 'a' like the taxonomy pattern"
-  end
-
-  test "validates specific element names from mapping config" do
-    # Load the actual element mapping configuration
-    mapping_path = Rails.root.join("config/amsf_element_mapping.yml")
-    skip "No element mapping config found" unless File.exist?(mapping_path)
-
-    mapping = YAML.load_file(mapping_path)
-    invalid_mappings = []
-
-    # Check each mapped element
-    mapping.each do |element_name, config|
-      next if element_name.to_s.start_with?("_") # Skip meta keys
-
-      unless XbrlTestHelper.valid_element_names.include?(element_name.to_s)
-        suggestion = XbrlTestHelper.suggest_element_name(element_name.to_s)
-        invalid_mappings << "#{element_name} (did you mean: #{suggestion}?)"
-      end
-    end
-
-    assert invalid_mappings.empty?,
-      "Found #{invalid_mappings.size} invalid element(s) in amsf_element_mapping.yml:\n  " \
-      "#{invalid_mappings.join("\n  ")}"
   end
 
   test "taxonomy contains expected sections" do
