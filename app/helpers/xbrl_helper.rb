@@ -44,14 +44,14 @@ module XbrlHelper
 
   public
 
-  # Format value for XBRL output
+  # Format value for XBRL instance document output
   def format_xbrl_value(value, element)
     return "" if value.blank?
     return CGI.escapeHTML(value.to_s) if element.nil?
 
     case element.type
     when :boolean
-      value.to_s.downcase.in?(%w[true 1 yes oui]) ? "Oui" : "Non"
+      parse_boolean(value) ? "Oui" : "Non"
     when :monetary
       format("%.2f", BigDecimal(value.to_s))
     when :integer
@@ -70,7 +70,7 @@ module XbrlHelper
 
     case element.type
     when :boolean
-      value.to_s.downcase.in?(%w[true 1 yes oui]) ? "Yes" : "No"
+      parse_boolean(value) ? "Yes" : "No"
     when :monetary
       number_to_currency(value, unit: "€", format: "%n %u")
     when :integer
@@ -82,6 +82,10 @@ module XbrlHelper
     end
   rescue ArgumentError
     h(value.to_s)
+  end
+
+  def parse_boolean(value)
+    value.to_s.downcase.in?(%w[true 1 yes oui])
   end
 
   # Badge CSS classes for element source

@@ -51,17 +51,6 @@ module Xbrl
       assert sections.is_a?(Hash)
     end
 
-    test "formatted_value formats integer values for xbrl" do
-      # a1101 is an integer element with value "42"
-      xbrl_value = @manifest.formatted_value("a1101", format: :xbrl)
-      assert_equal "42", xbrl_value
-    end
-
-    test "formatted_value returns nil for element without value" do
-      # Pick an element that exists in taxonomy but has no fixture value
-      assert_nil @manifest.formatted_value("a1401", format: :xbrl)
-    end
-
     test "ElementValue exposes element properties" do
       # a1101 is an integer element
       ev = @manifest.element_with_value("a1101")

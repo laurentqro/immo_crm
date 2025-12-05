@@ -63,59 +63,6 @@ module Xbrl
       all_elements_with_values.group_by { |ev| ev.element.section }
     end
 
-    # Format a value according to its element type
-    def formatted_value(element_name, format: :display)
-      ev = element_with_value(element_name)
-      return nil unless ev&.value.present?
-
-      case format
-      when :xbrl
-        format_for_xbrl(ev.value, ev.element)
-      when :html
-        format_for_html(ev.value, ev.element)
-      when :display
-        format_for_display(ev.value, ev.element)
-      else
-        ev.value
-      end
-    end
-
-    private
-
-    def format_for_xbrl(value, element)
-      case element.type
-      when :boolean
-        value.to_s.downcase.in?(%w[true 1 yes oui]) ? "Oui" : "Non"
-      when :monetary
-        format("%.2f", BigDecimal(value.to_s))
-      when :integer
-        value.to_i.to_s
-      else
-        CGI.escapeHTML(value.to_s)
-      end
-    rescue ArgumentError
-      CGI.escapeHTML(value.to_s)
-    end
-
-    def format_for_html(value, element)
-      case element.type
-      when :boolean
-        value.to_s.downcase.in?(%w[true 1 yes oui]) ? "Yes" : "No"
-      when :monetary
-        ActionController::Base.helpers.number_to_currency(value, unit: "€", format: "%n %u")
-      when :integer
-        ActionController::Base.helpers.number_with_delimiter(value.to_i)
-      else
-        value.to_s
-      end
-    rescue ArgumentError
-      value.to_s
-    end
-
-    def format_for_display(value, element)
-      format_for_html(value, element)
-    end
-
     # Value object combining element metadata with submission value
     class ElementValue
       attr_reader :element, :value, :source, :overridden, :confirmed
