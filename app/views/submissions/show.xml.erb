@@ -67,11 +67,12 @@
   <%# === Facts === -%>
   <% @manifest.all_elements_with_values.each do |ev| -%>
     <% next if ev.blank? -%>
-    <%# Handle dimensional element (a1103) specially -%>
-    <% if ev.name == "a1103" && ev.value.present? -%>
+    <%# Handle dimensional elements specially (require per-country breakdown) -%>
+    <% if ev.element.dimensional? && ev.value.present? -%>
       <% country_data = parse_country_data(ev.value) -%>
+      <% element_name = CGI.escapeHTML(ev.name.to_s) -%>
       <% country_data&.each do |country_code, count| -%>
-  <strix:a1103 contextRef="ctx_country_<%= CGI.escapeHTML(country_code.to_s) %>" unitRef="unit_pure"><%= CGI.escapeHTML(count.to_s) %></strix:a1103>
+  <strix:<%= element_name %> contextRef="ctx_country_<%= CGI.escapeHTML(country_code.to_s) %>" unitRef="unit_pure"><%= CGI.escapeHTML(count.to_s) %></strix:<%= element_name %>>
       <% end -%>
     <% else -%>
   <% element_name = CGI.escapeHTML(ev.name.to_s) -%>
