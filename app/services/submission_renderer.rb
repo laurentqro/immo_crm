@@ -98,6 +98,13 @@ class SubmissionRenderer
     lines << "*Generated from AMSF taxonomy version #{submission.taxonomy_version}*"
 
     lines.join("\n")
+  rescue StandardError => e
+    raise RenderError.new(
+      "Failed to render Markdown for submission #{submission&.id}: #{e.message}",
+      format: :markdown,
+      cause: e,
+      submission_id: submission&.id
+    )
   end
 
   # Suggested filename for XBRL export

@@ -225,4 +225,16 @@ class SubmissionRendererTest < ActiveSupport::TestCase
 
     assert_includes error.message, "submission"
   end
+
+  test "to_markdown raises RenderError on failure" do
+    bad_submission = Submission.new(year: 2024)
+    renderer = SubmissionRenderer.new(bad_submission)
+
+    error = assert_raises(SubmissionRenderer::RenderError) do
+      renderer.to_markdown
+    end
+
+    assert_equal :markdown, error.format
+    assert_includes error.message, "Failed to render Markdown"
+  end
 end
