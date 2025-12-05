@@ -134,7 +134,7 @@ This document describes the architecture of the XBRL rendering system for AMSF c
 
 ### Xbrl::Taxonomy (Singleton)
 
-Parses and caches AMSF taxonomy files. Thread-safe loading with mutex.
+Parses and caches AMSF taxonomy files. Loaded at boot time via initializer.
 
 ```ruby
 Xbrl::Taxonomy.element("a1101")     # => TaxonomyElement
@@ -264,3 +264,122 @@ bin/rails test test/models/xbrl/ test/services/submission_renderer_test.rb
 # - Schema element name validation
 # - Context/unit referential integrity
 ```
+
+## Adding New Taxonomy Versions
+
+When AMSF releases a new taxonomy version:
+
+### 1. Replace Taxonomy Files
+
+```bash
+# Backup current taxonomy
+mv docs/taxonomy docs/taxonomy_2025_backup
+
+# Add new taxonomy files
+mkdir docs/taxonomy
+cp /path/to/new/*.xsd docs/taxonomy/
+cp /path/to/new/*_lab.xml docs/taxonomy/
+cp /path/to/new/*_pre.xml docs/taxonomy/
+```
+
+### 2. Update File Constants
+
+In `app/models/xbrl/taxonomy.rb`, update the filename constants:
+
+```ruby
+SCHEMA_FILE = "strix_Real_Estate_AML_CFT_survey_2026.xsd"  # New year
+LABEL_FILE = "strix_Real_Estate_AML_CFT_survey_2026_lab.xml"
+PRESENTATION_FILE = "strix_Real_Estate_AML_CFT_survey_2026_pre.xml"
+```
+
+### 3. Update Short Labels
+
+Review `config/xbrl_short_labels.yml` for any new elements that need concise labels.
+
+### 4. Test
+
+```bash
+bin/rails test test/models/xbrl/
+```
+
+The app will fail to boot if taxonomy files are missing or malformed (fail-fast design).
+
+## Migration Path When Taxonomy Changes
+
+### Element Additions
+
+New elements are automatically available. Add calculation logic in `CalculationEngine` if needed.
+
+### Element Removals
+
+1. Old `SubmissionValue` records remain in the database (harmless)
+2. They won't appear in new XBRL output (only taxonomy elements are rendered)
+3. Optional: create a migration to clean up orphaned values
+
+```ruby
+# Optional cleanup migration
+SubmissionValue.where.not(element_name: Xbrl::Taxonomy.elements.map(&:name)).delete_all
+```
+
+### Element Type Changes
+
+If an element's type changes (e.g., integer → monetary):
+
+1. Update `config/xbrl_short_labels.yml` if the label needs adjustment
+2. Existing values may need conversion—review stored data
+3. The taxonomy parser will pick up the new type automatically
+
+### Schema URL Changes
+
+Update the schema reference in `app/views/submissions/show.xml.erb`:
+
+```erb
+<link:schemaRef
+  xlink:type="simple"
+  xlink:href="https://amlcft.amsf.mc/dcm/DTS/NEW_PATH/schema.xsd"/>
+```
+
+## Dimensional Elements
+
+Dimensional elements require per-dimension breakdown (e.g., counts by country).
+
+### How They Work
+
+1. **Definition**: Listed in `Taxonomy::DIMENSIONAL_ELEMENTS` constant
+2. **Storage**: Value is stored as JSON: `{"FR": 5, "MC": 3, "IT": 2}`
+3. **Rendering**: Creates separate XBRL contexts per dimension value
+
+```xml
+<!-- Each country gets its own context -->
+<context id="ctx_country_FR">
+  <entity>
+    <identifier scheme="http://amsf.mc/rci">12345</identifier>
+    <segment>
+      <strix:CountryDimension>FR</strix:CountryDimension>
+    </segment>
+  </entity>
+  <period><instant>2024-12-31</instant></period>
+</context>
+
+<!-- Facts reference their dimensional context -->
+<strix:a1103 contextRef="ctx_country_FR" unitRef="unit_pure">5</strix:a1103>
+<strix:a1103 contextRef="ctx_country_MC" unitRef="unit_pure">3</strix:a1103>
+```
+
+### Adding New Dimensional Elements
+
+1. Add the element name to the constant:
+
+```ruby
+# app/models/xbrl/taxonomy.rb
+DIMENSIONAL_ELEMENTS = %w[a1103 a1104].freeze  # Add new element
+```
+
+2. Ensure the UI captures data as a hash (country → count mapping)
+
+3. The template handles rendering automatically via `element.dimensional?`
+
+### Validation
+
+Country codes are validated against ISO 3166-1 alpha-2 using the `countries` gem.
+Invalid codes are logged and excluded from XBRL output.
