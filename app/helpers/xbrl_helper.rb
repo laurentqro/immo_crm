@@ -10,20 +10,10 @@ module XbrlHelper
     code.is_a?(String) && ISO3166::Country.new(code).present?
   end
 
-  # Maximum size for country data JSON (10KB should be plenty for country breakdown)
-  MAX_COUNTRY_DATA_SIZE = 10.kilobytes
-
   # Parse country data from JSON string or return hash as-is.
   # Returns nil if value is not a valid country breakdown hash.
   # Filters out invalid country codes with a warning.
-  # Rejects payloads larger than MAX_COUNTRY_DATA_SIZE.
   def parse_country_data(value)
-    # Size check before parsing to prevent memory exhaustion
-    if value.is_a?(String) && value.bytesize > MAX_COUNTRY_DATA_SIZE
-      Rails.logger.warn "Country data exceeds size limit: #{value.bytesize} bytes"
-      return nil
-    end
-
     raw_data = parse_country_json(value)
     return nil unless raw_data.is_a?(Hash)
 
