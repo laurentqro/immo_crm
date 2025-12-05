@@ -70,7 +70,7 @@ module Xbrl
         parse_schema
         parse_labels
         parse_presentation
-        @elements = @elements_by_name.values.sort_by { |e| e.order || 0 }.freeze
+        @elements = @elements_by_name.values.sort_by(&:order).freeze
         @elements_by_section = @elements.group_by(&:section).freeze
         @short_labels = load_short_labels.freeze
         true

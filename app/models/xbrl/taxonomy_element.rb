@@ -10,8 +10,8 @@ module Xbrl
   # - order, section: from _pre.xml presentation linkbase
   #
   class TaxonomyElement
-    attr_reader :name, :type, :dimensional
-    attr_accessor :label, :verbose_label, :section, :order
+    attr_reader :name, :type, :dimensional, :order
+    attr_accessor :label, :verbose_label, :section
 
     def initialize(name:, type:, label: nil, verbose_label: nil, section: nil, order: 0, dimensional: false)
       @name = name
@@ -45,6 +45,11 @@ module Xbrl
 
     def dimensional?
       @dimensional
+    end
+
+    # Ensure order is always an integer
+    def order=(value)
+      @order = value.to_i
     end
 
     # Strip HTML tags for plain text display

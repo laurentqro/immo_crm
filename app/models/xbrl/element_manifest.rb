@@ -55,7 +55,7 @@ module Xbrl
     def all_elements_with_values
       @all_elements_with_values ||= @stored_values.keys.filter_map do |element_name|
         element_with_value(element_name)
-      end.sort_by { |ev| ev.element.order || 0 }.freeze
+      end.sort_by { |ev| ev.element.order }.freeze
     end
 
     # Get elements grouped by section with their values
