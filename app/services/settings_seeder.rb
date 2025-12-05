@@ -12,9 +12,19 @@ class SettingsSeeder
   DEFAULT_VALUES = {
     # Entity Information - empty/zero defaults
     "entity_name" => "",
+    "entity_legal_form" => "",
+    "amsf_registration_number" => "",
     "total_employees" => "0",
     "compliance_officers" => "0",
     "annual_revenue" => "0.00",
+    # Activity Flags - false until configured
+    "activity_sales" => "false",
+    "activity_rentals" => "false",
+    "activity_property_management" => "false",
+    # Staffing - zero defaults
+    "staff_total" => "0",
+    "staff_compliance" => "0",
+    "uses_external_compliance" => "false",
     # KYC Procedures - conservative defaults (EDD enabled, SDD disabled)
     "edd_for_peps" => "true",
     "edd_for_high_risk_countries" => "true",

@@ -37,11 +37,25 @@ class Setting < ApplicationRecord
   # - Adding help text from taxonomy definition file
   SCHEMA = {
     # === Entity Info ===
-    # Note: These need to be mapped to actual taxonomy elements when identified
+    # Organization-level data required for AMSF survey
     "entity_name" => {value_type: "string", category: "entity_info", xbrl: nil},
+    "entity_legal_form" => {value_type: "enum", category: "entity_info", xbrl: nil},
+    "amsf_registration_number" => {value_type: "string", category: "entity_info", xbrl: nil},
     "total_employees" => {value_type: "integer", category: "entity_info", xbrl: nil},
     "compliance_officers" => {value_type: "integer", category: "entity_info", xbrl: nil},
     "annual_revenue" => {value_type: "decimal", category: "entity_info", xbrl: nil},
+
+    # === Activity Flags ===
+    # aACTIVE* elements indicate which business lines the agency operates
+    "activity_sales" => {value_type: "boolean", category: "entity_info", xbrl: "aACTIVE"},
+    "activity_rentals" => {value_type: "boolean", category: "entity_info", xbrl: "aACTIVERENTALS"},
+    "activity_property_management" => {value_type: "boolean", category: "entity_info", xbrl: "aACTIVEPS"},
+
+    # === Staffing ===
+    # Staff counts for Tab 1 entity profile
+    "staff_total" => {value_type: "integer", category: "entity_info", xbrl: "a11006"},
+    "staff_compliance" => {value_type: "integer", category: "entity_info", xbrl: "aC11502"},
+    "uses_external_compliance" => {value_type: "boolean", category: "entity_info", xbrl: "aC11508"},
 
     # === Tab 4: Controls (105 aC* policy questions) ===
     # All are Oui/Non (boolean) questions about organizational policies.
@@ -158,9 +172,9 @@ class Setting < ApplicationRecord
   validates :key, presence: true, uniqueness: {scope: :organization_id}
   validates :value_type, presence: true, inclusion: {in: VALUE_TYPES}
   validates :category, presence: true, inclusion: {in: CATEGORIES}
-  # XBRL element codes: aC1101Z, a2102B, a11502B, etc.
-  # Pattern: a + optional letter (C for controls) + 3-5 digits + 0-2 trailing letters
-  validates :xbrl_element, format: {with: /\Aa[A-Z]?\d{3,5}[A-Z]{0,2}\z/, allow_blank: true}
+  # XBRL element codes: aC1101Z, a2102B, a11502B, aACTIVE, aACTIVEPS, etc.
+  # Pattern: either aACTIVE variants OR a + optional letter (C for controls) + 3-5 digits + 0-2 trailing letters
+  validates :xbrl_element, format: {with: /\Aa(ACTIVE[A-Z]*|[A-Z]?\d{3,5}[A-Z]{0,2})\z/, allow_blank: true}
   validate :value_matches_type
 
   # === Scopes ===

@@ -348,6 +348,22 @@ class SettingTest < ActiveSupport::TestCase
     end
   end
 
+  test "xbrl_element accepts aACTIVE variants for activity flags" do
+    valid_elements = %w[aACTIVE aACTIVERENTALS aACTIVEPS]
+
+    valid_elements.each do |element|
+      setting = Setting.new(
+        organization: @organization,
+        key: "test_#{element.downcase}",
+        value: "true",
+        value_type: "boolean",
+        category: "entity_info",
+        xbrl_element: element
+      )
+      assert setting.valid?, "Expected xbrl_element '#{element}' to be valid"
+    end
+  end
+
   test "xbrl_element rejects elements with too few digits" do
     setting = Setting.new(
       organization: @organization,
@@ -401,8 +417,8 @@ class SettingTest < ActiveSupport::TestCase
 
   test "SCHEMA constant includes all setting definitions" do
     assert_kind_of Hash, Setting::SCHEMA
-    # 4 entity_info + 105 controls = 109 entries
-    assert_equal 109, Setting::SCHEMA.keys.count
+    # 12 entity_info (including activity flags and staffing) + 105 controls = 117 entries
+    assert_equal 117, Setting::SCHEMA.keys.count
 
     # Verify each schema entry has required keys
     Setting::SCHEMA.each do |key, schema|
@@ -413,6 +429,40 @@ class SettingTest < ActiveSupport::TestCase
         assert schema[:xbrl].present?, "#{key} is missing xbrl element"
       end
     end
+  end
+
+  # === Issue #19: New Settings Keys ===
+
+  test "SCHEMA includes activity flags" do
+    assert Setting::SCHEMA.key?("activity_sales")
+    assert Setting::SCHEMA.key?("activity_rentals")
+    assert Setting::SCHEMA.key?("activity_property_management")
+
+    assert_equal "boolean", Setting::SCHEMA["activity_sales"][:value_type]
+    assert_equal "aACTIVE", Setting::SCHEMA["activity_sales"][:xbrl]
+    assert_equal "aACTIVERENTALS", Setting::SCHEMA["activity_rentals"][:xbrl]
+    assert_equal "aACTIVEPS", Setting::SCHEMA["activity_property_management"][:xbrl]
+  end
+
+  test "SCHEMA includes staffing keys" do
+    assert Setting::SCHEMA.key?("staff_total")
+    assert Setting::SCHEMA.key?("staff_compliance")
+    assert Setting::SCHEMA.key?("uses_external_compliance")
+
+    assert_equal "integer", Setting::SCHEMA["staff_total"][:value_type]
+    assert_equal "integer", Setting::SCHEMA["staff_compliance"][:value_type]
+    assert_equal "boolean", Setting::SCHEMA["uses_external_compliance"][:value_type]
+    assert_equal "a11006", Setting::SCHEMA["staff_total"][:xbrl]
+    assert_equal "aC11502", Setting::SCHEMA["staff_compliance"][:xbrl]
+    assert_equal "aC11508", Setting::SCHEMA["uses_external_compliance"][:xbrl]
+  end
+
+  test "SCHEMA includes entity identity keys" do
+    assert Setting::SCHEMA.key?("entity_legal_form")
+    assert Setting::SCHEMA.key?("amsf_registration_number")
+
+    assert_equal "enum", Setting::SCHEMA["entity_legal_form"][:value_type]
+    assert_equal "string", Setting::SCHEMA["amsf_registration_number"][:value_type]
   end
 
   # === Instance Methods ===
