@@ -198,7 +198,7 @@ class SubmissionRendererTest < ActiveSupport::TestCase
     end
   end
 
-  test "RenderError includes format context" do
+  test "RenderError includes format and submission context" do
     bad_submission = Submission.new(year: 2024)
     renderer = SubmissionRenderer.new(bad_submission)
 
@@ -208,5 +208,21 @@ class SubmissionRendererTest < ActiveSupport::TestCase
 
     assert_equal :xbrl, error.format
     assert_includes error.message, "Failed to render XBRL"
+    # submission_id should be nil for unsaved submission
+    assert_nil error.submission_id
+  end
+
+  test "RenderError includes submission_id for saved submission" do
+    # Use a valid submission that will fail due to template error (missing org)
+    submission = @submission.dup
+    submission.organization = nil
+
+    renderer = SubmissionRenderer.new(submission)
+
+    error = assert_raises(SubmissionRenderer::RenderError) do
+      renderer.to_xbrl
+    end
+
+    assert_includes error.message, "submission"
   end
 end

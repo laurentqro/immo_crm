@@ -17,11 +17,12 @@
 class SubmissionRenderer
   # Raised when rendering fails due to template or data errors
   class RenderError < StandardError
-    attr_reader :format, :cause
+    attr_reader :format, :cause, :submission_id
 
-    def initialize(message, format: nil, cause: nil)
+    def initialize(message, format: nil, cause: nil, submission_id: nil)
       @format = format
       @cause = cause
+      @submission_id = submission_id
       super(message)
     end
   end
@@ -37,14 +38,24 @@ class SubmissionRenderer
   def to_xbrl
     render_template("submissions/show", format: :xml)
   rescue ActionView::Template::Error => e
-    raise RenderError.new("Failed to render XBRL: #{e.message}", format: :xbrl, cause: e)
+    raise RenderError.new(
+      "Failed to render XBRL for submission #{submission&.id}: #{e.message}",
+      format: :xbrl,
+      cause: e,
+      submission_id: submission&.id
+    )
   end
 
   # Render HTML review page
   def to_html
     render_template("submissions/rendered_review", format: :html)
   rescue ActionView::Template::Error => e
-    raise RenderError.new("Failed to render HTML: #{e.message}", format: :html, cause: e)
+    raise RenderError.new(
+      "Failed to render HTML for submission #{submission&.id}: #{e.message}",
+      format: :html,
+      cause: e,
+      submission_id: submission&.id
+    )
   end
 
   # Render Markdown export
