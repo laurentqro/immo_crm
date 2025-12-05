@@ -166,7 +166,7 @@
         <%= link_to "File STR", new_str_report_path(transaction_id: @transaction.id), class: "btn btn-primary btn-sm" %>
       </div>
       <div class="border-t border-gray-200 dark:border-gray-700">
-        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700 list-none">
           <% @transaction.str_reports.kept.recent.each do |str_report| %>
             <li class="px-4 py-4 sm:px-6">
               <div class="flex items-center justify-between">
