@@ -33,7 +33,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", /Settings/
 
     # Should show category sections
-    assert_select ".settings-category", minimum: 4
+    assert_select ".settings-category", minimum: 3
   end
 
   test "show shows entity info settings" do
@@ -62,15 +62,6 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "input[name='settings[written_aml_policy]']"
-  end
-
-  test "show shows training settings" do
-    sign_in @user
-
-    get settings_path
-
-    assert_response :success
-    assert_select "select[name='settings[training_frequency]']"
   end
 
   test "show pre-fills values from existing settings" do
@@ -193,16 +184,15 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     get settings_path
 
     assert_response :success
-    # Should render all 4 tabs for client-side navigation
-    assert_select "[data-tabs-target='tab']", 4
-    # Should render all 4 panels (3 hidden, 1 visible initially)
-    assert_select "[data-tabs-target='panel']", 4
+    # Should render all 3 tabs for client-side navigation
+    assert_select "[data-tabs-target='tab']", 3
+    # Should render all 3 panels (2 hidden, 1 visible initially)
+    assert_select "[data-tabs-target='panel']", 3
     # First panel (Entity Information) should be visible
     assert_select "#entity_info.settings-category"
     # Other panels should have hidden class
     assert_select "#kyc_procedures.settings-category.hidden"
     assert_select "#compliance_policies.settings-category.hidden"
-    assert_select "#training.settings-category.hidden"
   end
 
   # === Turbo Stream Responses ===

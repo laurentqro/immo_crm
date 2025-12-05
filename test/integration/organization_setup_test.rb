@@ -97,8 +97,7 @@ class OrganizationSetupTest < ActionDispatch::IntegrationTest
       settings: {
         edd_for_peps: "true",
         edd_for_high_risk_countries: "true",
-        written_aml_policy: "true",
-        training_frequency: "annual"
+        written_aml_policy: "true"
       }
     }
 

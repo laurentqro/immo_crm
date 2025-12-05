@@ -24,11 +24,10 @@ class SettingsTest < ApplicationSystemTestCase
 
     visit settings_path
 
-    # Should show all four category tabs
+    # Should show all three category tabs
     assert_text "Entity Information"
     assert_text "KYC Procedures"
     assert_text "Compliance Policies"
-    assert_text "Training"
   end
 
   test "settings page has save button" do
@@ -156,56 +155,7 @@ class SettingsTest < ApplicationSystemTestCase
     assert_checked_field "written_aml_policy"
   end
 
-  # === Training Section ===
-
-  test "training section shows training fields" do
-    login_as @user, scope: :user
-
-    visit settings_path
-
-    within ".training-section" do
-      assert_selector "select[name*='training_frequency']"
-      assert_selector "input[name*='last_training_date']"
-      assert_selector "input[name*='training_covers_aml']"
-    end
-  end
-
-  test "can select training frequency" do
-    login_as @user, scope: :user
-
-    visit settings_path
-
-    select "Biannual", from: "training_frequency"
-    click_button "Save Settings"
-
-    assert_text "Settings saved"
-    assert_select "training_frequency", selected: "Biannual"
-  end
-
-  test "can set last training date" do
-    login_as @user, scope: :user
-
-    visit settings_path
-
-    fill_in "last_training_date", with: "2025-11-15"
-    click_button "Save Settings"
-
-    assert_text "Settings saved"
-    assert_field "last_training_date", with: "2025-11-15"
-  end
-
   # === Category Tab Navigation ===
-
-  test "clicking category tab scrolls to section" do
-    login_as @user, scope: :user
-
-    visit settings_path
-
-    click_link "Training"
-
-    # Training section should be visible
-    assert_selector ".training-section"
-  end
 
   test "category tabs highlight current section" do
     login_as @user, scope: :user

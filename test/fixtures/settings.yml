@@ -103,32 +103,6 @@ internal_controls:
   category: "compliance_policies"
   xbrl_element: "a5104"
 
-# === Training ===
-
-training_frequency:
-  organization: one
-  key: "training_frequency"
-  value: "annual"
-  value_type: "enum"
-  category: "training"
-  xbrl_element: "a6101"
-
-last_training_date:
-  organization: one
-  key: "last_training_date"
-  value: "2025-02-10"
-  value_type: "date"
-  category: "training"
-  xbrl_element: "a6102"
-
-training_covers_aml:
-  organization: one
-  key: "training_covers_aml"
-  value: "true"
-  value_type: "boolean"
-  category: "training"
-  xbrl_element: "a6103"
-
 # === Organization Two (for cross-tenant tests) ===
 
 other_org_entity_name:

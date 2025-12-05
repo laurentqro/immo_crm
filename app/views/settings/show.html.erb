@@ -1,12 +1,11 @@
-<% Current.meta_tags.set(title: "Settings") %>
+<% Current.meta_tags.set(title: "Compliance Settings") %>
 
 <div class="px-4 sm:px-6 lg:px-8">
   <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
-      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">Settings</h1>
+      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">Compliance Settings</h1>
       <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
         Configure your organization's AML/CFT compliance settings.
-        <%= current_organization.name %>
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -25,7 +24,6 @@
           <a href="#" data-tabs-target="tab" data-action="click->tabs#change:prevent" class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium border-primary-500 text-primary-600 dark:text-primary-400">Entity Information</a>
           <a href="#" data-tabs-target="tab" data-action="click->tabs#change:prevent" class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400">KYC Procedures</a>
           <a href="#" data-tabs-target="tab" data-action="click->tabs#change:prevent" class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400">Compliance Policies</a>
-          <a href="#" data-tabs-target="tab" data-action="click->tabs#change:prevent" class="whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400">Training</a>
         </nav>
       </div>
 
@@ -168,45 +166,6 @@
               <%= label_tag :internal_controls, class: "ml-3" do %>
                 <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Internal Controls</span>
                 <span id="internal_controls_description" class="block text-sm text-gray-500 dark:text-gray-400">Internal control procedures are documented and implemented</span>
-              <% end %>
-            </div>
-          </div>
-        </div>
-
-        <%# Training Panel %>
-        <div data-tabs-target="panel" id="training" class="settings-category hidden">
-          <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Training</h2>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-            Staff training and awareness program details.
-          </p>
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div>
-              <%= label_tag :training_frequency, "Training Frequency", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-              <%= select_tag "settings[training_frequency]",
-                  options_for_select([
-                    ["Annual", "annual"],
-                    ["Biannual", "biannual"],
-                    ["Quarterly", "quarterly"],
-                    ["Monthly", "monthly"]
-                  ], get_setting_value("training_frequency")),
-                  id: "training_frequency", name: "settings[training_frequency]",
-                  class: "mt-1 form-control max-w-xs" %>
-            </div>
-            <div>
-              <%= label_tag :last_training_date, "Last Training Date", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-              <%= date_field_tag "settings[last_training_date]", get_setting_value("last_training_date"),
-                  id: "last_training_date", name: "settings[last_training_date]",
-                  class: "mt-1 form-control max-w-xs" %>
-            </div>
-            <div class="col-span-full flex items-start">
-              <%= hidden_field_tag "settings[training_covers_aml]", "false" %>
-              <%= check_box_tag "settings[training_covers_aml]", "true", get_setting_value("training_covers_aml") == "true",
-                  id: "training_covers_aml", name: "settings[training_covers_aml]",
-                  class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
-                  aria: { describedby: "training_covers_aml_description" } %>
-              <%= label_tag :training_covers_aml, class: "ml-3" do %>
-                <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Training Covers AML/CFT</span>
-                <span id="training_covers_aml_description" class="block text-sm text-gray-500 dark:text-gray-400">Training program includes AML/CFT compliance topics</span>
               <% end %>
             </div>
           </div>
