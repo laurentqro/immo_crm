@@ -5,7 +5,7 @@ import { Controller } from "@hotwired/stimulus"
 //
 // Usage:
 //   <div data-controller="survey-filter">
-//     <input data-survey-filter-target="search" data-action="input->survey-filter#filter">
+//     <input data-survey-filter-target="search" data-action="input->survey-filter#filterDebounced">
 //     <input type="checkbox" data-survey-filter-target="needsReviewOnly" data-action="change->survey-filter#filter">
 //     <span data-survey-filter-target="count">X</span> elements
 //
@@ -21,12 +21,35 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["search", "needsReviewOnly", "count", "sections", "section", "element", "sectionCount"]
 
+  // Debounce delay in milliseconds
+  static DEBOUNCE_MS = 150
+
   connect() {
     // Store original counts for reset
     this.totalCount = this.elementTargets.length
+    this.debounceTimer = null
+  }
+
+  disconnect() {
+    // Clean up timer on disconnect
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer)
+    }
+  }
+
+  // Debounced filter for text input - waits 150ms after last keystroke
+  filterDebounced() {
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer)
+    }
+
+    this.debounceTimer = setTimeout(() => {
+      this.filter()
+    }, this.constructor.DEBOUNCE_MS)
   }
 
   // Main filter method - combines text search and needs review filter
+  // Called directly for checkbox changes, debounced for text input
   filter() {
     const searchTerm = this.hasSearchTarget ? this.searchTarget.value.toLowerCase().trim() : ""
     const needsReviewOnly = this.hasNeedsReviewOnlyTarget ? this.needsReviewOnlyTarget.checked : false
