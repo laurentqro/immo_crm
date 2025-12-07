@@ -62,6 +62,11 @@ authenticate :user do
         post :unlock  # FR-029: Unlock submission
       end
     end
+
+    # Survey review page (015-amsf-survey-review)
+    # Single-page review replacing 7-step wizard
+    resource :review, only: [:show], controller: "survey_reviews"
+    post "review/complete", to: "survey_reviews#complete", as: :complete_review
   end
 
   # Audit log viewing (compliance) - Phase 4

@@ -45,7 +45,8 @@ module Xbrl
         value: sv&.value,
         source: sv&.source,
         overridden: sv&.overridden?,
-        confirmed: sv&.confirmed?
+        confirmed: sv&.confirmed?,
+        needs_review: sv&.needs_review? || false
       )
     end
 
@@ -65,14 +66,15 @@ module Xbrl
 
     # Value object combining element metadata with submission value
     class ElementValue
-      attr_reader :element, :value, :source, :overridden, :confirmed
+      attr_reader :element, :value, :source, :overridden, :confirmed, :needs_review
 
-      def initialize(element:, value:, source:, overridden:, confirmed:)
+      def initialize(element:, value:, source:, overridden:, confirmed:, needs_review: false)
         @element = element
         @value = value
         @source = source
         @overridden = overridden
         @confirmed = confirmed
+        @needs_review = needs_review
       end
 
       def present?
@@ -101,6 +103,10 @@ module Xbrl
 
       def confirmed?
         !!@confirmed
+      end
+
+      def needs_review?
+        !!@needs_review
       end
 
       # Delegate element properties
@@ -160,8 +166,22 @@ module Xbrl
         element.string?
       end
 
+      def dimensional?
+        element.dimensional?
+      end
+
       def type_label
         element.type_label
+      end
+
+      # Parse dimensional value as hash (country code => count)
+      # Returns empty hash if parsing fails or not dimensional
+      def dimensional_breakdown
+        return {} unless dimensional? && value.present?
+
+        JSON.parse(value)
+      rescue JSON::ParserError
+        {}
       end
     end
   end

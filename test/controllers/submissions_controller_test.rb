@@ -140,7 +140,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @organization, submission.organization
     assert_equal Date.current.year, submission.year
     assert_equal "draft", submission.status
-    assert_redirected_to submission_submission_step_path(submission, step: 1)
+    assert_redirected_to submission_review_path(submission)
   end
 
   test "resumes existing draft for same year" do
@@ -158,7 +158,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to submission_submission_step_path(existing_draft, step: 1)
+    assert_redirected_to submission_review_path(existing_draft)
   end
 
   test "creates submission with taxonomy version" do

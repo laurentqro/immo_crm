@@ -53,13 +53,25 @@ class CalculationEngineTest < ActiveSupport::TestCase
   test "calculates trusts count" do
     results = @engine.calculate_all
     expected = @organization.clients.kept.trusts.count
-    assert_equal expected, results["a11802B"].to_i
+    assert_equal expected, results["a1802TOLA"].to_i
+  end
+
+  test "calculates trusts distinction flag" do
+    results = @engine.calculate_all
+    has_trusts = @organization.clients.kept.trusts.exists?
+    assert_equal(has_trusts ? "Oui" : "Non", results["a1802BTOLA"])
   end
 
   test "calculates PEP clients count" do
     results = @engine.calculate_all
     expected = @organization.clients.kept.peps.count
-    assert_equal expected, results["a1301"].to_i
+    assert_equal expected, results["a11302"].to_i
+  end
+
+  test "calculates PEP clients flag" do
+    results = @engine.calculate_all
+    has_peps = @organization.clients.kept.peps.exists?
+    assert_equal(has_peps ? "Oui" : "Non", results["a11301"])
   end
 
   test "calculates high risk clients count" do
@@ -70,125 +82,104 @@ class CalculationEngineTest < ActiveSupport::TestCase
 
   # === Client Nationality Breakdowns ===
 
-  test "calculates clients by nationality" do
+  test "calculates foreign clients by nationality" do
     results = @engine.calculate_all
 
-    # Monaco nationals
-    mc_count = @organization.clients.kept.where(nationality: "MC").count
-    assert_equal mc_count, results["a1103_MC"].to_i if mc_count > 0
+    # a1103 is for foreign residents - excludes Monegasque nationals (MC)
+    breakdown = results["a1103"]
+    assert_kind_of Hash, breakdown if breakdown.present?
 
-    # French nationals
+    # Monaco nationals should be excluded
+    assert_nil breakdown&.dig("MC"), "MC nationals should be excluded from a1103 (foreign residents)"
+
+    # French nationals should be included if any exist
     fr_count = @organization.clients.kept.where(nationality: "FR").count
-    assert_equal fr_count, results["a1103_FR"].to_i if fr_count > 0
+    assert_equal fr_count, breakdown&.dig("FR").to_i if fr_count > 0
   end
 
   # === Transaction Statistics ===
-
-  test "calculates total transaction count" do
-    results = @engine.calculate_all
-    # Only transactions for the submission year
-    year = @submission.year
-    expected = @organization.transactions.kept.for_year(year).count
-    assert_equal expected, results["a2101B"].to_i
-  end
+  # Note: CalculationEngine uses taxonomy element names (a2102B, a2105B, a2108B)
+  # not sequential a210x names from early development
 
   test "calculates purchase count" do
     results = @engine.calculate_all
     year = @submission.year
     expected = @organization.transactions.kept.for_year(year).purchases.count
-    assert_equal expected, results["a2102"].to_i
+    assert_equal expected, results["a2102B"].to_i
   end
 
   test "calculates sale count" do
     results = @engine.calculate_all
     year = @submission.year
     expected = @organization.transactions.kept.for_year(year).sales.count
-    assert_equal expected, results["a2103"].to_i
+    assert_equal expected, results["a2105B"].to_i
   end
 
   test "calculates rental count" do
     results = @engine.calculate_all
     year = @submission.year
     expected = @organization.transactions.kept.for_year(year).rentals.count
-    assert_equal expected, results["a2104"].to_i
+    assert_equal expected, results["a2108B"].to_i
   end
 
   test "calculates total transaction value" do
     results = @engine.calculate_all
     year = @submission.year
     expected = @organization.transactions.kept.for_year(year).sum(:transaction_value)
-    assert_equal expected, BigDecimal(results["a2104B"].to_s)
+    assert_equal expected, BigDecimal(results["a2109B"].to_s)
   end
 
   test "calculates purchase value" do
     results = @engine.calculate_all
     year = @submission.year
     expected = @organization.transactions.kept.for_year(year).purchases.sum(:transaction_value)
-    assert_equal expected, BigDecimal(results["a2105"].to_s)
+    assert_equal expected, BigDecimal(results["a2102BB"].to_s)
   end
 
   test "calculates sale value" do
     results = @engine.calculate_all
     year = @submission.year
     expected = @organization.transactions.kept.for_year(year).sales.sum(:transaction_value)
-    assert_equal expected, BigDecimal(results["a2106"].to_s)
+    assert_equal expected, BigDecimal(results["a2105BB"].to_s)
   end
 
-  test "calculates rental value" do
-    results = @engine.calculate_all
-    year = @submission.year
-    expected = @organization.transactions.kept.for_year(year).rentals.sum(:transaction_value)
-    assert_equal expected, BigDecimal(results["a2107"].to_s)
-  end
+  # Note: Rental value has no dedicated monetary element in AMSF taxonomy
 
   # === Payment Method Statistics ===
+  # Note: a2202 is Oui/Non question, a2203 is cash count (string type per taxonomy)
+  # Crypto and PEP transaction counts/values are not in AMSF taxonomy elements
 
   test "calculates cash transaction count" do
     results = @engine.calculate_all
     year = @submission.year
     expected = @organization.transactions.kept.for_year(year)
                            .where(payment_method: %w[CASH MIXED]).count
-    assert_equal expected, results["a2201"].to_i
+    # a2203 is string type in taxonomy, stores count as string
+    assert_equal expected.to_s, results["a2203"]
   end
 
-  test "calculates total cash amount" do
+  test "calculates cash transaction flag" do
     results = @engine.calculate_all
     year = @submission.year
-    expected = @organization.transactions.kept.for_year(year)
-                           .where(payment_method: %w[CASH MIXED])
-                           .sum(:cash_amount)
-    assert_equal expected, BigDecimal(results["a2202"].to_s)
+    has_cash = @organization.transactions.kept.for_year(year)
+                           .where(payment_method: %w[CASH MIXED]).exists?
+    # a2202 is Oui/Non flag
+    assert_equal(has_cash ? "Oui" : "Non", results["a2202"])
   end
 
-  test "calculates crypto transaction count" do
+  test "calculates crypto transaction flag" do
     results = @engine.calculate_all
     year = @submission.year
-    expected = @organization.transactions.kept.for_year(year)
-                           .where(payment_method: "CRYPTO").count
-    assert_equal expected, results["a2301"].to_i
+    has_crypto = @organization.transactions.kept.for_year(year)
+                           .where(payment_method: "CRYPTO").exists?
+    # a2501A is Oui/Non flag for crypto transactions
+    assert_equal(has_crypto ? "Oui" : "Non", results["a2501A"])
   end
 
-  test "calculates crypto transaction value" do
-    results = @engine.calculate_all
-    year = @submission.year
-    expected = @organization.transactions.kept.for_year(year)
-                           .where(payment_method: "CRYPTO")
-                           .sum(:transaction_value)
-    assert_equal expected, BigDecimal(results["a2302"].to_s)
-  end
-
-  # === PEP Transaction Statistics ===
-
-  test "calculates transactions with PEP clients" do
-    results = @engine.calculate_all
-    year = @submission.year
-    pep_client_ids = @organization.clients.kept.peps.pluck(:id)
-    expected = @organization.transactions.kept.for_year(year)
-                           .where(client_id: pep_client_ids).count
-    assert_equal expected, results["a2401"].to_i
-  end
+  # Note: PEP transaction statistics (a2401) removed - not in AMSF taxonomy
 
   # === STR Statistics ===
+  # a3102 is the integer count element (a3101 is Oui/Non question)
 
   test "calculates STR count for year" do
     results = @engine.calculate_all
@@ -196,31 +187,30 @@ class CalculationEngineTest < ActiveSupport::TestCase
     expected = @organization.str_reports.kept
                            .where(report_date: Date.new(year, 1, 1)..Date.new(year, 12, 31))
                            .count
-    assert_equal expected, results["a3101"].to_i
+    assert_equal expected, results["a3102"].to_i
   end
 
   # === Beneficial Owner Statistics ===
 
   test "calculates total beneficial owners count" do
     results = @engine.calculate_all
-    expected = @organization.clients.kept.legal_entities
-                           .joins(:beneficial_owners)
-                           .merge(BeneficialOwner.all)
-                           .count
-    expected += @organization.clients.kept.trusts
-                            .joins(:beneficial_owners)
-                            .merge(BeneficialOwner.all)
-                            .count
+    # Engine counts BOs from PM and TRUST type clients
+    expected = BeneficialOwner.joins(:client)
+                             .merge(Client.kept)
+                             .where(clients: { organization_id: @organization.id, client_type: %w[PM TRUST] })
+                             .count
     assert_equal expected, results["a1501"].to_i
   end
 
   test "calculates PEP beneficial owners count" do
     results = @engine.calculate_all
     expected = BeneficialOwner.joins(:client)
+                             .merge(Client.kept)
                              .where(clients: { organization_id: @organization.id })
                              .where(is_pep: true)
                              .count
-    assert_equal expected, results["a1502"].to_i
+    # Element is a1502B (not a1502)
+    assert_equal expected, results["a1502B"].to_i
   end
 
   # === Edge Cases ===
@@ -236,7 +226,7 @@ class CalculationEngineTest < ActiveSupport::TestCase
 
     results = engine.calculate_all
     assert_equal 0, results["a1101"].to_i
-    assert_equal 0, results["a2101B"].to_i
+    assert_equal 0, results["a2102B"].to_i  # purchase count
   end
 
   test "handles submission for past year" do
@@ -271,11 +261,11 @@ class CalculationEngineTest < ActiveSupport::TestCase
 
     results = @engine.calculate_all
     year = @submission.year
-    total_txns = results["a2101B"].to_i
 
-    # Count should not include discarded
-    expected = @organization.transactions.kept.for_year(year).count
-    assert_equal expected, total_txns
+    # Check purchase count excludes discarded transactions
+    purchase_count = results["a2102B"].to_i
+    expected = @organization.transactions.kept.for_year(year).purchases.count
+    assert_equal expected, purchase_count
   end
 
   # === Populate Submission Values ===
@@ -290,7 +280,7 @@ class CalculationEngineTest < ActiveSupport::TestCase
 
     # Verify some key values were created
     assert @submission.submission_values.exists?(element_name: "a1101")
-    assert @submission.submission_values.exists?(element_name: "a2101B")
+    assert @submission.submission_values.exists?(element_name: "a2102B")  # purchase count
   end
 
   test "populate_submission_values sets source to calculated" do
