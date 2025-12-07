@@ -49,6 +49,13 @@ class SubmissionValue < ApplicationRecord
     confirmed_at.present?
   end
 
+  # Checks if this value is flagged for review.
+  # Used by survey review page to highlight elements needing attention.
+  # @return [Boolean]
+  def needs_review?
+    metadata&.dig("flagged_for_review") == true
+  end
+
   def confirm!
     update!(confirmed_at: Time.current) unless confirmed?
   end

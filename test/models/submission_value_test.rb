@@ -414,4 +414,31 @@ class SubmissionValueTest < ActiveSupport::TestCase
     value = SubmissionValue.new(value: "50", previous_year_value: nil)
     assert_not value.significant_change?
   end
+
+  # === Needs Review Flag (015-amsf-survey-review) ===
+
+  test "needs_review? returns true when metadata has flagged_for_review true" do
+    value = SubmissionValue.new(metadata: {"flagged_for_review" => true})
+    assert value.needs_review?
+  end
+
+  test "needs_review? returns false when metadata has flagged_for_review false" do
+    value = SubmissionValue.new(metadata: {"flagged_for_review" => false})
+    assert_not value.needs_review?
+  end
+
+  test "needs_review? returns false when metadata is nil" do
+    value = SubmissionValue.new(metadata: nil)
+    assert_not value.needs_review?
+  end
+
+  test "needs_review? returns false when metadata is empty" do
+    value = SubmissionValue.new(metadata: {})
+    assert_not value.needs_review?
+  end
+
+  test "needs_review? returns false when flagged_for_review key is missing" do
+    value = SubmissionValue.new(metadata: {"other_key" => "value"})
+    assert_not value.needs_review?
+  end
 end

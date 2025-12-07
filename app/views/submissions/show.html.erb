@@ -46,7 +46,7 @@
     <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
       <div class="flex space-x-3">
         <% if @submission.draft? %>
-          <%= link_to "Continue Wizard", submission_submission_step_path(@submission, step: 1), class: "btn btn-primary" %>
+          <%= link_to "Review Submission", submission_review_path(@submission), class: "btn btn-primary" %>
         <% end %>
         <% if @submission.validated? || @submission.completed? %>
           <%= link_to "Download XBRL", download_submission_path(@submission), class: "btn btn-secondary" %>

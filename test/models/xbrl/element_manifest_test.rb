@@ -98,5 +98,43 @@ module Xbrl
         assert ev_manual.manual?
       end
     end
+
+    # === needs_review (015-amsf-survey-review) ===
+
+    test "ElementValue has needs_review attribute" do
+      ev = @manifest.element_with_value("a1101")
+      assert_respond_to ev, :needs_review
+    end
+
+    test "ElementValue needs_review defaults to false" do
+      ev = @manifest.element_with_value("a1101")
+      assert_equal false, ev.needs_review
+    end
+
+    test "ElementValue needs_review reflects SubmissionValue flagged_for_review" do
+      # Use another_submission which doesn't have a1102 value yet
+      other_submission = submissions(:another_submission)
+
+      # Create a submission value with flagged_for_review in metadata
+      sv = SubmissionValue.create!(
+        submission: other_submission,
+        element_name: "a1102",
+        source: "calculated",
+        value: "100",
+        metadata: {"flagged_for_review" => true}
+      )
+
+      # Create manifest for this submission
+      manifest = Xbrl::ElementManifest.new(other_submission.reload)
+      ev = manifest.element_with_value("a1102")
+
+      assert ev.needs_review, "ElementValue should reflect needs_review from SubmissionValue"
+    end
+
+    test "ElementValue needs_review? predicate method works" do
+      ev = @manifest.element_with_value("a1101")
+      assert_respond_to ev, :needs_review?
+      assert_equal false, ev.needs_review?
+    end
   end
 end

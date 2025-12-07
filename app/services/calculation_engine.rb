@@ -168,12 +168,23 @@ class CalculationEngine
     clients = organization.clients.kept
 
     {
+      # Section 1.2 - Clients Summary
       "a1101" => clients.count,
       "a1102" => clients.natural_persons.count,
+
+      # Section 1.5 - Natural Persons
+      "a1401" => clients.high_risk.count,
+
+      # Section 1.6 - Legal Persons
       "a11502B" => clients.legal_entities.count,
-      "a11802B" => clients.trusts.count,
-      "a12002B" => clients.peps.count,
-      "a1401" => clients.high_risk.count
+
+      # Section 1.7 - Trusts and Other Legal Arrangements
+      "a1802BTOLA" => clients.trusts.exists? ? "Oui" : "Non",
+      "a1802TOLA" => clients.trusts.count,
+
+      # Section 1.8 - PEPs (PPE = Personne Politiquement Exposée)
+      "a11301" => clients.peps.exists? ? "Oui" : "Non",
+      "a11302" => clients.peps.count
     }
   end
 
@@ -182,6 +193,7 @@ class CalculationEngine
     clients = organization.clients.kept
 
     # Group by nationality and count - return nested hash for dimensional contexts
+    # a1103 asks for "foreign residents" so exclude Monegasque nationals (MC)
     country_counts = {}
     clients.group(:nationality).count.each do |nationality, count|
       next if nationality.blank?
@@ -192,6 +204,9 @@ class CalculationEngine
         Rails.logger.warn("CalculationEngine: Invalid nationality code skipped: '#{nationality}' (#{count} clients)")
         next
       end
+
+      # Exclude Monegasque nationals - a1103 is for foreign residents only
+      next if safe_nationality == "MC"
 
       country_counts[safe_nationality] = count
     end

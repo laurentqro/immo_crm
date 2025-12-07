@@ -45,8 +45,8 @@ class SubmissionsController < ApplicationController
     existing = current_organization.submissions.find_by(year: year)
 
     if existing
-      # Resume existing submission
-      redirect_to submission_submission_step_path(existing, step: 1)
+      # Resume existing submission - redirect to review page
+      redirect_to submission_review_path(existing)
       return
     end
 
@@ -56,7 +56,7 @@ class SubmissionsController < ApplicationController
     respond_to do |format|
       if @submission.save
         format.html do
-          redirect_to submission_submission_step_path(@submission, step: 1),
+          redirect_to submission_review_path(@submission),
                       notice: "Submission started for #{@submission.year}."
         end
         format.turbo_stream { flash.now[:notice] = "Submission started for #{@submission.year}." }
