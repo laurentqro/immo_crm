@@ -3,7 +3,7 @@
 <div class="container mx-auto px-4 py-8" data-controller="survey-filter">
   <%# Header with navigation and status %>
   <div class="mb-6 flex justify-between items-center">
-    <%= link_to "&larr; Back to Submission".html_safe, submission_path(@submission), class: "text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" %>
+    <%= link_to "← Back to Submission", submission_path(@submission), class: "text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" %>
     <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full <%= @submission.status_badge_class %>">
       <%= @submission.status %>
     </span>

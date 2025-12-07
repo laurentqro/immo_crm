@@ -100,7 +100,20 @@ class SurveyReviewsControllerTest < ActionDispatch::IntegrationTest
 
     post submission_complete_review_path(completed_submission)
 
-    assert_response :unprocessable_entity
+    # Pundit denies access via complete? policy (requires validated? state)
+    # Controller redirects with flash alert for HTML requests
+    assert_redirected_to submission_review_path(completed_submission)
+    assert_equal I18n.t("unauthorized"), flash[:alert]
+  end
+
+  test "complete action returns forbidden for non-validated submission via turbo_stream" do
+    draft_submission = submissions(:draft_submission)
+    sign_in @user
+
+    post submission_complete_review_path(draft_submission), as: :turbo_stream
+
+    # Pundit denies access - draft submissions aren't validated
+    assert_response :forbidden
   end
 
   test "complete action requires authentication" do

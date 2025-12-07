@@ -6,8 +6,11 @@
 class SurveyReviewsController < ApplicationController
   include OrganizationScoped
 
+  rescue_from Pundit::NotAuthorizedError, with: :handle_not_authorized
+
   before_action :set_submission
   before_action :authorize_submission
+  before_action :authorize_complete, only: [:complete]
   before_action :ensure_values_calculated, only: [:show]
 
   # GET /submissions/:submission_id/review
@@ -19,12 +22,8 @@ class SurveyReviewsController < ApplicationController
 
   # POST /submissions/:submission_id/review/complete
   # Transitions submission to completed status
+  # Authorization via authorize_complete ensures only validated submissions can be completed
   def complete
-    if @submission.completed?
-      head :unprocessable_entity
-      return
-    end
-
     @submission.complete!
 
     respond_to do |format|
@@ -41,14 +40,37 @@ class SurveyReviewsController < ApplicationController
   private
 
   # T020: Set submission from params, scoped to current organization
+  # Eager-load submission_values to avoid extra query in ElementManifest
   def set_submission
-    @submission = policy_scope(Submission).find_by(id: params[:submission_id])
+    @submission = policy_scope(Submission)
+                    .includes(:submission_values)
+                    .find_by(id: params[:submission_id])
     render_not_found unless @submission
   end
 
   # T020: Authorize access to submission
   def authorize_submission
     authorize @submission, :show?
+  end
+
+  # T020: Authorize completion - requires validated state per SubmissionPolicy#complete?
+  def authorize_complete
+    authorize @submission, :complete?
+  end
+
+  # Handle Pundit authorization failures
+  def handle_not_authorized(exception)
+    policy_name = exception.policy.class.to_s.underscore
+    action = exception.query
+
+    respond_to do |format|
+      format.html do
+        flash[:alert] = t("pundit.#{policy_name}.#{action}", default: t("unauthorized"))
+        redirect_back(fallback_location: submission_review_path(@submission))
+      end
+      format.turbo_stream { head :forbidden }
+      format.json { head :forbidden }
+    end
   end
 
   # T021: Ensure submission values are calculated before displaying
