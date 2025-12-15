@@ -12,7 +12,7 @@ gem "nokogiri", ">= 1.12.5" # Security update
 gem "noticed", "~> 2.2"
 gem "openssl", "~> 3.3"
 gem "pagy", "~> 43.1"
-gem "pay", "~> 11.0"
+gem "pay", "~> 11.4"
 gem "prefixed_ids", "~> 1.2"
 gem "pretender", "~> 0.4"
 gem "pundit", "~> 2.1"
