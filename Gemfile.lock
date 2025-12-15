@@ -200,7 +200,7 @@ GEM
     jbuilder (2.14.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.16.0)
+    json (2.18.0)
     kamal (2.9.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -283,7 +283,7 @@ GEM
     openssl (3.3.2)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
-    pagy (43.1.8)
+    pagy (43.2.1)
       json
       yaml
     parallel (1.27.0)
@@ -558,7 +558,7 @@ DEPENDENCIES
   nokogiri (>= 1.12.5)
   noticed (~> 2.2)
   openssl (~> 3.3)
-  pagy (~> 43.1)
+  pagy (~> 43.2)
   pay (~> 11.0)
   pg
   prefixed_ids (~> 1.2)
@@ -653,7 +653,7 @@ CHECKSUMS
   io-console (0.8.1) sha256=1e15440a6b2f67b6ea496df7c474ed62c860ad11237f29b3bd187f054b925fcb
   irb (1.15.3) sha256=4349edff1efa7ff7bfd34cb9df74a133a588ba88c2718098b3b4468b81184aaa
   jbuilder (2.14.1) sha256=4eb26376ff60ef100cb4fd6fd7533cd271f9998327e86adf20fd8c0e69fabb42
-  json (2.16.0) sha256=ca5630320bb5ca23ebfd0bac84532fab56eb357575653b815b9df42c051e1525
+  json (2.18.0) sha256=b10506aee4183f5cf49e0efc48073d7b75843ce3782c68dbeb763351c08fd505
   jumpstart (0.1.0)
   kamal (2.9.0) sha256=c94057c1834a2e365ccb4f3439da8153d6de9aa0e7a6e11bb4a2e3a557a36f99
   language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
@@ -693,7 +693,7 @@ CHECKSUMS
   openssl (3.3.2) sha256=7f4e01215dc9c4be1fca71d692406be3e6340b39c1f71a47fea9c497decd0f6c
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
-  pagy (43.1.8) sha256=06d89d0924ef74d239e2410f5e7baedcd73ebcd0a020bbe582af71c79dd9e38a
+  pagy (43.2.1) sha256=f7aa13d32d198ec3f50355e9c2fde27cef910f62fd6e7e00d452e37c2d5a99c1
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   parser (3.3.10.0) sha256=ce3587fa5cc55a88c4ba5b2b37621b3329aadf5728f9eafa36bbd121462aabd6
   pay (11.4.0) sha256=9d7ad01107f6cda5c2d40d46d676d34f8d6aab3358b5c8fbc7f037e93922c885
