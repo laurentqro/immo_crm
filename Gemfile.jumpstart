@@ -6,7 +6,7 @@ gem "invisible_captcha", "~> 2.0"
 gem "jumpstart", path: "lib/jumpstart"
 gem "local_time", "~> 3.0"
 gem "hotwire_combobox", "~> 0.3"
-gem "madmin", "~> 2.0"
+gem "madmin", "~> 2.2"
 gem "name_of_person", "~> 1.0"
 gem "nokogiri", ">= 1.12.5" # Security update
 gem "noticed", "~> 2.2"
