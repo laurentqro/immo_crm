@@ -92,3 +92,7 @@ eval_gemfile "Gemfile.jumpstart"
 
 # Immo CRM dependencies
 gem "discard", "~> 1.3" # Soft deletes for compliance retention
+
+# AMSF Survey XBRL Generation (local development - will be published gems)
+gem "amsf_survey", path: "../amsf_survey/amsf_survey"
+gem "amsf_survey-real_estate", path: "../amsf_survey/amsf_survey-real_estate"

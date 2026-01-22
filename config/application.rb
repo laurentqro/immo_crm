@@ -32,7 +32,8 @@ module JumpstartApp
     config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.{rb,yml}")]
 
     # Permitted locales available for the application
-    config.i18n.available_locales = [:en]
+    # Includes :fr for AMSF Survey gem (Monaco regulatory context requires French)
+    config.i18n.available_locales = [:en, :fr]
 
     # Set default locale
     config.i18n.default_locale = :en
