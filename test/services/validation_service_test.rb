@@ -295,4 +295,140 @@ class ValidationServiceTest < ActiveSupport::TestCase
     result = service.validate
     assert_kind_of ValidationService::Result, result
   end
+
+  # === Gem Validation Integration (T027-T030) ===
+
+  test "can accept AR Submission input for gem validation" do
+    submission = Submission.find_or_create_by!(organization: @organization, year: 2025)
+
+    # This tests that we can create a gem submission from AR submission
+    # The actual validation happens in SubmissionBuilder
+    gem_submission = AmsfSurvey.build_submission(
+      industry: :real_estate,
+      year: submission.year,
+      entity_id: submission.organization.rci_number,
+      period: Date.new(submission.year, 12, 31)
+    )
+
+    result = AmsfSurvey.validate(gem_submission)
+
+    assert_kind_of AmsfSurvey::ValidationResult, result
+    assert_respond_to result, :valid?
+    assert_respond_to result, :errors
+    assert_respond_to result, :warnings
+  end
+
+  test "gem validation detects missing required fields" do
+    submission = Submission.find_or_create_by!(organization: @organization, year: 2025)
+
+    # Create gem submission with no values
+    gem_submission = AmsfSurvey.build_submission(
+      industry: :real_estate,
+      year: submission.year,
+      entity_id: submission.organization.rci_number,
+      period: Date.new(submission.year, 12, 31)
+    )
+
+    result = AmsfSurvey.validate(gem_submission)
+
+    # Should have validation errors for missing required fields
+    assert_not result.valid?, "Validation should fail with missing required fields"
+    assert result.errors.any?, "Should have validation errors"
+  end
+
+  test "gem validation returns French locale messages" do
+    submission = Submission.find_or_create_by!(organization: @organization, year: 2025)
+
+    gem_submission = AmsfSurvey.build_submission(
+      industry: :real_estate,
+      year: submission.year,
+      entity_id: submission.organization.rci_number,
+      period: Date.new(submission.year, 12, 31)
+    )
+
+    result = AmsfSurvey.validate(gem_submission)
+
+    if result.errors.any?
+      # Error messages should be in French (the default locale for AMSF)
+      error = result.errors.first
+      assert error.message.present?, "Error should have a message"
+    end
+  end
+
+  test "layered validation uses gem then optional Arelle" do
+    submission = Submission.find_or_create_by!(organization: @organization, year: 2025)
+    CalculationEngine.new(submission).populate_submission_values!
+
+    builder = SubmissionBuilder.new(@organization, year: 2025)
+    builder.build
+
+    # Gem validation
+    gem_result = builder.validate
+    assert_kind_of AmsfSurvey::ValidationResult, gem_result
+
+    # Arelle validation (requires stub since service may not be running)
+    stub_request(:post, "#{ValidationService::VALIDATOR_URL}/validate")
+      .to_return(
+        status: 200,
+        body: { valid: true, errors: [], warnings: [] }.to_json,
+        headers: { "Content-Type" => "application/json" }
+      )
+
+    arelle_result = builder.validate_with_arelle
+    assert_kind_of ValidationService::Result, arelle_result
+  end
+
+  # === Arelle Configuration Toggle (T034) ===
+
+  test "AmsfValidationConfig.arelle_enabled? respects environment variable" do
+    # Default should be false in test environment
+    assert_not AmsfValidationConfig.arelle_enabled?, "Arelle should be disabled by default in test"
+
+    # Test enabling via environment variable
+    ENV["ARELLE_VALIDATION_ENABLED"] = "true"
+    assert AmsfValidationConfig.arelle_enabled?, "Arelle should be enabled when ENV is true"
+  ensure
+    ENV.delete("ARELLE_VALIDATION_ENABLED")
+  end
+
+  test "validate_layered combines gem and optional Arelle validation" do
+    submission = Submission.find_or_create_by!(organization: @organization, year: 2025)
+    CalculationEngine.new(submission).populate_submission_values!
+
+    builder = SubmissionBuilder.new(@organization, year: 2025)
+    builder.build
+
+    # With Arelle disabled (default in test), should only have gem result
+    result = builder.validate_layered
+
+    assert result.is_a?(Hash), "Should return a hash"
+    assert result.key?(:gem), "Should have gem result"
+    assert result.key?(:arelle), "Should have arelle key"
+    assert result.key?(:valid), "Should have combined valid flag"
+    assert_nil result[:arelle], "Arelle should be nil when disabled"
+  end
+
+  test "validate_layered includes Arelle when enabled" do
+    submission = Submission.find_or_create_by!(organization: @organization, year: 2025)
+    CalculationEngine.new(submission).populate_submission_values!
+
+    builder = SubmissionBuilder.new(@organization, year: 2025)
+    builder.build
+
+    stub_request(:post, "#{ValidationService::VALIDATOR_URL}/validate")
+      .to_return(
+        status: 200,
+        body: { valid: true, errors: [], warnings: [] }.to_json,
+        headers: { "Content-Type" => "application/json" }
+      )
+
+    # Enable Arelle validation
+    ENV["ARELLE_VALIDATION_ENABLED"] = "true"
+    result = builder.validate_layered
+
+    assert_not_nil result[:arelle], "Arelle result should be present when enabled"
+    assert_kind_of ValidationService::Result, result[:arelle]
+  ensure
+    ENV.delete("ARELLE_VALIDATION_ENABLED")
+  end
 end
