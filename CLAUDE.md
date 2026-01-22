@@ -122,6 +122,36 @@ Routes are modularized in `config/routes/`:
 - PostgreSQL (primary), existing SubmissionValue model (012-amsf-taxonomy-compliance)
 - Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Hotwire (Turbo/Stimulus), Nokogiri (XML/XBRL), Pay gem (013-amsf-data-capture)
 - PostgreSQL (primary), existing schema with clients, transactions, submissions tables (013-amsf-data-capture)
+- Ruby 3.4.7 / Rails 8.1 + `amsf_survey`, `amsf_survey-real_estate`, Nokogiri, Turbo/Stimulus (016-amsf-gem-migration)
+- PostgreSQL (existing schema - Submission, SubmissionValue models) (016-amsf-gem-migration)
+
+## AMSF Survey Gem Integration
+
+The application uses the `amsf_survey` and `amsf_survey-real_estate` gems for XBRL generation and validation:
+
+### Key Components
+- **SubmissionBuilder** (`app/services/submission_builder.rb`): Orchestrates submission workflow, creates gem submissions, validates, generates XBRL
+- **SubmissionRenderer** (`app/services/submission_renderer.rb`): Renders XBRL via gem for supported years
+- **ElementManifest** (`app/models/xbrl/element_manifest.rb`): Provides gem questionnaire access for field metadata
+- **Initializer** (`config/initializers/amsf_survey.rb`): Loads gem and configures Arelle validation toggle
+
+### Validation Layers
+1. **Gem validation**: Business rules via `AmsfSurvey.validate(submission)` - always runs
+2. **Arelle validation**: Schema validation via external service - optional, controlled by `ARELLE_VALIDATION_ENABLED`
+
+### Environment Variables
+- `ARELLE_VALIDATION_ENABLED`: Enable external Arelle validation (default: false in dev/test, true in production)
+- `XBRL_VALIDATOR_URL`: Arelle validator service URL (default: http://localhost:8000)
+
+### Usage
+```ruby
+builder = SubmissionBuilder.new(organization, year: 2025)
+result = builder.build
+validation = builder.validate        # Gem validation
+xbrl = builder.generate_xbrl         # XBRL via gem
+arelle = builder.validate_with_arelle  # External Arelle validation
+```
 
 ## Recent Changes
 - 001-mvp-immo-crm: Added Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Devise, Pundit, Hotwire (Turbo/Stimulus), Nokogiri, Pay gem
+- 016-amsf-gem-migration: Integrated amsf_survey gem for XBRL generation, validation, and questionnaire metadata
