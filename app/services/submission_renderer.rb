@@ -35,11 +35,23 @@ class SubmissionRenderer
   end
 
   # Render XBRL XML document
+  # Uses gem for supported years, falls back to ERB template otherwise
   def to_xbrl
-    render_template("submissions/show", format: :xml)
+    if gem_supported_year?
+      generate_xbrl_via_gem
+    else
+      render_template("submissions/show", format: :xml)
+    end
   rescue ActionView::Template::Error => e
     raise RenderError.new(
       "Failed to render XBRL for submission #{submission&.id}: #{e.message}",
+      format: :xbrl,
+      cause: e,
+      submission_id: submission&.id
+    )
+  rescue AmsfSurvey::GeneratorError => e
+    raise RenderError.new(
+      "Failed to generate XBRL via gem for submission #{submission&.id}: #{e.message}",
       format: :xbrl,
       cause: e,
       submission_id: submission&.id
@@ -113,6 +125,41 @@ class SubmissionRenderer
   end
 
   private
+
+  # Check if the submission year is supported by the gem
+  def gem_supported_year?
+    AmsfSurvey.registered?(:real_estate) &&
+      AmsfSurvey.supported_years(:real_estate).include?(submission.year)
+  end
+
+  # Generate XBRL using the gem
+  def generate_xbrl_via_gem
+    gem_submission = create_gem_submission
+    AmsfSurvey.to_xbrl(gem_submission, pretty: true)
+  end
+
+  # Create a gem submission from the AR submission
+  def create_gem_submission
+    gem_sub = AmsfSurvey.build_submission(
+      industry: :real_estate,
+      year: submission.year,
+      entity_id: submission.organization.rci_number,
+      period: Date.new(submission.year, 12, 31)
+    )
+
+    # Transfer values from AR submission to gem submission
+    submission.submission_values.each do |sv|
+      next unless sv.value.present?
+
+      begin
+        gem_sub[sv.element_name.to_sym] = sv.value
+      rescue AmsfSurvey::UnknownFieldError
+        Rails.logger.debug "Skipping unknown gem field: #{sv.element_name}"
+      end
+    end
+
+    gem_sub
+  end
 
   def render_template(template_path, format:)
     ApplicationController.render(

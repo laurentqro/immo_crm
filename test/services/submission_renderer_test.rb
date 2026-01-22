@@ -185,6 +185,40 @@ class SubmissionRendererTest < ActiveSupport::TestCase
     end
   end
 
+  # === Gem-Based XBRL Generation (T010) ===
+
+  test "to_xbrl via gem produces valid XBRL" do
+    # Create a submission for 2025 (supported by gem)
+    org = organizations(:one)
+    submission = Submission.find_or_create_by!(organization: org, year: 2025)
+    CalculationEngine.new(submission).populate_submission_values!
+
+    renderer = SubmissionRenderer.new(submission)
+    xml = renderer.to_xbrl
+
+    # Verify basic XBRL structure
+    doc = Nokogiri::XML(xml)
+    assert_empty doc.errors, "XML should be well-formed"
+    assert_equal "xbrl", doc.root.name.downcase.gsub(/^.*:/, "")
+  end
+
+  test "to_xbrl includes visible submission values as facts" do
+    org = organizations(:one)
+    submission = Submission.find_or_create_by!(organization: org, year: 2025)
+
+    # Add a gate field value that is always visible (aACTIVE is a gate field)
+    submission.submission_values.find_or_create_by!(element_name: "aACTIVE") do |sv|
+      sv.value = "Oui"
+      sv.source = "manual"
+    end
+
+    renderer = SubmissionRenderer.new(submission)
+    xml = renderer.to_xbrl
+
+    # Should contain the gate field fact (always visible)
+    assert_includes xml, "aACTIVE"
+  end
+
   # === Error Handling ===
 
   test "raises RenderError on template failure" do

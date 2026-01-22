@@ -3,8 +3,9 @@
 # SubmissionBuilder orchestrates the submission workflow:
 # 1. Creates or retrieves a Submission for the organization/year
 # 2. Populates calculated values from CRM data
-# 3. Generates XBRL XML
-# 4. Validates against external validator
+# 3. Creates a gem submission for XBRL generation
+# 4. Validates using gem validation (with optional Arelle fallback)
+# 5. Generates XBRL XML via gem
 #
 # Usage:
 #   builder = SubmissionBuilder.new(organization, year: 2025)
@@ -21,6 +22,7 @@ class SubmissionBuilder
     @organization = organization
     @year = year
     @submission = nil
+    @gem_submission = nil
     @built = false
   end
 
@@ -32,11 +34,26 @@ class SubmissionBuilder
     return Result.failure(submission.errors.full_messages) unless submission.persisted?
 
     populate_values
+    create_gem_submission
     @built = true
 
     Result.success(submission)
   rescue ActiveRecord::RecordInvalid => e
     Result.failure([e.message])
+  rescue AmsfSurvey::TaxonomyLoadError => e
+    # Gem doesn't support this year/industry - fall back gracefully
+    Rails.logger.warn "AMSF gem not available for #{year}: #{e.message}"
+    @built = true
+    Result.success(submission)
+  end
+
+  # Get the gem submission object for validation/generation
+  #
+  # @return [AmsfSurvey::Submission] the gem submission
+  # @raise [NotBuiltError] if build hasn't been called
+  def gem_submission
+    raise NotBuiltError, "Call build before gem_submission" unless @built
+    @gem_submission
   end
 
   # Generate XBRL XML from the submission
@@ -46,15 +63,55 @@ class SubmissionBuilder
   def generate_xbrl
     raise NotBuiltError, "Call build before generate_xbrl" unless @built
 
-    SubmissionRenderer.new(submission).to_xbrl
+    if @gem_submission
+      AmsfSurvey.to_xbrl(@gem_submission, pretty: true)
+    else
+      # Fall back to ERB template for years not supported by gem
+      SubmissionRenderer.new(submission).to_xbrl
+    end
   end
 
-  # Validate the XBRL content against the external validator
+  # Validate the submission using gem validation
+  # Optionally adds Arelle schema validation when enabled via ARELLE_VALIDATION_ENABLED
   #
-  # @return [Hash] Validation result with :valid, :errors, :warnings
+  # @return [AmsfSurvey::ValidationResult] Validation result with valid?, errors, warnings
   # @raise [NotBuiltError] if build hasn't been called
   def validate
     raise NotBuiltError, "Call build before validate" unless @built
+
+    if @gem_submission
+      AmsfSurvey.validate(@gem_submission)
+    else
+      # Fall back to external validator for years not supported by gem
+      validate_with_arelle
+    end
+  end
+
+  # Validate using both gem and Arelle (layered validation)
+  # Use this when you want both business rule validation AND schema validation
+  #
+  # @return [Hash] Combined validation results with :gem and :arelle keys
+  # @raise [NotBuiltError] if build hasn't been called
+  def validate_layered
+    raise NotBuiltError, "Call build before validate_layered" unless @built
+
+    gem_result = validate
+    arelle_result = AmsfValidationConfig.arelle_enabled? ? validate_with_arelle : nil
+
+    {
+      gem: gem_result,
+      arelle: arelle_result,
+      valid: gem_result.valid? && (arelle_result.nil? || arelle_result.valid?)
+    }
+  end
+
+  # Validate using external Arelle validator service
+  # Use this for additional schema-level validation beyond gem validation
+  #
+  # @return [ValidationService::Result] Validation result hash
+  # @raise [NotBuiltError] if build hasn't been called
+  def validate_with_arelle
+    raise NotBuiltError, "Call build before validate_with_arelle" unless @built
 
     xbrl_content = generate_xbrl
     ValidationService.new(xbrl_content).validate
@@ -99,5 +156,33 @@ class SubmissionBuilder
 
   def populate_values
     CalculationEngine.new(submission).populate_submission_values!
+  end
+
+  # Create a gem submission from the AR submission
+  # Transfers all submission values to the gem submission object
+  def create_gem_submission
+    @gem_submission = AmsfSurvey.build_submission(
+      industry: :real_estate,
+      year: year,
+      entity_id: organization.rci_number,
+      period: Date.new(year, 12, 31)
+    )
+
+    # Transfer values from AR submission to gem submission
+    submission.submission_values.each do |sv|
+      transfer_value_to_gem(sv)
+    end
+
+    @gem_submission
+  end
+
+  # Transfer a single submission value to the gem submission
+  # Handles unknown fields gracefully by logging and skipping
+  def transfer_value_to_gem(submission_value)
+    return unless submission_value.value.present?
+
+    @gem_submission[submission_value.element_name.to_sym] = submission_value.value
+  rescue AmsfSurvey::UnknownFieldError
+    Rails.logger.debug "Skipping unknown gem field: #{submission_value.element_name}"
   end
 end
