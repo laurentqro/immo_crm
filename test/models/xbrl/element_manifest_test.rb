@@ -136,5 +136,71 @@ module Xbrl
       assert_respond_to ev, :needs_review?
       assert_equal false, ev.needs_review?
     end
+
+    # === Gem Integration Tests (T018-T020) ===
+
+    test "field returns gem field via questionnaire" do
+      # Create a 2025 submission for gem compatibility
+      submission_2025 = Submission.find_or_create_by!(organization: @organization, year: 2025)
+      manifest_2025 = Xbrl::ElementManifest.new(submission_2025)
+
+      field = manifest_2025.field(:aACTIVE)
+
+      assert_not_nil field, "Should find aACTIVE field via gem questionnaire"
+      assert_kind_of AmsfSurvey::Field, field
+      assert_equal :aACTIVE, field.id
+    end
+
+    test "field returns nil for unknown field" do
+      submission_2025 = Submission.find_or_create_by!(organization: @organization, year: 2025)
+      manifest_2025 = Xbrl::ElementManifest.new(submission_2025)
+
+      field = manifest_2025.field(:nonexistent_xyz)
+
+      assert_nil field
+    end
+
+    test "fields_by_section returns gem sections" do
+      submission_2025 = Submission.find_or_create_by!(organization: @organization, year: 2025)
+      manifest_2025 = Xbrl::ElementManifest.new(submission_2025)
+
+      sections = manifest_2025.fields_by_section
+
+      assert sections.is_a?(Hash), "Should return a hash"
+      assert sections.keys.any?, "Should have sections"
+    end
+
+    test "all_fields returns fields from gem questionnaire" do
+      submission_2025 = Submission.find_or_create_by!(organization: @organization, year: 2025)
+      manifest_2025 = Xbrl::ElementManifest.new(submission_2025)
+
+      fields = manifest_2025.all_fields
+
+      assert fields.any?, "Should return fields"
+      assert fields.first.is_a?(AmsfSurvey::Field), "Fields should be AmsfSurvey::Field"
+    end
+
+    test "field visibility respects gate dependencies" do
+      submission_2025 = Submission.find_or_create_by!(organization: @organization, year: 2025)
+
+      # Set a gate field value
+      submission_2025.submission_values.find_or_create_by!(element_name: "aACTIVE") do |sv|
+        sv.value = "Oui"
+        sv.source = "manual"
+      end
+
+      manifest_2025 = Xbrl::ElementManifest.new(submission_2025.reload)
+
+      # Find a field that depends on aACTIVE
+      questionnaire = AmsfSurvey.questionnaire(industry: :real_estate, year: 2025)
+      dependent_field = questionnaire.fields.find { |f| f.id != :aACTIVE && f.visible?(aACTIVE: "Oui") && !f.visible?({}) }
+
+      if dependent_field
+        # When gate is set, field should be visible
+        assert manifest_2025.field_visible?(dependent_field.id, manifest_2025.gate_data)
+      else
+        skip "No fields with gate dependencies found"
+      end
+    end
   end
 end

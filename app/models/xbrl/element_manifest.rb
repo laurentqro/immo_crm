@@ -2,18 +2,20 @@
 
 module Xbrl
   # ElementManifest defines computation logic for XBRL elements.
-  # Works with Taxonomy (metadata) and CalculationEngine (existing computations).
+  # Works with Taxonomy (metadata) and gem questionnaire for field metadata.
   #
   # This is a thin layer that:
   # 1. Identifies which elements are computable vs manual
   # 2. Provides a consistent interface for value retrieval
   # 3. Combines taxonomy metadata with stored submission values
+  # 4. Provides gem questionnaire access for field lookup and visibility
   #
   # Usage:
   #   manifest = Xbrl::ElementManifest.new(submission)
   #   manifest.value_for("a1101")        # => "42"
-  #   manifest.element_with_value("a1101") # => { element: TaxonomyElement, value: "42", source: "calculated" }
-  #   manifest.all_elements_with_values  # => Array of all elements with their values
+  #   manifest.element_with_value("a1101") # => ElementValue
+  #   manifest.field(:a1101)             # => AmsfSurvey::Field (via gem)
+  #   manifest.all_fields                # => Array<AmsfSurvey::Field>
   #
   class ElementManifest
     attr_reader :submission
@@ -22,6 +24,86 @@ module Xbrl
       @submission = submission
       @stored_values = submission.submission_values.index_by(&:element_name)
     end
+
+    # === Gem Questionnaire Access ===
+
+    # Get field by ID from gem questionnaire
+    # Returns nil if field not found or gem not available for this year
+    #
+    # @param field_id [Symbol, String] the field identifier
+    # @return [AmsfSurvey::Field, nil] the field or nil
+    def field(field_id)
+      return nil unless questionnaire
+
+      questionnaire.field(field_id.to_sym)
+    end
+
+    # Get all fields from gem questionnaire
+    # Returns empty array if gem not available for this year
+    #
+    # @return [Array<AmsfSurvey::Field>]
+    def all_fields
+      return [] unless questionnaire
+
+      questionnaire.fields
+    end
+
+    # Get fields grouped by section from gem questionnaire
+    # Returns sections as {section_name => [fields]}
+    #
+    # @return [Hash{String => Array<AmsfSurvey::Field>}]
+    def fields_by_section
+      return {} unless questionnaire
+
+      questionnaire.sections.each_with_object({}) do |section, hash|
+        hash[section.name] = section.fields
+      end
+    end
+
+    # Check if a field is visible based on gate dependencies
+    #
+    # @param field_id [Symbol, String] the field identifier
+    # @param data [Hash] current submission data for gate evaluation
+    # @return [Boolean] true if field is visible
+    def field_visible?(field_id, data = gate_data)
+      f = field(field_id)
+      return true unless f # Default to visible if field not found
+
+      f.visible?(data)
+    end
+
+    # Get current submission data for gate field evaluation
+    # Returns a hash of field_id => value for all stored values
+    #
+    # @return [Hash{Symbol => Object}]
+    def gate_data
+      @gate_data ||= @stored_values.transform_keys(&:to_sym).transform_values(&:value)
+    end
+
+    # Get the gem questionnaire for this submission's year
+    # Returns nil if the year is not supported by the gem
+    #
+    # @return [AmsfSurvey::Questionnaire, nil]
+    def questionnaire
+      return @questionnaire if defined?(@questionnaire)
+
+      @questionnaire = begin
+        if gem_supported_year?
+          AmsfSurvey.questionnaire(industry: :real_estate, year: submission.year)
+        end
+      rescue AmsfSurvey::TaxonomyLoadError
+        nil
+      end
+    end
+
+    private
+
+    def gem_supported_year?
+      AmsfSurvey.registered?(:real_estate) &&
+        AmsfSurvey.supported_years(:real_estate).include?(submission.year)
+    end
+
+    public
 
     # Get raw value for an element
     def value_for(element_name)
