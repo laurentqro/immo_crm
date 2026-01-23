@@ -42,31 +42,49 @@ The `amsf_survey` gem is the **single coupling point**. The application knows no
 └─────────────────────────────────────────────────────────────┘
 ```
 
+## Survey PORO Responsibility
+
+**Survey is a read-only value calculator.** Given an organization and year, it produces pre-filled values for all questionnaire fields:
+
+| Field Type | Survey Method | Returns |
+|------------|---------------|---------|
+| Calculated | `total_clients` | Computed from CRM data |
+| From settings | `entity_name` | Value from organization |
+| Entry-only | (no method) | `nil` — user fills via form |
+
+**Survey does NOT:**
+- Read from database (no stored values)
+- Know about drafts, submissions, or persistence
+- Handle user edits or overrides
+
+The form/persistence layer (separate concern) displays Survey values, accepts user input, and saves elsewhere.
+
 ## File Structure
 
 ```
 app/models/
-  survey.rb                     # Main Survey PORO
+  survey.rb                       # Main Survey PORO
   survey/
-    customer_risk.rb            # Tab 1: Customer Risk Assessment
-    products_services_risk.rb   # Tab 2: Products/Services Risk
-    distribution_risk.rb        # Tab 3: Distribution Channel Risk
-    controls.rb                 # Tab 4: Internal Controls
-    signatories.rb              # Tab 5: Signatories
+    fields/
+      customer_risk.rb            # Tab 1: Customer Risk Assessment
+      products_services_risk.rb   # Tab 2: Products/Services Risk
+      distribution_risk.rb        # Tab 3: Distribution Channel Risk
+      controls.rb                 # Tab 4: Internal Controls
+      signatories.rb              # Tab 5: Signatories
 ```
 
-The 5 modules mirror AMSF's questionnaire tabs exactly.
+The `Fields` namespace signals these modules contain only field methods. The 5 modules mirror AMSF's questionnaire tabs exactly.
 
 ## Survey Class
 
 ```ruby
 # app/models/survey.rb
 class Survey
-  include Survey::CustomerRisk
-  include Survey::ProductsServicesRisk
-  include Survey::DistributionRisk
-  include Survey::Controls
-  include Survey::Signatories
+  include Survey::Fields::CustomerRisk
+  include Survey::Fields::ProductsServicesRisk
+  include Survey::Fields::DistributionRisk
+  include Survey::Fields::Controls
+  include Survey::Fields::Signatories
 
   attr_reader :organization, :year
 
@@ -119,15 +137,16 @@ class Survey
 end
 ```
 
-## Concern Module Example
+## Field Module Example
 
 ```ruby
-# app/models/survey/customer_risk.rb
-module Survey::CustomerRisk
+# app/models/survey/fields/customer_risk.rb
+module Survey::Fields::CustomerRisk
   extend ActiveSupport::Concern
 
   private
 
+  # Calculated from CRM data
   def total_clients
     organization.clients.count
   end
@@ -140,7 +159,15 @@ module Survey::CustomerRisk
     organization.clients.group(:country_code).count
   end
 
-  # ... ~60 more methods for Tab 1 fields
+  # From organization settings
+  def entity_name
+    organization.name
+  end
+
+  # Entry-only fields have NO method here.
+  # Survey returns nil → form shows empty field for user input.
+
+  # ... more methods for Tab 1 fields
 end
 ```
 
@@ -148,8 +175,9 @@ end
 
 1. **Dynamic field population**: `questionnaire.fields.each { |f| send(f.name) }`
 2. **Semantic method names**: Methods named after gem's semantic mappings (`:total_clients`, not `:a1101`)
-3. **Private methods**: Field methods are private—only the gem iterates them
-4. **Graceful nil handling**: Missing methods or nil values are skipped
+3. **Private methods**: Field methods are private—Survey iterates them internally
+4. **Entry-only = no method**: Fields requiring user input have no method; `respond_to?` returns false, value stays nil
+5. **Read-only**: Survey calculates values but never persists or reads stored data
 
 ## What Gets Removed
 
@@ -167,11 +195,16 @@ After implementation, delete:
 - `config/xbrl_short_labels.yml`
 - `docs/taxonomy/` directory
 
-## Migration Notes
+## Form & Persistence (Separate Concern)
 
-- This is greenfield design—no backward compatibility needed
-- The `Submission` AR model may still be used to store survey state/status
-- Field values can be cached in `SubmissionValue` if needed for persistence/editing
+Survey provides pre-filled values. A separate layer handles:
+
+1. **Display**: Render form with Survey values as defaults
+2. **User input**: Accept edits for all fields (including overrides of calculated values)
+3. **Persistence**: Save to AR model (design TBD)
+4. **Submission**: Merge user edits with Survey values, generate XBRL
+
+This separation keeps Survey pure (read-only calculator) and persistence flexible.
 
 ## Semantic Field Mapping
 
