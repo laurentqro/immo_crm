@@ -11,6 +11,10 @@ class Survey
 
       # Field methods will be added here
       # Example: total_clients, high_risk_clients, clients_by_country
+
+      def total_clients
+        organization.clients.count
+      end
     end
   end
 end

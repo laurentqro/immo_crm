@@ -49,4 +49,20 @@ class SurveyTest < ActiveSupport::TestCase
     assert_respond_to errors, :each
     assert errors.any?, "Expected validation errors for empty submission"
   end
+
+  # === CustomerRisk Field Tests ===
+
+  test "total_clients is a private method" do
+    assert_includes @survey.private_methods, :total_clients
+    assert_raises(NoMethodError) { @survey.total_clients }
+  end
+
+  test "total_clients returns count of clients for organization" do
+    # Organization :one has multiple clients in fixtures
+    expected_count = @organization.clients.count
+    actual_count = @survey.send(:total_clients)
+
+    assert_equal expected_count, actual_count
+    assert actual_count > 0, "Expected organization to have clients in fixtures"
+  end
 end
