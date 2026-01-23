@@ -36,4 +36,17 @@ class SurveyTest < ActiveSupport::TestCase
     assert_includes xbrl, "xbrli:xbrl"
     assert_includes xbrl, @organization.rci_number
   end
+
+  test "valid? returns validation status" do
+    # With no field implementations, submission has missing required fields
+    assert_respond_to @survey, :valid?
+    assert_equal false, @survey.valid?  # Expected to fail initially
+  end
+
+  test "errors returns validation errors" do
+    errors = @survey.errors
+
+    assert_respond_to errors, :each
+    assert errors.any?, "Expected validation errors for empty submission"
+  end
 end

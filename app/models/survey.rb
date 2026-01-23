@@ -24,7 +24,19 @@ class Survey
     AmsfSurvey.to_xbrl(submission, pretty: true)
   end
 
+  def valid?
+    validation_result.valid?
+  end
+
+  def errors
+    validation_result.errors
+  end
+
   private
+
+  def validation_result
+    @validation_result ||= AmsfSurvey.validate(submission)
+  end
 
   def questionnaire
     @questionnaire ||= AmsfSurvey.questionnaire(industry: :real_estate, year: year)
