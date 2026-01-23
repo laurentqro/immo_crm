@@ -25,4 +25,29 @@ class Survey
   def questionnaire
     @questionnaire ||= AmsfSurvey.questionnaire(industry: :real_estate, year: year)
   end
+
+  def submission
+    @submission ||= build_submission
+  end
+
+  def build_submission
+    sub = AmsfSurvey.build_submission(
+      industry: :real_estate,
+      year: year,
+      entity_id: organization.rci_number,
+      period: Date.new(year, 12, 31)
+    )
+
+    populate_fields(sub)
+    sub
+  end
+
+  def populate_fields(sub)
+    questionnaire.fields.each do |field|
+      next unless respond_to?(field.name, true)
+
+      value = send(field.name)
+      sub[field.name] = value if value.present?
+    end
+  end
 end

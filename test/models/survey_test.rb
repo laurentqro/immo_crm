@@ -20,4 +20,12 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 2025, questionnaire.year
     assert_equal :real_estate, questionnaire.industry
   end
+
+  test "build_submission creates gem submission with entity info" do
+    submission = @survey.send(:build_submission)
+
+    assert_instance_of AmsfSurvey::Submission, submission
+    assert_equal @organization.rci_number, submission.entity_id
+    assert_equal Date.new(2025, 12, 31), submission.period
+  end
 end
