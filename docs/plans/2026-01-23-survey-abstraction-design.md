@@ -185,3 +185,35 @@ The gem's `semantic_mappings.yml` (323 fields) provides the canonical field name
 | rci_number | a0102 | from_settings |
 
 The application only knows semantic names. XBRL codes are an implementation detail of the gem.
+
+## Handling Taxonomy Updates
+
+When AMSF updates the questionnaire (new gem version):
+
+| Change Type | App Impact | Detection |
+|-------------|------------|-----------|
+| Modified questions | None (semantic name unchanged) | Automatic |
+| Deleted questions | Dead methods (harmless) | Periodic cleanup |
+| New questions | Missing implementation | CI test fails |
+
+### Completeness Test
+
+A single test ensures all questionnaire fields have implementations:
+
+```ruby
+# test/models/survey_completeness_test.rb
+class SurveyCompletenessTest < ActiveSupport::TestCase
+  test "Survey implements all questionnaire fields" do
+    questionnaire = AmsfSurvey.questionnaire(industry: :real_estate, year: 2025)
+    survey = Survey.new(organization: organizations(:one), year: 2025)
+
+    missing = questionnaire.fields.map(&:name).reject do |name|
+      survey.respond_to?(name, true)
+    end
+
+    assert missing.empty?, "Survey missing implementations for: #{missing.join(', ')}"
+  end
+end
+```
+
+This test fails CI before deploy if any new field lacks an implementation.
