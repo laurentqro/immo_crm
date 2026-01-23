@@ -19,6 +19,6 @@ class SurveyCompletenessTest < ActiveSupport::TestCase
       survey.respond_to?(name, true)
     end
 
-    assert missing.empty?, "Survey missing implementations for: #{missing.join(', ')}"
+    assert missing.empty?, "Survey missing implementations for: #{missing.join(", ")}"
   end
 end

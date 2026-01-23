@@ -1,5 +1,7 @@
 # Survey Abstraction Design
 
+**Status: IMPLEMENTED** (2026-01-23)
+
 ## Goal
 
 Hide XBRL completely from the application. If AMSF switches to another format tomorrow, no application code changes.
@@ -250,3 +252,36 @@ end
 ```
 
 This test fails CI before deploy if any new field lacks an implementation.
+
+## Implementation Summary
+
+**Completed: 2026-01-23**
+
+### What Was Built
+
+- **Survey PORO** (`app/models/survey.rb`): Main class with 76 lines, handles XBRL generation via gem
+- **5 Field Modules** (~320 methods total):
+  - `CustomerRisk`: 125 methods for client/risk statistics
+  - `ProductsServicesRisk`: 58 methods for payment/transaction metrics
+  - `DistributionRisk`: 34 methods for CDD and channel risks
+  - `Controls`: 95 methods for compliance/audit controls
+  - `Signatories`: 36 methods for entity/business info
+
+### Key Implementation Details
+
+1. **All 323 questionnaire fields implemented** - Completeness test ensures 100% coverage
+2. **Settings caching** - `settings_cache` method prevents N+1 queries when reading organization settings
+3. **Helper methods** - Shared helpers (`year_transactions`, `clients_kept`, `beneficial_owners_base`) reduce code duplication
+4. **Year scoping** - All calculated fields scope data to the survey year
+
+### Tests
+
+- `test/models/survey_completeness_test.rb` - Ensures all gem fields have implementations
+- `test/integration/survey_xbrl_generation_test.rb` - End-to-end XBRL generation verification
+- `test/models/survey_test.rb` - Unit tests for Survey class
+
+### Next Steps (Not Part of This Implementation)
+
+- Form/persistence layer for user edits
+- Integration with existing Submission workflow
+- Removal of legacy XBRL code (listed in "What Gets Removed" section)
