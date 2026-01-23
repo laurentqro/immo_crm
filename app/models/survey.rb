@@ -13,6 +13,12 @@
 #   survey.valid?   # => true/false
 #
 class Survey
+  include Survey::Fields::CustomerRisk
+  include Survey::Fields::ProductsServicesRisk
+  include Survey::Fields::DistributionRisk
+  include Survey::Fields::Controls
+  include Survey::Fields::Signatories
+
   attr_reader :organization, :year
 
   def initialize(organization:, year:)
