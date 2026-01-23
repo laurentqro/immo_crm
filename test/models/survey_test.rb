@@ -28,4 +28,12 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal @organization.rci_number, submission.entity_id
     assert_equal Date.new(2025, 12, 31), submission.period
   end
+
+  test "to_xbrl generates valid XML" do
+    xbrl = @survey.to_xbrl
+
+    assert_includes xbrl, '<?xml version="1.0"'
+    assert_includes xbrl, "xbrli:xbrl"
+    assert_includes xbrl, @organization.rci_number
+  end
 end

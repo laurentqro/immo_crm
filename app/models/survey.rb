@@ -20,6 +20,10 @@ class Survey
     @year = year
   end
 
+  def to_xbrl
+    AmsfSurvey.to_xbrl(submission, pretty: true)
+  end
+
   private
 
   def questionnaire
