@@ -52,15 +52,15 @@ class SurveyTest < ActiveSupport::TestCase
 
   # === CustomerRisk Field Tests ===
 
-  test "total_clients is a private method" do
-    assert_includes @survey.private_methods, :total_clients
-    assert_raises(NoMethodError) { @survey.total_clients }
+  test "a1101 (total_clients) is a private method" do
+    assert_includes @survey.private_methods, :a1101
+    assert_raises(NoMethodError) { @survey.a1101 }
   end
 
-  test "total_clients returns count of clients for organization" do
+  test "a1101 (total_clients) returns count of clients for organization" do
     # Organization :one has multiple clients in fixtures
     expected_count = @organization.clients.count
-    actual_count = @survey.send(:total_clients)
+    actual_count = @survey.send(:a1101)
 
     assert_equal expected_count, actual_count
     assert actual_count > 0, "Expected organization to have clients in fixtures"

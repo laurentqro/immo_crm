@@ -23,57 +23,57 @@ class Survey
 
       # === Training ===
 
-      def staff_trained
+      def ab3206
         organization.trainings.for_year(year).sum(:staff_count)
       end
 
-      def training_frequency
-        setting_value("training_frequency")&.to_i || 1
+      def ab3207
+        setting_value("ab3207")&.to_i || 1
       end
 
-      def provides_aml_training
+      def ab1801b
         organization.trainings.for_year(year).exists? ? "Oui" : "Non"
       end
 
       # === Compliance Function ===
 
-      def compliance_fte
-        setting_value("compliance_fte")&.to_d || 0
+      def a381
+        setting_value("a381")&.to_d || 0
       end
 
-      def has_compliance_officer
-        setting_value("has_compliance_officer")&.to_d || 0
+      def a3802
+        setting_value("a3802")&.to_d || 0
       end
 
-      def compliance_officer_role
-        setting_value("compliance_officer_role")&.to_d || 0
+      def a3803
+        setting_value("a3803")&.to_d || 0
       end
 
-      def compliance_officer_reporting
-        setting_value("compliance_officer_reporting")&.to_d || 0
+      def a3804
+        setting_value("a3804")&.to_d || 0
       end
 
       # === Due Diligence Procedures ===
 
       # Legal form of the entity
-      def quelle_est_la_forme_juridique_de_entity
-        setting_value("quelle_est_la_forme_juridique_de_entity") || "SAM"
+      def air33lf
+        setting_value("air33lf") || "SAM"
       end
 
       # Simplified due diligence
-      def uses_simplified_dd
+      def a3301
         clients_kept.where(due_diligence_level: "SIMPLIFIED").count
       end
 
-      def ir_328
-        uses_simplified_dd.positive? ? "Oui" : "Non"
+      def air328
+        a3301.positive? ? "Oui" : "Non"
       end
 
-      def simplified_dd_clients
-        uses_simplified_dd.positive? ? "Oui" : "Non"
+      def a3302
+        a3301.positive? ? "Oui" : "Non"
       end
 
-      def simplified_dd_new_clients
+      def a3303
         # New clients with simplified DD in the year
         clients_kept
           .where(due_diligence_level: "SIMPLIFIED")
@@ -83,15 +83,15 @@ class Survey
       end
 
       # Enhanced due diligence
-      def uses_enhanced_dd
+      def a3304
         clients_kept.where(due_diligence_level: "REINFORCED").exists? ? "Oui" : "Non"
       end
 
-      def enhanced_dd_clients
+      def a3304c
         clients_kept.where(due_diligence_level: "REINFORCED").exists? ? "Oui" : "Non"
       end
 
-      def enhanced_dd_new_clients
+      def a3305
         # Enum value for how many new clients got enhanced DD
         count = clients_kept
           .where(due_diligence_level: "REINFORCED")
@@ -107,29 +107,29 @@ class Survey
         end
       end
 
-      def enhanced_dd_legal_entities
+      def a3307
         clients_kept
           .legal_entities
           .where(due_diligence_level: "REINFORCED")
           .exists? ? "Oui" : "Non"
       end
 
-      def enhanced_dd_trusts
-        setting_value("enhanced_dd_trusts")
+      def a3308
+        setting_value("a3308")
       end
 
-      def enhanced_dd_individuals_by_residence
-        setting_value("enhanced_dd_individuals_by_residence")
+      def a3306a
+        setting_value("a3306a")
       end
 
-      def enhanced_dd_by_country_residence
+      def a3306b
         clients_kept
           .where(due_diligence_level: "REINFORCED")
           .where.not(residence_country: [nil, ""])
           .count
       end
 
-      def enhanced_dd_individuals_by_nationality
+      def a3306
         clients_kept
           .natural_persons
           .where(due_diligence_level: "REINFORCED")
@@ -138,88 +138,88 @@ class Survey
       end
 
       # CDD refresh
-      def cdd_refresh_frequency
-        setting_value("cdd_refresh_frequency")&.to_i || 12
+      def a3401
+        setting_value("a3401")&.to_i || 12
       end
 
-      def has_event_driven_refresh
-        setting_value("has_event_driven_refresh") || "Oui"
+      def a3402
+        setting_value("a3402") || "Oui"
       end
 
-      def has_risk_based_refresh
-        setting_value("has_risk_based_refresh")&.to_i || 0
+      def a3403
+        setting_value("a3403")&.to_i || 0
       end
 
-      def clients_reviewed_enhanced_dd
+      def a3414
         # Clients reviewed with enhanced DD during period
         0
       end
 
-      def clients_with_cdd_gaps
-        setting_value("clients_with_cdd_gaps") || "Non"
+      def a3415
+        setting_value("a3415") || "Non"
       end
 
-      def cdd_gaps_percentage
-        setting_value("cdd_gaps_percentage")&.to_i || 0
+      def a3416
+        setting_value("a3416")&.to_i || 0
       end
 
       # === Risk Scoring ===
 
-      def has_client_risk_scoring
-        setting_value("has_client_risk_scoring")
+      def a3701
+        setting_value("a3701")
       end
 
-      def risk_scoring_methodology
-        setting_value("risk_scoring_methodology") || "Non"
+      def a3701a
+        setting_value("a3701a") || "Non"
       end
 
       # === ID Verification and Records ===
 
-      def enhanced_id_verification
-        setting_value("enhanced_id_verification") || "Oui"
+      def ac1620
+        setting_value("ac1620") || "Oui"
       end
 
-      def examines_source_of_wealth
-        setting_value("examines_source_of_wealth") || "Oui"
+      def ac1617
+        setting_value("ac1617") || "Oui"
       end
 
-      def records_id_card
-        setting_value("records_id_card") || "Oui"
+      def ac1625
+        setting_value("ac1625") || "Oui"
       end
 
-      def records_passport
-        setting_value("records_passport") || "Oui"
+      def ac1626
+        setting_value("ac1626") || "Oui"
       end
 
-      def records_residence_permit
-        setting_value("records_residence_permit") || "Oui"
+      def ac1627
+        setting_value("ac1627") || "Oui"
       end
 
-      def records_other_id
-        setting_value("records_other_id") || "Non"
+      def ac1629
+        setting_value("ac1629") || "Non"
       end
 
       # === High-Risk CDD Frequency ===
 
-      def high_risk_sales_cdd_frequency
-        setting_value("high_risk_sales_cdd_frequency") || "A chaque transaction"
+      def ac1616b
+        setting_value("ac1616b") || "A chaque transaction"
       end
 
-      def high_risk_rental_cdd_frequency
-        setting_value("high_risk_rental_cdd_frequency") || "Annuellement"
+      def ac1616a
+        setting_value("ac1616a") || "Annuellement"
       end
 
-      def high_risk_additional_measures
-        setting_value("high_risk_additional_measures") || "Oui"
+      def ac1618
+        setting_value("ac1618") || "Oui"
       end
 
-      def high_risk_measures_details
-        setting_value("high_risk_measures_details")
+      def ac1619
+        setting_value("ac1619")
       end
 
       # === SAR (Suspicious Activity Reports) ===
 
-      def sar_filed_period
+      def ac1102a
         year_start = Date.new(year, 1, 1)
         year_end = Date.new(year, 12, 31)
 
@@ -228,233 +228,233 @@ class Survey
           .count
       end
 
-      def sar_filed
-        setting_value("sar_filed")
+      def ac1102
+        setting_value("ac1102")
       end
 
-      def detected_suspicious_activity
-        setting_value("detected_suspicious_activity")
+      def ac1101z
+        setting_value("ac1101z")
       end
 
       # SAR breakdowns
-      def sar_individuals_by_nationality
-        setting_value("sar_individuals_by_nationality") || "Non"
+      def ac11101
+        setting_value("ac11101") || "Non"
       end
 
-      def sar_legal_entities
-        setting_value("sar_legal_entities") || "Non"
+      def ac11102
+        setting_value("ac11102") || "Non"
       end
 
-      def sar_trusts
-        setting_value("sar_trusts") || "Non"
+      def ac11103
+        setting_value("ac11103") || "Non"
       end
 
-      def sar_predicate_offenses
-        setting_value("sar_predicate_offenses") || "Non"
+      def ac11104
+        setting_value("ac11104") || "Non"
       end
 
-      def sar_red_flags
-        setting_value("sar_red_flags") || "Non"
+      def ac11105
+        setting_value("ac11105") || "Non"
       end
 
       # === Sanctions Screening ===
 
-      def performs_sanctions_screening
-        setting_value("performs_sanctions_screening") || "Oui"
+      def ac114
+        setting_value("ac114") || "Oui"
       end
 
-      def sanctions_screening_frequency
-        setting_value("sanctions_screening_frequency") || "Oui"
+      def ac11401
+        setting_value("ac11401") || "Oui"
       end
 
-      def sanctions_coverage
-        setting_value("sanctions_coverage") || "Oui"
+      def ac11402
+        setting_value("ac11402") || "Oui"
       end
 
-      def sanctions_hits
-        setting_value("sanctions_hits")
+      def ac11403
+        setting_value("ac11403")
       end
 
       # === Transaction Monitoring ===
 
-      def uses_transaction_monitoring
-        setting_value("uses_transaction_monitoring") || "Non"
+      def ac11501b
+        setting_value("ac11501b") || "Non"
       end
 
-      def monitoring_system
-        setting_value("monitoring_system")&.to_i || 0
+      def ac11502
+        setting_value("ac11502")&.to_i || 0
       end
 
-      def monitoring_alerts
-        setting_value("monitoring_alerts")&.to_i || 0
+      def ac11504
+        setting_value("ac11504")&.to_i || 0
       end
 
-      def alerts_escalated
-        setting_value("alerts_escalated") || "Non"
+      def ac11508
+        setting_value("ac11508") || "Non"
       end
 
       # === SICCFIN Requests ===
 
-      def siccfin_requests
-        setting_value("siccfin_requests") || "Non"
+      def ac1106
+        setting_value("ac1106") || "Non"
       end
 
       # === AML System and Software ===
 
-      def uses_aml_software
-        setting_value("uses_aml_software") || "Non"
+      def ac1501
+        setting_value("ac1501") || "Non"
       end
 
-      def software_vendor
-        setting_value("software_vendor") || "Non"
+      def ac1503b
+        setting_value("ac1503b") || "Non"
       end
 
-      def system_capabilities
-        setting_value("system_capabilities")&.to_i || 0
+      def ac1506
+        setting_value("ac1506")&.to_i || 0
       end
 
-      def system_last_upgraded
-        setting_value("system_last_upgraded") || "Non"
+      def ac1518a
+        setting_value("ac1518a") || "Non"
       end
 
       # === AML Policy ===
 
-      def has_aml_policy
-        setting_value("has_aml_policy") || "Oui"
+      def ac1201
+        setting_value("ac1201") || "Oui"
       end
 
-      def policy_last_updated
-        setting_value("policy_last_updated") || "Oui"
+      def ac1202
+        setting_value("ac1202") || "Oui"
       end
 
-      def policy_board_approved
-        setting_value("policy_board_approved") || "Oui"
+      def ac1203
+        setting_value("ac1203") || "Oui"
       end
 
-      def policy_covers_cdd
-        setting_value("policy_covers_cdd") || "Oui"
+      def ac1204
+        setting_value("ac1204") || "Oui"
       end
 
-      def policy_covers_monitoring
-        setting_value("policy_covers_monitoring") || "Oui"
+      def ac1205
+        setting_value("ac1205") || "Oui"
       end
 
-      def policy_covers_sar
-        setting_value("policy_covers_sar")
+      def ac1206
+        setting_value("ac1206")
       end
 
-      def policy_covers_sanctions
-        setting_value("policy_covers_sanctions") || "Oui"
+      def ac1207
+        setting_value("ac1207") || "Oui"
       end
 
-      def policy_covers_risk
-        setting_value("policy_covers_risk") || "Oui"
+      def ac1209b
+        setting_value("ac1209b") || "Oui"
       end
 
-      def policy_covers_third_parties
-        setting_value("policy_covers_third_parties") || "Non"
+      def ac1209c
+        setting_value("ac1209c") || "Non"
       end
 
-      def policy_covers_records
-        setting_value("policy_covers_records") || "Oui"
+      def ac1208
+        setting_value("ac1208") || "Oui"
       end
 
-      def policy_covers_training
-        setting_value("policy_covers_training") || "Oui"
+      def ac1209
+        setting_value("ac1209") || "Oui"
       end
 
       # === Board and Management ===
 
-      def board_oversight
-        setting_value("board_oversight") || "Oui"
+      def ac1301
+        setting_value("ac1301") || "Oui"
       end
 
-      def board_reporting_frequency
-        setting_value("board_reporting_frequency") || "Oui"
+      def ac1302
+        setting_value("ac1302") || "Oui"
       end
 
-      def senior_management_involved
-        setting_value("senior_management_involved") || "Oui"
+      def ac1303
+        setting_value("ac1303") || "Oui"
       end
 
-      def aml_budget_allocated
-        setting_value("aml_budget_allocated") || "Oui"
+      def ac1304
+        setting_value("ac1304") || "Oui"
       end
 
       # === Staff ===
 
-      def aml_staff
-        setting_value("aml_staff") || "Non"
+      def ac1401
+        setting_value("ac1401") || "Non"
       end
 
-      def staff_qualifications
-        setting_value("staff_qualifications")&.to_i || 0
+      def ac1402
+        setting_value("ac1402")&.to_i || 0
       end
 
-      def staff_turnover
-        setting_value("staff_turnover")
+      def ac1403
+        setting_value("ac1403")
       end
 
       # === Record Retention ===
 
-      def retention_years
-        setting_value("retention_years") || "Oui"
+      def ac116a
+        setting_value("ac116a") || "Oui"
       end
 
-      def record_retention_policy
-        setting_value("record_retention_policy")
+      def ac11601
+        setting_value("ac11601")
       end
 
       # === Audit ===
 
-      def has_internal_audit
-        setting_value("has_internal_audit") || "Non"
+      def ac11201
+        setting_value("ac11201") || "Non"
       end
 
-      def audit_frequency
-        setting_value("audit_frequency") || "Non"
+      def ac1125a
+        setting_value("ac1125a") || "Non"
       end
 
-      def external_audit_performed
-        setting_value("external_audit_performed") || "Non"
+      def ac11301
+        setting_value("ac11301") || "Non"
       end
 
-      def audit_findings
-        setting_value("audit_findings")
+      def ac11302
+        setting_value("ac11302")
       end
 
-      def findings_remediated
-        setting_value("findings_remediated")
+      def ac11303
+        setting_value("ac11303")
       end
 
-      def audit_methodology
-        setting_value("audit_methodology") || "Non"
+      def ac11304
+        setting_value("ac11304") || "Non"
       end
 
-      def audit_scope
-        setting_value("audit_scope") || "Non"
+      def ac11305
+        setting_value("ac11305") || "Non"
       end
 
-      def audit_independence
-        setting_value("audit_independence") || "Non"
+      def ac11306
+        setting_value("ac11306") || "Non"
       end
 
-      def audit_reporting
-        setting_value("audit_reporting") || "Non"
+      def ac11307
+        setting_value("ac11307") || "Non"
       end
 
       # === Group Information Sharing ===
 
-      def part_of_group
-        setting_value("part_of_group")&.to_i || 0
+      def ac12236
+        setting_value("ac12236")&.to_i || 0
       end
 
-      def group_policy_applies
-        setting_value("group_policy_applies")&.to_i || 0
+      def ac12237
+        setting_value("ac12237")&.to_i || 0
       end
 
-      def group_info_sharing
-        setting_value("group_info_sharing") || "Non"
+      def ac12333
+        setting_value("ac12333") || "Non"
       end
     end
   end

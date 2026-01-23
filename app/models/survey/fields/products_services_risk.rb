@@ -19,96 +19,96 @@ class Survey
 
       # === Check Payment Statistics ===
 
-      def accepts_checks
-        setting_value("accepts_checks") || "Non"
+      def a2101w
+        setting_value("a2101w") || "Non"
       end
 
-      def accepted_checks_period
-        setting_value("accepted_checks_period") || "Non"
+      def a2101wrp
+        setting_value("a2101wrp") || "Non"
       end
 
-      def check_transactions_with_clients
+      def a2102w
         year_transactions.with_client.where(payment_method: "CHECK").count
       end
 
-      def check_value_with_clients
+      def a2102bw
         year_transactions.with_client.where(payment_method: "CHECK").sum(:transaction_value)
       end
 
-      def clients_used_checks
-        (check_transactions_with_clients.positive? || check_transactions_by_clients.positive?) ? "Oui" : "Non"
+      def a2101b
+        (a2102w.positive? || a2102b.positive?) ? "Oui" : "Non"
       end
 
-      def check_transactions_by_clients
+      def a2102b
         year_transactions.by_client.where(payment_method: "CHECK").count
       end
 
-      def check_value_by_clients
+      def a2102bb
         year_transactions.by_client.where(payment_method: "CHECK").sum(:transaction_value)
       end
 
       # === Transfer Payment Statistics ===
 
-      def accepts_transfers
-        setting_value("accepts_transfers") || "Oui"
+      def a2104w
+        setting_value("a2104w") || "Oui"
       end
 
-      def accepted_transfers_period
-        setting_value("accepted_transfers_period") || "Oui"
+      def a2104wrp
+        setting_value("a2104wrp") || "Oui"
       end
 
-      def transfer_transactions_with_clients
+      def a2105w
         year_transactions.with_client.where(payment_method: "WIRE").count
       end
 
-      def transfer_value_with_clients
+      def a2105bw
         year_transactions.with_client.where(payment_method: "WIRE").sum(:transaction_value)
       end
 
-      def clients_used_transfers
-        (transfer_transactions_with_clients.positive? || transfer_transactions_by_clients.positive?) ? "Oui" : "Non"
+      def a2104b
+        (a2105w.positive? || a2105b.positive?) ? "Oui" : "Non"
       end
 
-      def transfer_transactions_by_clients
+      def a2105b
         year_transactions.by_client.where(payment_method: "WIRE").count
       end
 
-      def transfer_value_by_clients
+      def a2105bb
         year_transactions.by_client.where(payment_method: "WIRE").sum(:transaction_value)
       end
 
       # === Cash Payment Statistics ===
 
-      def accepts_cash
-        setting_value("accepts_cash") || "Non"
+      def a2107w
+        setting_value("a2107w") || "Non"
       end
 
-      def accepted_cash_period
-        setting_value("accepted_cash_period") || "Non"
+      def a2107wrp
+        setting_value("a2107wrp") || "Non"
       end
 
-      def cash_transactions_with_clients
+      def a2108w
         year_transactions.with_client.with_cash.count
       end
 
-      def cash_value_with_clients
+      def a2109w
         year_transactions.with_client.with_cash.sum(:cash_amount)
       end
 
-      def transactions_by_property_location
+      def ag24010w
         # Total transaction value by property location
         year_transactions.where.not(property_country: [nil, ""]).sum(:transaction_value)
       end
 
-      def cash_over_10k_with_clients
+      def a2110w
         year_transactions.with_client.with_cash.where("cash_amount >= ?", 10000).count
       end
 
-      def can_identify_cash_over_100k_with
-        setting_value("can_identify_cash_over_100k_with") || "Oui"
+      def a2113w
+        setting_value("a2113w") || "Oui"
       end
 
-      def cash_over_100k_individuals_with
+      def a2113aw
         year_transactions
           .with_client
           .with_cash
@@ -118,7 +118,7 @@ class Survey
           .count
       end
 
-      def cash_over_100k_monaco_entities_with
+      def a2114a
         year_transactions
           .with_client
           .with_cash
@@ -128,7 +128,7 @@ class Survey
           .count
       end
 
-      def cash_over_100k_foreign_entities_with
+      def a2115aw
         year_transactions
           .with_client
           .with_cash
@@ -138,32 +138,32 @@ class Survey
           .count
       end
 
-      def clients_used_cash
-        (cash_transactions_with_clients.positive? || cash_transactions_by_clients.positive?) ? "Oui" : "Non"
+      def a2107b
+        (a2108w.positive? || a2108b.positive?) ? "Oui" : "Non"
       end
 
-      def cash_transactions_by_clients
+      def a2108b
         year_transactions.by_client.with_cash.count
       end
 
-      def cash_value_by_clients
+      def a2109b
         year_transactions.by_client.with_cash.sum(:cash_amount)
       end
 
-      def clients_by_property_location
+      def ag24010b
         # Value of transactions by client property location
         year_transactions.by_client.where.not(property_country: [nil, ""]).sum(:transaction_value)
       end
 
-      def cash_over_10k_by_clients
+      def a2110b
         year_transactions.by_client.with_cash.where("cash_amount >= ?", 10000).count
       end
 
-      def can_identify_cash_over_100k_by
-        setting_value("can_identify_cash_over_100k_by") || "Oui"
+      def a2113b
+        setting_value("a2113b") || "Oui"
       end
 
-      def cash_over_100k_individuals_by
+      def a2113ab
         year_transactions
           .by_client
           .with_cash
@@ -173,7 +173,7 @@ class Survey
           .count
       end
 
-      def cash_over_100k_monaco_entities_by
+      def a2114ab
         year_transactions
           .by_client
           .with_cash
@@ -183,7 +183,7 @@ class Survey
           .count
       end
 
-      def cash_over_100k_foreign_entities_by
+      def a2115ab
         year_transactions
           .by_client
           .with_cash
@@ -195,84 +195,84 @@ class Survey
 
       # === Cryptocurrency Statistics ===
 
-      def accepts_cryptocurrency
-        setting_value("accepts_cryptocurrency") || "Non"
+      def a2201a
+        setting_value("a2201a") || "Non"
       end
 
-      def plans_virtual_currency
-        setting_value("plans_virtual_currency") || "Non"
+      def a2201d
+        setting_value("a2201d") || "Non"
       end
 
-      def has_virtual_asset_relationships
+      def a2202
         year_transactions.where(payment_method: "CRYPTO").exists? ? "Oui" : "Non"
       end
 
-      def virtual_asset_platforms
-        setting_value("virtual_asset_platforms")
+      def a2203
+        setting_value("a2203")
       end
 
-      def crypto_transactions
+      def ac1616c
         year_transactions.where(payment_method: "CRYPTO").exists? ? "Oui" : "Non"
       end
 
-      def verifies_virtual_asset_bo
-        setting_value("verifies_virtual_asset_bo")
+      def ac1621
+        setting_value("ac1621")
       end
 
       # === French-labeled transaction fields (ir_*) ===
 
       # Transaction counts for specific regulatory questions
-      def ir_233b
+      def air233b
         # Purchases where agency represents buyer
         year_transactions.purchases.where(agency_role: "BUYER_AGENT").count
       end
 
-      def ir_233s
+      def air233s
         # Sales where agency represents seller
         year_transactions.sales.where(agency_role: "SELLER_AGENT").count
       end
 
-      def pour_combien_d_achats_ventes_avez_vous_represente
+      def air235b_2
         # Purchase/sale transactions where agency represented client
         year_transactions.where(transaction_type: %w[PURCHASE SALE]).count
       end
 
-      def ir_235s
+      def air235s
         # Sales transactions count
         year_transactions.sales.count
       end
 
-      def ir_117
+      def air117
         # Specific count (new construction purchases)
         year_transactions.purchases.where(is_new_construction: true).count
       end
 
-      def ir_2391
+      def air2391
         # Was there preemption activity?
-        setting_value("ir_2391") || "Non"
+        setting_value("air2391") || "Non"
       end
 
-      def ir_2392
+      def air2392
         # Number of preemptions
-        setting_value("ir_2392")&.to_i || 0
+        setting_value("air2392")&.to_i || 0
       end
 
-      def quelle_etait_value_biens_preemptes_iso4217_eur
+      def air2393
         # Value of preempted properties
-        setting_value("quelle_etait_value_biens_preemptes_iso4217_eur")&.to_d || 0
+        setting_value("air2393")&.to_d || 0
       end
 
-      def ir_234
+      def air234
         # Transaction count for specific category
         year_transactions.purchases.count
       end
 
-      def ir_236
+      def air236
         # Another transaction count category
         year_transactions.rentals.count
       end
 
-      def count_biens_locatifs_uniques_gt_10_000_par_mois_qu
+      def air2313
         # Unique rental properties with monthly rent > 10,000
         year_transactions
           .rentals
@@ -282,7 +282,7 @@ class Survey
           .count
       end
 
-      def count_biens_locatifs_uniques_lt_10_000_par_mois_qu
+      def air2316
         # Unique rental properties with monthly rent <= 10,000
         year_transactions
           .rentals
@@ -294,37 +294,37 @@ class Survey
 
       # === Section Comments ===
 
-      def section_comments_payments_alt
-        setting_value("section_comments_payments_alt").present? ? "Oui" : "Non"
+      def a2501a
+        setting_value("a2501a").present? ? "Oui" : "Non"
       end
 
-      def section_comments_payments
-        setting_value("section_comments_payments")
+      def a2501
+        setting_value("a2501")
       end
 
       # === Additional Transaction Dimensional Fields ===
 
-      def ir_233
+      def air233
         # Total transactions where agency acted as agent
         year_transactions.where.not(agency_role: [nil, ""]).count
       end
 
-      def count_transactions_effectuees_par_les_clients_vent
+      def air235b_1
         # Sales transactions by clients
         year_transactions.by_client.sales.count
       end
 
-      def ir_237b
+      def air237b
         # Rental transactions count (alternative)
         year_transactions.rentals.count
       end
 
-      def ir_238b
+      def air238b
         # Rental transaction values
         year_transactions.rentals.sum(:transaction_value)
       end
 
-      def ir_239b
+      def air239b
         # Additional rental value metric
         year_transactions.rentals.sum(:rental_annual_value)
       end

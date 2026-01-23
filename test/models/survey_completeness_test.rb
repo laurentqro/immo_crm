@@ -6,8 +6,7 @@ require "test_helper"
 # It serves as a CI safety net: when the gem is updated with new fields,
 # this test fails until the app implements corresponding methods.
 #
-# The test checks that Survey responds to each semantic field name defined
-# in the questionnaire (e.g., :total_clients, :high_risk_clients).
+# The test checks that Survey responds to each field ID (e.g., :a1101, :a1102).
 # Fields without implementations will cause survey values to be nil,
 # which may cause validation failures or incomplete submissions.
 class SurveyCompletenessTest < ActiveSupport::TestCase
@@ -15,8 +14,8 @@ class SurveyCompletenessTest < ActiveSupport::TestCase
     questionnaire = AmsfSurvey.questionnaire(industry: :real_estate, year: 2025)
     survey = Survey.new(organization: organizations(:one), year: 2025)
 
-    missing = questionnaire.fields.map(&:name).reject do |name|
-      survey.respond_to?(name, true)
+    missing = questionnaire.fields.map { |f| f.id.downcase.to_sym }.reject do |field_id|
+      survey.respond_to?(field_id, true)
     end
 
     assert missing.empty?, "Survey missing implementations for: #{missing.join(", ")}"

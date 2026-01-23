@@ -2,10 +2,10 @@
 
 # Survey is a read-only value calculator for AMSF submissions.
 # Given an organization and year, it produces values for all questionnaire fields
-# by calling semantic methods (e.g., total_clients, high_risk_clients).
+# by calling methods named after field IDs (e.g., a1101, a1102).
 #
-# The amsf_survey gem handles XBRL codes and XML generation.
-# This class knows nothing about XBRL - only semantic field names.
+# The amsf_survey gem handles XML generation and validation.
+# This class uses field IDs directly - no semantic name indirection.
 #
 # Usage:
 #   survey = Survey.new(organization: org, year: 2025)
@@ -66,9 +66,10 @@ class Survey
 
   def populate_fields(sub)
     questionnaire.fields.each do |field|
-      next unless respond_to?(field.name, true)
+      field_id = field.id.downcase.to_sym
+      next unless respond_to?(field_id, true)
 
-      value = send(field.name)
+      value = send(field_id)
       sub[field.name] = value if value.present?
     end
   end

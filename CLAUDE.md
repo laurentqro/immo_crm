@@ -114,44 +114,61 @@ Routes are modularized in `config/routes/`:
 - **Multi-database** setup with separate databases for cache, jobs, and cable
 
 ## Active Technologies
-- Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Devise, Pundit, Hotwire (Turbo/Stimulus), Nokogiri, Pay gem (001-mvp-immo-crm)
-- PostgreSQL 15+ (primary), SolidQueue (jobs), SolidCache (cache), SolidCable (websockets) (001-mvp-immo-crm)
-- Ruby 3.2+ / Rails 8.0 + Minitest, Nokogiri (XSD/XML parsing), SubmissionRenderer and CalculationEngine services (011-xbrl-compliance-tests)
-- PostgreSQL (test database with fixtures) (011-xbrl-compliance-tests)
-- Ruby 3.2+ / Rails 8.0 + Nokogiri (XML parsing), Minitest (testing), Jumpstart Pro (application framework) (012-amsf-taxonomy-compliance)
-- PostgreSQL (primary), existing SubmissionValue model (012-amsf-taxonomy-compliance)
-- Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Hotwire (Turbo/Stimulus), Nokogiri (XML/XBRL), Pay gem (013-amsf-data-capture)
-- PostgreSQL (primary), existing schema with clients, transactions, submissions tables (013-amsf-data-capture)
-- Ruby 3.4.7 / Rails 8.1 + `amsf_survey`, `amsf_survey-real_estate`, Nokogiri, Turbo/Stimulus (016-amsf-gem-migration)
-- PostgreSQL (existing schema - Submission, SubmissionValue models) (016-amsf-gem-migration)
+- Ruby 3.4+ / Rails 8.1 + Jumpstart Pro, Devise, Pundit, Hotwire (Turbo/Stimulus), Pay gem
+- PostgreSQL 15+ (primary), SolidQueue (jobs), SolidCache (cache), SolidCable (websockets)
+- `amsf_survey` + `amsf_survey-real_estate` gems for regulatory survey submission
 
-## AMSF Survey Gem Integration
+## AMSF Survey Integration
 
-The application uses the `amsf_survey` and `amsf_survey-real_estate` gems for XBRL generation and validation:
+The application uses the `amsf_survey` and `amsf_survey-real_estate` gems for regulatory survey submission. **The app knows nothing about XBRL** - only semantic field names like `total_clients`, `high_risk_clients`.
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    immo_crm Application                   │
+│                                                           │
+│  Survey PORO ───────────────────────────────────────────  │
+│    │ CustomerRisk   │ ProductsServicesRisk │ Controls   │ │
+│    │ DistributionRisk │ Signatories                     │ │
+│                                                           │
+│  Methods: #total_clients, #high_risk_clients, etc.       │
+└───────────────────────────────────────────────────────────┘
+                              │ semantic names only
+                              ▼
+┌───────────────────────────────────────────────────────────┐
+│                     amsf_survey gem                        │
+│  Handles: XBRL codes, XML generation, validation          │
+└───────────────────────────────────────────────────────────┘
+```
 
 ### Key Components
-- **SubmissionBuilder** (`app/services/submission_builder.rb`): Orchestrates submission workflow, creates gem submissions, validates, generates XBRL
-- **SubmissionRenderer** (`app/services/submission_renderer.rb`): Renders XBRL via gem for supported years
-- **ElementManifest** (`app/models/xbrl/element_manifest.rb`): Provides gem questionnaire access for field metadata
-- **Initializer** (`config/initializers/amsf_survey.rb`): Loads gem and configures Arelle validation toggle
-
-### Validation Layers
-1. **Gem validation**: Business rules via `AmsfSurvey.validate(submission)` - always runs
-2. **Arelle validation**: Schema validation via external service - optional, controlled by `ARELLE_VALIDATION_ENABLED`
-
-### Environment Variables
-- `ARELLE_VALIDATION_ENABLED`: Enable external Arelle validation (default: false in dev/test, true in production)
-- `XBRL_VALIDATOR_URL`: Arelle validator service URL (default: http://localhost:8000)
+- **Survey** (`app/models/survey.rb`): Read-only PORO that calculates all 323 questionnaire field values
+- **Survey::Fields::*** (`app/models/survey/fields/`): 5 modules mirroring AMSF questionnaire tabs
+- **Initializer** (`config/initializers/amsf_survey.rb`): Loads gem and registers real_estate industry
 
 ### Usage
 ```ruby
-builder = SubmissionBuilder.new(organization, year: 2025)
-result = builder.build
-validation = builder.validate        # Gem validation
-xbrl = builder.generate_xbrl         # XBRL via gem
-arelle = builder.validate_with_arelle  # External Arelle validation
+survey = Survey.new(organization: org, year: 2025)
+survey.valid?    # => true/false (gem validation)
+survey.errors    # => validation errors
+survey.to_xbrl   # => XML string via gem
 ```
+
+### Field Modules
+| Module | Purpose | Example Methods |
+|--------|---------|-----------------|
+| `CustomerRisk` | Client/risk statistics | `a1101` (total clients), `a1102` (nationals), `a11301` (PEP clients) |
+| `ProductsServicesRisk` | Payment/transaction metrics | `a2108b` (cash transactions), `a2105b` (transfers) |
+| `DistributionRisk` | CDD and channel risks | `a3209` (non-face-to-face), `a3201` (introducers) |
+| `Controls` | Compliance/audit controls | `ac1201` (AML policy), `ab3206` (staff trained) |
+| `Signatories` | Entity/business info | `ac1701` (legal form), `ac1801` (annual revenue) |
+
+Methods use field IDs directly (e.g., `a1101`) rather than semantic names. This eliminates indirection - `grep a1101` finds both the gem field and the implementation.
+
+### CI Safety Net
+`test/models/survey_completeness_test.rb` ensures all gem questionnaire fields have implementations. When AMSF updates the questionnaire (new gem version), CI fails if any new field lacks a method.
 
 ## Recent Changes
 - 001-mvp-immo-crm: Added Ruby 3.2+ / Rails 8.0 + Jumpstart Pro, Devise, Pundit, Hotwire (Turbo/Stimulus), Nokogiri, Pay gem
-- 016-amsf-gem-migration: Integrated amsf_survey gem for XBRL generation, validation, and questionnaire metadata
+- 016-amsf-gem-migration: Complete XBRL abstraction via amsf_survey gem. Deleted ~10,500 lines of legacy code. App now uses semantic field names only; gem handles all XBRL details.

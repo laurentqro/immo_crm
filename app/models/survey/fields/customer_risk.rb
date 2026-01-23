@@ -21,46 +21,46 @@ class Survey
       # === Activity Indicators ===
 
       # Has the agency had any professional activity during the reporting period?
-      def has_activity
+      def aactive
         year_transactions.exists? ? "Oui" : "Non"
       end
 
       # Specifically for purchase/sale activity
-      def has_activity_purchase_sale
+      def aactiveps
         year_transactions.purchases.or(year_transactions.sales).exists? ? "Oui" : "Non"
       end
 
       # Specifically for rental activity
-      def has_activity_rentals
+      def aactiverentals
         year_transactions.rentals.exists? ? "Oui" : "Non"
       end
 
       # === Client Totals ===
 
       # Total number of unique clients active during the period
-      def total_clients
+      def a1101
         organization.clients.count
       end
 
       # Clients who are Monegasque nationals
-      def clients_nationals
+      def a1102
         clients_kept.where(nationality: "MC").count
       end
 
       # Clients who are foreign residents (not MC nationals but residents)
-      def clients_foreign_residents
+      def a1103
         clients_kept.where(residence_status: "RESIDENT").where.not(nationality: "MC").count
       end
 
       # Clients who are non-residents
-      def clients_non_residents
+      def a1104
         clients_kept.where(residence_status: "NON_RESIDENT").count
       end
 
       # === Natural Person Statistics ===
 
       # Transactions by individual clients for purchase/sale
-      def individual_transactions_purchase_sale
+      def a1403b
         year_transactions
           .joins(:client)
           .merge(Client.natural_persons)
@@ -69,7 +69,7 @@ class Survey
       end
 
       # Total funds transferred by individual clients
-      def individual_funds_transferred
+      def a1404b
         year_transactions
           .joins(:client)
           .merge(Client.natural_persons)
@@ -77,7 +77,7 @@ class Survey
       end
 
       # Individual clients with rental activity
-      def individuals_rentals
+      def a1401r
         clients_kept
           .natural_persons
           .joins(:transactions)
@@ -87,7 +87,7 @@ class Survey
       end
 
       # Rental transactions by individual clients
-      def individual_transactions_rentals
+      def a1403r
         year_transactions
           .joins(:client)
           .merge(Client.natural_persons)
@@ -98,7 +98,7 @@ class Survey
       # === Legal Entity Statistics ===
 
       # Transactions by legal entity clients
-      def legal_entity_transactions
+      def a1502b
         year_transactions
           .joins(:client)
           .merge(Client.legal_entities)
@@ -106,7 +106,7 @@ class Survey
       end
 
       # Total funds from legal entity transactions
-      def legal_entity_funds
+      def a1503b
         year_transactions
           .joins(:client)
           .merge(Client.legal_entities)
@@ -114,39 +114,39 @@ class Survey
       end
 
       # Does the entity identify Monaco legal entity types?
-      def identifies_monaco_legal_entity_types
-        setting_value("identifies_monaco_legal_entity_types") || "Non"
+      def a155
+        setting_value("a155") || "Non"
       end
 
       # === Trust Statistics ===
 
       # Does the entity identify trusts?
-      def identifies_trusts
+      def a1802btola
         clients_kept.trusts.exists? ? "Oui" : "Non"
       end
 
       # Number of trust clients
-      def trusts_count
+      def a1802tola
         clients_kept.trusts.count
       end
 
       # Monaco-based trusts
-      def monaco_trusts
+      def a1807atola
         clients_kept.trusts.where(country_code: "MC").count
       end
 
       # Has trust clients
-      def has_trust_clients
+      def a1801
         clients_kept.trusts.exists? ? "Oui" : "Non"
       end
 
       # Can provide trust transaction info
-      def has_trust_transaction_info
-        trust_transactions.positive? ? "Oui" : "Non"
+      def a11001btola
+        a1806tola.positive? ? "Oui" : "Non"
       end
 
       # Transactions by trust clients
-      def trust_transactions
+      def a1806tola
         year_transactions
           .joins(:client)
           .merge(Client.trusts)
@@ -154,7 +154,7 @@ class Survey
       end
 
       # Total funds from trust transactions
-      def trust_funds
+      def a1807tola
         year_transactions
           .joins(:client)
           .merge(Client.trusts)
@@ -162,19 +162,19 @@ class Survey
       end
 
       # Description of other legal arrangements
-      def other_arrangements_desc
-        setting_value("other_arrangements_desc")
+      def a11006
+        setting_value("a11006")
       end
 
       # === PEP (Politically Exposed Person) Statistics ===
 
       # Has PEP clients
-      def has_pep_clients
+      def a11301
         clients_kept.peps.exists? ? "Oui" : "Non"
       end
 
       # Transactions by PEP clients
-      def pep_transactions
+      def a11304b
         year_transactions
           .joins(:client)
           .merge(Client.peps)
@@ -182,7 +182,7 @@ class Survey
       end
 
       # Total funds from PEP transactions
-      def pep_funds_transferred
+      def a11305b
         year_transactions
           .joins(:client)
           .merge(Client.peps)
@@ -190,7 +190,7 @@ class Survey
       end
 
       # Transactions with PEP beneficial owners
-      def pep_bo_transactions
+      def a11309b
         year_transactions
           .joins(client: :beneficial_owners)
           .where(beneficial_owners: {is_pep: true})
@@ -201,302 +201,302 @@ class Survey
       # === VASP (Virtual Asset Service Provider) Statistics ===
 
       # Has VASP clients
-      def has_vasp_clients
+      def a13501b
         clients_kept.vasps.exists? ? "Oui" : "Non"
       end
 
       # === VASP Custodian Statistics ===
 
-      def identifies_vasp_custodians
-        setting_value("identifies_vasp_custodians") || "Non"
+      def a13601a
+        setting_value("a13601a") || "Non"
       end
 
-      def has_vasp_custodian_clients
+      def a13601cw
         clients_kept.where(is_vasp: true, vasp_type: "CUSTODIAN").exists? ? "Oui" : "Non"
       end
 
-      def vasp_custodian_transactions
+      def a13603bb
         vasp_transactions_by_type("CUSTODIAN")
       end
 
-      def vasp_custodian_funds
+      def a13604bb
         vasp_funds_by_type("CUSTODIAN")
       end
 
       # === VASP Exchange Statistics ===
 
-      def identifies_vasp_exchanges
-        setting_value("identifies_vasp_exchanges") || "Non"
+      def a13601b
+        setting_value("a13601b") || "Non"
       end
 
-      def has_vasp_exchange_clients
+      def a13601ep
         clients_kept.where(is_vasp: true, vasp_type: "EXCHANGE").exists? ? "Oui" : "Non"
       end
 
-      def vasp_exchange_transactions
+      def a13603ab
         vasp_transactions_by_type("EXCHANGE")
       end
 
-      def vasp_exchange_funds
+      def a13604ab
         vasp_funds_by_type("EXCHANGE")
       end
 
       # === VASP ICO Statistics ===
 
-      def identifies_vasp_ico
-        setting_value("identifies_vasp_ico") || "Non"
+      def a13601c
+        setting_value("a13601c") || "Non"
       end
 
-      def has_vasp_ico_clients
+      def a13601ico
         clients_kept.where(is_vasp: true, vasp_type: "ICO").exists? ? "Oui" : "Non"
       end
 
-      def vasp_ico_transactions
+      def a13603cacb
         vasp_transactions_by_type("ICO")
       end
 
-      def vasp_ico_funds
+      def a13604cb
         vasp_funds_by_type("ICO")
       end
 
       # === VASP Other Statistics ===
 
-      def identifies_vasp_other
-        setting_value("identifies_vasp_other") || "Non"
+      def a13601c2
+        setting_value("a13601c2") || "Non"
       end
 
-      def has_vasp_other_clients
+      def a13601other
         clients_kept.where(is_vasp: true, vasp_type: "OTHER").exists? ? "Oui" : "Non"
       end
 
-      def vasp_other_transactions
+      def a13603db
         vasp_transactions_by_type("OTHER")
       end
 
-      def vasp_other_funds
+      def a13604db
         vasp_funds_by_type("OTHER")
       end
 
       # Does entity provide other VASP services
-      def vasp_other_services
-        setting_value("vasp_other_services") || "Non"
+      def a13601
+        setting_value("a13601") || "Non"
       end
 
-      def vasp_other_services_desc
-        setting_value("vasp_other_services_desc")
+      def a13604e
+        setting_value("a13604e")
       end
 
       # === Beneficial Owner Statistics ===
 
       # Can identify BO nationality
-      def can_identify_bo_nationality
-        setting_value("can_identify_bo_nationality") || "Oui"
+      def a1204s
+        setting_value("a1204s") || "Oui"
       end
 
       # Can identify BOs with 25%+ ownership
-      def can_identify_25pct_bo
-        setting_value("can_identify_25pct_bo") || "Oui"
+      def a1204o
+        setting_value("a1204o") || "Oui"
       end
 
       # Records BO residence
-      def records_bo_residence
-        setting_value("records_bo_residence") || "Oui"
+      def a1203d
+        setting_value("a1203d") || "Oui"
       end
 
       # Records dual nationality
-      def records_dual_nationality
-        setting_value("records_dual_nationality") || "Non"
+      def a1203
+        setting_value("a1203") || "Non"
       end
 
       # Ownership structure documentation
-      def ownership_structure
-        setting_value("ownership_structure") || "Oui"
+      def ac171
+        setting_value("ac171") || "Oui"
       end
 
       # === High-Net-Worth Individual Tracking ===
 
       # Tracks HNWIs (High Net Worth Individuals)
-      def tracks_hnwi
-        setting_value("tracks_hnwi") || "Non"
+      def a11201bcd
+        setting_value("a11201bcd") || "Non"
       end
 
       # Tracks UHNWIs (Ultra High Net Worth Individuals)
-      def tracks_uhnwi
-        setting_value("tracks_uhnwi") || "Non"
+      def a11201bcdu
+        setting_value("a11201bcdu") || "Non"
       end
 
       # === Transaction Statistics ===
 
       # Transactions BY clients (client is principal)
-      def transactions_by_clients
+      def a1105b
         year_transactions.by_client.count
       end
 
       # Funds transferred BY clients
-      def funds_transferred_by_clients
+      def a1106b
         year_transactions.by_client.sum(:transaction_value)
       end
 
       # Funds transferred for rentals
-      def funds_transferred_rentals
+      def a1106brentals
         year_transactions.rentals.sum(:transaction_value)
       end
 
       # Transactions WITH clients (agency represents client)
-      def transactions_with_clients
+      def a1105w
         year_transactions.with_client.count
       end
 
       # Funds transferred WITH clients
-      def funds_transferred_with_clients
+      def a1106w
         year_transactions.with_client.sum(:transaction_value)
       end
 
       # === Monaco Business Sector Statistics ===
       # Counts of clients in various Monaco high-risk business sectors
 
-      def monaco_lawyers
+      def a11502b
         clients_by_sector("LEGAL_SERVICES")
       end
 
-      def monaco_accountants
+      def a11602b
         clients_by_sector("ACCOUNTING")
       end
 
-      def monaco_nominee_shareholders
+      def a11702b
         clients_by_sector("NOMINEE_SHAREHOLDER")
       end
 
-      def monaco_bearer_instruments
+      def a11802b
         clients_by_sector("BEARER_INSTRUMENTS")
       end
 
-      def monaco_real_estate_agents
+      def a12002b
         clients_by_sector("REAL_ESTATE")
       end
 
-      def monaco_nmppp
+      def a12102b
         clients_by_sector("NMPPP")
       end
 
-      def monaco_tcsp
+      def a12202b
         clients_by_sector("TCSP")
       end
 
-      def monaco_multi_family_offices
+      def a12302b
         clients_by_sector("MULTI_FAMILY_OFFICE")
       end
 
-      def monaco_single_family_offices
+      def a12302c
         clients_by_sector("SINGLE_FAMILY_OFFICE")
       end
 
-      def monaco_complex_structures
+      def a12402b
         clients_by_sector("COMPLEX_STRUCTURES")
       end
 
-      def monaco_cash_intensive
+      def a12502b
         clients_by_sector("CASH_INTENSIVE")
       end
 
-      def monaco_prepaid_cards
+      def a12602b
         clients_by_sector("PREPAID_CARDS")
       end
 
-      def monaco_art_antiquities
+      def a12702b
         clients_by_sector("ART_ANTIQUITIES")
       end
 
-      def monaco_import_export
+      def a12802b
         clients_by_sector("IMPORT_EXPORT")
       end
 
-      def monaco_high_value_goods
+      def a12902b
         clients_by_sector("HIGH_VALUE_GOODS")
       end
 
-      def monaco_npo
+      def a13002b
         clients_by_sector("NPO")
       end
 
-      def monaco_gambling
+      def a13202b
         clients_by_sector("GAMBLING")
       end
 
-      def monaco_construction
+      def a13302b
         clients_by_sector("CONSTRUCTION")
       end
 
-      def monaco_extractive
+      def a13402b
         clients_by_sector("EXTRACTIVE")
       end
 
-      def monaco_defense_weapons
+      def a13702b
         clients_by_sector("DEFENSE_WEAPONS")
       end
 
-      def monaco_yachting
+      def a13802b
         clients_by_sector("YACHTING")
       end
 
-      def monaco_sports_agents
+      def a13902b
         clients_by_sector("SPORTS_AGENTS")
       end
 
-      def monaco_fund_management
+      def a14102b
         clients_by_sector("FUND_MANAGEMENT")
       end
 
-      def monaco_holding_companies
+      def a14202b
         clients_by_sector("HOLDING_COMPANY")
       end
 
-      def monaco_auctioneers
+      def a14302b
         clients_by_sector("AUCTIONEERS")
       end
 
-      def monaco_car_dealers
+      def a14402b
         clients_by_sector("CAR_DEALERS")
       end
 
-      def monaco_government_sector
+      def a14502b
         clients_by_sector("GOVERNMENT")
       end
 
-      def monaco_aircraft_jets
+      def a14602b
         clients_by_sector("AIRCRAFT_JETS")
       end
 
-      def monaco_transport
+      def a14702b
         clients_by_sector("TRANSPORT")
       end
 
       # === Section Comments ===
 
-      def section_comments_risks
-        setting_value("section_comments_risks").present? ? "Oui" : "Non"
+      def a14801
+        setting_value("a14801").present? ? "Oui" : "Non"
       end
 
-      def section_comments_clients
-        setting_value("section_comments_clients")
+      def a14001
+        setting_value("a14001")
       end
 
       # === French-labeled fields (ir_*) ===
 
-      # ir_129 - specific regulatory question
-      def ir_129
-        setting_value("ir_129") || "Non"
+      # air129 - specific regulatory question
+      def air129
+        setting_value("air129") || "Non"
       end
 
       # Purchases made with specific intent
-      def combien_d_achats_ont_ils_ete_effectues_dans_le_but
-        setting_value("combien_d_achats_ont_ils_ete_effectues_dans_le_but")&.to_i || 0
+      def air1210
+        setting_value("air1210")&.to_i || 0
       end
 
       # === Dimensional Breakdowns (by nationality/country) ===
 
       # BO nationality breakdown
-      def bo_nationality_breakdown
+      def a1204s1
         beneficial_owners_base
           .where.not(nationality: [nil, ""])
           .group(:nationality)
@@ -505,13 +505,13 @@ class Survey
       end
 
       # BOs by direct/indirect and nationality
-      def bo_direct_indirect_by_nationality
+      def a1202o
         # Returns count - dimensional breakdown would be in separate field
         beneficial_owners_base.count
       end
 
       # BOs representing legal entities
-      def bo_representing_legal_entity
+      def a1202ob
         beneficial_owners_base
           .joins(:client)
           .merge(Client.legal_entities)
@@ -519,14 +519,14 @@ class Survey
       end
 
       # BOs with 25%+ ownership by nationality
-      def bo_25pct_by_nationality
+      def a120425o
         beneficial_owners_base
           .where("ownership_percentage >= ?", 25)
           .count
       end
 
       # Foreign resident BOs by nationality (resident in MC but not MC national)
-      def bo_foreign_residents_by_nationality
+      def a1207o
         beneficial_owners_base
           .where(residence_country: "MC")
           .where.not(nationality: "MC")
@@ -534,14 +534,14 @@ class Survey
       end
 
       # Non-resident BOs by nationality (not resident in MC)
-      def bo_non_residents_by_nationality
+      def a1210o
         beneficial_owners_base
           .where.not(residence_country: ["MC", nil, ""])
           .count
       end
 
       # Individuals by nationality
-      def individuals_by_nationality
+      def a1401
         clients_kept
           .natural_persons
           .where.not(nationality: [nil, ""])
@@ -552,7 +552,7 @@ class Survey
       end
 
       # Legal entities by country
-      def legal_entities_by_country
+      def a1501
         clients_kept
           .legal_entities
           .where.not(country_code: [nil, ""])
@@ -560,19 +560,19 @@ class Survey
       end
 
       # HNWI BOs by nationality
-      def hnwi_bo_by_nationality
+      def a11206b
         # Would need HNWI flag on beneficial_owners - return 0 for now
         0
       end
 
       # UHNWI BOs by nationality
-      def uhnwi_bo_by_nationality
+      def a112012b
         # Would need UHNWI flag on beneficial_owners - return 0 for now
         0
       end
 
       # Professional trustees by nationality
-      def professional_trustees_by_nationality
+      def a1808
         clients_kept
           .trusts
           .where(professional_category: "PROFESSIONAL_TRUSTEE")
@@ -580,7 +580,7 @@ class Survey
       end
 
       # Professional trustees by trust country
-      def professional_trustees_by_trust_country
+      def a1809
         clients_kept
           .trusts
           .where(professional_category: "PROFESSIONAL_TRUSTEE")
@@ -589,7 +589,7 @@ class Survey
       end
 
       # PEP clients by residence
-      def pep_clients_by_residence
+      def a11302res
         clients_kept
           .peps
           .where.not(residence_country: [nil, ""])
@@ -597,7 +597,7 @@ class Survey
       end
 
       # PEP clients by nationality
-      def pep_clients_by_nationality
+      def a11302
         clients_kept
           .peps
           .where.not(nationality: [nil, ""])
@@ -605,29 +605,29 @@ class Survey
       end
 
       # PEP beneficial owners count
-      def pep_beneficial_owners
+      def a11307
         beneficial_owners_base.where(is_pep: true).count
       end
 
       # VASP by country breakdowns
-      def vasp_custodian_by_country
+      def a13602b
         vasp_clients_by_country("CUSTODIAN")
       end
 
-      def vasp_exchange_by_country
+      def a13602a
         vasp_clients_by_country("EXCHANGE")
       end
 
-      def vasp_ico_by_country
+      def a13602c
         vasp_clients_by_country("ICO")
       end
 
-      def vasp_other_by_country
+      def a13602d
         vasp_clients_by_country("OTHER")
       end
 
       # Secondary nationalities for individuals
-      def individuals_secondary_nationalities
+      def a1402
         # Would need secondary_nationality field - return 0 for now
         0
       end
@@ -656,7 +656,7 @@ class Survey
         @settings_cache ||= organization.settings
           .where.not(key: [nil, ""])
           .index_by(&:key)
-          .transform_values(&:typed_value)
+          .transform_values(&:value)
       end
 
       def clients_by_sector(sector)

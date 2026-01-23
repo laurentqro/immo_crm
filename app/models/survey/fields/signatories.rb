@@ -19,150 +19,156 @@ class Survey
 
       # === Entity Information ===
 
-      def legal_form
+      def ac1701
         setting_value("legal_form")&.to_i || 0
       end
 
-      def registration_number
+      def ac1702
         setting_value("registration_number")&.to_i || 0
       end
 
-      def registration_date
+      def ac1703
         setting_value("registration_date")
       end
 
       # === Business Profile ===
 
-      def primary_activity
+      def ac1601
         setting_value("primary_activity") || "Non"
       end
 
-      def other_services
+      def ac168
         setting_value("other_services") || "Non"
       end
 
       # Services offered
-      def escrow_services
+      def ac1635
         setting_value("escrow_services") || "Non"
       end
 
-      def escrow_volume
+      def ac1635a
         setting_value("escrow_volume") || "Non"
       end
 
-      def property_management
+      def ac1636
         setting_value("property_management") || "Non"
       end
 
-      def ancillary_services
+      def ac1637
         setting_value("ancillary_services")
       end
 
-      def insurance_services
+      def ac1638a
         setting_value("insurance_services") || "Non"
       end
 
-      def mortgage_services
+      def ac1639a
         setting_value("mortgage_services") || "Non"
       end
 
-      def valuation_services
+      def ac1641a
         setting_value("valuation_services") || "Non"
       end
 
-      def legal_services
+      def ac1640a
         setting_value("legal_services")
       end
 
-      def renovation_services
+      def ac1642a
         setting_value("renovation_services") || "Non"
       end
 
       # === Financial Information ===
 
-      def annual_revenue
+      def ac1801
         setting_value("annual_revenue")&.to_i || 0
       end
 
-      def real_estate_revenue
-        setting_value("real_estate_revenue")&.to_i || 0
+      # Total unique clients (repeat of a1101)
+      def ac1611
+        organization.clients.count
       end
 
-      def operating_expenses
+      # High-risk clients count
+      def ac1802
+        clients_kept.where(risk_level: "high").count
+      end
+
+      def ac1806
         setting_value("operating_expenses") || "Non"
       end
 
-      def avg_transaction_size
+      def ac1609
         setting_value("avg_transaction_size") || "Non"
       end
 
-      def annual_transaction_volume
+      def ac1610
         setting_value("annual_transaction_volume") || "Non"
       end
 
       # === Market Information ===
 
-      def residential_vs_commercial
+      def ac1612a
         setting_value("residential_vs_commercial") || "Non"
       end
 
-      def market_segments
+      def ac1612
         setting_value("market_segments")&.to_i || 0
       end
 
-      def luxury_percentage
+      def ac1614
         setting_value("luxury_percentage") || "Non"
       end
 
-      def new_vs_existing_property
+      def ac1615
         setting_value("new_vs_existing_property") || "Non"
       end
 
       # === Office Information ===
 
-      def offices_count
+      def ac1812
         setting_value("offices_count") || "Non"
       end
 
-      def monaco_offices
+      def ac1813
         setting_value("monaco_offices")
       end
 
-      def overseas_offices
+      def ac1814w
         setting_value("overseas_offices") || "Non"
       end
 
       # === Employee Information ===
 
-      def employee_count
+      def ac1807
         setting_value("employee_count")
       end
 
-      def licensed_agents
+      def ac1811
         setting_value("licensed_agents") || "Non"
       end
 
-      def fiscal_year_end
+      def ac1904
         setting_value("fiscal_year_end") || "Decembre"
       end
 
       # === Submission Status ===
 
-      def status_1
+      def as1
         setting_value("status_1")
       end
 
-      def status_2
+      def as2
         setting_value("status_2")
       end
 
-      def survey_incomplete
+      def aincomplete
         setting_value("survey_incomplete")
       end
 
       # === Legal Entity Status ===
 
-      def legal_entity_status
+      def amles
         clients_kept.legal_entities.count
       end
     end
