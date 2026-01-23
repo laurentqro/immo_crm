@@ -649,8 +649,14 @@ class Survey
       end
 
       def setting_value(key)
-        setting = organization.settings.find_by(key: key)
-        setting&.typed_value
+        settings_cache[key]
+      end
+
+      def settings_cache
+        @settings_cache ||= organization.settings
+          .where.not(key: [nil, ""])
+          .index_by(&:key)
+          .transform_values(&:typed_value)
       end
 
       def clients_by_sector(sector)
