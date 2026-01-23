@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_07_195332) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_23_210342) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -436,12 +436,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_195332) do
     t.bigint "organization_id", null: false
     t.datetime "updated_at", null: false
     t.string "value"
-    t.string "value_type", null: false
-    t.string "xbrl_element"
     t.index ["category"], name: "index_settings_on_category"
     t.index ["organization_id", "key"], name: "index_settings_on_organization_id_and_key", unique: true
     t.index ["organization_id"], name: "index_settings_on_organization_id"
-    t.index ["xbrl_element"], name: "index_settings_on_xbrl_element"
   end
 
   create_table "str_reports", force: :cascade do |t|

@@ -1,5 +1,5 @@
 # Settings fixtures for testing
-# Settings are key-value pairs with types, mapped to XBRL elements
+# Settings are key-value pairs grouped by category
 
 # === Entity Info ===
 
@@ -7,33 +7,25 @@ entity_name:
   organization: one
   key: "entity_name"
   value: "Agence Immobilière Monaco"
-  value_type: "string"
   category: "entity_info"
-  xbrl_element: "a0101"
 
 total_employees:
   organization: one
   key: "total_employees"
   value: "5"
-  value_type: "integer"
   category: "entity_info"
-  xbrl_element: "a0102"
 
 compliance_officers:
   organization: one
   key: "compliance_officers"
   value: "1"
-  value_type: "integer"
   category: "entity_info"
-  xbrl_element: "a0103"
 
 annual_revenue:
   organization: one
   key: "annual_revenue"
   value: "850000.00"
-  value_type: "decimal"
   category: "entity_info"
-  xbrl_element: "a0104"
 
 # === KYC Procedures ===
 
@@ -41,33 +33,25 @@ edd_for_peps:
   organization: one
   key: "edd_for_peps"
   value: "true"
-  value_type: "boolean"
   category: "kyc_procedures"
-  xbrl_element: "a4101"
 
 edd_for_high_risk_countries:
   organization: one
   key: "edd_for_high_risk_countries"
   value: "true"
-  value_type: "boolean"
   category: "kyc_procedures"
-  xbrl_element: "a4102"
 
 edd_for_complex_structures:
   organization: one
   key: "edd_for_complex_structures"
   value: "true"
-  value_type: "boolean"
   category: "kyc_procedures"
-  xbrl_element: "a4103"
 
 sdd_applied:
   organization: one
   key: "sdd_applied"
   value: "false"
-  value_type: "boolean"
   category: "kyc_procedures"
-  xbrl_element: "a4104"
 
 # === Compliance Policies ===
 
@@ -75,33 +59,25 @@ written_aml_policy:
   organization: one
   key: "written_aml_policy"
   value: "true"
-  value_type: "boolean"
   category: "compliance_policies"
-  xbrl_element: "a5101"
 
 policy_last_updated:
   organization: one
   key: "policy_last_updated"
   value: "2024-06-15"
-  value_type: "date"
   category: "compliance_policies"
-  xbrl_element: "a5102"
 
 risk_assessment_performed:
   organization: one
   key: "risk_assessment_performed"
   value: "true"
-  value_type: "boolean"
   category: "compliance_policies"
-  xbrl_element: "a5103"
 
 internal_controls:
   organization: one
   key: "internal_controls"
   value: "true"
-  value_type: "boolean"
   category: "compliance_policies"
-  xbrl_element: "a5104"
 
 # === Organization Two (for cross-tenant tests) ===
 
@@ -109,12 +85,10 @@ other_org_entity_name:
   organization: two
   key: "entity_name"
   value: "Other Agency"
-  value_type: "string"
   category: "entity_info"
 
 other_org_employees:
   organization: two
   key: "total_employees"
   value: "3"
-  value_type: "integer"
   category: "entity_info"

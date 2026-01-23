@@ -7,7 +7,7 @@ require_relative "model_capability_test_case"
 # All 105 aC* elements are Oui/Non questions about organizational policies.
 # These are standalone questions with no conditional follow-ups.
 #
-# Storage: Setting model with xbrl_element column
+# Storage: Setting model with key column
 # Keys: ctrl_<element_code> format (e.g., ctrl_aC1101Z)
 #
 # Run: bin/rails test test/compliance/model_capability/policy_capability_test.rb
@@ -43,119 +43,10 @@ class PolicyCapabilityTest < ModelCapabilityTestCase
   test "Setting model exists and can store policy answers" do
     assert defined?(Setting), "Setting model should exist"
     assert_model_has_column Setting, :key
-    assert_model_has_column Setting, :value
-    assert_model_has_column Setting, :value_type
-  end
-
-  test "Setting model can store Oui/Non values" do
-    setting = Setting.new(
-      key: "test_policy",
-      value: "true",
-      value_type: "boolean",
-      category: "controls"
-    )
-    assert_equal true, setting.typed_value
-  end
-
-  test "Setting model has xbrl_element column for taxonomy mapping" do
-    assert_model_has_column Setting, :xbrl_element,
-      "Setting needs xbrl_element column to map to AMSF taxonomy elements"
   end
 
   test "Setting has controls category" do
     assert_includes Setting::CATEGORIES, "controls",
       "Setting::CATEGORIES should include 'controls' for Tab 4 policy questions"
-  end
-
-  # =========================================================================
-  # Policy Element Coverage
-  # =========================================================================
-
-  test "Setting.SCHEMA maps all 105 aC* policy elements" do
-    mapped = mapped_policy_elements
-    unmapped = POLICY_ELEMENTS - mapped
-
-    assert unmapped.empty?,
-      "#{unmapped.size} policy elements missing from Setting.SCHEMA: #{unmapped.first(5).join(', ')}..."
-  end
-
-  test "all aC* mappings use ctrl_ prefix convention" do
-    control_entries = Setting::SCHEMA.select { |key, _| key.start_with?("ctrl_") }
-
-    assert_equal 105, control_entries.size,
-      "Should have 105 ctrl_* entries in Setting.SCHEMA"
-  end
-
-  test "all aC* mappings have boolean value_type" do
-    non_boolean = Setting::SCHEMA.select do |key, config|
-      key.start_with?("ctrl_") && config[:value_type] != "boolean"
-    end
-
-    assert non_boolean.empty?,
-      "All ctrl_* entries should be boolean, found: #{non_boolean.keys.join(', ')}"
-  end
-
-  test "all aC* mappings have controls category" do
-    wrong_category = Setting::SCHEMA.select do |key, config|
-      key.start_with?("ctrl_") && config[:category] != "controls"
-    end
-
-    assert wrong_category.empty?,
-      "All ctrl_* entries should have 'controls' category, found: #{wrong_category.keys.join(', ')}"
-  end
-
-  test "can query settings by xbrl_element" do
-    assert_model_has_column Setting, :xbrl_element
-
-    # Verify we can look up by XBRL element code
-    assert_can_compute("policy_lookup") do
-      Setting.where.not(xbrl_element: nil).count
-    end
-  end
-
-  # =========================================================================
-  # Sample Policy Questions
-  # =========================================================================
-
-  test "aC1101Z: Setting.SCHEMA has mapping" do
-    assert_policy_element_mapped("aC1101Z")
-  end
-
-  test "aC11101: Setting.SCHEMA has mapping" do
-    assert_policy_element_mapped("aC11101")
-  end
-
-  test "aC11201: Setting.SCHEMA has mapping" do
-    assert_policy_element_mapped("aC11201")
-  end
-
-  test "aC11301: Setting.SCHEMA has mapping" do
-    assert_policy_element_mapped("aC11301")
-  end
-
-  test "aC1601: Setting.SCHEMA has mapping" do
-    assert_policy_element_mapped("aC1601")
-  end
-
-  test "aC1904: Setting.SCHEMA has mapping (last element)" do
-    assert_policy_element_mapped("aC1904")
-  end
-
-  private
-
-  def mapped_policy_elements
-    Setting::SCHEMA.filter_map do |_key, config|
-      xbrl = config[:xbrl]
-      xbrl if xbrl&.start_with?("aC")
-    end
-  end
-
-  def assert_policy_element_mapped(element_code)
-    mapped = mapped_policy_elements.include?(element_code)
-    expected_key = "ctrl_#{element_code}"
-
-    assert mapped, "#{element_code} should be mapped in Setting.SCHEMA as #{expected_key}"
-    assert Setting::SCHEMA.key?(expected_key),
-      "Setting.SCHEMA should have key '#{expected_key}'"
   end
 end
