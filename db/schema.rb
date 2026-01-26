@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_23_210342) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_26_120144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -102,6 +102,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_23_210342) do
     t.datetime "published_at", precision: nil
     t.string "title"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "submission_id", null: false
+    t.datetime "updated_at", null: false
+    t.text "value"
+    t.string "xbrl_id", null: false
+    t.index ["submission_id", "xbrl_id"], name: "index_answers_on_submission_id_and_xbrl_id", unique: true
+    t.index ["submission_id"], name: "index_answers_on_submission_id"
   end
 
   create_table "api_tokens", force: :cascade do |t|
@@ -606,6 +616,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_23_210342) do
   add_foreign_key "account_users", "users"
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "submissions"
   add_foreign_key "api_tokens", "users"
   add_foreign_key "audit_logs", "organizations", on_delete: :nullify
   add_foreign_key "audit_logs", "users", on_delete: :nullify

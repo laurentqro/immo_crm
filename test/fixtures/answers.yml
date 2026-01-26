@@ -1,0 +1,10 @@
+# Manual answer for draft submission
+manual_comment:
+  submission: in_review_submission
+  xbrl_id: "a14001"
+  value: "Test comment for section"
+
+another_answer:
+  submission: in_review_submission
+  xbrl_id: "air2392"
+  value: "5"
