@@ -483,4 +483,36 @@ class SubmissionTest < ActiveSupport::TestCase
     assert_not_nil submission.generated_at
     assert_equal "completed", submission.status
   end
+
+  # === merged_answers ===
+
+  test "merged_answers combines calculated and manual values" do
+    # Use 2025 as the amsf_survey gem only supports this year
+    submission = Submission.create!(organization: @organization, year: 2025)
+
+    # Add a manual answer that overrides calculated value
+    Answer.create!(submission: submission, xbrl_id: "a14001", value: "manual comment")
+
+    result = submission.merged_answers
+
+    # Should include calculated value
+    assert result.key?("a1101"), "Expected calculated a1101"
+
+    # Should include manual override
+    assert_equal "manual comment", result["a14001"]
+  end
+
+  test "manual answers override calculated values" do
+    # Use unique organization to avoid year uniqueness conflict
+    other_org = organizations(:two)
+    submission = Submission.create!(organization: other_org, year: 2025)
+
+    # Override a calculated field
+    Answer.create!(submission: submission, xbrl_id: "a1101", value: "999")
+
+    result = submission.merged_answers
+
+    # Manual value should win
+    assert_equal "999", result["a1101"]
+  end
 end

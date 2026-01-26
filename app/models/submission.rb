@@ -104,6 +104,13 @@ class Submission < ApplicationRecord
 
   # === Helper Methods ===
 
+  def merged_answers
+    survey = Survey.new(organization: organization, year: year)
+    calculated = survey.to_hash
+    manual = answers.pluck(:xbrl_id, :value).to_h
+    calculated.merge(manual)
+  end
+
   def editable?
     draft? || in_review?
   end
