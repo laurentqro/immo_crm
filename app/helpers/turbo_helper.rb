@@ -34,10 +34,4 @@ module TurboHelper
   def modal_frame_id(name)
     "modal_#{name}"
   end
-
-  # Generate a Turbo Frame ID for wizard steps
-  # Usage: wizard_step_frame_id(:submission, 2) => "submission_step_2"
-  def wizard_step_frame_id(wizard_name, step)
-    "#{wizard_name}_step_#{step}"
-  end
 end

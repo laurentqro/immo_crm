@@ -1,0 +1,240 @@
+<%= content_for :title, "Review #{@submission.year} AMSF Submission" %>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-6">
+    <%= link_to "&larr; Back to Submission".html_safe, submission_path(@submission), class: "text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" %>
+  </div>
+
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Review <%= @submission.year %> AMSF Survey</h1>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      Review your survey data before submitting to AMSF. All values are calculated from your CRM data.
+    </p>
+  </div>
+
+  <% if !@survey.valid? %>
+    <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+      <div class="flex">
+        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-200">Validation Errors</h3>
+          <ul class="mt-2 text-sm text-red-700 dark:text-red-300 list-disc list-inside">
+            <% @survey.errors.each do |error| %>
+              <li><%= error %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="space-y-8">
+    <%# Tab 1: Customer Risk %>
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">1. Customer Risk Assessment</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Client statistics and risk indicators</p>
+      </div>
+      <div class="px-4 py-5 sm:px-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+          <%= render "survey_field", label: "Had professional activity", value: @survey.send(:aactive) %>
+          <%= render "survey_field", label: "Purchase/sale activity", value: @survey.send(:aactiveps) %>
+          <%= render "survey_field", label: "Rental activity", value: @survey.send(:aactiverentals) %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Client Totals</h3>
+          </div>
+
+          <%= render "survey_field", label: "Total clients", value: @survey.send(:a1101), field_id: "a1101" %>
+          <%= render "survey_field", label: "Monegasque nationals", value: @survey.send(:a1102), field_id: "a1102" %>
+          <%= render "survey_field", label: "Foreign residents", value: @survey.send(:a1103), field_id: "a1103" %>
+          <%= render "survey_field", label: "Non-residents", value: @survey.send(:a1104), field_id: "a1104" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Transaction Statistics</h3>
+          </div>
+
+          <%= render "survey_field", label: "Transactions BY clients", value: @survey.send(:a1105b), field_id: "a1105b" %>
+          <%= render "survey_field", label: "Funds BY clients", value: number_to_currency(@survey.send(:a1106b), unit: "EUR "), field_id: "a1106b" %>
+          <%= render "survey_field", label: "Transactions WITH clients", value: @survey.send(:a1105w), field_id: "a1105w" %>
+          <%= render "survey_field", label: "Funds WITH clients", value: number_to_currency(@survey.send(:a1106w), unit: "EUR "), field_id: "a1106w" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Special Client Categories</h3>
+          </div>
+
+          <%= render "survey_field", label: "Has PEP clients", value: @survey.send(:a11301), field_id: "a11301" %>
+          <%= render "survey_field", label: "PEP transactions", value: @survey.send(:a11304b), field_id: "a11304b" %>
+          <%= render "survey_field", label: "Has VASP clients", value: @survey.send(:a13501b), field_id: "a13501b" %>
+          <%= render "survey_field", label: "Has trust clients", value: @survey.send(:a1801), field_id: "a1801" %>
+          <%= render "survey_field", label: "Trust clients count", value: @survey.send(:a1802tola), field_id: "a1802tola" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Individual Clients</h3>
+          </div>
+
+          <%= render "survey_field", label: "Individual client transactions (P/S)", value: @survey.send(:a1403b), field_id: "a1403b" %>
+          <%= render "survey_field", label: "Individual client funds", value: number_to_currency(@survey.send(:a1404b), unit: "EUR "), field_id: "a1404b" %>
+          <%= render "survey_field", label: "Individual clients with rentals", value: @survey.send(:a1401r), field_id: "a1401r" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Legal Entity Clients</h3>
+          </div>
+
+          <%= render "survey_field", label: "Legal entity transactions", value: @survey.send(:a1502b), field_id: "a1502b" %>
+          <%= render "survey_field", label: "Legal entity funds", value: number_to_currency(@survey.send(:a1503b), unit: "EUR "), field_id: "a1503b" %>
+        </dl>
+      </div>
+    </div>
+
+    <%# Tab 2: Products/Services Risk %>
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">2. Products & Services Risk</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Transaction types and payment methods</p>
+      </div>
+      <div class="px-4 py-5 sm:px-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="sm:col-span-3">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Check Payments</h3>
+          </div>
+
+          <%= render "survey_field", label: "Check transactions (WITH)", value: @survey.send(:a2102w), field_id: "a2102w" %>
+          <%= render "survey_field", label: "Check amount (WITH)", value: number_to_currency(@survey.send(:a2102bw), unit: "EUR "), field_id: "a2102bw" %>
+          <%= render "survey_field", label: "Check transactions (BY)", value: @survey.send(:a2102b), field_id: "a2102b" %>
+          <%= render "survey_field", label: "Check amount (BY)", value: number_to_currency(@survey.send(:a2102bb), unit: "EUR "), field_id: "a2102bb" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Wire Transfers</h3>
+          </div>
+
+          <%= render "survey_field", label: "Wire transactions (WITH)", value: @survey.send(:a2105w), field_id: "a2105w" %>
+          <%= render "survey_field", label: "Wire amount (WITH)", value: number_to_currency(@survey.send(:a2105bw), unit: "EUR "), field_id: "a2105bw" %>
+          <%= render "survey_field", label: "Wire transactions (BY)", value: @survey.send(:a2105b), field_id: "a2105b" %>
+          <%= render "survey_field", label: "Wire amount (BY)", value: number_to_currency(@survey.send(:a2105bb), unit: "EUR "), field_id: "a2105bb" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Cash Transactions</h3>
+          </div>
+
+          <%= render "survey_field", label: "Has cash transactions", value: @survey.send(:a2107b), field_id: "a2107b" %>
+          <%= render "survey_field", label: "Cash transactions (WITH)", value: @survey.send(:a2108w), field_id: "a2108w" %>
+          <%= render "survey_field", label: "Cash amount (WITH)", value: number_to_currency(@survey.send(:a2109w), unit: "EUR "), field_id: "a2109w" %>
+          <%= render "survey_field", label: "Cash transactions (BY)", value: @survey.send(:a2108b), field_id: "a2108b" %>
+          <%= render "survey_field", label: "Cash amount (BY)", value: number_to_currency(@survey.send(:a2109b), unit: "EUR "), field_id: "a2109b" %>
+          <%= render "survey_field", label: "Cash >= 10,000 EUR (WITH)", value: @survey.send(:a2110w), field_id: "a2110w" %>
+          <%= render "survey_field", label: "Cash >= 10,000 EUR (BY)", value: @survey.send(:a2110b), field_id: "a2110b" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Cryptocurrency</h3>
+          </div>
+
+          <%= render "survey_field", label: "Crypto transactions", value: @survey.send(:a2202), field_id: "a2202" %>
+        </dl>
+      </div>
+    </div>
+
+    <%# Tab 3: Distribution Risk %>
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">3. Distribution Channel Risk</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">CDD and client introduction methods</p>
+      </div>
+      <div class="px-4 py-5 sm:px-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+          <%= render "survey_field", label: "Third-party CDD used", value: @survey.send(:a3101), field_id: "a3101" %>
+          <%= render "survey_field", label: "Relies on third-party CDD", value: @survey.send(:a3103), field_id: "a3103" %>
+          <%= render "survey_field", label: "Uses introducers", value: @survey.send(:a3201), field_id: "a3201" %>
+          <%= render "survey_field", label: "Non-face-to-face relationships", value: @survey.send(:a3209), field_id: "a3209" %>
+        </dl>
+      </div>
+    </div>
+
+    <%# Tab 4: Controls %>
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">4. Internal Controls</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Training, compliance, and AML procedures</p>
+      </div>
+      <div class="px-4 py-5 sm:px-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="sm:col-span-3">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Training</h3>
+          </div>
+
+          <%= render "survey_field", label: "Training provided this year", value: @survey.send(:ab1801b), field_id: "ab1801b" %>
+          <%= render "survey_field", label: "Staff trained", value: @survey.send(:ab3206), field_id: "ab3206" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Due Diligence</h3>
+          </div>
+
+          <%= render "survey_field", label: "Simplified DD clients", value: @survey.send(:a3301), field_id: "a3301" %>
+          <%= render "survey_field", label: "Enhanced DD used", value: @survey.send(:a3304), field_id: "a3304" %>
+          <%= render "survey_field", label: "New enhanced DD clients", value: @survey.send(:a3305), field_id: "a3305" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Suspicious Activity Reports</h3>
+          </div>
+
+          <%= render "survey_field", label: "SARs filed this year", value: @survey.send(:ac1102a), field_id: "ac1102a" %>
+
+          <div class="sm:col-span-3 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">AML Policy</h3>
+          </div>
+
+          <%= render "survey_field", label: "Has AML policy", value: @survey.send(:ac1201), field_id: "ac1201" %>
+          <%= render "survey_field", label: "Policy approved by management", value: @survey.send(:ac1202), field_id: "ac1202" %>
+          <%= render "survey_field", label: "Sanctions screening", value: @survey.send(:ac114), field_id: "ac114" %>
+        </dl>
+      </div>
+    </div>
+
+    <%# Tab 5: Signatories %>
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">5. Entity Information</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Business profile and organization details</p>
+      </div>
+      <div class="px-4 py-5 sm:px-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+          <%= render "survey_field", label: "Total clients", value: @survey.send(:ac1611), field_id: "ac1611" %>
+          <%= render "survey_field", label: "High-risk clients", value: @survey.send(:ac1802), field_id: "ac1802" %>
+          <%= render "survey_field", label: "Legal entity clients", value: @survey.send(:amles), field_id: "amles" %>
+          <%= render "survey_field", label: "Annual revenue", value: number_to_currency(@survey.send(:ac1801), unit: "EUR "), field_id: "ac1801" %>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <%# Actions %>
+  <div class="mt-8 flex justify-between items-center">
+    <div class="text-sm text-gray-500 dark:text-gray-400">
+      <% if @survey.valid? %>
+        <span class="inline-flex items-center text-green-600 dark:text-green-400">
+          <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          Survey data is valid and ready to submit
+        </span>
+      <% else %>
+        <span class="inline-flex items-center text-red-600 dark:text-red-400">
+          <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          Please resolve validation errors before submitting
+        </span>
+      <% end %>
+    </div>
+    <div class="flex space-x-3">
+      <%= link_to "Back", submission_path(@submission), class: "btn btn-secondary" %>
+      <% if @survey.valid? %>
+        <%= button_to "Validate & Complete", submission_complete_review_path(@submission), method: :post, class: "btn btn-primary" %>
+      <% else %>
+        <button disabled class="btn btn-primary opacity-50 cursor-not-allowed">Validate & Complete</button>
+      <% end %>
+    </div>
+  </div>
+</div>

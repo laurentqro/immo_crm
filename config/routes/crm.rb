@@ -46,25 +46,14 @@ authenticate :user do
   # Singular resource: one settings page per organization (GET/PATCH /settings)
   resource :settings, only: [:show, :update], controller: "settings"
 
-  # Annual submission wizard (US5) - Phase 4
+  # Annual submission (US5) - Phase 4
   resources :submissions do
     member do
       get :download
       post :reopen  # FR-025: Reopen completed submission
     end
 
-    resources :submission_steps, only: [:show, :update], param: :step do
-      member do
-        post :confirm
-      end
-      collection do
-        post :lock    # FR-029: Lock submission for editing
-        post :unlock  # FR-029: Unlock submission
-      end
-    end
-
-    # Survey review page (015-amsf-survey-review)
-    # Single-page review replacing 7-step wizard
+    # Single-page survey review (replaced multi-step wizard)
     resource :review, only: [:show], controller: "survey_reviews"
     post "review/complete", to: "survey_reviews#complete", as: :complete_review
   end
