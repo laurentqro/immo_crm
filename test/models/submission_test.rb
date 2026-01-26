@@ -273,6 +273,22 @@ class SubmissionTest < ActiveSupport::TestCase
     end
   end
 
+  test "has many answers" do
+    submission = Submission.create!(organization: @organization, year: 2040)
+    assert_respond_to submission, :answers
+  end
+
+  test "destroys answers when destroyed" do
+    submission = submissions(:draft_submission)
+    Answer.create!(submission: submission, xbrl_id: "test_destroy", value: "test")
+    answer_count = submission.answers.count
+    assert answer_count > 0, "Test requires submission with answers"
+
+    assert_difference "Answer.count", -answer_count do
+      submission.destroy
+    end
+  end
+
   # === Organization Scoping ===
 
   test "for_organization scope filters by organization" do
