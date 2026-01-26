@@ -85,7 +85,7 @@ class Survey
       next unless respond_to?(field_id, true)
 
       value = send(field_id)
-      sub[field.name] = value if value.present?
+      sub[field.id] = value if value.present?
     end
   end
 end
