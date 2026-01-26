@@ -104,7 +104,7 @@ class SubmissionTest < ActiveSupport::TestCase
   end
 
   test "accepts all valid statuses" do
-    %w[draft in_review validated completed].each do |status|
+    %w[draft completed].each do |status|
       submission = Submission.new(
         organization: @organization,
         year: 2024 + Submission.count, # Ensure unique year
@@ -126,55 +126,13 @@ class SubmissionTest < ActiveSupport::TestCase
 
   # === State Machine ===
 
-  test "can transition from draft to in_review" do
+  test "can transition from draft to completed" do
     submission = Submission.create!(organization: @organization, year: 2025)
     assert_equal "draft", submission.status
-
-    submission.start_review!
-    assert_equal "in_review", submission.status
-  end
-
-  test "can transition from in_review to validated" do
-    submission = Submission.create!(
-      organization: @organization,
-      year: 2025,
-      status: "in_review"
-    )
-
-    submission.validate_submission!
-    assert_equal "validated", submission.status
-    assert_not_nil submission.validated_at
-  end
-
-  test "can transition from validated to completed" do
-    submission = Submission.create!(
-      organization: @organization,
-      year: 2025,
-      status: "validated"
-    )
 
     submission.complete!
     assert_equal "completed", submission.status
     assert_not_nil submission.completed_at
-  end
-
-  test "can transition from in_review back to draft on validation failure" do
-    submission = Submission.create!(
-      organization: @organization,
-      year: 2025,
-      status: "in_review"
-    )
-
-    submission.reject!
-    assert_equal "draft", submission.status
-  end
-
-  test "cannot transition from draft directly to validated" do
-    submission = Submission.create!(organization: @organization, year: 2025)
-
-    assert_raises(Submission::InvalidTransition) do
-      submission.validate_submission!
-    end
   end
 
   test "cannot transition from completed to any other status" do
@@ -186,7 +144,7 @@ class SubmissionTest < ActiveSupport::TestCase
     )
 
     assert_raises(Submission::InvalidTransition) do
-      submission.start_review!
+      submission.complete!
     end
   end
 
@@ -195,16 +153,6 @@ class SubmissionTest < ActiveSupport::TestCase
   test "draft? returns true for draft submissions" do
     submission = Submission.new(status: "draft")
     assert submission.draft?
-  end
-
-  test "in_review? returns true for in_review submissions" do
-    submission = Submission.new(status: "in_review")
-    assert submission.in_review?
-  end
-
-  test "validated? returns true for validated submissions" do
-    submission = Submission.new(status: "validated")
-    assert submission.validated?
   end
 
   test "completed? returns true for completed submissions" do
@@ -292,23 +240,11 @@ class SubmissionTest < ActiveSupport::TestCase
     assert_not_nil submission.started_at
   end
 
-  test "sets validated_at when validation passes" do
-    submission = Submission.create!(
-      organization: @organization,
-      year: 2025,
-      status: "in_review"
-    )
-    assert_nil submission.validated_at
-
-    submission.validate_submission!
-    assert_not_nil submission.validated_at
-  end
-
   test "sets completed_at when completed" do
     submission = Submission.create!(
       organization: @organization,
       year: 2025,
-      status: "validated"
+      status: "draft"
     )
     assert_nil submission.completed_at
 
@@ -316,24 +252,21 @@ class SubmissionTest < ActiveSupport::TestCase
     assert_not_nil submission.completed_at
   end
 
-  # === Downloaded Unvalidated Flag ===
-
-  test "downloaded_unvalidated defaults to false" do
-    submission = Submission.new(organization: @organization, year: 2025)
-    assert_equal false, submission.downloaded_unvalidated
-  end
-
-  test "can mark as downloaded_unvalidated" do
-    submission = Submission.create!(organization: @organization, year: 2025)
-    submission.update!(downloaded_unvalidated: true)
-    assert submission.downloaded_unvalidated
-  end
-
   # === Report Date Helper ===
 
   test "report_date returns end of year date" do
     submission = Submission.new(year: 2025)
     assert_equal Date.new(2025, 12, 31), submission.report_date
+  end
+
+  # === Editable ===
+
+  test "editable? returns true for draft status" do
+    draft = Submission.new(status: "draft")
+    completed = Submission.new(status: "completed")
+
+    assert draft.editable?
+    assert_not completed.editable?
   end
 
   # === Auditable ===
@@ -356,7 +289,7 @@ class SubmissionTest < ActiveSupport::TestCase
     submission = Submission.create!(organization: @organization, year: 2025)
 
     assert_difference "AuditLog.count", 1 do
-      submission.start_review!
+      submission.complete!
     end
 
     audit_log = AuditLog.last
@@ -368,105 +301,6 @@ class SubmissionTest < ActiveSupport::TestCase
 
   test "includes AmsfConstants" do
     assert Submission.include?(AmsfConstants)
-  end
-
-  # === Lifecycle Fields (AMSF Data Capture) ===
-
-  test "current_step defaults to 1" do
-    submission = Submission.new
-    assert_equal 1, submission.current_step
-  end
-
-  test "reopened_count defaults to 0" do
-    submission = Submission.new
-    assert_equal 0, submission.reopened_count
-  end
-
-  test "locked_by_user belongs to users" do
-    submission = Submission.create!(organization: @organization, year: 2035)
-    submission.update!(locked_by_user_id: @user.id, locked_at: Time.current)
-
-    submission.reload
-    assert_equal @user, submission.locked_by_user
-  end
-
-  test "editable? returns true for draft or in_review status" do
-    draft = Submission.new(status: "draft")
-    in_review = Submission.new(status: "in_review")
-    validated = Submission.new(status: "validated")
-    completed = Submission.new(status: "completed")
-
-    assert draft.editable?
-    assert in_review.editable?
-    assert_not validated.editable?
-    assert_not completed.editable?
-  end
-
-  test "acquire_lock! acquires lock for user" do
-    submission = Submission.create!(organization: @organization, year: 2036)
-    assert_nil submission.locked_by_user_id
-    assert_nil submission.locked_at
-
-    submission.acquire_lock!(@user)
-    assert_equal @user.id, submission.locked_by_user_id
-    assert_not_nil submission.locked_at
-  end
-
-  test "release_lock! releases lock" do
-    submission = Submission.create!(
-      organization: @organization,
-      year: 2037,
-      locked_by_user_id: @user.id,
-      locked_at: Time.current
-    )
-
-    submission.release_lock!
-    assert_nil submission.locked_by_user_id
-    assert_nil submission.locked_at
-  end
-
-  test "locked? returns true when locked" do
-    locked = Submission.new(locked_by_user_id: 1, locked_at: Time.current)
-    unlocked = Submission.new
-
-    assert locked.locked?
-    assert_not unlocked.locked?
-  end
-
-  test "locked_by? returns true when locked by specific user" do
-    submission = Submission.new(locked_by_user_id: @user.id, locked_at: Time.current)
-
-    assert submission.locked_by?(@user)
-    assert_not submission.locked_by?(users(:two))
-  end
-
-  test "reopen! increments reopened_count" do
-    submission = Submission.create!(
-      organization: @organization,
-      year: 2038,
-      status: "completed",
-      completed_at: Time.current,
-      generated_at: Time.current,
-      reopened_count: 0
-    )
-
-    submission.reopen!
-    assert_equal 1, submission.reopened_count
-    assert_equal "draft", submission.status
-    assert_nil submission.generated_at
-  end
-
-  test "generate! sets generated_at" do
-    submission = Submission.create!(
-      organization: @organization,
-      year: 2039,
-      status: "validated"
-    )
-    assert_nil submission.generated_at
-
-    submission.generate!
-    assert_not_nil submission.generated_at
-    assert_equal "completed", submission.status
   end
 
   # === merged_answers ===

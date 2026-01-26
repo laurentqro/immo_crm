@@ -59,8 +59,8 @@ module AmsfConstants
   # Setting value types for type casting
   SETTING_TYPES = %w[boolean integer decimal string date enum].freeze
 
-  # Submission workflow statuses
-  SUBMISSION_STATUSES = %w[draft in_review validated completed].freeze
+  # Submission workflow statuses (simplified: draft -> completed)
+  SUBMISSION_STATUSES = %w[draft completed].freeze
 
   # Source of submission values
   SUBMISSION_VALUE_SOURCES = %w[calculated from_settings manual].freeze

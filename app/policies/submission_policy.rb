@@ -37,47 +37,23 @@ class SubmissionPolicy < ApplicationPolicy
     belongs_to_organization?
   end
 
-  # Download is allowed for validated/completed submissions,
-  # or draft submissions with explicit unvalidated flag
+  # Download is allowed for completed submissions
   def download?
-    belongs_to_organization? && record.downloadable?
+    belongs_to_organization? && record.completed?
   end
 
   # Define which attributes users can set
-  # Note: source and overridden are system-managed, not user-settable
   def permitted_attributes
     [
       :year,
       :taxonomy_version,
-      :status,
-      submission_values_attributes: [:id, :value]
+      :status
     ]
   end
 
-  # Additional action for confirming policy values
-  def confirm?
-    update?
-  end
-
-  # Additional action for re-validation
-  def validate?
-    belongs_to_organization? && record.in_review?
-  end
-
-  # Additional action for completing submission
+  # Complete a draft submission
   def complete?
-    belongs_to_organization? && record.validated?
-  end
-
-  # FR-025: Reopen a completed submission for editing
-  def reopen?
-    belongs_to_organization? && record.completed?
-  end
-
-  # FR-029: Force unlock a submission locked by another user
-  # Only admins can force unlock to prevent accidental data loss
-  def force_unlock?
-    belongs_to_organization? && admin?
+    belongs_to_organization? && record.draft?
   end
 
   private
