@@ -38,6 +38,21 @@ class Survey
     validation_result.errors
   end
 
+  # Returns all calculated field values as a hash.
+  # Keys are field ID strings (e.g., "a1101"), values are the calculated results.
+  # Only includes fields that have corresponding methods implemented.
+  def to_hash
+    result = {}
+    questionnaire.fields.each do |field|
+      method_name = field.id.downcase.to_sym
+      next unless respond_to?(method_name, true)
+
+      value = send(method_name)
+      result[method_name.to_s] = value
+    end
+    result
+  end
+
   private
 
   def validation_result
