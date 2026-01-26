@@ -50,10 +50,9 @@ authenticate :user do
   resources :submissions do
     member do
       get :download
-      post :reopen  # FR-025: Reopen completed submission
     end
 
-    # Single-page survey review (replaced multi-step wizard)
+    # Single-page survey review
     resource :review, only: [:show], controller: "survey_reviews"
     post "review/complete", to: "survey_reviews#complete", as: :complete_review
   end
