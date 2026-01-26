@@ -34,8 +34,12 @@ class Survey
     submission.complete?
   end
 
-  def errors
-    submission.errors
+  def missing_fields
+    submission.missing_fields
+  end
+
+  def completion_percentage
+    submission.completion_percentage
   end
 
   # Returns all calculated field values as a hash.
