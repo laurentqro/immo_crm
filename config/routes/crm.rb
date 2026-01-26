@@ -50,9 +50,7 @@ authenticate :user do
   resources :submissions do
     member do
       get :download
-    end
-
-    resource :review, only: [:show], controller: "survey_reviews" do
+      get :review
       post :complete
     end
   end

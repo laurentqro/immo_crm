@@ -116,7 +116,7 @@
         <% if @submission_status[:status] == :not_started %>
           <%= button_to "Start #{@year} Submission", submissions_path, params: { submission: { year: @year } }, method: :post, class: "text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300" %>
         <% elsif @submission_status[:status] == :draft %>
-          <%= link_to "Continue Submission", submission_review_path(@submission_status[:submission]), class: "text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300" %>
+          <%= link_to "Continue Submission", review_submission_path(@submission_status[:submission]), class: "text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300" %>
         <% else %>
           <%= link_to "View Submission", "#", class: "text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300" %>
         <% end %>
