@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_26_120144) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_26_123440) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -471,26 +471,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_120144) do
     t.index ["transaction_id"], name: "index_str_reports_on_transaction_id"
   end
 
-  create_table "submission_values", force: :cascade do |t|
-    t.datetime "confirmed_at"
-    t.datetime "created_at", null: false
-    t.string "element_name", null: false
-    t.jsonb "metadata", default: {}
-    t.boolean "overridden", default: false
-    t.text "override_reason"
-    t.bigint "override_user_id"
-    t.string "previous_year_value"
-    t.string "source", null: false
-    t.bigint "submission_id", null: false
-    t.datetime "updated_at", null: false
-    t.string "value"
-    t.index ["metadata"], name: "index_submission_values_on_metadata", using: :gin
-    t.index ["override_user_id"], name: "index_submission_values_on_override_user_id"
-    t.index ["submission_id", "element_name"], name: "index_submission_values_on_submission_id_and_element_name", unique: true
-    t.index ["submission_id", "source", "confirmed_at"], name: "index_submission_values_on_source_confirmation"
-    t.index ["submission_id"], name: "index_submission_values_on_submission_id"
-  end
-
   create_table "submissions", force: :cascade do |t|
     t.datetime "completed_at"
     t.datetime "created_at", null: false
@@ -632,8 +612,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_26_120144) do
   add_foreign_key "str_reports", "clients"
   add_foreign_key "str_reports", "organizations"
   add_foreign_key "str_reports", "transactions"
-  add_foreign_key "submission_values", "submissions"
-  add_foreign_key "submission_values", "users", column: "override_user_id", on_delete: :nullify
   add_foreign_key "submissions", "organizations"
   add_foreign_key "submissions", "users", column: "locked_by_user_id", on_delete: :nullify
   add_foreign_key "trainings", "organizations"

@@ -13,9 +13,7 @@ class Submission < ApplicationRecord
   # === Associations ===
   belongs_to :organization
   belongs_to :locked_by_user, class_name: "User", optional: true
-  has_many :submission_values, dependent: :destroy
   has_many :answers, dependent: :destroy
-  accepts_nested_attributes_for :submission_values
 
   # === Validations ===
   validates :year, presence: true,

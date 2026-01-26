@@ -258,21 +258,6 @@ class SubmissionTest < ActiveSupport::TestCase
     assert_equal @organization, submission.organization
   end
 
-  test "has many submission_values" do
-    submission = Submission.create!(organization: @organization, year: 2025)
-    assert_respond_to submission, :submission_values
-  end
-
-  test "destroys submission_values when destroyed" do
-    submission = submissions(:draft_submission)
-    submission_value_count = submission.submission_values.count
-    assert submission_value_count > 0, "Test requires submission with values"
-
-    assert_difference "SubmissionValue.count", -submission_value_count do
-      submission.destroy
-    end
-  end
-
   test "has many answers" do
     submission = Submission.create!(organization: @organization, year: 2040)
     assert_respond_to submission, :answers
