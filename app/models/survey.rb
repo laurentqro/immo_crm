@@ -31,11 +31,11 @@ class Survey
   end
 
   def valid?
-    validation_result.valid?
+    submission.complete?
   end
 
   def errors
-    validation_result.errors
+    submission.errors
   end
 
   # Returns all calculated field values as a hash.
@@ -54,10 +54,6 @@ class Survey
   end
 
   private
-
-  def validation_result
-    @validation_result ||= AmsfSurvey.validate(submission)
-  end
 
   def questionnaire
     @questionnaire ||= AmsfSurvey.questionnaire(industry: :real_estate, year: year)
