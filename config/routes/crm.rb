@@ -52,9 +52,9 @@ authenticate :user do
       get :download
     end
 
-    # Single-page survey review
-    resource :review, only: [:show], controller: "survey_reviews"
-    post "review/complete", to: "survey_reviews#complete", as: :complete_review
+    resource :review, only: [:show], controller: "survey_reviews" do
+      post :complete
+    end
   end
 
   # Audit log viewing (compliance) - Phase 4
