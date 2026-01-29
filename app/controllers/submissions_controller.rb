@@ -47,6 +47,7 @@ class SubmissionsController < ApplicationController
 
   # GET /submissions/:id/review
   def review
+    authorize @submission
     @survey = Survey.new(organization: current_organization, year: @submission.year)
   end
 

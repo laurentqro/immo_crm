@@ -1,10 +1,6 @@
 <%= content_for :title, "Review #{@submission.year} AMSF Submission" %>
 
 <div class="container mx-auto px-4 py-8">
-  <div class="mb-6">
-    <%= link_to "&larr; Retour à la soumission".html_safe, submission_path(@submission), class: "text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" %>
-  </div>
-
   <div class="mb-8">
     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
       Questionnaire AMSF <%= @submission.year %>

@@ -42,6 +42,11 @@ class SubmissionPolicy < ApplicationPolicy
     belongs_to_organization? && record.completed?
   end
 
+  # Review is allowed for submissions in the user's organization
+  def review?
+    belongs_to_organization?
+  end
+
   # Define which attributes users can set
   def permitted_attributes
     [
