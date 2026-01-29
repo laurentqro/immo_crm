@@ -97,7 +97,7 @@ class Submission < ApplicationRecord
 
   def set_defaults
     self.status ||= "draft"
-    self.taxonomy_version ||= ENV.fetch("AMSF_TAXONOMY_VERSION", "2025")
+    self.taxonomy_version ||= AmsfSurvey.supported_years(:real_estate).max.to_s
     self.started_at ||= Time.current
   end
 end
