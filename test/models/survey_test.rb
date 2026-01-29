@@ -43,11 +43,32 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal false, @survey.valid?  # Expected to fail initially
   end
 
-  test "errors returns validation errors" do
-    errors = @survey.errors
+  test "missing_fields returns array of missing field IDs" do
+    missing = @survey.missing_fields
 
-    assert_respond_to errors, :each
-    assert errors.any?, "Expected validation errors for empty submission"
+    assert_respond_to missing, :each
+    assert missing.any?, "Expected missing fields for incomplete submission"
+  end
+
+  test "completion_percentage returns percentage complete" do
+    percentage = @survey.completion_percentage
+
+    assert_kind_of Numeric, percentage
+    assert percentage >= 0 && percentage <= 100
+  end
+
+  test "field_label returns label from questionnaire" do
+    label = @survey.field_label("aactive")
+
+    assert_not_nil label
+    assert_includes label, "mandataire professionnel"
+  end
+
+  test "field_value returns calculated value for field" do
+    value = @survey.field_value("a1101")
+
+    assert_not_nil value
+    assert_equal @organization.clients.count, value
   end
 
   # === CustomerRisk Field Tests ===
@@ -64,5 +85,46 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal expected_count, actual_count
     assert actual_count > 0, "Expected organization to have clients in fixtures"
+  end
+
+  # === Tabs Structure Tests ===
+
+  test "tabs returns array of 5 tabs with field IDs from modules" do
+    tabs = @survey.tabs
+
+    assert_equal 5, tabs.size
+    assert_equal %i[customer_risk products_services_risk distribution_risk controls signatories], tabs.map { |t| t[:key] }
+  end
+
+  test "tabs include all field methods from corresponding modules" do
+    tabs = @survey.tabs
+
+    # CustomerRisk should include a1101 (total_clients)
+    customer_risk_tab = tabs.find { |t| t[:key] == :customer_risk }
+    assert_includes customer_risk_tab[:fields], "a1101"
+
+    # Controls should include ac1201 (AML policy)
+    controls_tab = tabs.find { |t| t[:key] == :controls }
+    assert_includes controls_tab[:fields], "ac1201"
+  end
+
+  test "tabs exclude helper methods" do
+    tabs = @survey.tabs
+    all_fields = tabs.flat_map { |t| t[:fields] }
+
+    # Helper methods should not appear in any tab
+    Survey::HELPER_METHODS.each do |helper|
+      assert_not_includes all_fields, helper, "Helper method #{helper} should not be in tabs"
+    end
+  end
+
+  test "tabs fields are sorted by gem display order" do
+    tabs = @survey.tabs
+    customer_risk_tab = tabs.find { |t| t[:key] == :customer_risk }
+    fields = customer_risk_tab[:fields]
+
+    # aactive should come before a1101 (order 1 vs order 4)
+    assert fields.index("aactive") < fields.index("a1101"),
+      "Fields should be sorted by gem display order"
   end
 end

@@ -8,7 +8,6 @@ PATH
   remote: ../amsf_survey/amsf_survey
   specs:
     amsf_survey (0.1.0)
-      i18n (>= 1.0)
       nokogiri (~> 1.15)
 
 PATH
