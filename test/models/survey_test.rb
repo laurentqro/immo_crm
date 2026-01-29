@@ -91,6 +91,46 @@ class SurveyTest < ActiveSupport::TestCase
     assert actual_count > 0, "Expected organization to have clients in fixtures"
   end
 
+  test "a1204s1 returns BO nationality breakdown as formatted percentages" do
+    result = @survey.send(:a1204s1)
+
+    # Should be a string with "Country: X%" format
+    assert_kind_of String, result
+    assert_match(/\w+: \d+%/, result, "Expected 'Country: X%' format")
+
+    # Should contain comma-separated entries
+    entries = result.split(", ")
+    assert entries.length > 1, "Expected multiple nationalities"
+
+    # Each entry should follow the format
+    entries.each do |entry|
+      assert_match(/\A[\w\s]+: \d+%\z/, entry, "Entry '#{entry}' doesn't match expected format")
+    end
+
+    # Percentages should sum to approximately 100
+    percentages = result.scan(/(\d+)%/).flatten.map(&:to_i)
+    total = percentages.sum
+    assert_in_delta 100, total, 2, "Percentages should sum to ~100, got #{total}"
+  end
+
+  test "a1204s1 uses full country names not ISO codes" do
+    result = @survey.send(:a1204s1)
+
+    # Should contain full country names like "France" not "FR"
+    assert_match(/France|Monaco|Italy/, result, "Expected full country names")
+    refute_match(/\b[A-Z]{2}\b: \d+%/, result, "Should not contain ISO codes like 'FR: X%'")
+  end
+
+  test "a1204s1 excludes beneficial owners without nationality" do
+    result = @survey.send(:a1204s1)
+
+    # minimal_owner fixture has no nationality - should be excluded
+    # Verify no empty or nil entries
+    refute_match(/: 0%/, result, "Should not include 0% entries")
+    refute_includes result, "nil"
+    refute_includes result, ": %"
+  end
+
   # === Sections/Subsections Structure Tests ===
 
   test "sections returns array of Section objects from questionnaire" do

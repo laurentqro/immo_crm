@@ -495,13 +495,21 @@ class Survey
 
       # === Dimensional Breakdowns (by nationality/country) ===
 
-      # BO nationality breakdown
+      # BO nationality breakdown (percentages)
       def a1204s1
-        beneficial_owners_base
+        counts = beneficial_owners_base
           .where.not(nationality: [nil, ""])
           .group(:nationality)
           .count
-          .to_json
+
+        total = counts.values.sum.to_f
+        return "" if total.zero?
+
+        counts.map do |code, count|
+          percentage = (count / total * 100).round(0)
+          country_name = ISO3166::Country[code]&.common_name || code
+          "#{country_name}: #{percentage}%"
+        end.join(", ")
       end
 
       # BOs by direct/indirect and nationality
