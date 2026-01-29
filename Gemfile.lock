@@ -1,4 +1,16 @@
 PATH
+  remote: ../amsf_survey/amsf_survey-real_estate
+  specs:
+    amsf_survey-real_estate (0.1.0)
+      amsf_survey (~> 0.1)
+
+PATH
+  remote: ../amsf_survey/amsf_survey
+  specs:
+    amsf_survey (0.1.0)
+      nokogiri (~> 1.15)
+
+PATH
   remote: lib/jumpstart
   specs:
     jumpstart (0.1.0)
@@ -531,6 +543,8 @@ PLATFORMS
 
 DEPENDENCIES
   action_text-trix (~> 2.1)
+  amsf_survey!
+  amsf_survey-real_estate!
   bootsnap (>= 1.4.2)
   brakeman
   bullet
@@ -598,6 +612,8 @@ CHECKSUMS
   activestorage (8.1.1) sha256=bc01d8b4c55e309a0a2e218bfe502c382c9f232e28b1f4b0adc9d8719d2bf28d
   activesupport (8.1.1) sha256=5e92534e8d0c8b8b5e6b16789c69dbea65c1d7b752269f71a39422e9546cea67
   addressable (2.8.7) sha256=462986537cf3735ab5f3c0f557f14155d778f4b43ea4f485a9deb9c8f7c58232
+  amsf_survey (0.1.0)
+  amsf_survey-real_estate (0.1.0)
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bcrypt (3.1.20) sha256=8410f8c7b3ed54a3c00cd2456bf13917d695117f033218e2483b2e40b0784099

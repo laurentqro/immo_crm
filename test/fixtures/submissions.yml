@@ -19,23 +19,6 @@ another_submission:
   validated_at: <%= 1.year.ago + 1.hour %>
   completed_at: <%= 1.year.ago + 2.hours %>
 
-# Submission in review status
-in_review_submission:
-  organization: one
-  year: 2022
-  taxonomy_version: "2025"
-  status: "in_review"
-  started_at: <%= 2.years.ago %>
-
-# Validated submission (ready for download)
-validated_submission:
-  organization: one
-  year: 2021
-  taxonomy_version: "2025"
-  status: "validated"
-  started_at: <%= 3.years.ago %>
-  validated_at: <%= 3.years.ago + 1.day %>
-
 # Completed submission
 completed_submission:
   organization: one
@@ -53,15 +36,6 @@ other_org_submission:
   taxonomy_version: "2025"
   status: "draft"
   started_at: <%= 1.day.ago %>
-
-# Submission downloaded without validation
-unvalidated_download:
-  organization: one
-  year: 2019
-  taxonomy_version: "2025"
-  status: "draft"
-  started_at: <%= 5.years.ago %>
-  downloaded_unvalidated: true
 
 # =============================================================================
 # XBRL Compliance Test Fixtures

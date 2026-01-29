@@ -6,7 +6,9 @@ class DashboardController < ApplicationController
   include OrganizationScoped
 
   def show
-    @year = params[:year]&.to_i || Date.current.year
+    # Submission year = reporting period (previous calendar year)
+    # e.g., in 2026, we submit data for 2025
+    @year = params[:year]&.to_i || (Date.current.year - 1)
     @stats = calculate_stats
     @recent_transactions = fetch_recent_transactions
     @submission_status = fetch_submission_status

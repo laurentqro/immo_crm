@@ -1,0 +1,94 @@
+<%= content_for :title, "Review #{@submission.year} AMSF Submission" %>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+      Questionnaire AMSF <%= @submission.year %>
+    </h1>
+    <span class="text-sm text-gray-500 dark:text-gray-400"><%= @survey.completion_percentage %>% complété</span>
+
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      Vérifiez vos données avant de soumettre à l'AMSF. Toutes les valeurs sont calculées ou pré-remplies à partir des données que vous avez renseignées au cours de l'année <%= @submission.year %>.
+    </p>
+  </div>
+
+  <% if !@survey.valid? %>
+    <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+      <div class="flex">
+        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+            <%= pluralize(@survey.unanswered_questions.count, "question") %> attendent votre réponse avant de pouvoir soumettre votre déclaration:
+          </h3>
+          <ul class="mt-2 text-sm text-red-700 dark:text-red-300 list-disc list-inside">
+            <% @survey.unanswered_questions.each do |question| %>
+              <li><%= question.label %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="space-y-8">
+    <% @survey.sections.each do |section| %>
+      <div class="shadow rounded-lg border border-gray-200 dark:border-gray-700">
+        <%# Section header %>
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-600 rounded-t-lg">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+            <%= section.number %>. <%= section.title %>
+          </h2>
+        </div>
+
+        <% section.subsections.each do |subsection| %>
+          <%# Subsection header %>
+          <div class="px-4 py-3 sm:px-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-500">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+              <%= section.number %>.<%= subsection.number %> <%= subsection.title %>
+            </h3>
+          </div>
+
+          <%# Questions in this subsection %>
+          <div class="px-4 py-2 sm:px-6">
+            <dl>
+              <% subsection.questions.each do |question| %>
+                <%= render "survey_question", question: question, value: @survey.answer(question.id) %>
+              <% end %>
+            </dl>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Actions %>
+  <div class="mt-8 flex justify-between items-center">
+    <div class="text-sm text-gray-500 dark:text-gray-400">
+      <% if @survey.valid? %>
+        <span class="inline-flex items-center text-green-600 dark:text-green-400">
+          <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          Les données sont valides et prêtes à être soumises
+        </span>
+      <% else %>
+        <span class="inline-flex items-center text-red-600 dark:text-red-400">
+          <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          Veuillez résoudre les erreurs de validation avant de soumettre
+        </span>
+      <% end %>
+    </div>
+    <div class="flex space-x-3">
+      <%= link_to "Retour", submission_path(@submission), class: "btn btn-secondary" %>
+      <% if @survey.valid? %>
+        <%= button_to "Valider et terminer", complete_submission_path(@submission), method: :post, class: "btn btn-primary" %>
+      <% else %>
+        <button disabled class="btn btn-primary opacity-50 cursor-not-allowed">Valider et terminer</button>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -41,28 +41,24 @@
               <%= text_field_tag "settings[entity_name]", get_setting_value("entity_name"),
                   id: "entity_name", name: "settings[entity_name]",
                   class: "mt-1 form-control" %>
-              <p class="mt-1 text-xs text-gray-500">XBRL: a0101</p>
             </div>
             <div>
               <%= label_tag :total_employees, "Total Employees", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
               <%= number_field_tag "settings[total_employees]", get_setting_value("total_employees"),
                   id: "total_employees", name: "settings[total_employees]",
                   class: "mt-1 form-control", min: 0 %>
-              <p class="mt-1 text-xs text-gray-500">XBRL: a0102</p>
             </div>
             <div>
               <%= label_tag :compliance_officers, "Compliance Officers", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
               <%= number_field_tag "settings[compliance_officers]", get_setting_value("compliance_officers"),
                   id: "compliance_officers", name: "settings[compliance_officers]",
                   class: "mt-1 form-control", min: 0 %>
-              <p class="mt-1 text-xs text-gray-500">XBRL: a0103</p>
             </div>
             <div>
               <%= label_tag :annual_revenue, "Annual Revenue", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
               <%= number_field_tag "settings[annual_revenue]", get_setting_value("annual_revenue"),
                   id: "annual_revenue", name: "settings[annual_revenue]",
                   class: "mt-1 form-control", min: 0, step: "0.01" %>
-              <p class="mt-1 text-xs text-gray-500">XBRL: a0104</p>
             </div>
           </div>
         </div>
@@ -72,7 +68,6 @@
           <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">KYC Procedures</h2>
           <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
             Enhanced Due Diligence (EDD) and Simplified Due Diligence (SDD) settings.
-            <span class="font-medium">a4101</span> - XBRL element code for reference.
           </p>
           <div class="space-y-4">
             <div class="flex items-start">

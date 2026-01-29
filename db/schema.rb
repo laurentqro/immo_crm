@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_07_195332) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_26_124458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -102,6 +102,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_195332) do
     t.datetime "published_at", precision: nil
     t.string "title"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "submission_id", null: false
+    t.datetime "updated_at", null: false
+    t.text "value"
+    t.string "xbrl_id", null: false
+    t.index ["submission_id", "xbrl_id"], name: "index_answers_on_submission_id_and_xbrl_id", unique: true
+    t.index ["submission_id"], name: "index_answers_on_submission_id"
   end
 
   create_table "api_tokens", force: :cascade do |t|
@@ -436,12 +446,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_195332) do
     t.bigint "organization_id", null: false
     t.datetime "updated_at", null: false
     t.string "value"
-    t.string "value_type", null: false
-    t.string "xbrl_element"
     t.index ["category"], name: "index_settings_on_category"
     t.index ["organization_id", "key"], name: "index_settings_on_organization_id_and_key", unique: true
     t.index ["organization_id"], name: "index_settings_on_organization_id"
-    t.index ["xbrl_element"], name: "index_settings_on_xbrl_element"
   end
 
   create_table "str_reports", force: :cascade do |t|
@@ -464,47 +471,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_195332) do
     t.index ["transaction_id"], name: "index_str_reports_on_transaction_id"
   end
 
-  create_table "submission_values", force: :cascade do |t|
-    t.datetime "confirmed_at"
-    t.datetime "created_at", null: false
-    t.string "element_name", null: false
-    t.jsonb "metadata", default: {}
-    t.boolean "overridden", default: false
-    t.text "override_reason"
-    t.bigint "override_user_id"
-    t.string "previous_year_value"
-    t.string "source", null: false
-    t.bigint "submission_id", null: false
-    t.datetime "updated_at", null: false
-    t.string "value"
-    t.index ["metadata"], name: "index_submission_values_on_metadata", using: :gin
-    t.index ["override_user_id"], name: "index_submission_values_on_override_user_id"
-    t.index ["submission_id", "element_name"], name: "index_submission_values_on_submission_id_and_element_name", unique: true
-    t.index ["submission_id", "source", "confirmed_at"], name: "index_submission_values_on_source_confirmation"
-    t.index ["submission_id"], name: "index_submission_values_on_submission_id"
-  end
-
   create_table "submissions", force: :cascade do |t|
     t.datetime "completed_at"
     t.datetime "created_at", null: false
-    t.integer "current_step", default: 1
-    t.boolean "downloaded_unvalidated", default: false
-    t.datetime "generated_at"
-    t.datetime "locked_at"
-    t.bigint "locked_by_user_id"
     t.bigint "organization_id", null: false
-    t.integer "reopened_count", default: 0, null: false
-    t.string "signatory_name"
-    t.string "signatory_title"
     t.datetime "started_at"
     t.string "status", default: "draft"
     t.string "taxonomy_version", default: "2025"
     t.datetime "updated_at", null: false
     t.datetime "validated_at"
     t.integer "year", null: false
-    t.index ["locked_at"], name: "index_submissions_on_locked_at"
-    t.index ["locked_by_user_id", "locked_at"], name: "index_submissions_on_lock_status"
-    t.index ["locked_by_user_id"], name: "index_submissions_on_locked_by_user_id"
     t.index ["organization_id", "year"], name: "index_submissions_on_organization_id_and_year", unique: true
     t.index ["organization_id"], name: "index_submissions_on_organization_id"
   end
@@ -609,6 +585,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_195332) do
   add_foreign_key "account_users", "users"
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "submissions"
   add_foreign_key "api_tokens", "users"
   add_foreign_key "audit_logs", "organizations", on_delete: :nullify
   add_foreign_key "audit_logs", "users", on_delete: :nullify
@@ -624,10 +601,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_195332) do
   add_foreign_key "str_reports", "clients"
   add_foreign_key "str_reports", "organizations"
   add_foreign_key "str_reports", "transactions"
-  add_foreign_key "submission_values", "submissions"
-  add_foreign_key "submission_values", "users", column: "override_user_id", on_delete: :nullify
   add_foreign_key "submissions", "organizations"
-  add_foreign_key "submissions", "users", column: "locked_by_user_id", on_delete: :nullify
   add_foreign_key "trainings", "organizations"
   add_foreign_key "transactions", "clients"
   add_foreign_key "transactions", "organizations"
