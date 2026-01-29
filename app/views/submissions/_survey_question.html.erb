@@ -35,6 +35,8 @@
       <% end %>
     <% elsif value.blank? %>
       <span class="text-gray-400 dark:text-gray-500 italic text-sm">Non renseigné</span>
+    <% elsif question.type == :monetary %>
+      <span class="text-sm text-gray-900 dark:text-white font-semibold"><%= number_to_currency(value, unit: "€", format: "%n %u") %></span>
     <% else %>
       <span class="text-sm text-gray-900 dark:text-white font-semibold"><%= value %></span>
     <% end %>
