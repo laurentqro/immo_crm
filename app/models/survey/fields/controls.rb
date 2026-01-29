@@ -18,6 +18,7 @@ class Survey
   module Fields
     module Controls
       extend ActiveSupport::Concern
+      include Helpers
 
       private
 

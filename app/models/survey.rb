@@ -28,10 +28,16 @@ class Survey
 
   def to_xbrl
     AmsfSurvey.to_xbrl(submission, pretty: true)
+  rescue AmsfSurvey::Error => e
+    Rails.logger.error("XBRL generation failed for #{organization.rci_number}/#{year}: #{e.message}")
+    raise
   end
 
   def valid?
     submission.complete?
+  rescue AmsfSurvey::Error => e
+    Rails.logger.error("Survey validation failed for #{organization.rci_number}/#{year}: #{e.message}")
+    false
   end
 
   def unanswered_questions

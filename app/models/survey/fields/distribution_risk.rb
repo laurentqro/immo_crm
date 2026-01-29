@@ -13,6 +13,7 @@ class Survey
   module Fields
     module DistributionRisk
       extend ActiveSupport::Concern
+      include Helpers
 
       private
 

@@ -14,6 +14,7 @@ class Survey
   module Fields
     module Signatories
       extend ActiveSupport::Concern
+      include Helpers
 
       private
 

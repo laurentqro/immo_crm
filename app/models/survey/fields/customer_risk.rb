@@ -15,6 +15,7 @@ class Survey
   module Fields
     module CustomerRisk
       extend ActiveSupport::Concern
+      include Helpers
 
       private
 
@@ -638,58 +639,6 @@ class Survey
       def a1402
         # Would need secondary_nationality field - return 0 for now
         0
-      end
-
-      # === Helper Methods ===
-
-      def clients_kept
-        organization.clients.kept
-      end
-
-      def year_transactions
-        organization.transactions.kept.for_year(year)
-      end
-
-      def beneficial_owners_base
-        BeneficialOwner.joins(:client)
-          .merge(Client.kept)
-          .where(clients: {organization_id: organization.id})
-      end
-
-      def setting_value(key)
-        settings_cache[key]
-      end
-
-      def settings_cache
-        @settings_cache ||= organization.settings
-          .where.not(key: [nil, ""])
-          .index_by(&:key)
-          .transform_values(&:value)
-      end
-
-      def clients_by_sector(sector)
-        clients_kept.where(business_sector: sector).count
-      end
-
-      def vasp_transactions_by_type(vasp_type)
-        year_transactions
-          .joins(:client)
-          .where(clients: {is_vasp: true, vasp_type: vasp_type})
-          .count
-      end
-
-      def vasp_funds_by_type(vasp_type)
-        year_transactions
-          .joins(:client)
-          .where(clients: {is_vasp: true, vasp_type: vasp_type})
-          .sum(:transaction_value)
-      end
-
-      def vasp_clients_by_country(vasp_type)
-        clients_kept
-          .where(is_vasp: true, vasp_type: vasp_type)
-          .where.not(country_code: [nil, ""])
-          .count
       end
     end
   end
