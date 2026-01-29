@@ -14,8 +14,8 @@ class SurveyCompletenessTest < ActiveSupport::TestCase
     questionnaire = AmsfSurvey.questionnaire(industry: :real_estate, year: 2025)
     survey = Survey.new(organization: organizations(:one), year: 2025)
 
-    missing = questionnaire.fields.map { |f| f.id.downcase.to_sym }.reject do |field_id|
-      survey.respond_to?(field_id, true)
+    missing = questionnaire.questions.map { |q| q.id.to_s.downcase.to_sym }.reject do |question_id|
+      survey.respond_to?(question_id, true)
     end
 
     assert missing.empty?, "Survey missing implementations for: #{missing.join(", ")}"

@@ -50,7 +50,7 @@ Rails.application.config.after_initialize do
     # Verify the default year questionnaire loads correctly
     default_year = years.max
     questionnaire = AmsfSurvey.questionnaire(industry: :real_estate, year: default_year)
-    Rails.logger.info "AMSF Survey #{default_year}: #{questionnaire.question_count} fields, #{questionnaire.section_count} sections"
+    Rails.logger.info "AMSF Survey #{default_year}: #{questionnaire.question_count} questions, #{questionnaire.sections.size} sections"
   end
 rescue AmsfSurvey::TaxonomyLoadError => e
   Rails.logger.error "Failed to load AMSF Survey: #{e.message}"

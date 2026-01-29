@@ -1,18 +1,21 @@
-<%# Survey question display partial - two column: question | answer %>
-<%# locals: question_id (required), value, survey (required for label lookup), number (required), label (optional override) %>
-<%
-  # Use provided label or fetch from questionnaire
-  display_label = local_assigns[:label] || survey.question_label(question_id)
-  display_label ||= question_id # Fallback to question_id if label not found
-%>
-<div class="grid grid-cols-12 gap-4 py-3 border-b border-gray-100 dark:border-gray-700">
+<%# Survey question display partial - two column layout: question | answer %>
+<%# locals: question (required - Question object from gem), value (the calculated answer) %>
+<div class="grid grid-cols-12 gap-4 py-3 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+  <%# Question label and instructions (left column) %>
   <div class="col-span-9">
     <p class="text-sm text-gray-700 dark:text-gray-300">
-      <span class="font-semibold text-gray-500 dark:text-gray-400"><%= number %>.</span>
-      <%= display_label %>
+      <span class="font-semibold text-gray-500 dark:text-gray-400"><%= question.number %>.</span>
+      <%= question.label %>
     </p>
-    <span class="text-xs text-gray-400 dark:text-gray-500 font-mono ml-5">(<%= question_id %>)</span>
+    <% if question.instructions.present? %>
+      <p class="mt-1 ml-5 text-xs text-gray-500 dark:text-gray-400 italic">
+        <%= question.instructions %>
+      </p>
+    <% end %>
+    <span class="text-xs text-gray-400 dark:text-gray-500 font-mono ml-5">(<%= question.id %>)</span>
   </div>
+
+  <%# Answer value (right column) %>
   <div class="col-span-3 text-right">
     <% if value.is_a?(String) && value.in?(%w[Oui Non]) %>
       <% if value == "Oui" %>

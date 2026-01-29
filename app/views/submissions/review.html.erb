@@ -36,21 +36,33 @@
     </div>
   <% end %>
 
-  <% question_number = 0 %>
-
   <div class="space-y-8">
-    <% @survey.tabs.each_with_index do |tab, tab_index| %>
-      <div class="bg-white dark:bg-gray-800 shadow rounded-lg border border-gray-200 dark:border-gray-700">
-        <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 class="text-lg font-medium text-gray-900 dark:text-white"><%= tab_index + 1 %>. <%= tab[:title] %></h2>
+    <% @survey.sections.each do |section| %>
+      <div class="shadow rounded-lg border border-gray-200 dark:border-gray-700">
+        <%# Section header %>
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-600 rounded-t-lg">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+            <%= section.number %>. <%= section.title %>
+          </h2>
         </div>
-        <div class="px-4 py-5 sm:px-6">
-          <dl>
-            <% tab[:questions].each do |question_id| %>
-              <%= render "survey_question", survey: @survey, question_id: question_id, value: @survey.answer(question_id), number: (question_number += 1) %>
-            <% end %>
-          </dl>
-        </div>
+
+        <% section.subsections.each do |subsection| %>
+          <%# Subsection header %>
+          <div class="px-4 py-3 sm:px-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-500">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+              <%= section.number %>.<%= subsection.number %> <%= subsection.title %>
+            </h3>
+          </div>
+
+          <%# Questions in this subsection %>
+          <div class="px-4 py-2 sm:px-6">
+            <dl>
+              <% subsection.questions.each do |question| %>
+                <%= render "survey_question", question: question, value: @survey.answer(question.id) %>
+              <% end %>
+            </dl>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>
