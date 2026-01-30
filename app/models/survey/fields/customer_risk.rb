@@ -31,9 +31,9 @@ class Survey
         year_transactions.purchases.or(year_transactions.sales).exists? ? "Oui" : "Non"
       end
 
-      # Specifically for rental activity
+      # Specifically for rental activity (monthly rent >= €10,000)
       def aactiverentals
-        year_transactions.rentals.exists? ? "Oui" : "Non"
+        year_transactions.rentals.where(transaction_value: 10_000..).exists? ? "Oui" : "Non"
       end
 
       # === Client Totals ===

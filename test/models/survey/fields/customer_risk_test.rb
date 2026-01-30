@@ -1,0 +1,152 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
+  test "a1101 counts all clients for the organization" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Client.create!(organization: org, name: "Client 2", client_type: "NATURAL_PERSON")
+    Client.create!(organization: org, name: "Client 3", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal 3, survey.send(:a1101)
+  end
+
+  test "aactiveps returns Oui when purchase transactions exist for the year" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 100_000
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Oui", survey.send(:aactiveps)
+  end
+
+  test "aactiveps returns Oui when sale transactions exist for the year" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 100_000
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Oui", survey.send(:aactiveps)
+  end
+
+  test "aactiveps returns Non when only rental transactions exist" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 10_000
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Non", survey.send(:aactiveps)
+  end
+
+  test "aactiveps returns Non when no transactions exist" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Non", survey.send(:aactiveps)
+  end
+
+  test "aactiveps ignores transactions from other years" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2024, 6, 15),
+      transaction_value: 100_000
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Non", survey.send(:aactiveps)
+  end
+
+  test "aactiverentals returns Oui when rental transactions exist for the year" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 10_000
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Oui", survey.send(:aactiverentals)
+  end
+
+  test "aactiverentals returns Non when only purchase/sale transactions exist" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 100_000
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Non", survey.send(:aactiverentals)
+  end
+
+  test "aactiverentals ignores transactions from other years" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(2024, 6, 15),
+      transaction_value: 10_000
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Non", survey.send(:aactiverentals)
+  end
+
+  test "aactiverentals returns Non when rental is below 10000 monthly rent" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 9_999
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal "Non", survey.send(:aactiverentals)
+  end
+end
