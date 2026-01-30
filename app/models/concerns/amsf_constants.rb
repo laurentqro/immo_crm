@@ -44,7 +44,9 @@ module AmsfConstants
   # Client residence status
   RESIDENCE_STATUSES = %w[RESIDENT NON_RESIDENT].freeze
 
-  # Transaction direction (BY client vs WITH client as agent)
+  # Transaction payment direction (who handles the funds)
+  # BY_CLIENT: Client pays directly (e.g., buyer wires funds to seller's account)
+  # WITH_CLIENT: Funds flow through the agency (e.g., client pays agency, agency disburses)
   TRANSACTION_DIRECTIONS = %w[BY_CLIENT WITH_CLIENT].freeze
 
   # Suspicious Transaction Report reasons

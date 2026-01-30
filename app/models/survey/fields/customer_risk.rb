@@ -328,7 +328,7 @@ class Survey
 
       # === Transaction Statistics ===
 
-      # Transactions BY clients (client is principal)
+      # Transactions BY clients (client pays directly, funds don't flow through agency)
       # AMSF counts each rental month >= €10,000 as a separate transaction
       def a1105b
         purchases_and_sales = year_transactions.by_client.where(transaction_type: %w[PURCHASE SALE]).count
@@ -341,7 +341,7 @@ class Survey
         purchases_and_sales + rental_months
       end
 
-      # Funds transferred BY clients
+      # Funds transferred BY clients (client pays directly)
       def a1106b
         year_transactions.by_client.sum(:transaction_value)
       end
@@ -351,12 +351,12 @@ class Survey
         year_transactions.rentals.sum(:transaction_value)
       end
 
-      # Transactions WITH clients (agency represents client)
+      # Transactions WITH clients (funds flow through agency)
       def a1105w
         year_transactions.with_client.count
       end
 
-      # Funds transferred WITH clients
+      # Funds transferred WITH clients (funds flow through agency)
       def a1106w
         year_transactions.with_client.sum(:transaction_value)
       end

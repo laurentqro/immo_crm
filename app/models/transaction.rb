@@ -57,7 +57,9 @@ class Transaction < ApplicationRecord
   scope :with_cash, -> { where(payment_method: %w[CASH MIXED]).where.not(cash_amount: [nil, 0]) }
   scope :by_payment_method, ->(method) { where(payment_method: method) }
 
-  # Direction scopes (BY client vs WITH client as agent)
+  # Payment direction scopes
+  # by_client: Client pays directly (funds don't flow through agency)
+  # with_client: Funds flow through agency (agency handles client funds)
   scope :by_client, -> { where(direction: "BY_CLIENT") }
   scope :with_client, -> { where(direction: "WITH_CLIENT") }
 
