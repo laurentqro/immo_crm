@@ -1,22 +1,26 @@
-<%# Survey question display partial - two column layout: question | answer %>
+<%# Survey question display partial - three column layout: question | instructions | answer %>
 <%# locals: question (required - Question object from gem), value (the calculated answer) %>
 <div class="grid grid-cols-12 gap-4 py-3 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
-  <%# Question label and instructions (left column) %>
-  <div class="col-span-9">
+  <%# Question label (left column) %>
+  <div class="col-span-5">
     <p class="text-sm text-gray-700 dark:text-gray-300">
       <span class="font-semibold text-gray-500 dark:text-gray-400"><%= question.number %>.</span>
       <%= question.label %>
     </p>
-    <% if question.instructions.present? %>
-      <p class="mt-1 ml-5 text-xs text-gray-500 dark:text-gray-400 italic">
-        <%= question.instructions %>
-      </p>
-    <% end %>
     <span class="text-xs text-gray-400 dark:text-gray-500 font-mono ml-5">(<%= question.id %>)</span>
   </div>
 
+  <%# Instructions (middle column) %>
+  <div class="col-span-5">
+    <% if question.instructions.present? %>
+      <div class="text-xs text-gray-500 dark:text-gray-400 prose prose-xs prose-gray dark:prose-invert">
+        <%= markdown(question.instructions) %>
+      </div>
+    <% end %>
+  </div>
+
   <%# Answer value (right column) %>
-  <div class="col-span-3 text-right">
+  <div class="col-span-2 text-right">
     <% if value.is_a?(String) && value.in?(%w[Oui Non]) %>
       <% if value == "Oui" %>
         <span class="inline-flex items-center text-green-600 dark:text-green-400 font-semibold">

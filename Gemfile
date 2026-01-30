@@ -46,6 +46,9 @@ gem "image_processing", "~> 1.12"
 # Country data for ISO 3166 codes [https://github.com/countries/countries]
 gem "countries"
 
+# Markdown rendering [https://github.com/vmg/redcarpet]
+gem "redcarpet"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
