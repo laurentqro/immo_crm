@@ -329,8 +329,16 @@ class Survey
       # === Transaction Statistics ===
 
       # Transactions BY clients (client is principal)
+      # AMSF counts each rental month >= €10,000 as a separate transaction
       def a1105b
-        year_transactions.by_client.count
+        purchases_and_sales = year_transactions.by_client.where(transaction_type: %w[PURCHASE SALE]).count
+
+        rental_months = year_transactions.by_client
+          .rentals
+          .where(transaction_value: 10_000..)
+          .sum(:rental_duration_months)
+
+        purchases_and_sales + rental_months
       end
 
       # Funds transferred BY clients

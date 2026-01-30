@@ -149,4 +149,124 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
 
     assert_equal "Non", survey.send(:aactiverentals)
   end
+
+  test "a1105b counts transactions BY clients" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 100_000,
+      direction: "BY_CLIENT"
+    )
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(2025, 7, 15),
+      transaction_value: 200_000,
+      direction: "BY_CLIENT"
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal 2, survey.send(:a1105b)
+  end
+
+  test "a1105b excludes transactions WITH clients" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 100_000,
+      direction: "BY_CLIENT"
+    )
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(2025, 7, 15),
+      transaction_value: 200_000,
+      direction: "WITH_CLIENT"
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal 1, survey.send(:a1105b)
+  end
+
+  test "a1105b ignores transactions from other years" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2024, 6, 15),
+      transaction_value: 100_000,
+      direction: "BY_CLIENT"
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal 0, survey.send(:a1105b)
+  end
+
+  test "a1105b counts each rental month as a separate transaction for AMSF" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+
+    # One purchase = 1 transaction
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2025, 3, 15),
+      transaction_value: 500_000,
+      direction: "BY_CLIENT"
+    )
+
+    # 12-month rental at €15,000/month = 12 transactions for AMSF
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(2025, 1, 1),
+      transaction_value: 15_000,
+      direction: "BY_CLIENT",
+      rental_duration_months: 12
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal 13, survey.send(:a1105b)
+  end
+
+  test "a1105b excludes rental months below 10000 threshold" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
+
+    # 12-month rental at €9,000/month = 0 transactions (below threshold)
+    Transaction.create!(
+      organization: org,
+      client: client,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(2025, 1, 1),
+      transaction_value: 9_000,
+      direction: "BY_CLIENT",
+      rental_duration_months: 12
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal 0, survey.send(:a1105b)
+  end
 end
