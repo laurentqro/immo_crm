@@ -4,7 +4,7 @@
 # Draft submission in organization :one
 draft_submission:
   organization: one
-  year: 2024
+  year: 2025
   taxonomy_version: "2025"
   status: "draft"
   started_at: <%= 1.hour.ago %>
@@ -36,6 +36,16 @@ other_org_submission:
   taxonomy_version: "2025"
   status: "draft"
   started_at: <%= 1.day.ago %>
+
+# Validated submission (completed and ready for download)
+validated_submission:
+  organization: one
+  year: 2022
+  taxonomy_version: "2025"
+  status: "completed"
+  started_at: <%= 2.years.ago %>
+  validated_at: <%= 2.years.ago + 1.day %>
+  completed_at: <%= 2.years.ago + 2.days %>
 
 # =============================================================================
 # XBRL Compliance Test Fixtures

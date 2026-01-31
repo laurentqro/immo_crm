@@ -53,6 +53,26 @@ class SubmissionsController < ApplicationController
 
   # POST /submissions/:id/complete
   def complete
+    authorize @submission
+
+    @survey = Survey.new(organization: current_organization, year: @submission.year)
+
+    # Validate with Arelle if enabled
+    begin
+      validation_result = @survey.validate_with_arelle
+      if validation_result && !validation_result.valid
+        flash.now[:alert] = "XBRL validation failed with #{validation_result.summary[:errors]} error(s). Please fix the issues and try again."
+        flash[:validation_errors] = validation_result.error_messages
+        render :review, status: :unprocessable_entity
+        return
+      end
+    rescue ArelleClient::ConnectionError => e
+      Rails.logger.error("Arelle validation service unavailable: #{e.message}")
+      flash.now[:alert] = "XBRL validation service is temporarily unavailable. Please try again later."
+      render :review, status: :unprocessable_entity
+      return
+    end
+
     @submission.complete!
     redirect_to submission_path(@submission), notice: "Submission completed successfully."
   end

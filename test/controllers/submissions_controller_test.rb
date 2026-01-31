@@ -274,6 +274,81 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "in_review", @submission.status
   end
 
+  # === Complete Action with Arelle Validation ===
+
+  test "complete action validates with arelle when enabled" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post complete_submission_path(@submission)
+    end
+
+    @submission.reload
+    assert @submission.completed?
+    assert_redirected_to submission_path(@submission)
+  end
+
+  test "complete action blocks completion when arelle returns errors" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {
+          valid: false,
+          summary: {errors: 2},
+          messages: [
+            {severity: "error", code: "a1101", message: "Missing required field a1101"},
+            {severity: "error", code: "a1102", message: "Missing required field a1102"}
+          ]
+        }.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post complete_submission_path(@submission)
+    end
+
+    @submission.reload
+    assert @submission.draft?
+    assert_response :unprocessable_entity
+    assert_match(/validation.*failed/i, flash[:alert])
+  end
+
+  test "complete action skips arelle when disabled" do
+    sign_in @user
+
+    with_arelle_disabled do
+      post complete_submission_path(@submission)
+    end
+
+    @submission.reload
+    assert @submission.completed?
+  end
+
+  test "complete action shows friendly error when arelle unavailable" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_raise(Errno::ECONNREFUSED)
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post complete_submission_path(@submission)
+    end
+
+    @submission.reload
+    assert @submission.draft?
+    assert_response :unprocessable_entity
+    assert_match(/validation service.*unavailable/i, flash[:alert])
+  end
+
   # === Flash Messages ===
 
   test "shows success message after creating submission" do
@@ -344,5 +419,23 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
 
     log = AuditLog.last
     assert_equal "download", log.action
+  end
+
+  private
+
+  def with_arelle_enabled
+    original = ENV["ARELLE_VALIDATION_ENABLED"]
+    ENV["ARELLE_VALIDATION_ENABLED"] = "true"
+    yield
+  ensure
+    ENV["ARELLE_VALIDATION_ENABLED"] = original
+  end
+
+  def with_arelle_disabled
+    original = ENV["ARELLE_VALIDATION_ENABLED"]
+    ENV["ARELLE_VALIDATION_ENABLED"] = "false"
+    yield
+  ensure
+    ENV["ARELLE_VALIDATION_ENABLED"] = original
   end
 end
