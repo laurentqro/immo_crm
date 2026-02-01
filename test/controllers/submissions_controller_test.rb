@@ -488,21 +488,4 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "download", log.action
   end
 
-  private
-
-  def with_arelle_enabled
-    original = ENV["ARELLE_VALIDATION_ENABLED"]
-    ENV["ARELLE_VALIDATION_ENABLED"] = "true"
-    yield
-  ensure
-    ENV["ARELLE_VALIDATION_ENABLED"] = original
-  end
-
-  def with_arelle_disabled
-    original = ENV["ARELLE_VALIDATION_ENABLED"]
-    ENV["ARELLE_VALIDATION_ENABLED"] = "false"
-    yield
-  ensure
-    ENV["ARELLE_VALIDATION_ENABLED"] = original
-  end
 end

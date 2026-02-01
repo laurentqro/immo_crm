@@ -31,6 +31,23 @@ module ActiveSupport
     def json_response
       JSON.decode(response.body)
     end
+
+    # Arelle validation test helpers
+    def with_arelle_enabled
+      original = ENV["ARELLE_VALIDATION_ENABLED"]
+      ENV["ARELLE_VALIDATION_ENABLED"] = "true"
+      yield
+    ensure
+      ENV["ARELLE_VALIDATION_ENABLED"] = original
+    end
+
+    def with_arelle_disabled
+      original = ENV["ARELLE_VALIDATION_ENABLED"]
+      ENV["ARELLE_VALIDATION_ENABLED"] = "false"
+      yield
+    ensure
+      ENV["ARELLE_VALIDATION_ENABLED"] = original
+    end
   end
 end
 

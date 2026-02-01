@@ -15,6 +15,10 @@ class ArelleClient < ApplicationClient
   BASE_URI = ENV.fetch("ARELLE_API_URL", "http://localhost:8000")
 
   ValidationResult = Data.define(:valid, :summary, :messages) do
+    def valid?
+      valid
+    end
+
     def errors
       messages.select { |m| m[:severity] == "error" }
     end

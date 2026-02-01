@@ -61,7 +61,7 @@ class Submission < ApplicationRecord
 
     survey = Survey.new(organization: organization, year: year)
     result = survey.validate_with_arelle
-    return true if result.nil? || result.valid
+    return true if result.nil? || result.valid?
 
     result.error_messages.each do |message|
       errors.add(:xbrl, message)
