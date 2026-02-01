@@ -2,6 +2,7 @@
 
 class SubmissionsController < ApplicationController
   before_action :set_submission, only: [:show, :edit, :update, :destroy, :download, :review, :complete, :validate]
+  before_action :set_survey, only: [:review, :complete, :validate]
 
   def index
     @submissions = current_organization.submissions.recent_first
@@ -45,18 +46,14 @@ class SubmissionsController < ApplicationController
     head :not_implemented
   end
 
-  # GET /submissions/:id/review
   def review
     authorize @submission
-    @survey = Survey.new(organization: current_organization, year: @submission.year)
   end
 
-  # POST /submissions/:id/complete
   def complete
     authorize @submission
 
     unless @submission.validate_xbrl
-      @survey = Survey.new(organization: current_organization, year: @submission.year)
       render :review, status: :unprocessable_entity
       return
     end
@@ -65,11 +62,8 @@ class SubmissionsController < ApplicationController
     redirect_to submission_path(@submission), notice: "Submission completed successfully."
   end
 
-  # POST /submissions/:id/validate
   def validate
     authorize @submission
-
-    @survey = Survey.new(organization: current_organization, year: @submission.year)
 
     if @submission.validate_xbrl
       flash.now[:notice] = "XBRL validation passed! Your submission is ready to complete."
@@ -82,6 +76,10 @@ class SubmissionsController < ApplicationController
 
   def set_submission
     @submission = current_organization.submissions.find(params[:id])
+  end
+
+  def set_survey
+    @survey = Survey.new(organization: current_organization, year: @submission.year)
   end
 
   def submission_params

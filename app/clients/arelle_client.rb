@@ -8,8 +8,9 @@
 # Usage:
 #   client = ArelleClient.new
 #   result = client.validate(xml_content)
-#   result.valid?     # => true/false
-#   result.errors     # => array of error messages
+#   result.valid?        # => true/false
+#   result.errors        # => [{severity: "error", message: "..."}]
+#   result.error_messages # => ["error message 1", "error message 2"]
 #
 class ArelleClient < ApplicationClient
   BASE_URI = ENV.fetch("ARELLE_API_URL", "http://localhost:8000")
@@ -60,7 +61,11 @@ class ArelleClient < ApplicationClient
   def available?
     get("/docs")
     true
-  rescue *CONNECTION_ERRORS, Error
+  rescue *CONNECTION_ERRORS => e
+    Rails.logger.debug("Arelle API unavailable (connection): #{e.class}: #{e.message}")
+    false
+  rescue ApplicationClient::Error => e
+    Rails.logger.warn("Arelle API health check failed: #{e.class}: #{e.message}")
     false
   end
 
@@ -69,10 +74,17 @@ class ArelleClient < ApplicationClient
   def parse_validation_response(response)
     data = JSON.parse(response.body, symbolize_names: true)
 
+    unless data.is_a?(Hash) && data.key?(:valid) && data.key?(:messages)
+      raise Error, "Unexpected response format from Arelle API"
+    end
+
     ValidationResult.new(
       valid: data[:valid],
-      summary: data[:summary],
-      messages: data[:messages]
+      summary: data[:summary] || {},
+      messages: data[:messages] || []
     )
+  rescue JSON::ParserError => e
+    Rails.logger.error("Arelle API returned invalid JSON: #{e.message}")
+    raise Error, "Arelle API returned invalid response"
   end
 end

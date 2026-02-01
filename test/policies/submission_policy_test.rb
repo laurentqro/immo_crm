@@ -98,6 +98,22 @@ class SubmissionPolicyTest < ActiveSupport::TestCase
     assert_not policy.download?
   end
 
+  # Validate tests
+  test "user can validate submission in their organization" do
+    policy = SubmissionPolicy.new(@user_account_user, @submission)
+    assert policy.validate?
+  end
+
+  test "user can validate completed submission in their organization" do
+    policy = SubmissionPolicy.new(@user_account_user, @completed_submission)
+    assert policy.validate?
+  end
+
+  test "user cannot validate submission in another organization" do
+    policy = SubmissionPolicy.new(@user_account_user, @other_org_submission)
+    assert_not policy.validate?
+  end
+
   # Complete tests
   test "user can complete draft submission in their organization" do
     policy = SubmissionPolicy.new(@user_account_user, @submission)

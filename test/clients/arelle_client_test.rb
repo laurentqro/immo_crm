@@ -64,4 +64,73 @@ class ArelleClientTest < ActiveSupport::TestCase
 
     assert_not @client.available?
   end
+
+  test "available? returns false on HTTP error" do
+    stub_request(:get, "http://localhost:8000/docs")
+      .to_return(status: 500, body: "Internal Server Error")
+
+    # The ApplicationClient raises InternalError for 500, which available? rescues
+    assert_not @client.available?
+  end
+
+  test "validate raises error on malformed JSON response" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: "not valid json",
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    assert_raises(ArelleClient::Error) do
+      @client.validate("<xml/>")
+    end
+  end
+
+  test "validate raises error on missing required fields in response" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {unexpected: "format"}.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    assert_raises(ArelleClient::Error) do
+      @client.validate("<xml/>")
+    end
+  end
+
+  test "ValidationResult#warnings filters warning messages" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {
+          valid: true,
+          summary: {errors: 0, warnings: 2, info: 1},
+          messages: [
+            {severity: "warning", code: "w1", message: "Warning 1"},
+            {severity: "warning", code: "w2", message: "Warning 2"},
+            {severity: "info", code: "i1", message: "Info 1"}
+          ]
+        }.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    result = @client.validate("<xml/>")
+
+    assert_equal 2, result.warnings.length
+    assert result.warnings.all? { |m| m[:severity] == "warning" }
+  end
+
+  test "ValidationResult#valid? predicate method" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {valid: true, summary: {}, messages: []}.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    result = @client.validate("<xml/>")
+
+    assert result.valid?
+  end
 end
