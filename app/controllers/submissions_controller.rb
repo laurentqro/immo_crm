@@ -61,8 +61,10 @@ class SubmissionsController < ApplicationController
     begin
       validation_result = @survey.validate_with_arelle
       if validation_result && !validation_result.valid
-        flash.now[:alert] = "XBRL validation failed with #{validation_result.summary[:errors]} error(s). Please fix the issues and try again."
-        flash[:validation_errors] = validation_result.error_messages
+        error_count = validation_result.summary[:errors]
+        flash.now[:alert] = "XBRL validation failed with #{error_count} error(s). Please fix the issues and try again."
+        @validation_errors = validation_result.error_messages.first(10)
+        @validation_error_count = error_count
         render :review, status: :unprocessable_entity
         return
       end
@@ -91,8 +93,7 @@ class SubmissionsController < ApplicationController
       elsif result.valid
         flash[:notice] = "XBRL validation passed! Your submission is ready to complete."
       else
-        flash[:alert] = "XBRL validation found #{result.summary[:errors]} error(s)."
-        flash[:validation_errors] = result.error_messages
+        flash[:alert] = "XBRL validation found #{result.summary[:errors]} error(s). Click 'Complete Submission' to see details."
       end
     rescue ArelleClient::ConnectionError => e
       Rails.logger.error("Arelle validation service unavailable: #{e.message}")

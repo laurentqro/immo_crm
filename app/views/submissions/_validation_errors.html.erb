@@ -1,5 +1,5 @@
 <%# Displays Arelle validation errors in review page %>
-<% if flash[:validation_errors].present? %>
+<% if @validation_errors.present? %>
   <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
     <div class="flex">
       <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
@@ -12,12 +12,12 @@
         <div class="mt-2 text-sm text-red-700 dark:text-red-300">
           <p class="mb-2">Please fix the following errors before completing your submission:</p>
           <ul class="list-disc list-inside space-y-1">
-            <% flash[:validation_errors].first(10).each do |error| %>
-              <li><%= error %></li>
+            <% @validation_errors.each do |error| %>
+              <li><%= truncate(error, length: 200) %></li>
             <% end %>
-            <% if flash[:validation_errors].size > 10 %>
+            <% if @validation_error_count && @validation_error_count > 10 %>
               <li class="text-red-600 dark:text-red-400 font-medium">
-                ... and <%= flash[:validation_errors].size - 10 %> more error(s)
+                ... and <%= @validation_error_count - 10 %> more error(s)
               </li>
             <% end %>
           </ul>

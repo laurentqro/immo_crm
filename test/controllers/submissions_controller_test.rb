@@ -417,7 +417,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to review_submission_path(@submission)
-    assert_equal ["Test error"], flash[:validation_errors]
+    assert_match(/found 1 error/i, flash[:alert])
   end
 
   test "validate action shows success when valid" do
