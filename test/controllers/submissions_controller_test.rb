@@ -319,7 +319,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     @submission.reload
     assert @submission.draft?
     assert_response :unprocessable_entity
-    assert_match(/validation.*failed/i, flash[:alert])
+    assert_match(/Missing required field a1101/, response.body)
   end
 
   test "complete action skips arelle when disabled" do
@@ -346,7 +346,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     @submission.reload
     assert @submission.draft?
     assert_response :unprocessable_entity
-    assert_match(/validation service.*unavailable/i, flash[:alert])
+    assert_match(/temporarily unavailable/, response.body)
   end
 
   # === Flash Messages ===
@@ -398,7 +398,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
 
   # === Validate Action ===
 
-  test "validate action returns validation result" do
+  test "validate action shows errors in submission" do
     stub_request(:post, "http://localhost:8000/validate")
       .to_return(
         status: 200,
@@ -416,8 +416,8 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
       post validate_submission_path(@submission)
     end
 
-    assert_redirected_to review_submission_path(@submission)
-    assert_match(/found 1 error/i, flash[:alert])
+    assert_response :success
+    assert_match(/Test error/, response.body)
   end
 
   test "validate action shows success when valid" do
@@ -434,7 +434,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
       post validate_submission_path(@submission)
     end
 
-    assert_redirected_to review_submission_path(@submission)
+    assert_response :success
     assert_match /valid/i, flash[:notice]
   end
 
@@ -448,19 +448,19 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
       post validate_submission_path(@submission)
     end
 
-    assert_redirected_to review_submission_path(@submission)
-    assert_match /unavailable/i, flash[:alert]
+    assert_response :success
+    assert_match(/temporarily unavailable/, response.body)
   end
 
-  test "validate action shows alert when arelle disabled" do
+  test "validate action renders review when arelle disabled" do
     sign_in @user
 
     with_arelle_disabled do
       post validate_submission_path(@submission)
     end
 
-    assert_redirected_to review_submission_path(@submission)
-    assert_equal "XBRL validation is not enabled.", flash[:alert]
+    assert_response :success
+    assert_no_match(/XBRL Validation Failed/, response.body)
   end
 
   # === Audit Logging ===

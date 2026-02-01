@@ -51,6 +51,28 @@ class Submission < ApplicationRecord
     update!(status: "completed", completed_at: Time.current)
   end
 
+  # Validate XBRL output against Arelle API.
+  # Adds errors to errors[:xbrl] if validation fails.
+  # Returns true if valid or Arelle is disabled, false if errors found.
+  #
+  # @return [Boolean]
+  def validate_xbrl
+    return true unless AmsfValidationConfig.arelle_enabled?
+
+    survey = Survey.new(organization: organization, year: year)
+    result = survey.validate_with_arelle
+    return true if result.nil? || result.valid
+
+    result.error_messages.each do |message|
+      errors.add(:xbrl, message)
+    end
+    false
+  rescue ArelleClient::ConnectionError => e
+    Rails.logger.error("Arelle validation service unavailable: #{e.message}")
+    errors.add(:xbrl, "Validation service temporarily unavailable. Please try again later.")
+    false
+  end
+
   # === Helper Methods ===
 
   def merged_answers

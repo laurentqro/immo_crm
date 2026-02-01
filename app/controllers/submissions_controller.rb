@@ -55,22 +55,8 @@ class SubmissionsController < ApplicationController
   def complete
     authorize @submission
 
-    @survey = Survey.new(organization: current_organization, year: @submission.year)
-
-    # Validate with Arelle if enabled
-    begin
-      validation_result = @survey.validate_with_arelle
-      if validation_result && !validation_result.valid
-        error_count = validation_result.summary[:errors]
-        flash.now[:alert] = "XBRL validation failed with #{error_count} error(s). Please fix the issues and try again."
-        @validation_errors = validation_result.error_messages.first(10)
-        @validation_error_count = error_count
-        render :review, status: :unprocessable_entity
-        return
-      end
-    rescue ArelleClient::ConnectionError => e
-      Rails.logger.error("Arelle validation service unavailable: #{e.message}")
-      flash.now[:alert] = "XBRL validation service is temporarily unavailable. Please try again later."
+    unless @submission.validate_xbrl
+      @survey = Survey.new(organization: current_organization, year: @submission.year)
       render :review, status: :unprocessable_entity
       return
     end
@@ -83,24 +69,13 @@ class SubmissionsController < ApplicationController
   def validate
     authorize @submission
 
-    survey = Survey.new(organization: current_organization, year: @submission.year)
+    @survey = Survey.new(organization: current_organization, year: @submission.year)
 
-    begin
-      result = survey.validate_with_arelle
-
-      if result.nil?
-        flash[:alert] = "XBRL validation is not enabled."
-      elsif result.valid
-        flash[:notice] = "XBRL validation passed! Your submission is ready to complete."
-      else
-        flash[:alert] = "XBRL validation found #{result.summary[:errors]} error(s). Click 'Complete Submission' to see details."
-      end
-    rescue ArelleClient::ConnectionError => e
-      Rails.logger.error("Arelle validation service unavailable: #{e.message}")
-      flash[:alert] = "XBRL validation service is temporarily unavailable."
+    if @submission.validate_xbrl
+      flash.now[:notice] = "XBRL validation passed! Your submission is ready to complete."
     end
 
-    redirect_to review_submission_path(@submission)
+    render :review
   end
 
   private
