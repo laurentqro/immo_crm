@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SubmissionsController < ApplicationController
-  before_action :set_submission, only: [:show, :edit, :update, :destroy, :download, :review, :complete]
+  before_action :set_submission, only: [:show, :edit, :update, :destroy, :download, :review, :complete, :validate]
 
   def index
     @submissions = current_organization.submissions.recent_first
@@ -75,6 +75,31 @@ class SubmissionsController < ApplicationController
 
     @submission.complete!
     redirect_to submission_path(@submission), notice: "Submission completed successfully."
+  end
+
+  # POST /submissions/:id/validate
+  def validate
+    authorize @submission
+
+    survey = Survey.new(organization: current_organization, year: @submission.year)
+
+    begin
+      result = survey.validate_with_arelle
+
+      if result.nil?
+        flash[:alert] = "XBRL validation is not enabled."
+      elsif result.valid
+        flash[:notice] = "XBRL validation passed! Your submission is ready to complete."
+      else
+        flash[:alert] = "XBRL validation found #{result.summary[:errors]} error(s)."
+        flash[:validation_errors] = result.error_messages
+      end
+    rescue ArelleClient::ConnectionError => e
+      Rails.logger.error("Arelle validation service unavailable: #{e.message}")
+      flash[:alert] = "XBRL validation service is temporarily unavailable."
+    end
+
+    redirect_to review_submission_path(@submission)
   end
 
   private

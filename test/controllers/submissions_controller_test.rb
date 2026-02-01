@@ -396,6 +396,73 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # === Validate Action ===
+
+  test "validate action returns validation result" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {
+          valid: false,
+          summary: {errors: 1, warnings: 0, info: 2},
+          messages: [{severity: "error", code: "test", message: "Test error"}]
+        }.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post validate_submission_path(@submission)
+    end
+
+    assert_redirected_to review_submission_path(@submission)
+    assert_equal ["Test error"], flash[:validation_errors]
+  end
+
+  test "validate action shows success when valid" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post validate_submission_path(@submission)
+    end
+
+    assert_redirected_to review_submission_path(@submission)
+    assert_match /valid/i, flash[:notice]
+  end
+
+  test "validate action handles connection error gracefully" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_raise(Errno::ECONNREFUSED)
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post validate_submission_path(@submission)
+    end
+
+    assert_redirected_to review_submission_path(@submission)
+    assert_match /unavailable/i, flash[:alert]
+  end
+
+  test "validate action shows alert when arelle disabled" do
+    sign_in @user
+
+    with_arelle_disabled do
+      post validate_submission_path(@submission)
+    end
+
+    assert_redirected_to review_submission_path(@submission)
+    assert_equal "XBRL validation is not enabled.", flash[:alert]
+  end
+
   # === Audit Logging ===
 
   test "creates audit log on submission creation" do
