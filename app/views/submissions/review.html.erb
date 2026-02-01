@@ -102,7 +102,7 @@
       <%= button_to "Validate XBRL", validate_submission_path(@submission),
           method: :post,
           class: "btn btn-secondary",
-          data: { turbo_frame: "_top" } %>
+          data: { turbo: false } %>
       <% if @survey.valid? %>
         <%= button_to "Valider et terminer", complete_submission_path(@submission), method: :post, class: "btn btn-primary" %>
       <% else %>

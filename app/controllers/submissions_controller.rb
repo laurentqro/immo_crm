@@ -42,8 +42,15 @@ class SubmissionsController < ApplicationController
   end
 
   def download
-    # TODO: Generate and send XBRL file
-    head :not_implemented
+    survey = Survey.new(organization: current_organization, year: @submission.year)
+    xml_content = survey.to_xbrl
+
+    filename = "amsf_survey_#{Time.current.strftime('%Y_%m_%d_%H%M%S')}.xml"
+
+    send_data xml_content,
+      filename: filename,
+      type: "application/xml",
+      disposition: "attachment"
   end
 
   def review
@@ -67,6 +74,8 @@ class SubmissionsController < ApplicationController
 
     if @submission.validate_xbrl
       flash.now[:notice] = "XBRL validation passed! Your submission is ready to complete."
+    else
+      Rails.logger.info("XBRL validation failed with #{@submission.errors[:xbrl].count} errors: #{@submission.errors[:xbrl].first(3)}")
     end
 
     render :review
