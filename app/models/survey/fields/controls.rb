@@ -20,6 +20,27 @@ class Survey
       extend ActiveSupport::Concern
       include Helpers
 
+      # XBRL legal form enumeration values
+      # Maps short codes used in settings to full XBRL-compliant labels
+      LEGAL_FORMS = {
+        "AM" => "01. Associations monégasques",
+        "ASC" => "02. Autres sociétés civiles",
+        "AAJ" => "04. Autres arrangements juridiques",
+        "DPE" => "05. Domaine Privé de l'Etat Monégasque",
+        "EI" => "06. Entreprise individuelle",
+        "FM" => "07. Fondation monégasque",
+        "GIE" => "08. Groupement d'Intérêt économiques",
+        "SNC" => "09. Sociétés en nom collectif",
+        "SCI" => "10. Sociétés civiles immobilières",
+        "SCP" => "11. Sociétés civiles particulières",
+        "SCS" => "12. Sociétés en commandite simple",
+        "SARL" => "13. Sociétés à responsabilité limitée",
+        "SAM" => "14. Sociétés anonymes monégasques",
+        "SCA" => "15. Sociétés en commandite par actions",
+        "TRUST" => "16. Trusts",
+        "INCONNU" => "17. Inconnu (LE)"
+      }.freeze
+
       private
 
       # === Training ===
@@ -56,9 +77,10 @@ class Survey
 
       # === Due Diligence Procedures ===
 
-      # Legal form of the entity
+      # Legal form of the entity - returns XBRL-compliant enumeration value
       def air33lf
-        setting_value("air33lf") || "SAM"
+        code = setting_value("air33lf") || "SAM"
+        LEGAL_FORMS[code] || LEGAL_FORMS["INCONNU"]
       end
 
       # Simplified due diligence
