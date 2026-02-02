@@ -231,7 +231,7 @@ class Survey
       end
 
       def ac1616a
-        setting_value("ac1616a") || "Annuellement"
+        setting_value("ac1616a")
       end
 
       def ac1618
