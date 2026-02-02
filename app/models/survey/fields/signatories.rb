@@ -150,7 +150,7 @@ class Survey
       end
 
       def ac1904
-        setting_value("fiscal_year_end") || "Decembre"
+        setting_value("last_external_audit")
       end
 
       # === Submission Status ===

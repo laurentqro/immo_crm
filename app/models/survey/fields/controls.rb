@@ -227,11 +227,11 @@ class Survey
       # === High-Risk CDD Frequency ===
 
       def ac1616b
-        setting_value("ac1616b")
+        setting_value("high_risk_cdd_frequency")
       end
 
       def ac1616a
-        setting_value("ac1616a")
+        setting_value("standard_cdd_frequency")
       end
 
       def ac1618
