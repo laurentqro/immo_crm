@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_30_233120) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_02_144833) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -154,7 +154,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_30_233120) do
     t.boolean "is_pep", default: false, null: false
     t.string "name", null: false
     t.string "nationality"
-    t.decimal "ownership_pct", precision: 5, scale: 2
     t.decimal "ownership_percentage", precision: 5, scale: 2
     t.string "pep_type"
     t.string "residence_country"

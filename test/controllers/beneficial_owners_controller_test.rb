@@ -93,7 +93,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
           name: "Jean Dupont",
           nationality: "FR",
           residence_country: "MC",
-          ownership_pct: 25.0,
+          ownership_percentage: 25.0,
           control_type: "DIRECT"
         }
       }
@@ -186,13 +186,13 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     patch beneficial_owner_path(@beneficial_owner), params: {
       beneficial_owner: {
         name: "Updated Name",
-        ownership_pct: 50.0
+        ownership_percentage: 50.0
       }
     }
 
     @beneficial_owner.reload
     assert_equal "Updated Name", @beneficial_owner.name
-    assert_equal 50.0, @beneficial_owner.ownership_pct
+    assert_equal 50.0, @beneficial_owner.ownership_percentage
     assert_redirected_to client_path(@legal_entity)
   end
 

@@ -142,7 +142,7 @@ end
       name: Faker::Name.name,
       nationality: NATIONALITIES.sample,
       residence_country: COUNTRIES.sample,
-      ownership_pct: [25, 33, 50, 51, 75, 100].sample,
+      ownership_percentage: [25, 33, 50, 51, 75, 100].sample,
       control_type: %w[DIRECT INDIRECT REPRESENTATIVE].sample,
       is_pep: is_owner_pep,
       pep_type: is_owner_pep ? %w[DOMESTIC FOREIGN INTL_ORG].sample : nil

@@ -68,52 +68,52 @@ class BeneficialOwnerTest < ActiveSupport::TestCase
 
   # === Ownership Percentage Validation ===
 
-  test "ownership_pct can be nil" do
+  test "ownership_percentage can be nil" do
     owner = BeneficialOwner.new(
       client: @legal_entity,
       name: "Jean Dupont",
-      ownership_pct: nil
+      ownership_percentage: nil
     )
     assert owner.valid?
   end
 
-  test "ownership_pct must be between 0 and 100" do
+  test "ownership_percentage must be between 0 and 100" do
     owner = BeneficialOwner.new(
       client: @legal_entity,
       name: "Jean Dupont",
-      ownership_pct: 50.0
+      ownership_percentage: 50.0
     )
     assert owner.valid?
   end
 
-  test "ownership_pct cannot be negative" do
+  test "ownership_percentage cannot be negative" do
     owner = BeneficialOwner.new(
       client: @legal_entity,
       name: "Jean Dupont",
-      ownership_pct: -1
+      ownership_percentage: -1
     )
     assert_not owner.valid?
-    assert owner.errors[:ownership_pct].any? { |e| e.include?("greater than or equal to") }
+    assert owner.errors[:ownership_percentage].any? { |e| e.include?("greater than or equal to") }
   end
 
-  test "ownership_pct cannot exceed 100" do
+  test "ownership_percentage cannot exceed 100" do
     owner = BeneficialOwner.new(
       client: @legal_entity,
       name: "Jean Dupont",
-      ownership_pct: 101
+      ownership_percentage: 101
     )
     assert_not owner.valid?
-    assert owner.errors[:ownership_pct].any? { |e| e.include?("less than or equal to") }
+    assert owner.errors[:ownership_percentage].any? { |e| e.include?("less than or equal to") }
   end
 
-  test "ownership_pct allows boundary values" do
+  test "ownership_percentage allows boundary values" do
     [0, 100, 0.01, 99.99].each do |pct|
       owner = BeneficialOwner.new(
         client: @legal_entity,
         name: "Jean Dupont",
-        ownership_pct: pct
+        ownership_percentage: pct
       )
-      assert owner.valid?, "Expected ownership_pct #{pct} to be valid"
+      assert owner.valid?, "Expected ownership_percentage #{pct} to be valid"
     end
   end
 

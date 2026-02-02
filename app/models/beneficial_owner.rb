@@ -19,7 +19,7 @@ class BeneficialOwner < ApplicationRecord
   validates :name, presence: true
 
   # Ownership percentage between 0-100 (if provided)
-  validates :ownership_pct,
+  validates :ownership_percentage,
     numericality: {
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: 100
@@ -48,8 +48,8 @@ class BeneficialOwner < ApplicationRecord
   # === Instance Methods ===
 
   def ownership_percentage_display
-    return nil unless ownership_pct
-    "#{ownership_pct}%"
+    return nil unless ownership_percentage
+    "#{ownership_percentage}%"
   end
 
   def control_type_label

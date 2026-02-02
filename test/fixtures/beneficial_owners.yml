@@ -7,7 +7,7 @@ owner_one:
   name: "Marie Durand"
   nationality: "FR"
   residence_country: "MC"
-  ownership_pct: 51.0
+  ownership_percentage: 51.0
   control_type: "DIRECT"
   is_pep: false
 
@@ -17,7 +17,7 @@ owner_two:
   name: "Philippe Laurent"
   nationality: "MC"
   residence_country: "MC"
-  ownership_pct: 49.0
+  ownership_percentage: 49.0
   control_type: "DIRECT"
   is_pep: false
 
@@ -27,7 +27,7 @@ cascade_owner_one:
   name: "Cascade Owner One"
   nationality: "MC"
   residence_country: "MC"
-  ownership_pct: 60.0
+  ownership_percentage: 60.0
   control_type: "DIRECT"
   is_pep: false
 
@@ -36,7 +36,7 @@ cascade_owner_two:
   name: "Cascade Owner Two"
   nationality: "FR"
   residence_country: "MC"
-  ownership_pct: 40.0
+  ownership_percentage: 40.0
   control_type: "INDIRECT"
   is_pep: false
 
@@ -46,7 +46,7 @@ pep_owner:
   name: "PEP Beneficial Owner"
   nationality: "MC"
   residence_country: "MC"
-  ownership_pct: 0.0
+  ownership_percentage: 0.0
   control_type: "REPRESENTATIVE"
   is_pep: true
   pep_type: "DOMESTIC"
@@ -57,7 +57,7 @@ trust_owner:
   name: "Trust Beneficiary"
   nationality: "MC"
   residence_country: "MC"
-  ownership_pct: 100.0
+  ownership_percentage: 100.0
   control_type: "DIRECT"
   is_pep: false
 
@@ -67,7 +67,7 @@ other_client_owner:
   name: "Other Client Owner"
   nationality: "IT"
   residence_country: "IT"
-  ownership_pct: 100.0
+  ownership_percentage: 100.0
   control_type: "DIRECT"
   is_pep: false
 
@@ -77,7 +77,7 @@ other_org_owner:
   name: "Other Org Owner"
   nationality: "FR"
   residence_country: "FR"
-  ownership_pct: 100.0
+  ownership_percentage: 100.0
   control_type: "DIRECT"
   is_pep: false
 

@@ -42,7 +42,7 @@ class BeneficialOwnerPolicy < ApplicationPolicy
       :name,
       :nationality,
       :residence_country,
-      :ownership_pct,
+      :ownership_percentage,
       :control_type,
       :is_pep,
       :pep_type
