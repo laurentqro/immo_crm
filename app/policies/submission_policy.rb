@@ -61,6 +61,11 @@ class SubmissionPolicy < ApplicationPolicy
     belongs_to_organization? && record.draft?
   end
 
+  # Validate a submission with Arelle XBRL validation
+  def validate?
+    belongs_to_organization?
+  end
+
   private
 
   # Check if the current user is an admin of the account

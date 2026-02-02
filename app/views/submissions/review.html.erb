@@ -12,6 +12,8 @@
     </p>
   </div>
 
+  <%= render "validation_errors" %>
+
   <% if !@survey.valid? %>
     <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
       <div class="flex">
@@ -97,6 +99,10 @@
     </div>
     <div class="flex space-x-3">
       <%= link_to "Retour", submission_path(@submission), class: "btn btn-secondary" %>
+      <%= button_to "Validate XBRL", validate_submission_path(@submission),
+          method: :post,
+          class: "btn btn-secondary",
+          data: { turbo: false } %>
       <% if @survey.valid? %>
         <%= button_to "Valider et terminer", complete_submission_path(@submission), method: :post, class: "btn btn-primary" %>
       <% else %>

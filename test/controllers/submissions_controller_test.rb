@@ -274,6 +274,81 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "in_review", @submission.status
   end
 
+  # === Complete Action with Arelle Validation ===
+
+  test "complete action validates with arelle when enabled" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post complete_submission_path(@submission)
+    end
+
+    @submission.reload
+    assert @submission.completed?
+    assert_redirected_to submission_path(@submission)
+  end
+
+  test "complete action blocks completion when arelle returns errors" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {
+          valid: false,
+          summary: {errors: 2},
+          messages: [
+            {severity: "error", code: "a1101", message: "Missing required field a1101"},
+            {severity: "error", code: "a1102", message: "Missing required field a1102"}
+          ]
+        }.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post complete_submission_path(@submission)
+    end
+
+    @submission.reload
+    assert @submission.draft?
+    assert_response :unprocessable_entity
+    assert_match(/Missing required field a1101/, response.body)
+  end
+
+  test "complete action skips arelle when disabled" do
+    sign_in @user
+
+    with_arelle_disabled do
+      post complete_submission_path(@submission)
+    end
+
+    @submission.reload
+    assert @submission.completed?
+  end
+
+  test "complete action shows friendly error when arelle unavailable" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_raise(Errno::ECONNREFUSED)
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post complete_submission_path(@submission)
+    end
+
+    @submission.reload
+    assert @submission.draft?
+    assert_response :unprocessable_entity
+    assert_match(/temporarily unavailable/, response.body)
+  end
+
   # === Flash Messages ===
 
   test "shows success message after creating submission" do
@@ -321,6 +396,73 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # === Validate Action ===
+
+  test "validate action shows errors in submission" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {
+          valid: false,
+          summary: {errors: 1, warnings: 0, info: 2},
+          messages: [{severity: "error", code: "test", message: "Test error"}]
+        }.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post validate_submission_path(@submission)
+    end
+
+    assert_response :success
+    assert_match(/Test error/, response.body)
+  end
+
+  test "validate action shows success when valid" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post validate_submission_path(@submission)
+    end
+
+    assert_response :success
+    assert_match /valid/i, flash[:notice]
+  end
+
+  test "validate action handles connection error gracefully" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_raise(Errno::ECONNREFUSED)
+
+    sign_in @user
+
+    with_arelle_enabled do
+      post validate_submission_path(@submission)
+    end
+
+    assert_response :success
+    assert_match(/temporarily unavailable/, response.body)
+  end
+
+  test "validate action renders review when arelle disabled" do
+    sign_in @user
+
+    with_arelle_disabled do
+      post validate_submission_path(@submission)
+    end
+
+    assert_response :success
+    assert_no_match(/XBRL Validation Failed/, response.body)
+  end
+
   # === Audit Logging ===
 
   test "creates audit log on submission creation" do
@@ -345,4 +487,5 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     log = AuditLog.last
     assert_equal "download", log.action
   end
+
 end

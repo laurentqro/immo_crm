@@ -43,7 +43,7 @@
           <%= link_to "Review Submission", review_submission_path(@submission), class: "btn btn-primary" %>
         <% end %>
         <% if @submission.completed? %>
-          <%= link_to "Download XBRL", download_submission_path(@submission), class: "btn btn-secondary" %>
+          <%= link_to "Download XBRL", download_submission_path(@submission), data: { turbo: false }, class: "btn btn-secondary" %>
         <% end %>
         <% if @submission.draft? %>
           <%= button_to "Delete", submission_path(@submission), method: :delete,

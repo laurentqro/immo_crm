@@ -52,6 +52,7 @@ authenticate :user do
       get :download
       get :review
       post :complete
+      post :validate
     end
   end
 

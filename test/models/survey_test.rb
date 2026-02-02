@@ -170,4 +170,62 @@ class SurveyTest < ActiveSupport::TestCase
     numbers = questions.map(&:number)
     assert_equal numbers, numbers.sort, "Questions should be ordered by number"
   end
+
+  # === Arelle Validation Tests ===
+
+  test "validate_with_arelle returns validation result when enabled" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    with_arelle_enabled do
+      result = @survey.validate_with_arelle
+
+      assert_instance_of ArelleClient::ValidationResult, result
+      assert result.valid
+    end
+  end
+
+  test "validate_with_arelle returns nil when disabled" do
+    with_arelle_disabled do
+      result = @survey.validate_with_arelle
+
+      assert_nil result
+    end
+  end
+
+  test "validate_with_arelle returns error result on validation failure" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_return(
+        status: 200,
+        body: {
+          valid: false,
+          summary: {errors: 1},
+          messages: [{severity: "error", code: "test", message: "Missing field"}]
+        }.to_json,
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    with_arelle_enabled do
+      result = @survey.validate_with_arelle
+
+      assert_not result.valid
+      assert_includes result.error_messages, "Missing field"
+    end
+  end
+
+  test "validate_with_arelle raises ConnectionError when service unavailable" do
+    stub_request(:post, "http://localhost:8000/validate")
+      .to_raise(Errno::ECONNREFUSED)
+
+    with_arelle_enabled do
+      assert_raises(ArelleClient::ConnectionError) do
+        @survey.validate_with_arelle
+      end
+    end
+  end
+
 end

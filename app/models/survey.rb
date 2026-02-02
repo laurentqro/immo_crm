@@ -48,6 +48,20 @@ class Survey
     submission.completion_percentage
   end
 
+  # Validate XBRL output against Arelle API.
+  #
+  # Returns nil if Arelle validation is disabled.
+  # Returns ValidationResult with valid?, errors, error_messages.
+  # Raises ArelleClient::ConnectionError if Arelle is unavailable.
+  #
+  # @return [ArelleClient::ValidationResult, nil]
+  def validate_with_arelle
+    return unless AmsfValidationConfig.arelle_enabled?
+
+    client = ArelleClient.new
+    client.validate(to_xbrl)
+  end
+
   # Returns all calculated field values as a hash.
   # Keys are field ID strings (e.g., "a1101"), values are the calculated results.
   # Only includes fields that have corresponding methods implemented.

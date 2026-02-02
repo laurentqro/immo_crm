@@ -38,7 +38,7 @@
                     <%= link_to "Continue", review_submission_path(submission), class: "text-green-600 hover:text-green-900" %>
                   <% end %>
                   <% if submission.completed? %>
-                    <%= link_to "Download", download_submission_path(submission), class: "text-purple-600 hover:text-purple-900" %>
+                    <%= link_to "Download", download_submission_path(submission), data: { turbo: false }, class: "text-purple-600 hover:text-purple-900" %>
                   <% end %>
                 </td>
               </tr>
