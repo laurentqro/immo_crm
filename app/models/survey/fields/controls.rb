@@ -253,8 +253,9 @@ class Survey
           .count
       end
 
+      # Total FTE employees plus non-salaried partners/owners
       def ac1102
-        setting_value("ac1102")
+        setting_value("total_employees")&.to_i
       end
 
       def ac1101z
