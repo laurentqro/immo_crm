@@ -34,6 +34,11 @@ class Client < ApplicationRecord
   validates :vasp_type, presence: true, if: :is_vasp?
   validates :vasp_type, inclusion: { in: VASP_TYPES }, allow_blank: true
 
+  # Trust-specific validations
+  validates :trustee_name, presence: true, if: :trust?
+  validates :trustee_nationality, presence: true, if: :trust?
+  validates :trustee_country, presence: true, if: :trust?
+
   validates :risk_level, inclusion: { in: RISK_LEVELS }, allow_blank: true
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_blank: true
   validates :residence_status, inclusion: { in: RESIDENCE_STATUSES }, allow_blank: true
@@ -57,6 +62,7 @@ class Client < ApplicationRecord
   scope :natural_persons, -> { where(client_type: "NATURAL_PERSON") }
   scope :legal_entities, -> { where(client_type: "LEGAL_ENTITY") }
   scope :trusts, -> { where(client_type: "TRUST") }
+  scope :professional_trustees, -> { trusts.where(is_professional_trustee: true) }
 
   # Risk/compliance scopes
   scope :peps, -> { where(is_pep: true) }

@@ -625,23 +625,23 @@ class Survey
         {}
       end
 
-      # Professional trustees grouped by nationality
+      # Professional trustees grouped by trustee nationality
       def a1808
         clients_kept
           .trusts
-          .where(professional_category: "PROFESSIONAL_TRUSTEE")
-          .where.not(nationality: [nil, ""])
-          .group(:nationality)
+          .where(is_professional_trustee: true)
+          .where.not(trustee_nationality: [nil, ""])
+          .group(:trustee_nationality)
           .count
       end
 
-      # Professional trustees grouped by trust country
+      # Professional trustees grouped by trustee country
       def a1809
         clients_kept
           .trusts
-          .where(professional_category: "PROFESSIONAL_TRUSTEE")
-          .where.not(country_code: [nil, ""])
-          .group(:country_code)
+          .where(is_professional_trustee: true)
+          .where.not(trustee_country: [nil, ""])
+          .group(:trustee_country)
           .count
       end
 

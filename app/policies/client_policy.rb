@@ -61,7 +61,12 @@ class ClientPolicy < ApplicationPolicy
       :professional_category,
       :relationship_end_reason,
       :source_of_funds_verified,
-      :source_of_wealth_verified
+      :source_of_wealth_verified,
+      # Trustee fields (for Trust clients)
+      :trustee_name,
+      :trustee_nationality,
+      :trustee_country,
+      :is_professional_trustee
     ]
   end
 

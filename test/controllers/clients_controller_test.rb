@@ -53,7 +53,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
   test "filters clients by type" do
     sign_in @user
 
-    get clients_path(client_type: "PP")
+    get clients_path(client_type: "NATURAL_PERSON")
     assert_response :success
     # Should only show natural persons
   end
@@ -142,7 +142,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
       post clients_path, params: {
         client: {
           name: "New Client",
-          client_type: "PP",
+          client_type: "NATURAL_PERSON",
           nationality: "MC",
           residence_country: "MC"
         }
@@ -151,7 +151,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
 
     client = Client.last
     assert_equal "New Client", client.name
-    assert_equal "PP", client.client_type
+    assert_equal "NATURAL_PERSON", client.client_type
     assert_equal @organization, client.organization
     assert_redirected_to client_path(client)
   end
@@ -163,7 +163,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
       post clients_path, params: {
         client: {
           name: "Monaco Corp",
-          client_type: "PM",
+          client_type: "LEGAL_ENTITY",
           legal_person_type: "SARL",
           nationality: "MC"
         }
@@ -171,7 +171,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     end
 
     client = Client.last
-    assert_equal "PM", client.client_type
+    assert_equal "LEGAL_ENTITY", client.client_type
     assert_equal "SARL", client.legal_person_type
   end
 
@@ -181,7 +181,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "PEP Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         is_pep: true,
         pep_type: "DOMESTIC"
       }
@@ -199,7 +199,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
       post clients_path, params: {
         client: {
           name: "",
-          client_type: "PP"
+          client_type: "NATURAL_PERSON"
         }
       }
     end
@@ -213,7 +213,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "Turbo Client",
-        client_type: "PP"
+        client_type: "NATURAL_PERSON"
       }
     }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
@@ -325,7 +325,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "Compliance Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         due_diligence_level: "STANDARD"
       }
     }
@@ -340,7 +340,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "Simplified DD Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         due_diligence_level: "SIMPLIFIED",
         simplified_dd_reason: "Low-risk regulated entity"
       }
@@ -357,7 +357,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "Professional Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         professional_category: "LEGAL"
       }
     }
@@ -372,7 +372,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "Verified Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         source_of_funds_verified: true,
         source_of_wealth_verified: true
       }
@@ -389,7 +389,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "Ended Relationship Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         relationship_end_reason: "CLIENT_REQUEST",
         relationship_ended_at: 1.day.ago
       }
@@ -424,7 +424,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "Missing Reason Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         due_diligence_level: "SIMPLIFIED"
         # Missing simplified_dd_reason
       }
@@ -452,7 +452,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     post clients_path, params: {
       client: {
         name: "Flash Test Client",
-        client_type: "PP"
+        client_type: "NATURAL_PERSON"
       }
     }
 

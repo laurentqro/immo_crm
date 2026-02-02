@@ -5,7 +5,7 @@
 natural_person:
   organization: one
   name: "Jean-Pierre Martin"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "FR"
   residence_country: "MC"
   is_pep: false
@@ -16,7 +16,7 @@ natural_person:
 legal_entity:
   organization: one
   name: "Monaco Investments SARL"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SARL"
   nationality: "MC"
   residence_country: "MC"
@@ -29,7 +29,7 @@ legal_entity:
 legal_entity_two:
   organization: one
   name: "Second Corp SA"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SA"
   nationality: "MC"
   residence_country: "MC"
@@ -41,7 +41,7 @@ legal_entity_two:
 legal_entity_with_owners:
   organization: one
   name: "Corp With Owners"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SCI"
   nationality: "MC"
   residence_country: "MC"
@@ -59,12 +59,16 @@ trust:
   is_pep: false
   risk_level: "MEDIUM"
   became_client_at: <%= 8.months.ago %>
+  trustee_name: "Monaco Trust Services"
+  trustee_nationality: "MC"
+  trustee_country: "MC"
+  is_professional_trustee: true
 
 # PEP client in organization :one
 pep_client:
   organization: one
   name: "Pierre Dupont"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "MC"
   residence_country: "MC"
   is_pep: true
@@ -76,7 +80,7 @@ pep_client:
 high_risk_client:
   organization: one
   name: "Risky Business LLC"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "OTHER"
   nationality: "RU"
   residence_country: "RU"
@@ -89,7 +93,7 @@ high_risk_client:
 ended_relationship:
   organization: one
   name: "Former Client"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "FR"
   residence_country: "FR"
   is_pep: false
@@ -101,7 +105,7 @@ ended_relationship:
 discarded_client:
   organization: one
   name: "Deleted Client"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "IT"
   residence_country: "IT"
   is_pep: false
@@ -113,7 +117,7 @@ discarded_client:
 other_org_client:
   organization: two
   name: "Other Org Client"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "FR"
   residence_country: "FR"
   is_pep: false
@@ -124,7 +128,7 @@ other_org_client:
 other_org_legal_entity:
   organization: two
   name: "Other Org Corp"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SARL"
   nationality: "FR"
   residence_country: "FR"
@@ -136,7 +140,7 @@ other_org_legal_entity:
 company_client:
   organization: company
   name: "Company Test Client"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -147,7 +151,7 @@ company_client:
 vasp_client:
   organization: one
   name: "Crypto Exchange Monaco"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SAM"
   nationality: "MC"
   residence_country: "MC"
@@ -169,7 +173,7 @@ vasp_client:
 calc_natural_1:
   organization: compliance_test_org
   name: "Compliance Natural Person 1"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "FR"
   residence_country: "MC"
   is_pep: false
@@ -179,7 +183,7 @@ calc_natural_1:
 calc_natural_2:
   organization: compliance_test_org
   name: "Compliance Natural Person 2"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "DE"
   residence_country: "MC"
   is_pep: false
@@ -189,7 +193,7 @@ calc_natural_2:
 calc_natural_3:
   organization: compliance_test_org
   name: "Compliance Natural Person 3"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "IT"
   residence_country: "MC"
   is_pep: false
@@ -199,7 +203,7 @@ calc_natural_3:
 calc_natural_4:
   organization: compliance_test_org
   name: "Compliance Natural Person 4"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -209,7 +213,7 @@ calc_natural_4:
 calc_natural_5:
   organization: compliance_test_org
   name: "Compliance Natural Person 5"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "FR"
   residence_country: "FR"
   is_pep: false
@@ -219,7 +223,7 @@ calc_natural_5:
 calc_natural_6:
   organization: compliance_test_org
   name: "Compliance Natural Person 6"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "GB"
   residence_country: "MC"
   is_pep: false
@@ -229,7 +233,7 @@ calc_natural_6:
 calc_natural_7:
   organization: compliance_test_org
   name: "Compliance Natural Person 7"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "ES"
   residence_country: "MC"
   is_pep: false
@@ -239,7 +243,7 @@ calc_natural_7:
 calc_natural_8:
   organization: compliance_test_org
   name: "Compliance Natural Person 8"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "CH"
   residence_country: "MC"
   is_pep: false
@@ -249,7 +253,7 @@ calc_natural_8:
 calc_natural_9:
   organization: compliance_test_org
   name: "Compliance Natural Person 9"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "BE"
   residence_country: "MC"
   is_pep: false
@@ -259,7 +263,7 @@ calc_natural_9:
 calc_natural_10:
   organization: compliance_test_org
   name: "Compliance Natural Person 10"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "NL"
   residence_country: "MC"
   is_pep: false
@@ -271,7 +275,7 @@ calc_natural_10:
 calc_legal_1:
   organization: compliance_test_org
   name: "Compliance Legal Entity 1 SARL"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SARL"
   nationality: "MC"
   residence_country: "MC"
@@ -283,7 +287,7 @@ calc_legal_1:
 calc_legal_2:
   organization: compliance_test_org
   name: "Compliance Legal Entity 2 SA"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SA"
   nationality: "MC"
   residence_country: "MC"
@@ -295,7 +299,7 @@ calc_legal_2:
 calc_legal_3:
   organization: compliance_test_org
   name: "Compliance Legal Entity 3 SCI"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SCI"
   nationality: "MC"
   residence_country: "MC"
@@ -307,7 +311,7 @@ calc_legal_3:
 calc_legal_4:
   organization: compliance_test_org
   name: "Compliance Legal Entity 4 SAM"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "SAM"
   nationality: "MC"
   residence_country: "MC"
@@ -319,7 +323,7 @@ calc_legal_4:
 calc_legal_5:
   organization: compliance_test_org
   name: "Compliance Legal Entity 5 LLC"
-  client_type: "PM"
+  client_type: "LEGAL_ENTITY"
   legal_person_type: "OTHER"
   nationality: "FR"
   residence_country: "MC"
@@ -333,7 +337,7 @@ calc_legal_5:
 calc_pep_1:
   organization: compliance_test_org
   name: "Compliance PEP Client 1"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "FR"
   residence_country: "MC"
   is_pep: true
@@ -344,7 +348,7 @@ calc_pep_1:
 calc_pep_2:
   organization: compliance_test_org
   name: "Compliance PEP Client 2"
-  client_type: "PP"
+  client_type: "NATURAL_PERSON"
   nationality: "MC"
   residence_country: "MC"
   is_pep: true
@@ -363,3 +367,7 @@ calc_trust_1:
   is_pep: false
   risk_level: "MEDIUM"
   became_client_at: <%= 6.months.ago %>
+  trustee_name: "Compliance Trust Company"
+  trustee_nationality: "MC"
+  trustee_country: "MC"
+  is_professional_trustee: true

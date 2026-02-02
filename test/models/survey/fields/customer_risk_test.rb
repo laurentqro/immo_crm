@@ -275,7 +275,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
 
     natural_person = Client.create!(organization: org, name: "Natural Person", client_type: "NATURAL_PERSON")
     legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
-    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST")
+    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST", trustee_name: "Test Trustee", trustee_nationality: "MC", trustee_country: "MC")
 
     # Natural person purchase (a1403b)
     Transaction.create!(
@@ -363,7 +363,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
 
     natural_person = Client.create!(organization: org, name: "Natural Person", client_type: "NATURAL_PERSON")
     legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
-    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST")
+    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST", trustee_name: "Test Trustee", trustee_nationality: "MC", trustee_country: "MC")
 
     # Natural person transaction (a1404b)
     Transaction.create!(

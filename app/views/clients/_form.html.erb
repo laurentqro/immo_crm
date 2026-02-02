@@ -8,22 +8,22 @@
       <%= form.text_field :name, required: true, class: "form-control" %>
     </div>
 
-    <div class="form-group">
-      <%= form.label :client_type, "Client type" %>
-      <%= form.select :client_type,
-          options_for_select([
-            ["Natural Person", "PP"],
-            ["Legal Entity", "PM"],
-            ["Trust", "TRUST"]
-          ], client.client_type),
-          { include_blank: "Select type..." },
-          {
-            required: true,
-            data: { client_form_target: "clientType", action: "change->client-form#toggleFields" }
-          } %>
-    </div>
+    <%# Client Type as Radio Buttons %>
+    <fieldset class="form-group">
+      <legend class="form-label">Client type <span class="text-red-500">*</span></legend>
+      <div class="flex gap-6 mt-2">
+        <% [["Natural Person", "NATURAL_PERSON"], ["Legal Entity", "LEGAL_ENTITY"], ["Trust", "TRUST"]].each do |label, value| %>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <%= form.radio_button :client_type, value,
+                data: { client_form_target: "clientType", action: "change->client-form#toggleFields" },
+                class: "form-radio" %>
+            <span><%= label %></span>
+          </label>
+        <% end %>
+      </div>
+    </fieldset>
 
-    <%# Legal Person Type (only for PM) %>
+    <%# Legal Person Type (only for Legal Entity) %>
     <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="legalPersonType">
       <%= form.label :legal_person_type, "Legal form" %>
       <%= form.select :legal_person_type,
@@ -36,6 +36,46 @@
             ["Other", "OTHER"]
           ], client.legal_person_type),
           { include_blank: "Select legal form..." } %>
+    </div>
+
+    <%# Trustee Section (only for Trust) %>
+    <div class="<%= 'hidden' unless client.trust? %>" data-client-form-target="trusteeSection">
+      <div class="border rounded-lg p-4 mb-2" style="border-color: var(--base-border-tertiary); background-color: var(--base-bg-secondary)">
+        <h3 class="text-sm font-medium mb-4">Trustee Information</h3>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="form-group">
+            <%= form.label :trustee_name, "Trustee name" %>
+            <%= form.text_field :trustee_name, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :trustee_nationality, "Trustee nationality" %>
+            <%= form.select :trustee_nationality,
+                options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.trustee_nationality),
+                { include_blank: "Select country..." },
+                { class: "form-control" } %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :trustee_country, "Trustee country of residence" %>
+            <%= form.select :trustee_country,
+                options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.trustee_country),
+                { include_blank: "Select country..." },
+                { class: "form-control" } %>
+          </div>
+
+          <div class="form-group flex items-end">
+            <div class="form-picker-group">
+              <%= form.check_box :is_professional_trustee %>
+              <div>
+                <%= form.label :is_professional_trustee, "Professional trustee" %>
+                <p class="form-hint">Trustee acts in a professional capacity (lawyer, accountant, trust company)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -189,7 +229,7 @@
       <p class="form-hint">Reason for ending the business relationship (if applicable).</p>
     </div>
 
-    <%# Business Sector (optional) %>
+    <%# Business Sector (only for Legal Entity) %>
     <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="businessSector">
       <%= form.label :business_sector %>
       <%= form.text_field :business_sector,

@@ -27,7 +27,7 @@ class ClientManagementTest < ApplicationSystemTestCase
     visit clients_path
 
     # Should show client type badges
-    assert_selector "[data-client-type='PP']"
+    assert_selector "[data-client-type='NATURAL_PERSON']"
   end
 
   test "user can filter clients by type" do
@@ -180,7 +180,7 @@ class ClientManagementTest < ApplicationSystemTestCase
     click_button "Update Client"
 
     @client.reload
-    assert_equal "PP", @client.client_type
+    assert_equal "NATURAL_PERSON", @client.client_type
   end
 
   # === Delete Client ===

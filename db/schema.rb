@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_02_144833) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_02_163246) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -175,6 +175,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_144833) do
     t.boolean "is_pep", default: false, null: false
     t.boolean "is_pep_associated"
     t.boolean "is_pep_related"
+    t.boolean "is_professional_trustee", default: false
     t.boolean "is_vasp", default: false, null: false
     t.string "legal_person_type"
     t.string "name", null: false
@@ -192,6 +193,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_144833) do
     t.text "simplified_dd_reason"
     t.boolean "source_of_funds_verified", default: false
     t.boolean "source_of_wealth_verified", default: false
+    t.string "trustee_country"
+    t.string "trustee_name"
+    t.string "trustee_nationality"
     t.datetime "updated_at", null: false
     t.string "vasp_type"
     t.index ["client_type"], name: "index_clients_on_client_type"

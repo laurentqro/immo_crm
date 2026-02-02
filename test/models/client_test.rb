@@ -15,7 +15,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP"
+      client_type: "NATURAL_PERSON"
     )
     assert client.valid?
   end
@@ -23,7 +23,7 @@ class ClientTest < ActiveSupport::TestCase
   test "requires name" do
     client = Client.new(
       organization: @organization,
-      client_type: "PP"
+      client_type: "NATURAL_PERSON"
     )
     assert_not client.valid?
     assert_includes client.errors[:name], "can't be blank"
@@ -41,7 +41,7 @@ class ClientTest < ActiveSupport::TestCase
   test "requires organization" do
     client = Client.new(
       name: "John Doe",
-      client_type: "PP"
+      client_type: "NATURAL_PERSON"
     )
     assert_not client.valid?
     assert_includes client.errors[:organization], "must exist"
@@ -58,14 +58,20 @@ class ClientTest < ActiveSupport::TestCase
   end
 
   test "accepts all valid client_types" do
-    %w[PP PM TRUST].each do |type|
+    %w[NATURAL_PERSON LEGAL_ENTITY TRUST].each do |type|
       client = Client.new(
         organization: @organization,
         name: "Test Client",
         client_type: type
       )
-      # PM requires legal_person_type
-      client.legal_person_type = "SCI" if type == "PM"
+      # LEGAL_ENTITY requires legal_person_type
+      client.legal_person_type = "SCI" if type == "LEGAL_ENTITY"
+      # TRUST requires trustee fields
+      if type == "TRUST"
+        client.trustee_name = "Test Trustee"
+        client.trustee_nationality = "MC"
+        client.trustee_country = "MC"
+      end
       assert client.valid?, "Expected client_type '#{type}' to be valid"
     end
   end
@@ -76,7 +82,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "Monaco Corp",
-      client_type: "PM"
+      client_type: "LEGAL_ENTITY"
     )
     assert_not client.valid?
     assert_includes client.errors[:legal_person_type], "can't be blank"
@@ -86,7 +92,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP"
+      client_type: "NATURAL_PERSON"
     )
     assert client.valid?
   end
@@ -95,7 +101,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "Monaco Corp",
-      client_type: "PM",
+      client_type: "LEGAL_ENTITY",
       legal_person_type: "INVALID"
     )
     assert_not client.valid?
@@ -107,7 +113,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "Test Corp",
-        client_type: "PM",
+        client_type: "LEGAL_ENTITY",
         legal_person_type: type
       )
       assert client.valid?, "Expected legal_person_type '#{type}' to be valid"
@@ -118,7 +124,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       is_pep: true
     )
     assert_not client.valid?
@@ -129,7 +135,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       is_pep: false
     )
     assert client.valid?
@@ -139,7 +145,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       is_pep: true,
       pep_type: "INVALID"
     )
@@ -152,7 +158,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "PEP Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         is_pep: true,
         pep_type: type
       )
@@ -164,7 +170,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "Crypto Exchange",
-      client_type: "PM",
+      client_type: "LEGAL_ENTITY",
       legal_person_type: "SARL",
       is_vasp: true
     )
@@ -176,7 +182,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "Regular Corp",
-      client_type: "PM",
+      client_type: "LEGAL_ENTITY",
       legal_person_type: "SARL",
       is_vasp: false
     )
@@ -188,7 +194,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "VASP Client",
-        client_type: "PM",
+        client_type: "LEGAL_ENTITY",
         legal_person_type: "SARL",
         is_vasp: true,
         vasp_type: type
@@ -203,7 +209,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       risk_level: "INVALID"
     )
     assert_not client.valid?
@@ -215,7 +221,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "Test Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         risk_level: level
       )
       assert client.valid?, "Expected risk_level '#{level}' to be valid"
@@ -226,7 +232,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "Rejected Client",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       rejection_reason: "INVALID"
     )
     assert_not client.valid?
@@ -238,7 +244,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "Rejected Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         rejection_reason: reason
       )
       assert client.valid?, "Expected rejection_reason '#{reason}' to be valid"
@@ -249,7 +255,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       residence_status: "INVALID"
     )
     assert_not client.valid?
@@ -261,7 +267,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "Test Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         residence_status: status
       )
       assert client.valid?, "Expected residence_status '#{status}' to be valid"
@@ -272,7 +278,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       residence_status: nil
     )
     assert client.valid?
@@ -282,7 +288,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       country_code: "INVALID"
     )
     assert_not client.valid?
@@ -294,7 +300,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "Test Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         country_code: code
       )
       assert client.valid?, "Expected country_code '#{code}' to be valid"
@@ -305,7 +311,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       country_code: nil
     )
     assert client.valid?
@@ -446,7 +452,7 @@ class ClientTest < ActiveSupport::TestCase
       Client.create!(
         organization: @organization,
         name: "New Client",
-        client_type: "PP"
+        client_type: "NATURAL_PERSON"
       )
     end
 
@@ -479,7 +485,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       due_diligence_level: "INVALID"
     )
     assert_not client.valid?
@@ -491,7 +497,7 @@ class ClientTest < ActiveSupport::TestCase
       attrs = {
         organization: @organization,
         name: "Test Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         due_diligence_level: level
       }
       # SIMPLIFIED requires a reason
@@ -506,7 +512,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       due_diligence_level: nil
     )
     assert client.valid?
@@ -516,7 +522,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       due_diligence_level: "SIMPLIFIED"
     )
     assert_not client.valid?
@@ -527,7 +533,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       due_diligence_level: "STANDARD"
     )
     assert client.valid?
@@ -537,7 +543,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       relationship_end_reason: "INVALID"
     )
     assert_not client.valid?
@@ -549,7 +555,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "Test Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         relationship_end_reason: reason
       )
       assert client.valid?, "Expected relationship_end_reason '#{reason}' to be valid"
@@ -560,7 +566,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       relationship_end_reason: nil
     )
     assert client.valid?
@@ -570,7 +576,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       professional_category: "INVALID"
     )
     assert_not client.valid?
@@ -582,7 +588,7 @@ class ClientTest < ActiveSupport::TestCase
       client = Client.new(
         organization: @organization,
         name: "Test Client",
-        client_type: "PP",
+        client_type: "NATURAL_PERSON",
         professional_category: category
       )
       assert client.valid?, "Expected professional_category '#{category}' to be valid"
@@ -593,7 +599,7 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new(
       organization: @organization,
       name: "John Doe",
-      client_type: "PP",
+      client_type: "NATURAL_PERSON",
       professional_category: nil
     )
     assert client.valid?

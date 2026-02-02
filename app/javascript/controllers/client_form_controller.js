@@ -7,6 +7,7 @@ export default class extends Controller {
     "clientType",
     "legalPersonType",
     "businessSector",
+    "trusteeSection",
     "isPep",
     "pepType",
     "dueDiligenceLevel",
@@ -20,8 +21,11 @@ export default class extends Controller {
   }
 
   toggleFields() {
-    const clientType = this.clientTypeTarget.value
+    // Get client type from radio button (checked) or select (value)
+    const clientType = this.element.querySelector('input[name="client[client_type]"]:checked')?.value
+      || this.clientTypeTarget?.value
     const isLegalEntity = clientType === "LEGAL_ENTITY"
+    const isTrust = clientType === "TRUST"
 
     // Show/hide legal entity specific fields
     if (this.hasLegalPersonTypeTarget) {
@@ -29,6 +33,10 @@ export default class extends Controller {
     }
     if (this.hasBusinessSectorTarget) {
       this.businessSectorTarget.classList.toggle("hidden", !isLegalEntity)
+    }
+    // Show/hide trust specific fields
+    if (this.hasTrusteeSectionTarget) {
+      this.trusteeSectionTarget.classList.toggle("hidden", !isTrust)
     }
   }
 
