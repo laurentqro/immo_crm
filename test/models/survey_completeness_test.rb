@@ -20,4 +20,19 @@ class SurveyCompletenessTest < ActiveSupport::TestCase
 
     assert missing.empty?, "Survey missing implementations for: #{missing.join(", ")}"
   end
+
+  test "compliance_policies_author setting options match gem valid_values for aC1208" do
+    question = AmsfSurvey.questionnaire(industry: :real_estate, year: 2025).question(:ac1208)
+
+    # These values must match the select options in app/views/settings/show.html.erb
+    app_values = [
+      "Par l'entité",
+      "Par un autre membre du groupe",
+      "Par des consultants externes",
+      "Combinaison de soi, membre ou externe"
+    ]
+
+    assert_equal app_values.sort, question.valid_values.sort,
+      "Settings dropdown values for compliance_policies_author must match gem's aC1208 valid_values"
+  end
 end

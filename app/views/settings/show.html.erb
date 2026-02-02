@@ -220,6 +220,21 @@
                 <span id="internal_controls_description" class="block text-sm text-gray-500 dark:text-gray-400">Internal control procedures are documented and implemented</span>
               <% end %>
             </div>
+
+            <div class="mt-6">
+              <%= label_tag :compliance_policies_author, "Policy Author", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Who prepared your entity's AML/CFT policies and procedures?</p>
+              <%= select_tag "settings[compliance_policies_author]",
+                  options_for_select([
+                    ["Select an option...", ""],
+                    ["By the entity itself", "Par l'entité"],
+                    ["By another group member", "Par un autre membre du groupe"],
+                    ["By external consultants", "Par des consultants externes"],
+                    ["Combination of self, member or external", "Combinaison de soi, membre ou externe"]
+                  ], get_setting_value("compliance_policies_author")),
+                  id: "compliance_policies_author", name: "settings[compliance_policies_author]",
+                  class: "mt-1 form-control max-w-md" %>
+            </div>
           </div>
         </div>
       </div>

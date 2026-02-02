@@ -66,6 +66,7 @@ class SettingsController < ApplicationController
     "policy_last_updated" => "compliance_policies",
     "risk_assessment_performed" => "compliance_policies",
     "internal_controls" => "compliance_policies",
+    "compliance_policies_author" => "compliance_policies",
     "training_frequency" => "training",
     "last_training_date" => "training",
     "training_covers_aml" => "training"
@@ -99,6 +100,7 @@ class SettingsController < ApplicationController
       :policy_last_updated,
       :risk_assessment_performed,
       :internal_controls,
+      :compliance_policies_author,
       :training_frequency,
       :last_training_date,
       :training_covers_aml

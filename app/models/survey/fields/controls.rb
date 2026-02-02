@@ -382,7 +382,7 @@ class Survey
       end
 
       def ac1208
-        setting_value("ac1208") || "Oui"
+        setting_value("compliance_policies_author")
       end
 
       def ac1209
