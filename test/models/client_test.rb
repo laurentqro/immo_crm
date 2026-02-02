@@ -614,4 +614,66 @@ class ClientTest < ActiveSupport::TestCase
     client = Client.new
     assert_equal false, client.source_of_wealth_verified
   end
+
+  # === Introducer Tracking ===
+
+  test "introduced_by_third_party defaults to false" do
+    client = Client.new
+    assert_equal false, client.introduced_by_third_party
+  end
+
+  test "requires introducer_country when introduced_by_third_party is true" do
+    client = Client.new(
+      organization: @organization,
+      name: "Introduced Client",
+      client_type: "NATURAL_PERSON",
+      introduced_by_third_party: true
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:introducer_country], "can't be blank"
+  end
+
+  test "introducer_country not required when introduced_by_third_party is false" do
+    client = Client.new(
+      organization: @organization,
+      name: "Regular Client",
+      client_type: "NATURAL_PERSON",
+      introduced_by_third_party: false
+    )
+    assert client.valid?
+  end
+
+  test "introducer_country must be ISO 3166-1 alpha-2 format when present" do
+    client = Client.new(
+      organization: @organization,
+      name: "Introduced Client",
+      client_type: "NATURAL_PERSON",
+      introduced_by_third_party: true,
+      introducer_country: "INVALID"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:introducer_country], "must be ISO 3166-1 alpha-2 format"
+  end
+
+  test "accepts valid ISO introducer_country codes" do
+    %w[FR CH GB IT US].each do |code|
+      client = Client.new(
+        organization: @organization,
+        name: "Test Client",
+        client_type: "NATURAL_PERSON",
+        introduced_by_third_party: true,
+        introducer_country: code
+      )
+      assert client.valid?, "Expected introducer_country '#{code}' to be valid"
+    end
+  end
+
+  test "introduced scope returns only introduced clients" do
+    introduced_client = clients(:introduced_from_france)
+    regular_client = clients(:not_introduced)
+
+    introduced = Client.introduced
+    assert_includes introduced, introduced_client
+    assert_not_includes introduced, regular_client
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_02_163246) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_02_232525) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -172,6 +172,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_163246) do
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.string "due_diligence_level"
+    t.boolean "introduced_by_third_party", default: false, null: false
+    t.string "introducer_country"
     t.boolean "is_pep", default: false, null: false
     t.boolean "is_pep_associated"
     t.boolean "is_pep_related"
@@ -202,6 +204,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_163246) do
     t.index ["country_code"], name: "index_clients_on_country_code"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
     t.index ["due_diligence_level"], name: "index_clients_on_due_diligence_level"
+    t.index ["introduced_by_third_party"], name: "index_clients_on_introduced_by_third_party"
     t.index ["is_pep"], name: "index_clients_on_is_pep"
     t.index ["is_pep_associated"], name: "index_clients_on_is_pep_associated"
     t.index ["is_pep_related"], name: "index_clients_on_is_pep_related"

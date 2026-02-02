@@ -237,6 +237,29 @@
           placeholder: "e.g., Finance, Real Estate, Consulting" %>
     </div>
 
+    <%# Business Introducer Section %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <h3 class="text-sm font-medium mb-4" style="color: var(--base-text-secondary);">Business Introducer</h3>
+
+      <div class="form-picker-group">
+        <%= form.check_box :introduced_by_third_party,
+            data: { client_form_target: "introducedByThirdParty", action: "change->client-form#toggleIntroducerCountry" } %>
+        <div>
+          <%= form.label :introduced_by_third_party, "Client was introduced by a third party" %>
+          <p class="form-hint">Business relationship was initiated through an external introducer.</p>
+        </div>
+      </div>
+
+      <div class="form-group mt-4 ml-7 <%= 'hidden' unless client.introduced_by_third_party? %>" data-client-form-target="introducerCountry">
+        <%= form.label :introducer_country, "Introducer country" %>
+        <%= form.select :introducer_country,
+            options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.introducer_country),
+            { include_blank: "Select country..." },
+            { class: "form-control" } %>
+        <p class="form-hint">Country of residence of the introducing party.</p>
+      </div>
+    </div>
+
     <%# Became Client Date %>
     <div class="form-group">
       <%= form.label :became_client_at, "Client since" %>

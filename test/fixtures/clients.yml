@@ -371,3 +371,74 @@ calc_trust_1:
   trustee_nationality: "MC"
   trustee_country: "MC"
   is_professional_trustee: true
+
+# =============================================================================
+# Introducer Tracking Test Fixtures
+# These fixtures test Q180-186 AMSF questionnaire fields (a3201, a3202, etc.)
+# =============================================================================
+
+# Introduced client from French introducer, became client this year
+introduced_from_france:
+  organization: compliance_test_org
+  name: "Client Introduced From France"
+  client_type: "NATURAL_PERSON"
+  nationality: "IT"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= Date.new(Date.current.year, 3, 15) %>
+  introduced_by_third_party: true
+  introducer_country: "FR"
+
+# Introduced client from Swiss introducer, became client this year
+introduced_from_switzerland:
+  organization: compliance_test_org
+  name: "Client Introduced From Switzerland"
+  client_type: "NATURAL_PERSON"
+  nationality: "FR"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "MEDIUM"
+  became_client_at: <%= Date.new(Date.current.year, 6, 1) %>
+  introduced_by_third_party: true
+  introducer_country: "CH"
+
+# Introduced client from UK introducer, became client last year
+introduced_from_uk_last_year:
+  organization: compliance_test_org
+  name: "Client Introduced From UK Last Year"
+  client_type: "NATURAL_PERSON"
+  nationality: "GB"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= Date.new(Date.current.year - 1, 9, 1) %>
+  introduced_by_third_party: true
+  introducer_country: "GB"
+
+# Second introduced client from France (for grouping tests), became last year
+introduced_from_france_last_year:
+  organization: compliance_test_org
+  name: "Another Client Introduced From France"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "SARL"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  business_sector: "Consulting"
+  became_client_at: <%= Date.new(Date.current.year - 1, 2, 1) %>
+  introduced_by_third_party: true
+  introducer_country: "FR"
+
+# Non-introduced client (for scope testing)
+not_introduced:
+  organization: compliance_test_org
+  name: "Regular Client Not Introduced"
+  client_type: "NATURAL_PERSON"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 6.months.ago %>
+  introduced_by_third_party: false

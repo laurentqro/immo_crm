@@ -80,6 +80,9 @@ BUSINESS_SECTORS = [
   "Luxury Goods"
 ].freeze
 
+# Introducer countries for clients brought in by third parties
+INTRODUCER_COUNTRIES = %w[FR CH GB IT US].freeze
+
 puts "Creating clients..."
 
 # Create natural persons (15 clients)
@@ -91,6 +94,9 @@ puts "Creating clients..."
          else "LOW"
          end
 
+  # ~20% of clients are introduced by third parties (indices 0, 5, 10)
+  is_introduced = i % 5 == 0
+
   client = Client.create!(
     organization: organization,
     name: Faker::Name.name,
@@ -101,10 +107,13 @@ puts "Creating clients..."
     is_pep: is_pep,
     pep_type: is_pep ? %w[DOMESTIC FOREIGN INTL_ORG].sample : nil,
     became_client_at: Faker::Date.between(from: 5.years.ago, to: Date.today),
-    notes: i < 5 ? Faker::Lorem.paragraph(sentence_count: 2) : nil
+    notes: i < 5 ? Faker::Lorem.paragraph(sentence_count: 2) : nil,
+    introduced_by_third_party: is_introduced,
+    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil
   )
 
-  puts "  - Created natural person: #{client.name} (#{client.risk_level} risk#{', PEP' if client.is_pep?})"
+  intro_tag = client.introduced_by_third_party? ? ", introduced from #{client.introducer_country}" : ""
+  puts "  - Created natural person: #{client.name} (#{client.risk_level} risk#{', PEP' if client.is_pep?}#{intro_tag})"
 end
 
 # Create legal entities (10 clients)
@@ -118,6 +127,9 @@ end
 
   legal_type = %w[SCI SARL SAM SA].sample
 
+  # ~20% of clients are introduced by third parties (indices 0, 5)
+  is_introduced = i % 5 == 0
+
   client = Client.create!(
     organization: organization,
     name: "#{Faker::Company.name} #{legal_type}",
@@ -130,7 +142,9 @@ end
     is_pep: is_pep,
     pep_type: is_pep ? %w[DOMESTIC FOREIGN].sample : nil,
     became_client_at: Faker::Date.between(from: 5.years.ago, to: Date.today),
-    notes: Faker::Lorem.paragraph(sentence_count: 2)
+    notes: Faker::Lorem.paragraph(sentence_count: 2),
+    introduced_by_third_party: is_introduced,
+    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil
   )
 
   # Add 1-3 beneficial owners for each legal entity
@@ -162,6 +176,9 @@ TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
   trustee_country = TRUSTEE_COUNTRIES.sample
   is_professional = i < 3 # First 3 trusts have professional trustees
 
+  # ~20% of clients are introduced by third parties (index 0)
+  is_introduced = i == 0
+
   client = Client.create!(
     organization: organization,
     name: "#{Faker::Name.last_name} Family Trust",
@@ -174,7 +191,9 @@ TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
     trustee_name: is_professional ? "#{Faker::Company.name} Trust Services" : Faker::Name.name,
     trustee_nationality: NATIONALITIES.sample,
     trustee_country: trustee_country,
-    is_professional_trustee: is_professional
+    is_professional_trustee: is_professional,
+    introduced_by_third_party: is_introduced,
+    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil
   )
 
   # Add 2-4 beneficial owners for each trust
@@ -620,5 +639,6 @@ puts "  - MEDIUM: #{Client.where(risk_level: 'MEDIUM').count}"
 puts "  - LOW: #{Client.where(risk_level: 'LOW').count}"
 puts ""
 puts "PEP clients: #{Client.peps.count}"
+puts "Introduced clients: #{Client.introduced.count}"
 puts ""
 puts "Login with: #{test_email} / password123"

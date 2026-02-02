@@ -66,7 +66,10 @@ class ClientPolicy < ApplicationPolicy
       :trustee_name,
       :trustee_nationality,
       :trustee_country,
-      :is_professional_trustee
+      :is_professional_trustee,
+      # Introducer tracking fields
+      :introduced_by_third_party,
+      :introducer_country
     ]
   end
 

@@ -11,13 +11,16 @@ export default class extends Controller {
     "isPep",
     "pepType",
     "dueDiligenceLevel",
-    "simplifiedDdReason"
+    "simplifiedDdReason",
+    "introducedByThirdParty",
+    "introducerCountry"
   ]
 
   connect() {
     this.toggleFields()
     this.togglePepType()
     this.toggleSimplifiedReason()
+    this.toggleIntroducerCountry()
   }
 
   toggleFields() {
@@ -53,5 +56,12 @@ export default class extends Controller {
 
     const isSimplified = this.dueDiligenceLevelTarget.value === "SIMPLIFIED"
     this.simplifiedDdReasonTarget.classList.toggle("hidden", !isSimplified)
+  }
+
+  toggleIntroducerCountry() {
+    if (!this.hasIntroducedByThirdPartyTarget || !this.hasIntroducerCountryTarget) return
+
+    const isIntroduced = this.introducedByThirdPartyTarget.checked
+    this.introducerCountryTarget.classList.toggle("hidden", !isIntroduced)
   }
 }

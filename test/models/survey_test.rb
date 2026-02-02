@@ -267,4 +267,105 @@ class SurveyTest < ActiveSupport::TestCase
     end
   end
 
+  # === DistributionRisk Introducer Field Tests ===
+
+  # Use compliance_test_org which has introducer fixtures:
+  # - introduced_from_france (IT nationality, FR introducer, this year)
+  # - introduced_from_switzerland (FR nationality, CH introducer, this year)
+  # - introduced_from_uk_last_year (GB nationality, GB introducer, last year)
+  # - introduced_from_france_last_year (MC nationality, FR introducer, last year)
+  # - not_introduced (MC nationality, not introduced)
+
+  test "a3201 returns Oui when introduced clients exist" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3201)
+
+    assert_equal "Oui", result
+  end
+
+  test "a3201 returns Non when no introduced clients exist" do
+    org = organizations(:two) # organization with no introduced clients
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3201)
+
+    assert_equal "Non", result
+  end
+
+  test "a3202 returns Hash grouped by client nationality for all introduced clients" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3202)
+
+    assert_kind_of Hash, result
+    # Should include all 4 introduced clients:
+    # IT (1), FR (1), GB (1), MC (1)
+    assert_equal 4, result.values.sum
+    assert result.key?("IT")
+    assert result.key?("FR")
+    assert result.key?("GB")
+    assert result.key?("MC")
+  end
+
+  test "a3204 returns Hash grouped by client nationality for this year only" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3204)
+
+    assert_kind_of Hash, result
+    # Should only include 2 clients introduced this year:
+    # introduced_from_france (IT), introduced_from_switzerland (FR)
+    assert_equal 2, result.values.sum
+    assert result.key?("IT")
+    assert result.key?("FR")
+    refute result.key?("GB"), "Should not include GB (introduced last year)"
+  end
+
+  test "a3203 returns Hash grouped by introducer country for all introduced clients" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3203)
+
+    assert_kind_of Hash, result
+    # Should group by introducer_country:
+    # FR (2 clients - introduced_from_france + introduced_from_france_last_year)
+    # CH (1), GB (1)
+    assert_equal 4, result.values.sum
+    assert_equal 2, result["FR"]
+    assert_equal 1, result["CH"]
+    assert_equal 1, result["GB"]
+  end
+
+  test "a3205 returns Hash grouped by introducer country for this year only" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3205)
+
+    assert_kind_of Hash, result
+    # Should only include 2 clients introduced this year:
+    # FR (1 - introduced_from_france), CH (1 - introduced_from_switzerland)
+    assert_equal 2, result.values.sum
+    assert_equal 1, result["FR"]
+    assert_equal 1, result["CH"]
+    refute result.key?("GB"), "Should not include GB (introduced last year)"
+  end
+
+  test "a3501b returns Oui (we track client nationality)" do
+    result = @survey.send(:a3501b)
+
+    assert_equal "Oui", result
+  end
+
+  test "a3501c returns Oui (we track introducer country)" do
+    result = @survey.send(:a3501c)
+
+    assert_equal "Oui", result
+  end
+
 end

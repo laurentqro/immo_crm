@@ -57,29 +57,47 @@ class Survey
 
       # === Client Introduction Channels ===
 
+      # Q180: Do you accept clients through introducers?
       def a3201
-        setting_value("a3201") || "Non"
+        clients_kept.introduced.exists? ? "Oui" : "Non"
       end
 
-      # Clients introduced by third parties, grouped by nationality
+      # Q182: Total introduced clients grouped by client nationality
       def a3202
-        # Would need introducer tracking - return empty hash for now
-        {}
+        clients_kept
+          .introduced
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
+          .count
       end
 
-      # Introduced clients (alternative) grouped by nationality
+      # Q183: Clients introduced this year, grouped by client nationality
       def a3204
-        {}
+        clients_kept
+          .introduced
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
+          .count
       end
 
-      # Introduced clients (alternative 2) grouped by nationality
+      # Q185: Total introduced clients grouped by introducer country
       def a3203
-        {}
+        clients_kept
+          .introduced
+          .where.not(introducer_country: [nil, ""])
+          .group(:introducer_country)
+          .count
       end
 
-      # Introduced clients (alternative 3) grouped by nationality
+      # Q186: Clients introduced this year, grouped by introducer country
       def a3205
-        {}
+        clients_kept
+          .introduced
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
+          .where.not(introducer_country: [nil, ""])
+          .group(:introducer_country)
+          .count
       end
 
       # === Non-Face-to-Face Relationships ===
@@ -126,13 +144,16 @@ class Survey
 
       # === Risk Assessment ===
 
+      # Q181: Can you provide client nationality for introduced clients?
       def a3501b
-        # Can we provide nationality info for clients from introducers?
-        setting_value("can_provide_introducer_client_nationality") == "true" ? "Oui" : "Non"
+        # Yes - we track nationality on all clients
+        "Oui"
       end
 
+      # Q184: Can you provide introducer country/residency?
       def a3501c
-        setting_value("a3501c") || "Non"
+        # Yes - we track introducer_country when introduced_by_third_party is true
+        "Oui"
       end
 
       # === Acquisition and Marketing Channels ===

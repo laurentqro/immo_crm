@@ -46,6 +46,11 @@ class Client < ApplicationRecord
     format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
     allow_blank: true
 
+  validates :introducer_country,
+    presence: true,
+    format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
+    if: :introduced_by_third_party?
+
   # AMSF Data Capture validations
   validates :due_diligence_level, inclusion: { in: DUE_DILIGENCE_LEVELS }, allow_blank: true
   validates :simplified_dd_reason, presence: true, if: -> { due_diligence_level == "SIMPLIFIED" }
@@ -78,6 +83,9 @@ class Client < ApplicationRecord
   # Relationship status scopes
   scope :active, -> { where(relationship_ended_at: nil) }
   scope :ended, -> { where.not(relationship_ended_at: nil) }
+
+  # Introducer scopes
+  scope :introduced, -> { where(introduced_by_third_party: true) }
 
   # Organization scope (for policy/controller use)
   scope :for_organization, ->(org) { where(organization: org) }
