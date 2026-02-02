@@ -518,132 +518,152 @@ class Survey
         counts.transform_values { |count| (count / total * 100).round(2) }
       end
 
-      # BOs by direct/indirect and nationality
+      # BOs by direct/indirect control, grouped by nationality
       def a1202o
-        # Returns count - dimensional breakdown would be in separate field
-        beneficial_owners_base.count
+        beneficial_owners_base
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
+          .count
       end
 
-      # BOs representing legal entities
+      # BOs representing legal entities, grouped by nationality
       def a1202ob
         beneficial_owners_base
           .joins(:client)
           .merge(Client.legal_entities)
+          .where.not(beneficial_owners: {nationality: [nil, ""]})
+          .group(:nationality)
           .count
       end
 
-      # BOs with 25%+ ownership by nationality
+      # BOs with 25%+ ownership, grouped by nationality
       def a120425o
         beneficial_owners_base
           .where("ownership_percentage >= ?", 25)
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
           .count
       end
 
-      # Foreign resident BOs by nationality (resident in MC but not MC national)
+      # Foreign resident BOs (resident in MC but not MC national), grouped by nationality
       def a1207o
         beneficial_owners_base
           .where(residence_country: "MC")
-          .where.not(nationality: "MC")
+          .where.not(nationality: ["MC", nil, ""])
+          .group(:nationality)
           .count
       end
 
-      # Non-resident BOs by nationality (not resident in MC)
+      # Non-resident BOs (not resident in MC), grouped by nationality
       def a1210o
         beneficial_owners_base
           .where.not(residence_country: ["MC", nil, ""])
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
           .count
       end
 
-      # Individuals by nationality
+      # Individuals grouped by nationality
       def a1401
         clients_kept
           .natural_persons
           .where.not(nationality: [nil, ""])
           .group(:nationality)
           .count
-          .values
-          .sum
       end
 
-      # Legal entities by country
+      # Legal entities grouped by country
       def a1501
         clients_kept
           .legal_entities
           .where.not(country_code: [nil, ""])
+          .group(:country_code)
           .count
       end
 
-      # HNWI BOs by nationality
+      # HNWI BOs grouped by nationality
       def a11206b
-        # Would need HNWI flag on beneficial_owners - return 0 for now
-        0
+        # Would need HNWI flag on beneficial_owners - return empty hash for now
+        {}
       end
 
-      # UHNWI BOs by nationality
+      # UHNWI BOs grouped by nationality
       def a112012b
-        # Would need UHNWI flag on beneficial_owners - return 0 for now
-        0
+        # Would need UHNWI flag on beneficial_owners - return empty hash for now
+        {}
       end
 
-      # Professional trustees by nationality
+      # Professional trustees grouped by nationality
       def a1808
         clients_kept
           .trusts
           .where(professional_category: "PROFESSIONAL_TRUSTEE")
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
           .count
       end
 
-      # Professional trustees by trust country
+      # Professional trustees grouped by trust country
       def a1809
         clients_kept
           .trusts
           .where(professional_category: "PROFESSIONAL_TRUSTEE")
           .where.not(country_code: [nil, ""])
+          .group(:country_code)
           .count
       end
 
-      # PEP clients by residence
+      # PEP clients grouped by residence country
       def a11302res
         clients_kept
           .peps
           .where.not(residence_country: [nil, ""])
+          .group(:residence_country)
           .count
       end
 
-      # PEP clients by nationality
+      # PEP clients grouped by nationality
       def a11302
         clients_kept
           .peps
           .where.not(nationality: [nil, ""])
+          .group(:nationality)
           .count
       end
 
-      # PEP beneficial owners count
+      # PEP beneficial owners grouped by nationality
       def a11307
-        beneficial_owners_base.where(is_pep: true).count
+        beneficial_owners_base
+          .where(is_pep: true)
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
+          .count
       end
 
-      # VASP by country breakdowns
+      # VASP Custodian clients grouped by country
       def a13602b
-        vasp_clients_by_country("CUSTODIAN")
+        vasp_clients_grouped_by_country("CUSTODIAN")
       end
 
+      # VASP Exchange clients grouped by country
       def a13602a
-        vasp_clients_by_country("EXCHANGE")
+        vasp_clients_grouped_by_country("EXCHANGE")
       end
 
+      # VASP ICO clients grouped by country
       def a13602c
-        vasp_clients_by_country("ICO")
+        vasp_clients_grouped_by_country("ICO")
       end
 
+      # VASP Other clients grouped by country
       def a13602d
-        vasp_clients_by_country("OTHER")
+        vasp_clients_grouped_by_country("OTHER")
       end
 
       # Secondary nationalities for individuals
       def a1402
-        # Would need secondary_nationality field - return 0 for now
-        0
+        # Would need secondary_nationality field - return empty hash for now
+        {}
       end
     end
   end

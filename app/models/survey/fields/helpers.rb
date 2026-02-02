@@ -65,11 +65,20 @@ class Survey
           .sum(:transaction_value)
       end
 
-      # Count VASP clients by country/type
+      # Count VASP clients by country/type (scalar - deprecated)
       def vasp_clients_by_country(vasp_type)
         clients_kept
           .where(is_vasp: true, vasp_type: vasp_type)
           .where.not(country_code: [nil, ""])
+          .count
+      end
+
+      # VASP clients grouped by country (for dimensional fields)
+      def vasp_clients_grouped_by_country(vasp_type)
+        clients_kept
+          .where(is_vasp: true, vasp_type: vasp_type)
+          .where.not(country_code: [nil, ""])
+          .group(:country_code)
           .count
       end
     end

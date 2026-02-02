@@ -310,24 +310,36 @@ class Survey
         year_transactions.where.not(agency_role: [nil, ""]).count
       end
 
+      # Sales transactions by clients, grouped by property country
       def air235b_1
-        # Sales transactions by clients
-        year_transactions.by_client.sales.count
+        year_transactions.by_client.sales
+          .where.not(property_country: [nil, ""])
+          .group(:property_country)
+          .count
       end
 
+      # Rental transactions, grouped by property country
       def air237b
-        # Rental transactions count (alternative)
-        year_transactions.rentals.count
+        year_transactions.rentals
+          .where.not(property_country: [nil, ""])
+          .group(:property_country)
+          .count
       end
 
+      # Rental transaction values, grouped by property country
       def air238b
-        # Rental transaction values
-        year_transactions.rentals.sum(:transaction_value)
+        year_transactions.rentals
+          .where.not(property_country: [nil, ""])
+          .group(:property_country)
+          .sum(:transaction_value)
       end
 
+      # Additional rental value metric, grouped by property country
       def air239b
-        # Additional rental value metric
-        year_transactions.rentals.sum(:rental_annual_value)
+        year_transactions.rentals
+          .where.not(property_country: [nil, ""])
+          .group(:property_country)
+          .sum(:rental_annual_value)
       end
     end
   end

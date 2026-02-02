@@ -39,18 +39,20 @@ class Survey
         setting_value("ac1622b")
       end
 
-      # Third-party CDD clients by nationality
+      # Third-party CDD clients grouped by nationality
       def a3102
-        # Would need tracking of third-party CDD clients - return 0 for now
-        0
+        # Would need tracking of third-party CDD clients - return empty hash for now
+        {}
       end
 
+      # Third-party CDD (alternative) grouped by nationality
       def a3104
-        0
+        {}
       end
 
+      # Third-party CDD (alternative 2) grouped by nationality
       def a3105
-        0
+        {}
       end
 
       # === Client Introduction Channels ===
@@ -59,21 +61,25 @@ class Survey
         setting_value("a3201") || "Non"
       end
 
+      # Clients introduced by third parties, grouped by nationality
       def a3202
-        # Would need introducer tracking - return 0 for now
-        0
+        # Would need introducer tracking - return empty hash for now
+        {}
       end
 
+      # Introduced clients (alternative) grouped by nationality
       def a3204
-        0
+        {}
       end
 
+      # Introduced clients (alternative 2) grouped by nationality
       def a3203
-        0
+        {}
       end
 
+      # Introduced clients (alternative 3) grouped by nationality
       def a3205
-        0
+        {}
       end
 
       # === Non-Face-to-Face Relationships ===

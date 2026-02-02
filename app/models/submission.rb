@@ -77,7 +77,7 @@ class Submission < ApplicationRecord
     false
   rescue AmsfSurvey::Error => e
     Rails.logger.error("XBRL generation failed during validation: #{e.message}")
-    errors.add(:xbrl, "Unable to generate XBRL for validation. Please check your survey data.")
+    errors.add(:xbrl, e.message)
     false
   end
 

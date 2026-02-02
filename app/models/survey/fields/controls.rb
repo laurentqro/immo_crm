@@ -74,12 +74,14 @@ class Survey
         a3301.positive? ? "Oui" : "Non"
       end
 
+      # New clients with simplified DD in the year, grouped by nationality
       def a3303
-        # New clients with simplified DD in the year
         clients_kept
           .where(due_diligence_level: "SIMPLIFIED")
           .where("became_client_at >= ?", Date.new(year, 1, 1))
           .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
           .count
       end
 
@@ -119,22 +121,29 @@ class Survey
         setting_value("a3308")
       end
 
+      # Shareholders with 25%+ ownership, grouped by nationality/country
       def a3306a
-        setting_value("a3306a")
+        # This refers to the organization's own shareholders, not clients
+        # Would need tracking of organization shareholders - return empty hash for now
+        {}
       end
 
+      # Clients with enhanced DD, grouped by residence country
       def a3306b
         clients_kept
           .where(due_diligence_level: "REINFORCED")
           .where.not(residence_country: [nil, ""])
+          .group(:residence_country)
           .count
       end
 
+      # Natural persons with enhanced DD, grouped by nationality
       def a3306
         clients_kept
           .natural_persons
           .where(due_diligence_level: "REINFORCED")
           .where.not(nationality: [nil, ""])
+          .group(:nationality)
           .count
       end
 

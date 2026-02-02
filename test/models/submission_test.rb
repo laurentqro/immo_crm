@@ -71,7 +71,8 @@ class SubmissionTest < ActiveSupport::TestCase
 
       Survey.stub(:new, mock_survey) do
         assert_not @submission.validate_xbrl
-        assert @submission.errors[:xbrl].first.include?("Unable to generate XBRL")
+        # Error message from gem is passed through directly
+        assert @submission.errors[:xbrl].first.include?("Invalid data")
       end
     end
   end
