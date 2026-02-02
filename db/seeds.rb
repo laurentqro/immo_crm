@@ -154,8 +154,13 @@ end
 end
 
 # Create trusts (5 clients)
+# Trustee jurisdictions common for Monaco real estate
+TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
+
 5.times do |i|
   risk = i < 2 ? "HIGH" : "MEDIUM"
+  trustee_country = TRUSTEE_COUNTRIES.sample
+  is_professional = i < 3 # First 3 trusts have professional trustees
 
   client = Client.create!(
     organization: organization,
@@ -165,7 +170,11 @@ end
     residence_country: COUNTRIES.sample,
     risk_level: risk,
     became_client_at: Faker::Date.between(from: 5.years.ago, to: Date.today),
-    notes: "Trust established for #{Faker::Company.bs}"
+    notes: "Trust established for #{Faker::Company.bs}",
+    trustee_name: is_professional ? "#{Faker::Company.name} Trust Services" : Faker::Name.name,
+    trustee_nationality: NATIONALITIES.sample,
+    trustee_country: trustee_country,
+    is_professional_trustee: is_professional
   )
 
   # Add 2-4 beneficial owners for each trust
