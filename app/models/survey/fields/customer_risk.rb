@@ -73,6 +73,7 @@ class Survey
       # Total funds transferred by individual clients
       def a1404b
         year_transactions
+          .by_client
           .joins(:client)
           .merge(Client.natural_persons)
           .sum(:transaction_value)
@@ -124,6 +125,7 @@ class Survey
       # Total funds from legal entity transactions
       def a1503b
         year_transactions
+          .by_client
           .joins(:client)
           .merge(Client.legal_entities)
           .sum(:transaction_value)
@@ -184,6 +186,7 @@ class Survey
       # Total funds from trust transactions
       def a1807tola
         year_transactions
+          .by_client
           .joins(:client)
           .merge(Client.trusts)
           .sum(:transaction_value)

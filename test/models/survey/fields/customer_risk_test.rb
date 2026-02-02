@@ -357,4 +357,51 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
     assert_equal 1, survey.send(:a1403b), "a1403b should only count BY_CLIENT transactions"
     assert_equal 1, survey.send(:a1105b), "a1105b should only count BY_CLIENT transactions"
   end
+
+  test "a1106b equals sum of a1404b, a1503b, a1807tola" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+
+    natural_person = Client.create!(organization: org, name: "Natural Person", client_type: "NATURAL_PERSON")
+    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
+    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST")
+
+    # Natural person transaction (a1404b)
+    Transaction.create!(
+      organization: org,
+      client: natural_person,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2025, 3, 15),
+      transaction_value: 500_000,
+      direction: "BY_CLIENT"
+    )
+
+    # Legal entity transaction (a1503b)
+    Transaction.create!(
+      organization: org,
+      client: legal_entity,
+      transaction_type: "SALE",
+      transaction_date: Date.new(2025, 5, 15),
+      transaction_value: 1_000_000,
+      direction: "BY_CLIENT"
+    )
+
+    # Trust transaction (a1807tola)
+    Transaction.create!(
+      organization: org,
+      client: trust,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(2025, 6, 15),
+      transaction_value: 750_000,
+      direction: "BY_CLIENT"
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    # AMSF validation: sum of children must equal parent
+    children_sum = survey.send(:a1404b) + survey.send(:a1503b) + survey.send(:a1807tola)
+    parent = survey.send(:a1106b)
+
+    assert_equal parent, children_sum,
+      "Sum of children (#{children_sum}) must equal parent a1106b (#{parent})"
+  end
 end
