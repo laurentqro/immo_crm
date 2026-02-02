@@ -127,7 +127,8 @@ class Survey
       # === Risk Assessment ===
 
       def a3501b
-        setting_value("a3501b") || "Oui"
+        # Can we provide nationality info for clients from introducers?
+        setting_value("can_provide_introducer_client_nationality") == "true" ? "Oui" : "Non"
       end
 
       def a3501c

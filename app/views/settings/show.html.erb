@@ -172,6 +172,27 @@
               <% end %>
             </div>
           </div>
+
+          <%# Business Introducers Section %>
+          <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-4">Business Introducers</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Settings related to clients introduced by third-party business introducers.
+            </p>
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <%= hidden_field_tag "settings[can_provide_introducer_client_nationality]", "false" %>
+                <%= check_box_tag "settings[can_provide_introducer_client_nationality]", "true", get_setting_value("can_provide_introducer_client_nationality") == "true",
+                    id: "can_provide_introducer_client_nationality", name: "settings[can_provide_introducer_client_nationality]",
+                    class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                    aria: { describedby: "can_provide_introducer_client_nationality_description" } %>
+                <%= label_tag :can_provide_introducer_client_nationality, class: "ml-3" do %>
+                  <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Can Provide Introducer Client Nationality</span>
+                  <span id="can_provide_introducer_client_nationality_description" class="block text-sm text-gray-500 dark:text-gray-400">Your entity can provide nationality information for clients brought in by business introducers</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
         </div>
 
         <%# Compliance Policies Panel %>
