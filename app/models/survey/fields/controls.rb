@@ -79,7 +79,9 @@ class Survey
 
       # Legal form of the entity - returns XBRL-compliant enumeration value
       def air33lf
-        code = setting_value("air33lf") || "SAM"
+        code = setting_value("legal_form")
+        return nil if code.blank?
+
         LEGAL_FORMS[code] || LEGAL_FORMS["INCONNU"]
       end
 

@@ -45,7 +45,7 @@ class SettingsController < ApplicationController
   # Maps setting keys to their categories
   SETTING_CATEGORIES = {
     "entity_name" => "entity_info",
-    "entity_legal_form" => "entity_info",
+    "legal_form" => "entity_info",
     "amsf_registration_number" => "entity_info",
     "total_employees" => "entity_info",
     "compliance_officers" => "entity_info",
@@ -74,9 +74,9 @@ class SettingsController < ApplicationController
   end
 
   def settings_params
-    params.expect(settings: [ 
+    params.expect(settings: [
       :entity_name,
-      :entity_legal_form,
+      :legal_form,
       :amsf_registration_number,
       :total_employees,
       :compliance_officers,

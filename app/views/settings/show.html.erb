@@ -43,6 +43,31 @@
                   class: "mt-1 form-control" %>
             </div>
             <div>
+              <%= label_tag :legal_form, "Legal Form", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= select_tag "settings[legal_form]",
+                  options_for_select([
+                    ["Select legal form...", ""],
+                    ["Société Anonyme Monégasque (SAM)", "SAM"],
+                    ["Société à Responsabilité Limitée (SARL)", "SARL"],
+                    ["Société Civile Immobilière (SCI)", "SCI"],
+                    ["Société Civile Particulière (SCP)", "SCP"],
+                    ["Société en Nom Collectif (SNC)", "SNC"],
+                    ["Société en Commandite Simple (SCS)", "SCS"],
+                    ["Société en Commandite par Actions (SCA)", "SCA"],
+                    ["Entreprise Individuelle (EI)", "EI"],
+                    ["Groupement d'Intérêt Économique (GIE)", "GIE"],
+                    ["Association Monégasque (AM)", "AM"],
+                    ["Fondation Monégasque (FM)", "FM"],
+                    ["Trust", "TRUST"],
+                    ["Autres sociétés civiles", "ASC"],
+                    ["Autres arrangements juridiques", "AAJ"],
+                    ["Domaine Privé de l'État Monégasque", "DPE"],
+                    ["Inconnu", "INCONNU"]
+                  ], get_setting_value("legal_form")),
+                  id: "legal_form", name: "settings[legal_form]",
+                  class: "mt-1 form-control" %>
+            </div>
+            <div>
               <%= label_tag :total_employees, "Total Employees", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
               <%= number_field_tag "settings[total_employees]", get_setting_value("total_employees"),
                   id: "total_employees", name: "settings[total_employees]",
