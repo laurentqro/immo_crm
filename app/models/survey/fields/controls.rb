@@ -109,29 +109,20 @@ class Survey
           .count
       end
 
-      # Enhanced due diligence
+      # Is entity a branch/subsidiary of a foreign entity?
       def a3304
-        clients_kept.where(due_diligence_level: "REINFORCED").exists? ? "Oui" : "Non"
+        setting_value("is_foreign_subsidiary") == "true" ? "Oui" : "Non"
       end
 
+      # Same question, alternate field ID
       def a3304c
-        clients_kept.where(due_diligence_level: "REINFORCED").exists? ? "Oui" : "Non"
+        a3304
       end
 
+      # Parent company country (if entity is a branch/subsidiary of foreign entity)
+      # Returns a country from the XBRL enumeration, or nil if not applicable
       def a3305
-        # Enum value for how many new clients got enhanced DD
-        count = clients_kept
-          .where(due_diligence_level: "REINFORCED")
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
-          .count
-
-        case count
-        when 0 then "Aucun"
-        when 1..5 then "1-5"
-        when 6..10 then "6-10"
-        else "Plus de 10"
-        end
+        setting_value("parent_company_country")
       end
 
       def a3307

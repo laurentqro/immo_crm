@@ -14,4 +14,15 @@ module SettingsHelper
     @settings_hash ||= @settings_by_category.values.flatten.index_by(&:key)
     @settings_hash[key]&.value || default
   end
+
+  # Returns XBRL-compliant country options for select_tag.
+  # Values are pulled from the amsf_survey gem to ensure they match the schema.
+  def xbrl_country_options(selected = nil)
+    # Use the latest supported year from the gem (currently 2025)
+    questionnaire = AmsfSurvey.questionnaire(industry: :real_estate, year: 2025)
+    countries = questionnaire.question(:a3305).valid_values
+
+    options = [["Select country...", ""]] + countries.map { |c| [c, c] }
+    options_for_select(options, selected)
+  end
 end

@@ -86,6 +86,38 @@
                   class: "mt-1 form-control", min: 0, step: "0.01" %>
             </div>
           </div>
+
+          <%# Foreign Parent Company Section %>
+          <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700"
+               data-controller="toggle"
+               data-toggle-open-value="<%= get_setting_value('is_foreign_subsidiary') == 'true' %>">
+            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-4">Corporate Structure</h3>
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <%= hidden_field_tag "settings[is_foreign_subsidiary]", "false" %>
+                <%= check_box_tag "settings[is_foreign_subsidiary]", "true", get_setting_value("is_foreign_subsidiary") == "true",
+                    id: "is_foreign_subsidiary", name: "settings[is_foreign_subsidiary]",
+                    class: "h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 mt-1",
+                    data: { action: "change->toggle#toggleInput" },
+                    aria: { describedby: "is_foreign_subsidiary_description", controls: "parent_company_country_field" } %>
+                <%= label_tag :is_foreign_subsidiary, class: "ml-3" do %>
+                  <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">Branch or Subsidiary of Foreign Entity</span>
+                  <span id="is_foreign_subsidiary_description" class="block text-sm text-gray-500 dark:text-gray-400">Check if your entity is a branch or subsidiary of a company based outside Monaco</span>
+                <% end %>
+              </div>
+
+              <div id="parent_company_country_field"
+                   data-toggle-target="toggleable"
+                   class="<%= 'hidden' unless get_setting_value('is_foreign_subsidiary') == 'true' %> ml-7 mt-2">
+                <%= label_tag :parent_company_country, "Parent Company Country", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+                <%= select_tag "settings[parent_company_country]",
+                    xbrl_country_options(get_setting_value("parent_company_country")),
+                    id: "parent_company_country", name: "settings[parent_company_country]",
+                    class: "mt-1 form-control max-w-md" %>
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Select the country where the parent company operates</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <%# KYC Procedures Panel %>
