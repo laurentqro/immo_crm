@@ -63,6 +63,7 @@ class Survey
       # Transactions by individual clients for purchase/sale
       def a1403b
         year_transactions
+          .by_client
           .joins(:client)
           .merge(Client.natural_persons)
           .where(transaction_type: %w[PURCHASE SALE])
@@ -90,20 +91,34 @@ class Survey
       # Rental transactions by individual clients
       def a1403r
         year_transactions
+          .by_client
           .joins(:client)
           .merge(Client.natural_persons)
           .rentals
-          .count
+          .where(transaction_value: 10_000..)
+          .sum(:rental_duration_months)
       end
 
       # === Legal Entity Statistics ===
 
       # Transactions by legal entity clients
       def a1502b
-        year_transactions
+        purchases_and_sales = year_transactions
+          .by_client
           .joins(:client)
           .merge(Client.legal_entities)
+          .where(transaction_type: %w[PURCHASE SALE])
           .count
+
+        rental_months = year_transactions
+          .by_client
+          .joins(:client)
+          .merge(Client.legal_entities)
+          .rentals
+          .where(transaction_value: 10_000..)
+          .sum(:rental_duration_months)
+
+        purchases_and_sales + rental_months
       end
 
       # Total funds from legal entity transactions
@@ -148,10 +163,22 @@ class Survey
 
       # Transactions by trust clients
       def a1806tola
-        year_transactions
+        purchases_and_sales = year_transactions
+          .by_client
           .joins(:client)
           .merge(Client.trusts)
+          .where(transaction_type: %w[PURCHASE SALE])
           .count
+
+        rental_months = year_transactions
+          .by_client
+          .joins(:client)
+          .merge(Client.trusts)
+          .rentals
+          .where(transaction_value: 10_000..)
+          .sum(:rental_duration_months)
+
+        purchases_and_sales + rental_months
       end
 
       # Total funds from trust transactions
