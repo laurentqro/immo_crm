@@ -578,6 +578,7 @@ class Survey
       # Foreign resident BOs (resident in MC but not MC national), grouped by nationality
       def a1207o
         beneficial_owners_base
+          .where("ownership_percentage >= ?", 25)
           .where(residence_country: "MC")
           .where.not(nationality: ["MC", nil, ""])
           .group(:nationality)
@@ -587,6 +588,7 @@ class Survey
       # Non-resident BOs (not resident in MC), grouped by nationality
       def a1210o
         beneficial_owners_base
+          .where("ownership_percentage >= ?", 25)
           .where.not(residence_country: ["MC", nil, ""])
           .where.not(nationality: [nil, ""])
           .group(:nationality)
