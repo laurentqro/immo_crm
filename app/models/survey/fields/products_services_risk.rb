@@ -306,8 +306,12 @@ class Survey
       # === Additional Transaction Dimensional Fields ===
 
       def air233
-        # Total transactions where agency acted as agent
-        year_transactions.where.not(agency_role: [nil, ""]).count
+        # Total transactions where agency acted as agent, grouped by property country
+        year_transactions
+          .where.not(agency_role: [nil, ""])
+          .where.not(property_country: [nil, ""])
+          .group(:property_country)
+          .count
       end
 
       # Sales transactions by clients, grouped by property country

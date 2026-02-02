@@ -131,6 +131,45 @@ class SurveyTest < ActiveSupport::TestCase
     assert result.values.all? { |v| v > 0 }, "All percentages should be > 0"
   end
 
+  # === ProductsServicesRisk Field Tests ===
+
+  test "air233 returns Hash grouped by property country" do
+    result = @survey.send(:air233)
+
+    # Should be a Hash with ISO country codes as keys and counts as values
+    assert_kind_of Hash, result
+  end
+
+  test "air233 uses ISO country codes as keys" do
+    result = @survey.send(:air233)
+
+    # All keys should be 2-letter ISO country codes
+    result.each_key do |code|
+      assert_match(/\A[A-Z]{2}\z/, code, "Expected ISO country code, got '#{code}'")
+    end
+  end
+
+  test "air233 counts only transactions with agency_role" do
+    # Get expected count from fixture data
+    expected_count = @organization.transactions.kept
+      .where(transaction_date: Date.new(2025, 1, 1)..Date.new(2025, 12, 31))
+      .where.not(agency_role: [nil, ""])
+      .where.not(property_country: [nil, ""])
+      .count
+
+    result = @survey.send(:air233)
+    actual_count = result.values.sum
+
+    assert_equal expected_count, actual_count
+  end
+
+  test "air233 excludes transactions without property_country" do
+    result = @survey.send(:air233)
+
+    refute result.key?(nil), "Should not include nil key"
+    refute result.key?(""), "Should not include empty string key"
+  end
+
   # === Sections/Subsections Structure Tests ===
 
   test "sections returns array of Section objects from questionnaire" do
