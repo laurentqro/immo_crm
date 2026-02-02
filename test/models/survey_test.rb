@@ -91,44 +91,44 @@ class SurveyTest < ActiveSupport::TestCase
     assert actual_count > 0, "Expected organization to have clients in fixtures"
   end
 
-  test "a1204s1 returns BO nationality breakdown as formatted percentages" do
+  test "a1204s1 returns BO nationality breakdown as Hash for dimensional XBRL" do
     result = @survey.send(:a1204s1)
 
-    # Should be a string with "Country: X%" format
-    assert_kind_of String, result
-    assert_match(/\w+: \d+%/, result, "Expected 'Country: X%' format")
+    # Should be a Hash with ISO country codes as keys and percentages as values
+    assert_kind_of Hash, result
+    assert result.any?, "Expected at least one nationality entry"
 
-    # Should contain comma-separated entries
-    entries = result.split(", ")
-    assert entries.length > 1, "Expected multiple nationalities"
+    # Keys should be ISO country codes (2-letter strings)
+    result.each_key do |code|
+      assert_match(/\A[A-Z]{2}\z/, code, "Expected ISO country code, got '#{code}'")
+    end
 
-    # Each entry should follow the format
-    entries.each do |entry|
-      assert_match(/\A[\w\s]+: \d+%\z/, entry, "Entry '#{entry}' doesn't match expected format")
+    # Values should be numeric percentages
+    result.each_value do |percentage|
+      assert_kind_of Numeric, percentage
+      assert percentage >= 0 && percentage <= 100, "Percentage #{percentage} out of range"
     end
 
     # Percentages should sum to approximately 100
-    percentages = result.scan(/(\d+)%/).flatten.map(&:to_i)
-    total = percentages.sum
-    assert_in_delta 100, total, 2, "Percentages should sum to ~100, got #{total}"
+    total = result.values.sum
+    assert_in_delta 100, total, 1, "Percentages should sum to ~100, got #{total}"
   end
 
-  test "a1204s1 uses full country names not ISO codes" do
+  test "a1204s1 uses ISO country codes as keys" do
     result = @survey.send(:a1204s1)
 
-    # Should contain full country names like "France" not "FR"
-    assert_match(/France|Monaco|Italy/, result, "Expected full country names")
-    refute_match(/\b[A-Z]{2}\b: \d+%/, result, "Should not contain ISO codes like 'FR: X%'")
+    # Should use ISO codes like "FR", "MC" as keys
+    assert result.keys.all? { |k| k.match?(/\A[A-Z]{2}\z/) }, "Expected all keys to be ISO codes"
   end
 
   test "a1204s1 excludes beneficial owners without nationality" do
     result = @survey.send(:a1204s1)
 
     # minimal_owner fixture has no nationality - should be excluded
-    # Verify no empty or nil entries
-    refute_match(/: 0%/, result, "Should not include 0% entries")
-    refute_includes result, "nil"
-    refute_includes result, ": %"
+    # Verify no nil keys or zero values (empty nationalities filtered out)
+    refute result.key?(nil), "Should not include nil key"
+    refute result.key?(""), "Should not include empty string key"
+    assert result.values.all? { |v| v > 0 }, "All percentages should be > 0"
   end
 
   # === Sections/Subsections Structure Tests ===
