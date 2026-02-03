@@ -314,12 +314,31 @@ class Survey
           .count
       end
 
-      # Sales transactions by clients, grouped by property country
+      # Purchase/sale transactions by clients, grouped by client country
+      # All property transactions are BY_CLIENT type (client-to-third-party payments)
+      # Natural persons: group by nationality
+      # Legal entities: group by incorporation_country
       def air235b_1
-        year_transactions.by_client.sales
-          .where.not(property_country: [nil, ""])
-          .group(:property_country)
+        # Natural persons: group by nationality
+        natural_counts = year_transactions
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .merge(Client.natural_persons)
+          .where.not(clients: { nationality: [nil, ""] })
+          .group("clients.nationality")
           .count
+
+        # Legal entities: group by incorporation_country
+        legal_counts = year_transactions
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .merge(Client.legal_entities)
+          .where.not(clients: { incorporation_country: [nil, ""] })
+          .group("clients.incorporation_country")
+          .count
+
+        # Merge both Hashes, summing counts for overlapping countries
+        natural_counts.merge(legal_counts) { |_key, v1, v2| v1 + v2 }
       end
 
       # Rental transactions, grouped by property country
