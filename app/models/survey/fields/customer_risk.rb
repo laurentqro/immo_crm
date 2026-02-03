@@ -615,14 +615,20 @@ class Survey
 
       # HNWI BOs grouped by nationality
       def a11206b
-        # Would need HNWI flag on beneficial_owners - return empty hash for now
-        {}
+        beneficial_owners_base
+          .hnwis
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
+          .count
       end
 
       # UHNWI BOs grouped by nationality
       def a112012b
-        # Would need UHNWI flag on beneficial_owners - return empty hash for now
-        {}
+        beneficial_owners_base
+          .uhnwis
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
+          .count
       end
 
       # Professional trustees grouped by trustee nationality

@@ -45,6 +45,8 @@ class BeneficialOwner < ApplicationRecord
   scope :indirect, -> { where(control_type: "INDIRECT") }
   scope :representatives, -> { where(control_type: "REPRESENTATIVE") }
   scope :with_significant_control, -> { where("ownership_percentage >= ?", 25) }
+  scope :hnwis, -> { where(is_hnwi: true) }
+  scope :uhnwis, -> { where(is_uhnwi: true) }
 
   # === Instance Methods ===
 

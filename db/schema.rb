@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_112554) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_123729) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -151,9 +151,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_112554) do
     t.datetime "created_at", null: false
     t.boolean "identification_verified", default: false
     t.string "incorporation_country"
+    t.boolean "is_hnwi", default: false, null: false
     t.boolean "is_pep", default: false, null: false
+    t.boolean "is_uhnwi", default: false, null: false
     t.string "name", null: false
     t.string "nationality"
+    t.decimal "net_worth_eur", precision: 15, scale: 2
     t.decimal "ownership_percentage", precision: 5, scale: 2
     t.string "pep_type"
     t.string "residence_country"
@@ -161,7 +164,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_112554) do
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_beneficial_owners_on_client_id"
     t.index ["incorporation_country"], name: "index_beneficial_owners_on_incorporation_country"
+    t.index ["is_hnwi"], name: "index_beneficial_owners_on_is_hnwi"
     t.index ["is_pep"], name: "index_beneficial_owners_on_is_pep"
+    t.index ["is_uhnwi"], name: "index_beneficial_owners_on_is_uhnwi"
   end
 
   create_table "clients", force: :cascade do |t|
