@@ -150,7 +150,7 @@ class Survey
 
       # Monaco-based trusts
       def a1807atola
-        clients_kept.trusts.where(country_code: "MC").count
+        clients_kept.trusts.where(incorporation_country: "MC").count
       end
 
       # Has trust clients
@@ -608,8 +608,8 @@ class Survey
       def a1501
         clients_kept
           .legal_entities
-          .where.not(country_code: [nil, ""])
-          .group(:country_code)
+          .where.not(incorporation_country: [nil, ""])
+          .group(:incorporation_country)
           .count
       end
 

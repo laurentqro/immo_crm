@@ -69,7 +69,9 @@ class ClientPolicy < ApplicationPolicy
       :is_professional_trustee,
       # Introducer tracking fields
       :introduced_by_third_party,
-      :introducer_country
+      :introducer_country,
+      # Incorporation country (for legal entities and trusts)
+      :incorporation_country
     ]
   end
 

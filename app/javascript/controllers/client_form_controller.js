@@ -8,6 +8,8 @@ export default class extends Controller {
     "legalPersonType",
     "businessSector",
     "trusteeSection",
+    "incorporationCountry",
+    "naturalPersonFields",
     "isPep",
     "pepType",
     "dueDiligenceLevel",
@@ -29,6 +31,7 @@ export default class extends Controller {
       || this.clientTypeTarget?.value
     const isLegalEntity = clientType === "LEGAL_ENTITY"
     const isTrust = clientType === "TRUST"
+    const isNaturalPerson = clientType === "NATURAL_PERSON"
 
     // Show/hide legal entity specific fields
     if (this.hasLegalPersonTypeTarget) {
@@ -40,6 +43,14 @@ export default class extends Controller {
     // Show/hide trust specific fields
     if (this.hasTrusteeSectionTarget) {
       this.trusteeSectionTarget.classList.toggle("hidden", !isTrust)
+    }
+    // Show/hide incorporation country for legal entities and trusts
+    if (this.hasIncorporationCountryTarget) {
+      this.incorporationCountryTarget.classList.toggle("hidden", !isLegalEntity && !isTrust)
+    }
+    // Show/hide nationality and residence fields (only for natural persons and trusts, not legal entities)
+    if (this.hasNaturalPersonFieldsTarget) {
+      this.naturalPersonFieldsTarget.classList.toggle("hidden", isLegalEntity)
     }
   }
 

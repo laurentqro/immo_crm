@@ -78,7 +78,18 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <%# Country of Incorporation (for Legal Entity and Trust) %>
+    <div class="form-group <%= 'hidden' unless client.legal_entity? || client.trust? %>" data-client-form-target="incorporationCountry">
+      <%= form.label :incorporation_country, "Country of incorporation" %>
+      <%= form.select :incorporation_country,
+          options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.incorporation_country),
+          { include_blank: "Select country..." },
+          { class: "form-control" } %>
+      <p class="form-hint">Country where the entity is legally registered or has its head office (pays du siège ou de l'immatriculation).</p>
+    </div>
+
+    <%# Nationality and Residence (only for Natural Person and Trust, not Legal Entity) %>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 <%= 'hidden' if client.legal_entity? %>" data-client-form-target="naturalPersonFields">
       <div class="form-group">
         <%= form.label :nationality %>
         <%= form.select :nationality,

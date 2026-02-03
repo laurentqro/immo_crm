@@ -66,6 +66,14 @@
             <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.legal_person_type %></dd>
           </div>
         <% end %>
+        <% if (@client.legal_entity? || @client.trust?) && @client.incorporation_country.present? %>
+          <div class="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Country of Incorporation</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0">
+              <%= ISO3166::Country[@client.incorporation_country]&.iso_short_name || @client.incorporation_country %>
+            </dd>
+          </div>
+        <% end %>
         <div class="<%= @client.legal_entity? ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800' %> px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Nationality</dt>
           <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.nationality || "—" %></dd>

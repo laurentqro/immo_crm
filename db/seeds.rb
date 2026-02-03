@@ -116,6 +116,9 @@ puts "Creating clients..."
   puts "  - Created natural person: #{client.name} (#{client.risk_level} risk#{', PEP' if client.is_pep?}#{intro_tag})"
 end
 
+# Countries of incorporation for legal entities (mix of Monaco and common offshore/EU)
+INCORPORATION_COUNTRIES = %w[MC FR LU CH GB JE GG LI].freeze
+
 # Create legal entities (10 clients)
 10.times do |i|
   is_pep = i < 2 # First 2 have PEP beneficial owners (we'll add them below)
@@ -130,6 +133,9 @@ end
   # ~20% of clients are introduced by third parties (indices 0, 5)
   is_introduced = i % 5 == 0
 
+  # Incorporation country - first 3 are Monaco, rest are mixed
+  incorporation_country = i < 3 ? "MC" : INCORPORATION_COUNTRIES.sample
+
   client = Client.create!(
     organization: organization,
     name: "#{Faker::Company.name} #{legal_type}",
@@ -137,6 +143,7 @@ end
     legal_person_type: legal_type,
     nationality: NATIONALITIES.sample,
     residence_country: COUNTRIES.sample,
+    incorporation_country: incorporation_country,
     business_sector: BUSINESS_SECTORS.sample,
     risk_level: risk,
     is_pep: is_pep,
@@ -179,12 +186,16 @@ TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
   # ~20% of clients are introduced by third parties (index 0)
   is_introduced = i == 0
 
+  # Incorporation country for trusts - typically offshore jurisdictions
+  trust_incorporation_country = i < 2 ? "MC" : %w[JE GG CH LI].sample
+
   client = Client.create!(
     organization: organization,
     name: "#{Faker::Name.last_name} Family Trust",
     client_type: "TRUST",
     nationality: %w[CH GB JE GG].sample,
     residence_country: COUNTRIES.sample,
+    incorporation_country: trust_incorporation_country,
     risk_level: risk,
     became_client_at: Faker::Date.between(from: 5.years.ago, to: Date.today),
     notes: "Trust established for #{Faker::Company.bs}",

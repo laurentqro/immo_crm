@@ -284,35 +284,38 @@ class ClientTest < ActiveSupport::TestCase
     assert client.valid?
   end
 
-  test "country_code must be ISO 3166-1 alpha-2 format when present" do
+  test "incorporation_country must be ISO 3166-1 alpha-2 format when present" do
     client = Client.new(
       organization: @organization,
-      name: "John Doe",
-      client_type: "NATURAL_PERSON",
-      country_code: "INVALID"
+      name: "Monaco Corp",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "SCI",
+      incorporation_country: "INVALID"
     )
     assert_not client.valid?
-    assert_includes client.errors[:country_code], "must be ISO 3166-1 alpha-2 format"
+    assert_includes client.errors[:incorporation_country], "must be ISO 3166-1 alpha-2 format"
   end
 
-  test "accepts valid ISO country codes" do
+  test "accepts valid ISO incorporation_country codes" do
     %w[FR MC US GB DE].each do |code|
       client = Client.new(
         organization: @organization,
-        name: "Test Client",
-        client_type: "NATURAL_PERSON",
-        country_code: code
+        name: "Test Corp",
+        client_type: "LEGAL_ENTITY",
+        legal_person_type: "SCI",
+        incorporation_country: code
       )
-      assert client.valid?, "Expected country_code '#{code}' to be valid"
+      assert client.valid?, "Expected incorporation_country '#{code}' to be valid"
     end
   end
 
-  test "country_code can be blank" do
+  test "incorporation_country can be blank" do
     client = Client.new(
       organization: @organization,
-      name: "John Doe",
-      client_type: "NATURAL_PERSON",
-      country_code: nil
+      name: "Monaco Corp",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "SCI",
+      incorporation_country: nil
     )
     assert client.valid?
   end

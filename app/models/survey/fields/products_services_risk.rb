@@ -124,7 +124,7 @@ class Survey
           .with_client
           .with_cash
           .joins(:client)
-          .merge(Client.legal_entities.where(country_code: "MC"))
+          .merge(Client.legal_entities.where(incorporation_country: "MC"))
           .where("cash_amount >= ?", 100000)
           .count
       end
@@ -134,7 +134,7 @@ class Survey
           .with_client
           .with_cash
           .joins(:client)
-          .merge(Client.legal_entities.where.not(country_code: ["MC", nil, ""]))
+          .merge(Client.legal_entities.where.not(incorporation_country: ["MC", nil, ""]))
           .where("cash_amount >= ?", 100000)
           .count
       end
@@ -179,7 +179,7 @@ class Survey
           .by_client
           .with_cash
           .joins(:client)
-          .merge(Client.legal_entities.where(country_code: "MC"))
+          .merge(Client.legal_entities.where(incorporation_country: "MC"))
           .where("cash_amount >= ?", 100000)
           .count
       end
@@ -189,7 +189,7 @@ class Survey
           .by_client
           .with_cash
           .joins(:client)
-          .merge(Client.legal_entities.where.not(country_code: ["MC", nil, ""]))
+          .merge(Client.legal_entities.where.not(incorporation_country: ["MC", nil, ""]))
           .where("cash_amount >= ?", 100000)
           .count
       end

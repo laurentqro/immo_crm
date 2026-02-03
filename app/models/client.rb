@@ -42,7 +42,7 @@ class Client < ApplicationRecord
   validates :risk_level, inclusion: { in: RISK_LEVELS }, allow_blank: true
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_blank: true
   validates :residence_status, inclusion: { in: RESIDENCE_STATUSES }, allow_blank: true
-  validates :country_code,
+  validates :incorporation_country,
     format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
     allow_blank: true
 

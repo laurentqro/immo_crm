@@ -69,7 +69,7 @@ class Survey
       def vasp_clients_by_country(vasp_type)
         clients_kept
           .where(is_vasp: true, vasp_type: vasp_type)
-          .where.not(country_code: [nil, ""])
+          .where.not(incorporation_country: [nil, ""])
           .count
       end
 
@@ -77,8 +77,8 @@ class Survey
       def vasp_clients_grouped_by_country(vasp_type)
         clients_kept
           .where(is_vasp: true, vasp_type: vasp_type)
-          .where.not(country_code: [nil, ""])
-          .group(:country_code)
+          .where.not(incorporation_country: [nil, ""])
+          .group(:incorporation_country)
           .count
       end
     end
