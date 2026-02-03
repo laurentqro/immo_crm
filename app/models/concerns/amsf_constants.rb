@@ -116,6 +116,9 @@ module AmsfConstants
   # Managed Property Types
   MANAGED_PROPERTY_TYPES = %w[RESIDENTIAL COMMERCIAL].freeze
 
+  # Third-Party CDD Types (local vs foreign providers)
+  THIRD_PARTY_CDD_TYPES = %w[LOCAL FOREIGN].freeze
+
   # Year-over-year comparison threshold (FR-019)
   # Changes greater than this percentage require additional review
   SIGNIFICANCE_THRESHOLD = 25.0

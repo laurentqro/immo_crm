@@ -15,7 +15,10 @@ export default class extends Controller {
     "dueDiligenceLevel",
     "simplifiedDdReason",
     "introducedByThirdParty",
-    "introducerCountry"
+    "introducerCountry",
+    "thirdPartyCdd",
+    "thirdPartyCddType",
+    "thirdPartyCddCountry"
   ]
 
   connect() {
@@ -23,6 +26,7 @@ export default class extends Controller {
     this.togglePepType()
     this.toggleSimplifiedReason()
     this.toggleIntroducerCountry()
+    this.toggleThirdPartyCdd()
   }
 
   toggleFields() {
@@ -74,5 +78,23 @@ export default class extends Controller {
 
     const isIntroduced = this.introducedByThirdPartyTarget.checked
     this.introducerCountryTarget.classList.toggle("hidden", !isIntroduced)
+  }
+
+  toggleThirdPartyCdd() {
+    if (!this.hasThirdPartyCddTarget) return
+
+    const isEnabled = this.thirdPartyCddTarget.checked
+
+    // Show/hide type radio buttons
+    if (this.hasThirdPartyCddTypeTarget) {
+      this.thirdPartyCddTypeTarget.classList.toggle("hidden", !isEnabled)
+    }
+
+    // Show/hide country field (only if enabled AND type is FOREIGN)
+    if (this.hasThirdPartyCddCountryTarget) {
+      const typeValue = this.element.querySelector('input[name="client[third_party_cdd_type]"]:checked')?.value
+      const showCountry = isEnabled && typeValue === "FOREIGN"
+      this.thirdPartyCddCountryTarget.classList.toggle("hidden", !showCountry)
+    }
   }
 }

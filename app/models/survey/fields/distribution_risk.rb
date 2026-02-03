@@ -19,12 +19,14 @@ class Survey
 
       # === Third-Party CDD ===
 
+      # Q: Do you use third-party CDD from local providers?
       def a3101
-        setting_value("a3101") || "Non"
+        clients_kept.with_local_third_party_cdd.exists? ? "Oui" : "Non"
       end
 
+      # Q: Do you use third-party CDD from foreign providers?
       def a3103
-        setting_value("a3103") || "Non"
+        clients_kept.with_foreign_third_party_cdd.exists? ? "Oui" : "Non"
       end
 
       def ac1622f
@@ -39,20 +41,31 @@ class Survey
         setting_value("ac1622b")
       end
 
-      # Third-party CDD clients grouped by nationality
+      # Clients where local third parties performed CDD, grouped by client nationality
       def a3102
-        # Would need tracking of third-party CDD clients - return empty hash for now
-        {}
+        clients_kept
+          .with_local_third_party_cdd
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
+          .count
       end
 
-      # Third-party CDD (alternative) grouped by nationality
+      # Clients where foreign third parties performed CDD, grouped by client nationality
       def a3104
-        {}
+        clients_kept
+          .with_foreign_third_party_cdd
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
+          .count
       end
 
-      # Third-party CDD (alternative 2) grouped by nationality
+      # Clients where foreign third parties performed CDD, grouped by third-party's country
       def a3105
-        {}
+        clients_kept
+          .with_foreign_third_party_cdd
+          .where.not(third_party_cdd_country: [nil, ""])
+          .group(:third_party_cdd_country)
+          .count
       end
 
       # === Client Introduction Channels ===

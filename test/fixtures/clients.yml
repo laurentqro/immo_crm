@@ -442,3 +442,51 @@ not_introduced:
   risk_level: "LOW"
   became_client_at: <%= 6.months.ago %>
   introduced_by_third_party: false
+
+# =============================================================================
+# Third-Party CDD Test Fixtures
+# These fixtures test Q fields a3101-a3105 for third-party CDD tracking
+# =============================================================================
+
+# Client where local third-party performed CDD
+local_third_party_cdd:
+  organization: compliance_test_org
+  name: "Client with Local Third-Party CDD"
+  client_type: "NATURAL_PERSON"
+  nationality: "FR"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  became_client_at: <%= 3.months.ago %>
+  third_party_cdd: true
+  third_party_cdd_type: "LOCAL"
+
+# Client where foreign third-party (from France) performed CDD
+foreign_third_party_cdd:
+  organization: compliance_test_org
+  name: "Client with Foreign Third-Party CDD"
+  client_type: "NATURAL_PERSON"
+  nationality: "IT"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "MEDIUM"
+  became_client_at: <%= 2.months.ago %>
+  third_party_cdd: true
+  third_party_cdd_type: "FOREIGN"
+  third_party_cdd_country: "FR"
+
+# Another client where foreign third-party (from Switzerland) performed CDD
+foreign_third_party_cdd_swiss:
+  organization: compliance_test_org
+  name: "Client with Swiss Third-Party CDD"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "SARL"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  business_sector: "Finance"
+  became_client_at: <%= 1.month.ago %>
+  third_party_cdd: true
+  third_party_cdd_type: "FOREIGN"
+  third_party_cdd_country: "CH"

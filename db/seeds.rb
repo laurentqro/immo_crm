@@ -83,6 +83,9 @@ BUSINESS_SECTORS = [
 # Introducer countries for clients brought in by third parties
 INTRODUCER_COUNTRIES = %w[FR CH GB IT US].freeze
 
+# Third-party CDD provider countries (foreign providers)
+THIRD_PARTY_CDD_COUNTRIES = %w[FR CH GB LU].freeze
+
 puts "Creating clients..."
 
 # Create natural persons (15 clients)
@@ -97,6 +100,11 @@ puts "Creating clients..."
   # ~20% of clients are introduced by third parties (indices 0, 5, 10)
   is_introduced = i % 5 == 0
 
+  # ~15% of clients have third-party CDD (indices 1, 6, 11)
+  has_third_party_cdd = (i - 1) % 5 == 0 && i > 0
+  third_party_cdd_type = has_third_party_cdd ? %w[LOCAL FOREIGN].sample : nil
+  third_party_cdd_country = (has_third_party_cdd && third_party_cdd_type == "FOREIGN") ? THIRD_PARTY_CDD_COUNTRIES.sample : nil
+
   client = Client.create!(
     organization: organization,
     name: Faker::Name.name,
@@ -109,11 +117,15 @@ puts "Creating clients..."
     became_client_at: Faker::Date.between(from: 5.years.ago, to: Date.today),
     notes: i < 5 ? Faker::Lorem.paragraph(sentence_count: 2) : nil,
     introduced_by_third_party: is_introduced,
-    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil
+    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil,
+    third_party_cdd: has_third_party_cdd,
+    third_party_cdd_type: third_party_cdd_type,
+    third_party_cdd_country: third_party_cdd_country
   )
 
   intro_tag = client.introduced_by_third_party? ? ", introduced from #{client.introducer_country}" : ""
-  puts "  - Created natural person: #{client.name} (#{client.risk_level} risk#{', PEP' if client.is_pep?}#{intro_tag})"
+  cdd_tag = client.third_party_cdd? ? ", 3rd-party CDD (#{client.third_party_cdd_type}#{client.third_party_cdd_country ? " - #{client.third_party_cdd_country}" : ""})" : ""
+  puts "  - Created natural person: #{client.name} (#{client.risk_level} risk#{', PEP' if client.is_pep?}#{intro_tag}#{cdd_tag})"
 end
 
 # Countries of incorporation for legal entities (mix of Monaco and common offshore/EU)
@@ -133,6 +145,11 @@ INCORPORATION_COUNTRIES = %w[MC FR LU CH GB JE GG LI].freeze
   # ~20% of clients are introduced by third parties (indices 0, 5)
   is_introduced = i % 5 == 0
 
+  # ~20% of legal entities have third-party CDD (indices 2, 7)
+  has_third_party_cdd = (i - 2) % 5 == 0
+  third_party_cdd_type = has_third_party_cdd ? %w[LOCAL FOREIGN].sample : nil
+  third_party_cdd_country = (has_third_party_cdd && third_party_cdd_type == "FOREIGN") ? THIRD_PARTY_CDD_COUNTRIES.sample : nil
+
   # Incorporation country - first 3 are Monaco, rest are mixed
   incorporation_country = i < 3 ? "MC" : INCORPORATION_COUNTRIES.sample
 
@@ -151,7 +168,10 @@ INCORPORATION_COUNTRIES = %w[MC FR LU CH GB JE GG LI].freeze
     became_client_at: Faker::Date.between(from: 5.years.ago, to: Date.today),
     notes: Faker::Lorem.paragraph(sentence_count: 2),
     introduced_by_third_party: is_introduced,
-    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil
+    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil,
+    third_party_cdd: has_third_party_cdd,
+    third_party_cdd_type: third_party_cdd_type,
+    third_party_cdd_country: third_party_cdd_country
   )
 
   # Add 1-3 beneficial owners for each legal entity
@@ -186,6 +206,11 @@ TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
   # ~20% of clients are introduced by third parties (index 0)
   is_introduced = i == 0
 
+  # ~40% of trusts have third-party CDD (indices 1, 3) - trusts often use external CDD
+  has_third_party_cdd = i == 1 || i == 3
+  third_party_cdd_type = has_third_party_cdd ? %w[LOCAL FOREIGN].sample : nil
+  third_party_cdd_country = (has_third_party_cdd && third_party_cdd_type == "FOREIGN") ? THIRD_PARTY_CDD_COUNTRIES.sample : nil
+
   # Incorporation country for trusts - typically offshore jurisdictions
   trust_incorporation_country = i < 2 ? "MC" : %w[JE GG CH LI].sample
 
@@ -204,7 +229,10 @@ TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
     trustee_country: trustee_country,
     is_professional_trustee: is_professional,
     introduced_by_third_party: is_introduced,
-    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil
+    introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil,
+    third_party_cdd: has_third_party_cdd,
+    third_party_cdd_type: third_party_cdd_type,
+    third_party_cdd_country: third_party_cdd_country
   )
 
   # Add 2-4 beneficial owners for each trust
@@ -651,5 +679,6 @@ puts "  - LOW: #{Client.where(risk_level: 'LOW').count}"
 puts ""
 puts "PEP clients: #{Client.peps.count}"
 puts "Introduced clients: #{Client.introduced.count}"
+puts "Third-party CDD clients: #{Client.with_third_party_cdd.count} (Local: #{Client.with_local_third_party_cdd.count}, Foreign: #{Client.with_foreign_third_party_cdd.count})"
 puts ""
 puts "Login with: #{test_email} / password123"

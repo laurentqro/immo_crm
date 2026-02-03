@@ -51,6 +51,17 @@ class Client < ApplicationRecord
     format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
     if: :introduced_by_third_party?
 
+  # Third-party CDD validations
+  validates :third_party_cdd_type,
+    presence: true,
+    inclusion: { in: THIRD_PARTY_CDD_TYPES },
+    if: :third_party_cdd?
+
+  validates :third_party_cdd_country,
+    presence: true,
+    format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
+    if: -> { third_party_cdd? && third_party_cdd_type == "FOREIGN" }
+
   # AMSF Data Capture validations
   validates :due_diligence_level, inclusion: { in: DUE_DILIGENCE_LEVELS }, allow_blank: true
   validates :simplified_dd_reason, presence: true, if: -> { due_diligence_level == "SIMPLIFIED" }
@@ -60,6 +71,7 @@ class Client < ApplicationRecord
   # === Callbacks ===
   before_save :clear_pep_type_if_not_pep
   before_save :clear_vasp_type_if_not_vasp
+  before_save :clear_third_party_cdd_fields_if_not_used
 
   # === Scopes ===
 
@@ -86,6 +98,11 @@ class Client < ApplicationRecord
 
   # Introducer scopes
   scope :introduced, -> { where(introduced_by_third_party: true) }
+
+  # Third-party CDD scopes
+  scope :with_third_party_cdd, -> { where(third_party_cdd: true) }
+  scope :with_local_third_party_cdd, -> { where(third_party_cdd: true, third_party_cdd_type: "LOCAL") }
+  scope :with_foreign_third_party_cdd, -> { where(third_party_cdd: true, third_party_cdd_type: "FOREIGN") }
 
   # Organization scope (for policy/controller use)
   scope :for_organization, ->(org) { where(organization: org) }
@@ -148,5 +165,13 @@ class Client < ApplicationRecord
   # Clear vasp_type when is_vasp is set to false to maintain data consistency
   def clear_vasp_type_if_not_vasp
     self.vasp_type = nil unless is_vasp?
+  end
+
+  # Clear third-party CDD fields when third_party_cdd is set to false
+  def clear_third_party_cdd_fields_if_not_used
+    unless third_party_cdd?
+      self.third_party_cdd_type = nil
+      self.third_party_cdd_country = nil
+    end
   end
 end

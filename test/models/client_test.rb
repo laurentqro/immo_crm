@@ -679,4 +679,155 @@ class ClientTest < ActiveSupport::TestCase
     assert_includes introduced, introduced_client
     assert_not_includes introduced, regular_client
   end
+
+  # === Third-Party CDD Tracking ===
+
+  test "third_party_cdd defaults to false" do
+    client = Client.new
+    assert_equal false, client.third_party_cdd
+  end
+
+  test "requires third_party_cdd_type when third_party_cdd is true" do
+    client = Client.new(
+      organization: @organization,
+      name: "CDD Client",
+      client_type: "NATURAL_PERSON",
+      third_party_cdd: true
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:third_party_cdd_type], "can't be blank"
+  end
+
+  test "third_party_cdd_type not required when third_party_cdd is false" do
+    client = Client.new(
+      organization: @organization,
+      name: "Regular Client",
+      client_type: "NATURAL_PERSON",
+      third_party_cdd: false
+    )
+    assert client.valid?
+  end
+
+  test "third_party_cdd_type must be valid when present" do
+    client = Client.new(
+      organization: @organization,
+      name: "CDD Client",
+      client_type: "NATURAL_PERSON",
+      third_party_cdd: true,
+      third_party_cdd_type: "INVALID"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:third_party_cdd_type], "is not included in the list"
+  end
+
+  test "accepts all valid third_party_cdd_types" do
+    %w[LOCAL FOREIGN].each do |type|
+      attrs = {
+        organization: @organization,
+        name: "Test Client",
+        client_type: "NATURAL_PERSON",
+        third_party_cdd: true,
+        third_party_cdd_type: type
+      }
+      # FOREIGN requires a country
+      attrs[:third_party_cdd_country] = "FR" if type == "FOREIGN"
+
+      client = Client.new(attrs)
+      assert client.valid?, "Expected third_party_cdd_type '#{type}' to be valid"
+    end
+  end
+
+  test "requires third_party_cdd_country when third_party_cdd_type is FOREIGN" do
+    client = Client.new(
+      organization: @organization,
+      name: "Foreign CDD Client",
+      client_type: "NATURAL_PERSON",
+      third_party_cdd: true,
+      third_party_cdd_type: "FOREIGN"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:third_party_cdd_country], "can't be blank"
+  end
+
+  test "third_party_cdd_country not required when third_party_cdd_type is LOCAL" do
+    client = Client.new(
+      organization: @organization,
+      name: "Local CDD Client",
+      client_type: "NATURAL_PERSON",
+      third_party_cdd: true,
+      third_party_cdd_type: "LOCAL"
+    )
+    assert client.valid?
+  end
+
+  test "third_party_cdd_country must be ISO 3166-1 alpha-2 format when present" do
+    client = Client.new(
+      organization: @organization,
+      name: "Foreign CDD Client",
+      client_type: "NATURAL_PERSON",
+      third_party_cdd: true,
+      third_party_cdd_type: "FOREIGN",
+      third_party_cdd_country: "INVALID"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:third_party_cdd_country], "must be ISO 3166-1 alpha-2 format"
+  end
+
+  test "accepts valid ISO third_party_cdd_country codes" do
+    %w[FR CH GB IT US].each do |code|
+      client = Client.new(
+        organization: @organization,
+        name: "Test Client",
+        client_type: "NATURAL_PERSON",
+        third_party_cdd: true,
+        third_party_cdd_type: "FOREIGN",
+        third_party_cdd_country: code
+      )
+      assert client.valid?, "Expected third_party_cdd_country '#{code}' to be valid"
+    end
+  end
+
+  test "clears third_party_cdd fields when third_party_cdd is set to false" do
+    client = Client.create!(
+      organization: @organization,
+      name: "CDD Client",
+      client_type: "NATURAL_PERSON",
+      third_party_cdd: true,
+      third_party_cdd_type: "FOREIGN",
+      third_party_cdd_country: "FR"
+    )
+
+    client.update!(third_party_cdd: false)
+    client.reload
+
+    assert_nil client.third_party_cdd_type
+    assert_nil client.third_party_cdd_country
+  end
+
+  test "with_third_party_cdd scope returns only clients with third-party CDD" do
+    local_cdd_client = clients(:local_third_party_cdd)
+    regular_client = clients(:not_introduced)
+
+    with_cdd = Client.with_third_party_cdd
+    assert_includes with_cdd, local_cdd_client
+    assert_not_includes with_cdd, regular_client
+  end
+
+  test "with_local_third_party_cdd scope returns only clients with local CDD" do
+    local_cdd_client = clients(:local_third_party_cdd)
+    foreign_cdd_client = clients(:foreign_third_party_cdd)
+
+    local_cdd = Client.with_local_third_party_cdd
+    assert_includes local_cdd, local_cdd_client
+    assert_not_includes local_cdd, foreign_cdd_client
+  end
+
+  test "with_foreign_third_party_cdd scope returns only clients with foreign CDD" do
+    local_cdd_client = clients(:local_third_party_cdd)
+    foreign_cdd_client = clients(:foreign_third_party_cdd)
+
+    foreign_cdd = Client.with_foreign_third_party_cdd
+    assert_includes foreign_cdd, foreign_cdd_client
+    assert_not_includes foreign_cdd, local_cdd_client
+  end
 end

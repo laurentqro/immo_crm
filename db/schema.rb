@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_02_232525) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_112554) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -148,9 +148,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_232525) do
   create_table "beneficial_owners", force: :cascade do |t|
     t.bigint "client_id", null: false
     t.string "control_type"
-    t.string "country_code"
     t.datetime "created_at", null: false
     t.boolean "identification_verified", default: false
+    t.string "incorporation_country"
     t.boolean "is_pep", default: false, null: false
     t.string "name", null: false
     t.string "nationality"
@@ -160,7 +160,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_232525) do
     t.boolean "source_of_wealth_verified", default: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_beneficial_owners_on_client_id"
-    t.index ["country_code"], name: "index_beneficial_owners_on_country_code"
+    t.index ["incorporation_country"], name: "index_beneficial_owners_on_incorporation_country"
     t.index ["is_pep"], name: "index_beneficial_owners_on_is_pep"
   end
 
@@ -168,10 +168,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_232525) do
     t.datetime "became_client_at"
     t.string "business_sector"
     t.string "client_type", null: false
-    t.string "country_code"
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.string "due_diligence_level"
+    t.string "incorporation_country"
     t.boolean "introduced_by_third_party", default: false, null: false
     t.string "introducer_country"
     t.boolean "is_pep", default: false, null: false
@@ -195,15 +195,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_232525) do
     t.text "simplified_dd_reason"
     t.boolean "source_of_funds_verified", default: false
     t.boolean "source_of_wealth_verified", default: false
+    t.boolean "third_party_cdd", default: false, null: false
+    t.string "third_party_cdd_country"
+    t.string "third_party_cdd_type"
     t.string "trustee_country"
     t.string "trustee_name"
     t.string "trustee_nationality"
     t.datetime "updated_at", null: false
     t.string "vasp_type"
     t.index ["client_type"], name: "index_clients_on_client_type"
-    t.index ["country_code"], name: "index_clients_on_country_code"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"
     t.index ["due_diligence_level"], name: "index_clients_on_due_diligence_level"
+    t.index ["incorporation_country"], name: "index_clients_on_incorporation_country"
     t.index ["introduced_by_third_party"], name: "index_clients_on_introduced_by_third_party"
     t.index ["is_pep"], name: "index_clients_on_is_pep"
     t.index ["is_pep_associated"], name: "index_clients_on_is_pep_associated"
@@ -215,6 +218,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_232525) do
     t.index ["professional_category"], name: "index_clients_on_professional_category"
     t.index ["residence_status"], name: "index_clients_on_residence_status"
     t.index ["risk_level"], name: "index_clients_on_risk_level"
+    t.index ["third_party_cdd"], name: "index_clients_on_third_party_cdd"
   end
 
   create_table "connected_accounts", force: :cascade do |t|

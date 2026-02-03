@@ -271,6 +271,44 @@
       </div>
     </div>
 
+    <%# Third-Party CDD Section %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <h3 class="text-sm font-medium mb-4" style="color: var(--base-text-secondary);">Third-Party Customer Due Diligence</h3>
+
+      <div class="form-picker-group">
+        <%= form.check_box :third_party_cdd,
+            data: { client_form_target: "thirdPartyCdd", action: "change->client-form#toggleThirdPartyCdd" } %>
+        <div>
+          <%= form.label :third_party_cdd, "CDD performed by a third party" %>
+          <p class="form-hint">Customer due diligence was conducted by an external party (e.g., another regulated entity).</p>
+        </div>
+      </div>
+
+      <fieldset class="form-group mt-4 ml-7 <%= 'hidden' unless client.third_party_cdd? %>" data-client-form-target="thirdPartyCddType">
+        <legend class="form-label">Third-party provider type</legend>
+        <div class="flex gap-6 mt-2">
+          <% [["Local (Monaco)", "LOCAL"], ["Foreign", "FOREIGN"]].each do |label, value| %>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <%= form.radio_button :third_party_cdd_type, value,
+                  data: { action: "change->client-form#toggleThirdPartyCdd" },
+                  class: "form-radio" %>
+              <span><%= label %></span>
+            </label>
+          <% end %>
+        </div>
+        <p class="form-hint mt-1">Whether the CDD provider is based in Monaco or abroad.</p>
+      </fieldset>
+
+      <div class="form-group mt-4 ml-7 <%= 'hidden' unless client.third_party_cdd? && client.third_party_cdd_type == 'FOREIGN' %>" data-client-form-target="thirdPartyCddCountry">
+        <%= form.label :third_party_cdd_country, "Third-party provider country" %>
+        <%= form.select :third_party_cdd_country,
+            options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.third_party_cdd_country),
+            { include_blank: "Select country..." },
+            { class: "form-control" } %>
+        <p class="form-hint">Country of residence of the foreign CDD provider.</p>
+      </div>
+    </div>
+
     <%# Became Client Date %>
     <div class="form-group">
       <%= form.label :became_client_at, "Client since" %>

@@ -368,4 +368,137 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal "Oui", result
   end
 
+  # === DistributionRisk Third-Party CDD Field Tests ===
+
+  # Use compliance_test_org which has third-party CDD fixtures:
+  # - local_third_party_cdd (FR nationality, LOCAL type)
+  # - foreign_third_party_cdd (IT nationality, FOREIGN type, FR provider country)
+  # - foreign_third_party_cdd_swiss (MC nationality, FOREIGN type, CH provider country)
+
+  test "a3101 returns Oui when local third-party CDD clients exist" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3101)
+
+    assert_equal "Oui", result
+  end
+
+  test "a3101 returns Non when no local third-party CDD clients exist" do
+    org = organizations(:two) # organization with no third-party CDD clients
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3101)
+
+    assert_equal "Non", result
+  end
+
+  test "a3103 returns Oui when foreign third-party CDD clients exist" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3103)
+
+    assert_equal "Oui", result
+  end
+
+  test "a3103 returns Non when no foreign third-party CDD clients exist" do
+    org = organizations(:two) # organization with no third-party CDD clients
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3103)
+
+    assert_equal "Non", result
+  end
+
+  test "a3102 returns Hash grouped by client nationality for local CDD clients" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3102)
+
+    assert_kind_of Hash, result
+    # Should include only local_third_party_cdd (FR nationality)
+    assert_equal 1, result.values.sum
+    assert_equal 1, result["FR"]
+  end
+
+  test "a3102 returns empty Hash when no local CDD clients exist" do
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3102)
+
+    assert_kind_of Hash, result
+    assert result.empty?
+  end
+
+  test "a3104 returns Hash grouped by client nationality for foreign CDD clients" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3104)
+
+    assert_kind_of Hash, result
+    # Should include:
+    # - foreign_third_party_cdd (IT nationality)
+    # - foreign_third_party_cdd_swiss (MC nationality)
+    assert_equal 2, result.values.sum
+    assert_equal 1, result["IT"]
+    assert_equal 1, result["MC"]
+  end
+
+  test "a3104 returns empty Hash when no foreign CDD clients exist" do
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3104)
+
+    assert_kind_of Hash, result
+    assert result.empty?
+  end
+
+  test "a3105 returns Hash grouped by third-party provider country" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3105)
+
+    assert_kind_of Hash, result
+    # Should include:
+    # - foreign_third_party_cdd (FR provider country)
+    # - foreign_third_party_cdd_swiss (CH provider country)
+    assert_equal 2, result.values.sum
+    assert_equal 1, result["FR"]
+    assert_equal 1, result["CH"]
+  end
+
+  test "a3105 returns empty Hash when no foreign CDD clients exist" do
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a3105)
+
+    assert_kind_of Hash, result
+    assert result.empty?
+  end
+
+  test "ac1622f returns Oui when any third-party CDD is used" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:ac1622f)
+
+    assert_equal "Oui", result
+  end
+
+  test "ac1622f returns Non when no third-party CDD is used" do
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:ac1622f)
+
+    assert_equal "Non", result
+  end
+
 end

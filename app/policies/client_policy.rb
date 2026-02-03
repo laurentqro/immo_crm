@@ -70,6 +70,10 @@ class ClientPolicy < ApplicationPolicy
       # Introducer tracking fields
       :introduced_by_third_party,
       :introducer_country,
+      # Third-party CDD tracking fields
+      :third_party_cdd,
+      :third_party_cdd_type,
+      :third_party_cdd_country,
       # Incorporation country (for legal entities and trusts)
       :incorporation_country
     ]
