@@ -1,15 +1,23 @@
 <%= content_for :title, "Review #{@submission.year} AMSF Submission" %>
 
 <div class="container mx-auto px-4 py-8">
-  <div class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-      Questionnaire AMSF <%= @submission.year %>
-    </h1>
-    <span class="text-sm text-gray-500 dark:text-gray-400"><%= @survey.completion_percentage %>% complété</span>
+  <div class="mb-8 flex justify-between items-start">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        Questionnaire AMSF <%= @submission.year %>
+      </h1>
+      <span class="text-sm text-gray-500 dark:text-gray-400"><%= @survey.completion_percentage %>% complété</span>
 
-    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-      Vérifiez vos données avant de soumettre à l'AMSF. Toutes les valeurs sont calculées ou pré-remplies à partir des données que vous avez renseignées au cours de l'année <%= @submission.year %>.
-    </p>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Vérifiez vos données avant de soumettre à l'AMSF. Toutes les valeurs sont calculées ou pré-remplies à partir des données que vous avez renseignées au cours de l'année <%= @submission.year %>.
+      </p>
+    </div>
+    <div>
+      <%= button_to "Validate XBRL", validate_submission_path(@submission),
+          method: :post,
+          class: "btn btn-secondary",
+          data: { turbo: false } %>
+    </div>
   </div>
 
   <%= render "validation_errors" %>
