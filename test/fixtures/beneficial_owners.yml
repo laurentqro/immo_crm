@@ -86,3 +86,58 @@ minimal_owner:
   client: legal_entity
   name: "Minimal Owner"
   is_pep: false
+
+# HNWI owner (net worth > 5M EUR but <= 50M EUR)
+hnwi_owner:
+  client: legal_entity
+  name: "HNWI Owner"
+  nationality: "MC"
+  residence_country: "MC"
+  ownership_percentage: 30.0
+  control_type: "DIRECT"
+  is_pep: false
+  net_worth_eur: 10000000.00
+
+# UHNWI owner (net worth > 50M EUR, automatically also HNWI)
+uhnwi_owner:
+  client: legal_entity
+  name: "UHNWI Owner"
+  nationality: "CH"
+  residence_country: "MC"
+  ownership_percentage: 20.0
+  control_type: "DIRECT"
+  is_pep: false
+  net_worth_eur: 75000000.00
+
+# Owner at HNWI boundary (exactly 5M, should NOT be HNWI)
+at_hnwi_threshold:
+  client: legal_entity
+  name: "At HNWI Threshold"
+  nationality: "FR"
+  residence_country: "FR"
+  ownership_percentage: 25.0
+  control_type: "DIRECT"
+  is_pep: false
+  net_worth_eur: 5000000.00
+
+# Owner at UHNWI boundary (exactly 50M, should be HNWI but NOT UHNWI)
+at_uhnwi_threshold:
+  client: legal_entity
+  name: "At UHNWI Threshold"
+  nationality: "IT"
+  residence_country: "IT"
+  ownership_percentage: 25.0
+  control_type: "DIRECT"
+  is_pep: false
+  net_worth_eur: 50000000.00
+
+# Owner with low net worth (not HNWI)
+low_net_worth_owner:
+  client: legal_entity
+  name: "Low Net Worth Owner"
+  nationality: "MC"
+  residence_country: "MC"
+  ownership_percentage: 25.0
+  control_type: "DIRECT"
+  is_pep: false
+  net_worth_eur: 1000000.00

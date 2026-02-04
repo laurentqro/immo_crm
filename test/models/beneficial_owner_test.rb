@@ -250,4 +250,103 @@ class BeneficialOwnerTest < ActiveSupport::TestCase
     owner = BeneficialOwner.new
     assert_equal false, owner.identification_verified
   end
+
+  # === HNWI/UHNWI Derivation Tests ===
+
+  test "hnwis scope returns beneficial owners with net_worth > 5M" do
+    hnwi = beneficial_owners(:hnwi_owner)
+    uhnwi = beneficial_owners(:uhnwi_owner)
+    low_net_worth = beneficial_owners(:low_net_worth_owner)
+    at_threshold = beneficial_owners(:at_hnwi_threshold)
+
+    hnwis = BeneficialOwner.hnwis
+
+    assert_includes hnwis, hnwi, "HNWI owner (10M) should be in hnwis scope"
+    assert_includes hnwis, uhnwi, "UHNWI owner (75M) should also be in hnwis scope"
+    assert_not_includes hnwis, low_net_worth, "Low net worth owner (1M) should not be in hnwis scope"
+    assert_not_includes hnwis, at_threshold, "Owner at exactly 5M threshold should not be HNWI (must be > 5M)"
+  end
+
+  test "uhnwis scope returns beneficial owners with net_worth > 50M" do
+    hnwi = beneficial_owners(:hnwi_owner)
+    uhnwi = beneficial_owners(:uhnwi_owner)
+    at_uhnwi_threshold = beneficial_owners(:at_uhnwi_threshold)
+
+    uhnwis = BeneficialOwner.uhnwis
+
+    assert_includes uhnwis, uhnwi, "UHNWI owner (75M) should be in uhnwis scope"
+    assert_not_includes uhnwis, hnwi, "HNWI owner (10M) should not be in uhnwis scope"
+    assert_not_includes uhnwis, at_uhnwi_threshold, "Owner at exactly 50M threshold should not be UHNWI (must be > 50M)"
+  end
+
+  test "uhnwi is always a subset of hnwi" do
+    # This is the critical AMSF validation rule:
+    # Any country in a11206B (HNWI) child (a112012B, UHNWI) must also be in the parent
+    uhnwis = BeneficialOwner.uhnwis
+    hnwis = BeneficialOwner.hnwis
+
+    # Every UHNWI must also be an HNWI
+    uhnwis.each do |uhnwi|
+      assert_includes hnwis, uhnwi, "UHNWI #{uhnwi.name} must also be an HNWI"
+    end
+  end
+
+  test "hnwi? instance method returns true for net_worth > 5M" do
+    hnwi = beneficial_owners(:hnwi_owner)
+    uhnwi = beneficial_owners(:uhnwi_owner)
+    low = beneficial_owners(:low_net_worth_owner)
+
+    assert hnwi.hnwi?, "Owner with 10M should be HNWI"
+    assert uhnwi.hnwi?, "Owner with 75M should also be HNWI"
+    assert_not low.hnwi?, "Owner with 1M should not be HNWI"
+  end
+
+  test "uhnwi? instance method returns true for net_worth > 50M" do
+    hnwi = beneficial_owners(:hnwi_owner)
+    uhnwi = beneficial_owners(:uhnwi_owner)
+
+    assert uhnwi.uhnwi?, "Owner with 75M should be UHNWI"
+    assert_not hnwi.uhnwi?, "Owner with 10M should not be UHNWI"
+  end
+
+  test "nil net_worth is neither HNWI nor UHNWI" do
+    minimal = beneficial_owners(:minimal_owner)
+
+    assert_nil minimal.net_worth_eur
+    assert_not minimal.hnwi?, "Owner with nil net_worth should not be HNWI"
+    assert_not minimal.uhnwi?, "Owner with nil net_worth should not be UHNWI"
+  end
+
+  test "hnwi and uhnwi thresholds are correct" do
+    assert_equal 5_000_000, BeneficialOwner::HNWI_THRESHOLD
+    assert_equal 50_000_000, BeneficialOwner::UHNWI_THRESHOLD
+  end
+
+  test "boundary values for HNWI classification" do
+    # Just below threshold - not HNWI
+    owner = BeneficialOwner.new(client: @legal_entity, name: "Test", net_worth_eur: 4_999_999.99)
+    assert_not owner.hnwi?
+
+    # Exactly at threshold - not HNWI (must be greater than)
+    owner.net_worth_eur = 5_000_000
+    assert_not owner.hnwi?
+
+    # Just above threshold - is HNWI
+    owner.net_worth_eur = 5_000_000.01
+    assert owner.hnwi?
+  end
+
+  test "boundary values for UHNWI classification" do
+    # Just below threshold - not UHNWI
+    owner = BeneficialOwner.new(client: @legal_entity, name: "Test", net_worth_eur: 49_999_999.99)
+    assert_not owner.uhnwi?
+
+    # Exactly at threshold - not UHNWI (must be greater than)
+    owner.net_worth_eur = 50_000_000
+    assert_not owner.uhnwi?
+
+    # Just above threshold - is UHNWI
+    owner.net_worth_eur = 50_000_000.01
+    assert owner.uhnwi?
+  end
 end

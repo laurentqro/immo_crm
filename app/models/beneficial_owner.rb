@@ -8,9 +8,18 @@
 # - Control the entity through other means (indirect)
 # - Act as legal representative (representative)
 #
+# HNWI/UHNWI Classification:
+# - HNWI (High Net Worth Individual): net_worth_eur > 5,000,000 EUR
+# - UHNWI (Ultra High Net Worth Individual): net_worth_eur > 50,000,000 EUR
+# These are derived from net_worth_eur to guarantee UHNWI ⊂ HNWI (AMSF requirement).
+#
 class BeneficialOwner < ApplicationRecord
   include AmsfConstants
   include Auditable
+
+  # HNWI/UHNWI thresholds in EUR (from AMSF gap analysis)
+  HNWI_THRESHOLD = 5_000_000
+  UHNWI_THRESHOLD = 50_000_000
 
   # === Associations ===
   belongs_to :client
@@ -45,8 +54,10 @@ class BeneficialOwner < ApplicationRecord
   scope :indirect, -> { where(control_type: "INDIRECT") }
   scope :representatives, -> { where(control_type: "REPRESENTATIVE") }
   scope :with_significant_control, -> { where("ownership_percentage >= ?", 25) }
-  scope :hnwis, -> { where(is_hnwi: true) }
-  scope :uhnwis, -> { where(is_uhnwi: true) }
+  # HNWI/UHNWI scopes derived from net_worth_eur
+  # This guarantees UHNWI ⊂ HNWI since anyone >50M is also >5M
+  scope :hnwis, -> { where("net_worth_eur > ?", HNWI_THRESHOLD) }
+  scope :uhnwis, -> { where("net_worth_eur > ?", UHNWI_THRESHOLD) }
 
   # === Instance Methods ===
 
@@ -62,6 +73,16 @@ class BeneficialOwner < ApplicationRecord
     when "REPRESENTATIVE" then "Legal Representative"
     else control_type
     end
+  end
+
+  # HNWI status derived from net_worth_eur
+  def hnwi?
+    net_worth_eur.present? && net_worth_eur > HNWI_THRESHOLD
+  end
+
+  # UHNWI status derived from net_worth_eur
+  def uhnwi?
+    net_worth_eur.present? && net_worth_eur > UHNWI_THRESHOLD
   end
 
   # Delegate organization access through client

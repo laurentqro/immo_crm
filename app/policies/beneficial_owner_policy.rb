@@ -45,7 +45,8 @@ class BeneficialOwnerPolicy < ApplicationPolicy
       :ownership_percentage,
       :control_type,
       :is_pep,
-      :pep_type
+      :pep_type,
+      :net_worth_eur
     ]
   end
 
