@@ -1,0 +1,1292 @@
+[
+  {
+    "section": "1.1",
+    "question_number": "1",
+    "question_text": "Avez-vous agi en tant que mandataire professionnel au sens de la loi n° 1.362 pour des achats ou des ventes de biens immobiliers ou de locations immobilières au cours de la période de déclaration ? (cf. lien)",
+    "question_instructions": "Activités soumises : L'achat, la vente et la location de biens immobiliers. Pour la location, uniquement les loyers mensuels supérieur ou égal à 10.000€."
+  },
+  {
+    "section": "1.1",
+    "question_number": "2",
+    "question_text": "Spécifiquement en ce qui concerne les achats ou ventes de biens immobiliers réalisés au cours de la période de référence ?",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.1",
+    "question_number": "3",
+    "question_text": "Spécifiquement en ce qui concerne les locations de biens immobiliers pour lesquelles des opérations ont été réalisées au cours de la période de référence ?",
+    "question_instructions": "La location de biens immobiliers pour un loyer mensuel supérieur ou égal à 10.000€."
+  },
+  {
+    "section": "1.2",
+    "question_number": "4",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques qui ont été actifs à un moment donné pendant la période de déclaration, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers. Veuillez fournir des réponses uniquement pour les activités où vous ou votre entité avez agi en tant que mandataire professionnel au sens de la loi n° 1.362 modifiée par la loi n°1.503 du 23 décembre 2020 pour l'achat, la vente ou la location de biens immobiliers au cours de la période de déclaration. Par exemple, les clients locataires ayant un loyer mensuel inférieur à 10 000 euros devraient être exclus de ce total. En cas de bi-nationalité ou de pluri-nationalité, indiquer celle qui est la plus communément utilisée. Veuillez déclarer uniquement les informations relatives aux activités qui ne sont pas revendiquées par une autre entité que vous avez représentée et qui répond également à ce questionnaire de LBC/FT du SICCFIN sur les questions immobilières. Pour les questions mentionnant un « client unique », veuillez tenir compte de ce qui suit : • Si un même client effectue plusieurs opérations, il est considéré comme un seul client. • Si l'entité fournit plusieurs services ou dispose de plusieurs contrats ou relations avec le même client, il est considéré comme un seul client. • Toute autre situation où le même client serait compté deux fois, veuillez considérer qu'il s'agit d'un seul client."
+  },
+  {
+    "section": "1.2",
+    "question_number": "5",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par les clients au cours de la période de déclaration, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers. Précisions pour plus de clarté : Si un client achète une propriété et effectue 2 transferts pour effectuer le paiement complet, cela sera compté comme 1 transaction immobilière. l'achat de parts ou d'actions d'une société à vocation immobilière constitue autant d'opérations qu'il y a d'achats ou de vente (par ex. achat de 10 parts = 1 transaction ; un achat de 10 parts puis un autre achat de 15 parts = 2 transactions ; vente de 100% des parts d'une SCI = 1 transaction). Pour les locations, une transaction correspond à l'équivalent d'un loyer mensuel (>= 10.000 Euros). Un client locataire effectuant des paiements mensuels pendant une année complète représente 12 transactions. Un client locataire effectuant un paiement couvrant 12 mois de loyer sera compté comme 12 transactions."
+  },
+  {
+    "section": "1.2",
+    "question_number": "6",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par des clients pendant la période de déclaration, pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers. Merci de fournir le total du montant du contrat d'achat/vente. Si le montant total n'est pas disponible, par exemple que le montant connu est sans frais ni taxes, veuillez expliquer votre réponse dans la section commentaires."
+  },
+  {
+    "section": "1.2",
+    "question_number": "7",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par des clients pendant la période de déclaration, pour la location de biens immobiliers.",
+    "question_instructions": "La location de biens immobiliers. Merci de fournir le total du montant du contrat location. Si le montant total n'est pas disponible, par exemple que le montant connu est sans frais ni taxes, veuillez expliquer votre réponse dans la section commentaires."
+  },
+  {
+    "section": "1.2",
+    "question_number": "8",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées avec les clients au cours de la période de déclaration, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.2",
+    "question_number": "9",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés avec les clients pendant la période de déclaration, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.3",
+    "question_number": "10",
+    "question_text": "Votre entité peut-elle distinguer la nationalité du bénéficiaire effectif des clients ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.3",
+    "question_number": "11",
+    "question_text": "Fournir la répartition en pourcentage des principales nationalités des bénéficiaires effectifs.",
+    "question_instructions": "Veuillez indiquer la répartition en pourcentage des nationalités principales des bénéficiaires effectifs de tous les clients, y compris les bénéficiaires effectifs ayant différents pourcentages de propriété, ceux qui exercent un contrôle direct ou indirect et ceux qui représentent une personne morale."
+  },
+  {
+    "section": "1.3",
+    "question_number": "12",
+    "question_text": "Veuillez indiquer le nombre total de bénéficiaires effectifs exerçant un contrôle direct ou indirect sur une personne morale, ventilé par nationalité principale.",
+    "question_instructions": "Les informations demandées concernent seulement le nombre de BE qui sont considérés comme des BE du fait du contrôle direct ou indirect d'une personne morale, d'un trust ou d'une autre construction juridique."
+  },
+  {
+    "section": "1.3",
+    "question_number": "13",
+    "question_text": "Veuillez indiquer le nombre total de bénéficiaires effectifs représentant une personne morale, ventilé par nationalité principale.",
+    "question_instructions": "Les informations demandées concernent seulement le nombre de BE qui sont considérés comme des BE du fait de la représentation légale d'une personne morale, d'un trust ou d'une autre construction juridique."
+  },
+  {
+    "section": "1.3",
+    "question_number": "14",
+    "question_text": "Votre entité peut-elle distinguer les bénéficiaires effectifs qui détiennent 25 % ou plus ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.3",
+    "question_number": "15",
+    "question_text": "Veuillez fournir le nombre total de bénéficiaires effectifs détenant au moins 25%, ventilé par nationalité principale du BE.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.3",
+    "question_number": "16",
+    "question_text": "Votre entité enregistre-t-elle la résidence pour les bénéficiaires effectifs détenant une participation de 25 % ou plus ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.3",
+    "question_number": "17",
+    "question_text": "Veuillez indiquer le nombre total de bénéficiaires effectifs des résidents étrangers, par nationalité principale du bénéficiaire effectif, pour les bénéficiaires effectifs détenant 25%.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.3",
+    "question_number": "18",
+    "question_text": "Veuillez indiquer le nombre total de bénéficiaires effectifs des non-résidents, par nationalité principale du bénéficiaire effectif, pour les bénéficiaires effectifs détenant 25%.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.4",
+    "question_number": "19",
+    "question_text": "Que vous ayez ou non de tels clients, votre entité identifie-t-elle et enregistre-t-elle le type de clients lorsqu'il s'agit de: HNWIs?",
+    "question_instructions": "Aux fins de ce questionnaire, un particulier fortuné (HNWI) est une personne physique dont la somme de tous les comptes et actifs nets est supérieure à 5 millions d'euros."
+  },
+  {
+    "section": "1.4",
+    "question_number": "20",
+    "question_text": "UHNWIs?",
+    "question_instructions": "Aux fins de ce questionnaire, un particulier très fortuné (UHNWI) est une personne physique dont la somme de tous les comptes et actifs nets est supérieure à 50 millions d'euros."
+  },
+  {
+    "section": "1.4",
+    "question_number": "21",
+    "question_text": "Trusts et d'autres constructions juridiques non mentionnées ci-dessus ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.4",
+    "question_number": "22",
+    "question_text": "PSAV (prestataires de services d'actifs virtuels) qui fournissent d'autres services ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.5",
+    "question_number": "23",
+    "question_text": "Veuillez fournir le nombre total de clients uniques qui sont des personnes physiques qui sont des nationaux, pour les achats, ventes et locations de propriétés.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.5",
+    "question_number": "24",
+    "question_text": "Veuillez fournir le nombre total de clients uniques qui sont des personnes physiques qui sont des résidents étrangers, pour les achats, ventes et locations de propriétés.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.5",
+    "question_number": "25",
+    "question_text": "Veuillez fournir le nombre total de clients uniques qui sont des personnes physiques qui ne sont pas des résidents, pour les achats, ventes et locations de propriétés.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.5",
+    "question_number": "26",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques qui sont des personnes physiques (individus), classés selon la nationalité principale de l'individu pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.5",
+    "question_number": "27",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par des clients qui sont des personnes physiques pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.5",
+    "question_number": "28",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par des clients qui sont des personnes physiques, pour l'achat et la vente de biens immobiliers, en euros.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.5",
+    "question_number": "29",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques qui sont des personnes physiques (individus) pour la location de biens immobiliers.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.5",
+    "question_number": "30",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par des clients qui sont des personnes physiques pour la location de biens immobiliers.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.5",
+    "question_number": "31",
+    "question_text": "Certains des achats immobiliers effectués pendant la période de déclaration avaient-ils pour but d'établir une résidence à Monaco ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.5",
+    "question_number": "32",
+    "question_text": "Combien d'achats ont-ils été effectués dans le but d'établir une résidence à Monaco au cours de la période de déclaration ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.6",
+    "question_number": "33",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques qui sont des personnes morales, ventilé selon le pays du siège ou de l'immatriculation, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.6",
+    "question_number": "34",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par des clients qui sont des personnes morales pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers. Précisions pour plus de clarté : Si un client achète une propriété et effectue 2 transferts pour effectuer le paiement complet, cela sera compté comme 1 transaction immobilière. l'achat de parts ou d'actions d'une société à vocation immobilière constitue autant d'opérations qu'il y a d'achats ou de vente (par ex. achat de 10 parts = 1 transaction ; un achat de 10 parts puis un autre achat de 15 parts = 2 transactions ; vente de 100% des parts d'une SCI = 1 transaction)."
+  },
+  {
+    "section": "1.6",
+    "question_number": "35",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par les clients qui sont des personnes morales pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.6",
+    "question_number": "36",
+    "question_text": "Votre entité distingue-t-elle si les clients sont des personnes morales monégasques et le type de personne morale ?",
+    "question_instructions": "Les types de personnes morales incluent: • Associations monégasques • Autres sociétés civiles • Autres sociétés commerciales • Autres arrangements juridiques • Domaine Privé de l'Etat Monégasque • Entreprise individuelle • Fondation monégasque • Groupement d'intérêt économique GIE • Société en nom collectif SNC • Société civile immobilière SCI • Société civile particulière SCP • Société en commandite simple SCS • Société à responsabilité limitée SARL • Société anonyme monégasque SAM • Société en commandite par actions SCA • Trusts"
+  },
+  {
+    "section": "1.6",
+    "question_number": "37",
+    "question_text": "Veuillez indiquer le nombre de clients qui sont des personnes morales monégasques, ventilé par type.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.6",
+    "question_number": "38",
+    "question_text": "Veuillez indiquer le nombre total de clients bénéficiaires effectifs uniques de personnes morales qui sont des particuliers fortunés (HNWI), ventilés par nationalité principale du HNWI.",
+    "question_instructions": "L'achat et la vente de biens immobiliers. L'expression « bénéficiaire effectif unique » signifie que, quand bien même un bénéficiaire effectif serait impliqué dans plusieurs propriétés, il doit être néanmoins considéré comme un seul et même bénéficiaire effectif. Aux fins de ce questionnaire, un particulier fortuné (HNWI) est une personne physique dont la somme de tous les comptes et actifs nets est supérieure à 5 millions d'euros."
+  },
+  {
+    "section": "1.6",
+    "question_number": "39",
+    "question_text": "Veuillez indiquer le nombre total de clients bénéficiaires effectifs uniques de personnes morales et qui sont des particuliers très fortunés (UHNWI), ventilés par nationalité primaire de l'UHNWI.",
+    "question_instructions": "L'achat et la vente de biens immobiliers. L'expression « bénéficiaire effectif unique » signifie que, quand bien même un bénéficiaire effectif serait impliqué dans plusieurs propriétés, il doit être néanmoins considéré comme un seul et même bénéficiaire effectif. Aux fins de ce questionnaire, un particulier très fortuné (UHNWI) est une personne physique dont la somme de tous les comptes et actifs nets est supérieure à 50 millions d'euros."
+  },
+  {
+    "section": "1.7",
+    "question_number": "40",
+    "question_text": "Votre entité distingue-t-elle si les clients sont des trusts ou d'autres constructions juridiques ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.7",
+    "question_number": "41",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques qui sont des trusts et d'autres constructions juridiques pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.7",
+    "question_number": "42",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des trusts et autres constructions juridiques pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.7",
+    "question_number": "43",
+    "question_text": "Veuillez indiquer le nombre total de personnes physiques qui sont des trustees à titre professionnel, ventilé par nationalité primaire, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.7",
+    "question_number": "44",
+    "question_text": "Veuillez indiquer le nombre total de personnes physiques qui sont des trustees à titre professionnel, ventilé par pays dans lequel le trust a été créé, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.7",
+    "question_number": "45",
+    "question_text": "Votre entité dispose-t-elle d'informations sur le nombre et la valeur de leurs opérations ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.7",
+    "question_number": "46",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par des clients qui sont des trusts et d'autres constructions juridiques, pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.7",
+    "question_number": "47",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par les clients qui sont des trusts et d'autres constructions juridiques, pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.7",
+    "question_number": "48",
+    "question_text": "Veuillez préciser le type d'autres constructions juridiques non mentionnées dans les questions précédentes que votre entité a comme clients.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.8",
+    "question_number": "49",
+    "question_text": "Votre entité compte-t-elle parmi ses clients des personnes politiquement exposées (PPE) ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.8",
+    "question_number": "50",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques qui sont des PPE, ventilé selon le lieu de résidence des PPE (y compris les clients nationaux), pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.8",
+    "question_number": "51",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques qui sont des PPE, ventilé selon la nationalité primaire de la PPE (y compris les clients nationaux), pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.8",
+    "question_number": "52",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par des clients qui sont des PPE pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.8",
+    "question_number": "53",
+    "question_text": "Veuillez indiquer la valeur totale en euros des fonds transférés par des clients qui sont des PPE, pour l'achat et la vente de biens immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.8",
+    "question_number": "54",
+    "question_text": "Veuillez indiquer le nombre total de clients qui sont les bénéficiaires effectifs uniques de personnes morales/trusts et autres constructions juridiques et qui sont des PPE. Veuillez les classer selon la nationalité principale de la PPE.",
+    "question_instructions": "Pour les besoins de cette question, on entend par \"bénéficiaire effectif\" toute personne physique qui possède ou exerce un contrôle final effectif sur un client, directement ou indirectement, ou la personne physique qui exerce un contrôle final effectif sur une personne morale ou une construction juridique. L'expression « bénéficiaires effectifs uniques » signifie que, quand bien même une personne physique serait le bénéficiaire effectif de plusieurs personnes morales/constructions, elle ne doit néanmoins être considérée que comme un seul bénéficiaire effectif."
+  },
+  {
+    "section": "1.8",
+    "question_number": "55",
+    "question_text": "Veuillez indiquer le nombre total d'opérations (entrantes et sortantes) effectuées par des bénéficiaires effectifs de personnes morales/trusts et autres constructions juridiques qui sont des PPE.",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.9",
+    "question_number": "56",
+    "question_text": "Votre entité a-t-elle des clients qui sont des PSAV ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.9",
+    "question_number": "57",
+    "question_text": "Votre entité distingue-t-elle si des clients PSAV sont des prestataires de conservation (Custodian Wallet Providers) ?",
+    "question_instructions": "Prestataires de conservation (Custodian Wallet Providers)"
+  },
+  {
+    "section": "1.9",
+    "question_number": "58",
+    "question_text": "Votre entité a-t-elle des clients PSAV qui sont des prestataires de conservation (Custodian Wallet Providers) ?",
+    "question_instructions": "Prestataires de conservation (Custodian Wallet Providers)"
+  },
+  {
+    "section": "1.9",
+    "question_number": "59",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques PSAV qui sont des prestataires de conservation (Custodian Wallet Providers), ventilé par pays d'établissement pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "Prestataires de conservation (Custodian Wallet Providers). L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "60",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par les clients PSAV qui qui sont des prestataires de conservation (Custodian Wallet Providers) pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "Prestataires de conservation (Custodian Wallet Providers). L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "61",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés avec et par les clients PSAV qui sont des prestataires de conservation (Custodian Wallet Providers) pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "Prestataires de conservation (Custodian Wallet Providers). L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "62",
+    "question_text": "Votre entité distingue-t-elle si des clients PSAV sont des fournisseurs d'échange de monnaie virtuelle ?",
+    "question_instructions": "Fournisseurs d'échange de monnaie virtuelle"
+  },
+  {
+    "section": "1.9",
+    "question_number": "63",
+    "question_text": "Votre entité a-t-elle des clients PSAV qui sont des fournisseurs d'échange de monnaie virtuelle ?",
+    "question_instructions": "Fournisseurs d'échange de monnaie virtuelle"
+  },
+  {
+    "section": "1.9",
+    "question_number": "64",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques PSAV qui sont des fournisseurs d'échange de monnaie virtuelle, ventilé par pays d'établissement, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "Fournisseurs d'échange de monnaie virtuelle. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "65",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées avec et par les clients PSAV qui sont des fournisseurs d'échange de monnaie virtuelle pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "Fournisseurs d'échange de monnaie virtuelle. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "66",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés avec et par les clients PSAV qui sont des fournisseurs d'échange de monnaie virtuelle pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "Fournisseurs d'échange de monnaie virtuelle. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "67",
+    "question_text": "Votre entité distingue-t-elle si des clients PSAV sont des prestataires de services liés aux ICO (offre au public de jetons) ?",
+    "question_instructions": "ICO"
+  },
+  {
+    "section": "1.9",
+    "question_number": "68",
+    "question_text": "Votre entité a-t-elle des clients PSAV qui sont des services liés aux ICO (offre au public de jetons) ?",
+    "question_instructions": "ICO"
+  },
+  {
+    "section": "1.9",
+    "question_number": "69",
+    "question_text": "Veuillez fournir le nombre total de clients uniques PSAV qui sont des services liés aux ICO (offre au public de jetons), ventilé par pays d'établissement, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "ICO. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "70",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par les clients PSAV qui sont des prestataires de services liés aux ICO (offre au public de jetons), pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "ICO. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "71",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par les clients PSAV qui sont des prestataires de services liés aux ICO (offre au public de jetons), pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "ICO. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "72",
+    "question_text": "Votre entité distingue-t-elle si des clients PSAV fournissent d'autres services non mentionnés ci-dessus ?",
+    "question_instructions": "VASP qui fournissent d'autres services"
+  },
+  {
+    "section": "1.9",
+    "question_number": "73",
+    "question_text": "Votre entité a-t-elle des clients PSAV qui fournissent d'autres services ?",
+    "question_instructions": "VASP qui fournissent d'autres services"
+  },
+  {
+    "section": "1.9",
+    "question_number": "74",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques PSAV qui fournissent d'autres services, ventilé par pays d'établissement, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "VASP qui fournissent d'autres services. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "75",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par les clients PSAV qui fournissent d'autres services non mentionnés ci-dessus, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "VASP qui fournissent d'autres services. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "76",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par les clients PSAV qui fournissent d'autres services, pour l'achat, la vente et la location de biens immobiliers.",
+    "question_instructions": "VASP qui fournissent d'autres services. L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "1.9",
+    "question_number": "77",
+    "question_text": "Veuillez préciser quels sont les autres services fournis par les clients PSAV qui ne sont pas mentionnés ci-dessus.",
+    "question_instructions": "VASP qui fournissent d'autres services"
+  },
+  {
+    "section": "1.10",
+    "question_number": "78",
+    "question_text": "Pour les clients ayant deux ou plusieurs nationalités, votre entité enregistre-t-elle toutes les nationalités du client ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.10",
+    "question_number": "79",
+    "question_text": "Veuillez fournir le nombre total de nationalités secondaires des clients uniques qui sont des personnes physiques (individus), classés selon la(les) nationalité(s) secondaire(s) du client, le cas échéant (y compris les nationaux).",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.11",
+    "question_number": "80",
+    "question_text": "Avez-vous eu des clients monégasques (achats et ventes) au cours de la période de déclaration ?",
+    "question_instructions": "L'achat et la vente de biens immobiliers. Pour les personnes de nationalité monégasque."
+  },
+  {
+    "section": "1.11",
+    "question_number": "81",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des avocats ou qui exercent d'autres professions juridiques.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "82",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des auditeurs/comptables.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "83",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont actionnaires/administrateurs agissant pour le compte d'une autre personne.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "84",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont émetteurs, utilisateurs ou fournisseurs d'actions au porteur ou d'autres instruments au porteur.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "85",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des agents immobiliers.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "86",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des NMPPP.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "87",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des prestataires de services aux trusts et aux sociétés.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "88",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des Multi-Family Offices.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "89",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des Single-Family Offices.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "90",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des structures de propriété plus complexes.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "91",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans des sociétés caractérisées par une forte utilisation d'espèces.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "92",
+    "question_text": "Veuillez indiquer le nombre total de clients monégasques qui fournissent ou qui acceptent des paiements à partir de cartes prépayées anonymes / cartes avec un seuil élevé de mesures de vigilance à l'égard de la clientèle.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "93",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans le marché de l'art et des antiquités.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "94",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans l'import-export.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "95",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans le commerce des biens de grande valeur.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "96",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des OBNL.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "97",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans un casino ou des jeux d'argent.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "98",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans le bâtiment ou le développement immobilier.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "99",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans les industries extractives.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "100",
+    "question_text": "Prière d'indiquer le nombre total de clients uniques monégasques impliqués dans le secteur de la défense / des armes.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "101",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui exercent une activité liée à la navigation de plaisance.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "102",
+    "question_text": "Prière d'indiquer le nombre total de clients uniques monégasques qui sont des agents ou des intermédiaires sportifs.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "103",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans la gestion de fonds.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "104",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des sociétés holding.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "105",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont commissaires-priseurs.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "106",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont des concessionnaires de véhicules automobiles.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "107",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui relèvent du gouvernement et du secteur public.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "108",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont impliqués dans la vente d'avions ou l'affrètement de jets privés.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.11",
+    "question_number": "109",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques monégasques qui sont impliqués dans le transport.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "1.12",
+    "question_number": "110",
+    "question_text": "Avez-vous des commentaires sur l'une des questions de cette section ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "1.12",
+    "question_number": "111",
+    "question_text": "Prière de partager vos retours et vos commentaires au sujet de cette section.",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.1",
+    "question_number": "112",
+    "question_text": "Votre entité accepte-t-elle ou effectue-t-elle des opérations par chèque avec les clients ?",
+    "question_instructions": "Les paiements avec des clients sont d'opérations entre l'entité déclarante et ses clients pour des produits ou services proposés par l'entité."
+  },
+  {
+    "section": "2.1",
+    "question_number": "113",
+    "question_text": "Votre entité a-t-elle accepté ou effectué des opérations par chèque avec les clients au cours de la période de déclaration ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.1",
+    "question_number": "114",
+    "question_text": "Prière d'indiquer le nombre total d'opérations effectuées par chèque (tant entrantes que sortantes) avec des clients ?",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.1",
+    "question_number": "115",
+    "question_text": "Veuillez indiquer la valeur totale des opérations par chèques effectuées avec des clients (entrantes et sortants) au cours de la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.2",
+    "question_number": "116",
+    "question_text": "D'après votre connaissance des contrats émis pour l'achat, la vente et la location, vos clients ont-ils accepté ou effectué des opérations par chèque au cours de la période de déclaration ?",
+    "question_instructions": "Les paiements par les clients sont d'opérations initiées et effectuées par le client. Par exemple, un client paie son loyer au moyen d'un chèque."
+  },
+  {
+    "section": "2.2",
+    "question_number": "117",
+    "question_text": "Prière d'indiquer le nombre total d'opérations effectuées par chèque (tant entrantes que sortantes) par des clients ?",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.2",
+    "question_number": "118",
+    "question_text": "Veuillez indiquer la valeur totale des opérations par chèques effectuées par des clients (entrantes et sortants) au cours de la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.3",
+    "question_number": "119",
+    "question_text": "Votre entité accepte-t-elle ou effectue-t-elle des transferts électroniques d'argent avec les clients ?",
+    "question_instructions": "Les paiements avec des clients sont d'opérations entre l'entité déclarante et ses clients pour des produits ou services proposés par l'entité. Les transferts électroniques incluent les paiements provenant d'une forme électronique, tels que les virements électroniques, prestataire de service de paiement (PSP) (Pay Pal), les cartes de débit, les cartes de crédit, les paiements en monnaie virtuelle, etc."
+  },
+  {
+    "section": "2.3",
+    "question_number": "120",
+    "question_text": "Votre entité a-t-elle accepté ou effectué des transferts électroniques avec les clients au cours de la période de déclaration ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.3",
+    "question_number": "121",
+    "question_text": "Prière d'indiquer le nombre total d'opérations (tant entrantes que sortantes) effectuées sous forme d'ordre de paiement électronique avec des clients.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.3",
+    "question_number": "122",
+    "question_text": "Veuillez indiquer la valeur totale des transferts électroniques effectués avec des clients (entrants et sortants) au cours de la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers. Les transferts électroniques incluent les paiements provenant d'une forme électronique, tels que les virements électroniques, prestataire de service de paiement (PSP) (Pay Pal), les cartes de débit, les cartes de crédit, les paiements en monnaie virtuelle, etc."
+  },
+  {
+    "section": "2.4",
+    "question_number": "123",
+    "question_text": "D'après votre connaissance des contrats émis pour l'achat, la vente et la location, vos clients ont-ils accepté ou effectué des virements électroniques au cours de la période de déclaration ?",
+    "question_instructions": "Les paiements par les clients sont d'opérations initiées et effectuées par le client. Par exemple, un client effectue un virement bancaire vers un vendeur. Les transferts électroniques incluent les paiements provenant d'une forme électronique, tels que les virements électroniques, prestataire de service de paiement (PSP) (Pay Pal), les cartes de débit, les cartes de crédit, les paiements en monnaie virtuelle, etc."
+  },
+  {
+    "section": "2.4",
+    "question_number": "124",
+    "question_text": "Prière d'indiquer le nombre total d'opérations (tant entrantes que sortantes) effectuées sous forme d'ordre de paiement électronique par/ à l'intention du client.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.4",
+    "question_number": "125",
+    "question_text": "Veuillez indiquer la valeur totale des transferts électroniques effectués par des clients (entrants et sortants) au cours de la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers. Les transferts électroniques incluent les paiements provenant d'une forme électronique, tels que les virements électroniques, prestataire de service de paiement (PSP) (Pay Pal), les cartes de débit, les cartes de crédit, les paiements en monnaie virtuelle, etc."
+  },
+  {
+    "section": "2.5",
+    "question_number": "126",
+    "question_text": "Votre entité accepte-t-elle ou effectue-t-elle des opérations en espèces avec les clients ?",
+    "question_instructions": "Les paiements avec des clients sont d'opérations entre l'entité déclarante et ses clients pour des produits ou services proposés par l'entité."
+  },
+  {
+    "section": "2.5",
+    "question_number": "127",
+    "question_text": "Votre entité a-t-elle accepté ou effectué des opérations en espèces avec les clients au cours de la période de déclaration ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.5",
+    "question_number": "128",
+    "question_text": "Veuillez fournir le nombre total d'opérations en espèces avec les clients, au cours de la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.5",
+    "question_number": "129",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés, par paiements en espèces, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.5",
+    "question_number": "130",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés avec des clients, par paiements en espèces dans des devises autres que l'euro, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.5",
+    "question_number": "131",
+    "question_text": "Prière d'indiquer le nombre total d'opérations effectuées en espèces (tant entrantes que sortantes) pour un montant supérieur ou égal à 10 000 euros avec des clients, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.5",
+    "question_number": "132",
+    "question_text": "Votre entité peut-elle distinguer les opérations en espèces supérieures à 100 000 euros dans votre comptabilité ?",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.5",
+    "question_number": "133",
+    "question_text": "Nombre d'opérations physiques en espèces effectuées avec des personnes physiques pour un montant supérieur à 100 000 euros, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.5",
+    "question_number": "134",
+    "question_text": "Nombre d'opérations physiques en espèces effectuées avec des personnes morales monégasques pour un montant supérieur à 100 000 euros, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.5",
+    "question_number": "135",
+    "question_text": "Nombre d'opérations physiques en espèces effectuées avec des personnes morales étrangères pour un montant supérieur à 100 000 euros, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.6",
+    "question_number": "136",
+    "question_text": "D'après votre connaissance des contrats émis pour l'achat, la vente et la location, vos clients ont-ils accepté ou effectué des opérations en espèces au cours de la période de déclaration ?",
+    "question_instructions": "Les paiements par les clients sont d'opérations initiées et effectuées par le client. Par exemple, un client paie son loyer en espèces."
+  },
+  {
+    "section": "2.6",
+    "question_number": "137",
+    "question_text": "Veuillez fournir le nombre total d'opérations en espèces par des clients, au cours de la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.6",
+    "question_number": "138",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés, par paiements en espèces, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.6",
+    "question_number": "139",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par des clients, par paiements en espèces dans des devises autres que l'euro, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.6",
+    "question_number": "140",
+    "question_text": "Prière d'indiquer le nombre total d'opérations effectuées en espèces (tant entrantes que sortantes) pour un montant supérieur ou égal à 10 000 euros par des clients, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.6",
+    "question_number": "141",
+    "question_text": "Votre entité peut-elle distinguer les opérations en espèces supérieures à 100 000 euros dans votre comptabilité ?",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.6",
+    "question_number": "142",
+    "question_text": "Nombre d'opérations physiques en espèces effectuées par des personnes physiques pour un montant supérieur à 100 000 euros, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.6",
+    "question_number": "143",
+    "question_text": "Nombre d'opérations physiques en espèces effectuées par des personnes morales monégasques pour un montant supérieur à 100 000 euros, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.6",
+    "question_number": "144",
+    "question_text": "Nombre d'opérations physiques en espèces effectuées par des personnes morales étrangères pour un montant supérieur à 100 000 euros, pendant la période de déclaration.",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.7",
+    "question_number": "145",
+    "question_text": "Acceptez-vous ou effectuez-vous des opérations utilisant des crypto-monnaies avec des clients ?",
+    "question_instructions": "L'achat, la vente et la location de biens immobiliers."
+  },
+  {
+    "section": "2.7",
+    "question_number": "146",
+    "question_text": "Prévoyez-vous d'accepter des paiements, ou de proposer des produits et services immobiliers, en utilisant des monnaies virtuelles au cours de l'année prochaine ?",
+    "question_instructions": "Ceci devrait inclure non seulement les paiements reçus ou investis directement en rapport avec les actifs virtuels, mais également les paiements faisant intervenir des tiers (agents, intermédiaires, PSAV, etc.)."
+  },
+  {
+    "section": "2.7",
+    "question_number": "147",
+    "question_text": "Votre entité entretient-elle des relations d'affaires avec des plateformes ou des intermédiaires en matière d'actifs virtuels ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.7",
+    "question_number": "148",
+    "question_text": "Prière de nommer les plateformes ou intermédiaires en matière d'actifs virtuels avec lesquels votre entité entretient des relations d'affaires.",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.8",
+    "question_number": "149",
+    "question_text": "Veuillez indiquer le nombre total de clients uniques, ventilé par nationalité primaire de l'individu, ou par le pays du siège ou de l'immatriculation, pour l'achat et la vente de biens immobiliers au cours de la période de déclaration.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "2.8",
+    "question_number": "150",
+    "question_text": "Combien de clients uniques étaient des acheteurs ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.8",
+    "question_number": "151",
+    "question_text": "Combien de clients uniques étaient des vendeurs ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.8",
+    "question_number": "152",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par les clients, ventilé par nationalité primaire du client, ou par le pays du siège ou de l'immatriculation, pour l'achat et la vente de biens immobiliers au cours de la période de déclaration.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "2.8",
+    "question_number": "153",
+    "question_text": "Pour combien d'achats/ventes avez-vous représenté l'acheteur ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.8",
+    "question_number": "154",
+    "question_text": "Pour combien d'achats/ventes avez-vous représenté le vendeur ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.8",
+    "question_number": "155",
+    "question_text": "Veuillez indiquer le nombre total d'opérations effectuées par les clients, ventilé par nationalité primaire du client, ou par le pays du siège ou de l'immatriculation, pour l'achat et la vente de biens immobiliers au cours de la période de déclaration et des 4 années précédentes.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "2.8",
+    "question_number": "156",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par les clients pour l'achat et la vente de biens immobiliers (en euros) au cours de la période de déclaration, ventilée par nationalité primaire du client ou par le pays du siège ou de l'immatriculation.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "2.8",
+    "question_number": "157",
+    "question_text": "Veuillez indiquer la valeur totale des fonds transférés par les clients pour l'achat et la vente de biens immobiliers (en euros) au cours de la période de déclaration et des 4 années précédentes, ventilée par nationalité primaire du client ou par le pays du siège ou de l'immatriculation.",
+    "question_instructions": "L'achat et la vente de biens immobiliers."
+  },
+  {
+    "section": "2.8",
+    "question_number": "158",
+    "question_text": "Combien d'achats et de ventes de biens immobiliers ont-ils été effectués au cours de la période de déclaration à des fins d'investissement, à l'exclusion des biens utilisés comme résidence principale par l'acheteur ou par des personnes qui lui sont liées ?",
+    "question_instructions": "L'achat et la vente de biens immobiliers. Un membre de la famille, tel qu'un enfant ou un parent, sera considéré comme personne liée à l'acheteur."
+  },
+  {
+    "section": "2.8",
+    "question_number": "159",
+    "question_text": "L'Etat de Monaco a t-il préempté des biens à la vente ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.8",
+    "question_number": "160",
+    "question_text": "Combien de biens ont été acquis par l'Etat de Monaco via l'exercice de son droit de préemption ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.8",
+    "question_number": "161",
+    "question_text": "Quelle était la valeur totale des biens préemptés ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.9",
+    "question_number": "162",
+    "question_text": "Veuillez indiquer le nombre total de biens uniques loués au cours de la période de déclaration.",
+    "question_instructions": "La location de biens."
+  },
+  {
+    "section": "2.9",
+    "question_number": "163",
+    "question_text": "Veuillez indiquer le nombre total d'opérations de location au cours de la période de déclaration.",
+    "question_instructions": "La location de biens."
+  },
+  {
+    "section": "2.9",
+    "question_number": "164",
+    "question_text": "Veuillez indiquer le nombre total de biens locatifs uniques, >= 10.000 € par mois, qui ont été loués à un moment donné au cours de la période de déclaration.",
+    "question_instructions": "La location de biens."
+  },
+  {
+    "section": "2.9",
+    "question_number": "165",
+    "question_text": "Veuillez indiquer le nombre total de biens locatifs uniques, < 10.000 € par mois, qui ont été loués à un moment donné au cours de la période de déclaration.",
+    "question_instructions": "La location de biens."
+  },
+  {
+    "section": "2.10",
+    "question_number": "166",
+    "question_text": "Avez-vous des commentaires sur l'une des questions de cette section ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "2.10",
+    "question_number": "167",
+    "question_text": "Prière de partager vos retours et vos commentaires au sujet de cette section.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.1",
+    "question_number": "168",
+    "question_text": "Votre entité a-elle recours à des tiers locaux pour appliquer certaines/ toutes les mesures de vigilance relatives à la clientèle ?",
+    "question_instructions": "Les institutions financières / entreprises et professions non financières désignées peuvent autoriser le recours à des tiers pour réaliser certains éléments des mesures de vigilance à l'égard de la clientèle afin d'apporter des affaires, à condition que les critères requis soient remplis."
+  },
+  {
+    "section": "3.1",
+    "question_number": "169",
+    "question_text": "Prière d'indiquer le nombre total de clients où des tiers locaux ont été utilisés pour appliquer certaines/ toutes les mesures de vigilance au cours de la période de déclaration, et de les ventiler selon la nationalité principale du client.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.1",
+    "question_number": "170",
+    "question_text": "Votre entité a-elle recours à des tiers étrangers pour appliquer certaines/ toutes les mesures de vigilance relatives à la clientèle ?",
+    "question_instructions": "Les institutions financières / entreprises et professions non financières désignées peuvent autoriser le recours à des tiers pour réaliser certains éléments des mesures de vigilance à l'égard de la clientèle afin d'apporter des affaires, à condition que les critères requis soient remplis."
+  },
+  {
+    "section": "3.1",
+    "question_number": "171",
+    "question_text": "Prière d'indiquer le nombre total de clients où des tiers étrangers ont été utilisés pour appliquer certaines/ toutes les mesures de vigilance au cours de la période de déclaration, et de les ventiler selon la nationalité principale du client.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.1",
+    "question_number": "172",
+    "question_text": "Prière d'indiquer le nombre total de clients où des tiers étrangers ont été utilisés pour appliquer certaines/ toutes les mesures de vigilance au cours de la période de déclaration, et de les ventiler selon le lieu de résidence du tiers étranger.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "173",
+    "question_text": "Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des personnes physiques, dont l'entrée en relation est intervenue au cours de la période de déclaration.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "174",
+    "question_text": "Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des personnes morales, dont l'entrée en relation est intervenue au cours de la période de déclaration.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "175",
+    "question_text": "Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des trusts et d'autres constructions juridiques, dont l'entrée en relation est intervenue au cours de la période de déclaration.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "176",
+    "question_text": "Votre entité entre-t-elle en relation avec des clients sans qu'il y ait de rencontre face à face, soit sur une base non présentielle ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "177",
+    "question_text": "Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des personnes physiques, dont l'entrée en relation s'est effectuée sans rencontre face à face aux fins du devoir de vigilance relatif à la clientèle.",
+    "question_instructions": "L'entité déclarante devrait indiquer si les clients sont démarchés (aux fins du devoir de vigilance relatif à la clientèle) sans rencontre face à face (sur une base non présentielle)."
+  },
+  {
+    "section": "3.2",
+    "question_number": "178",
+    "question_text": "Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des personnes morales, dont l'entrée en relation s'est effectuée sans rencontre face à face aux fins du devoir de vigilance relatif à la clientèle.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "179",
+    "question_text": "Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des trusts et d'autres constructions juridiques, dont l'entrée en relation s'est effectuée sans rencontre face à face aux fins du devoir de vigilance relatif à la clientèle.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "180",
+    "question_text": "Votre entité accepte-t-elle des clients à travers des apporteurs d'affaires ?",
+    "question_instructions": "Un apporteur d'affaires est une institution financière/ une entreprise ou profession non financière désignée qui entretient un rapport direct avec un client, mais qui délègue l'exécution de l'opération à l'entité assujettie (un apporteur d'affaires est une entreprise qui ramène des clients à l'entité autorisée)."
+  },
+  {
+    "section": "3.2",
+    "question_number": "181",
+    "question_text": "L'entité peut-elle fournir des informations sur la nationalité des clients démarchés par l'apporteur d'affaire ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "182",
+    "question_text": "Prière d'indiquer le nombre total de clients démarchés à travers des tiers, en les ventilant selon la nationalité principale du client (dans le cas d'une personne physique) ou selon le pays d'établissement (dans le cas d'une personne morale ou d'une construction juridique).",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "183",
+    "question_text": "Prière d'indiquer le nombre total de clients démarchés à travers des tiers, au cours de la période de déclaration, en les ventilant selon la nationalité principale du client (dans le cas d'une personne physique) ou selon le pays d'établissement (dans le cas d'une personne morale ou d'une construction juridique).",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "184",
+    "question_text": "L'entité peut-elle fournir des informations sur la résidence des apporteurs d'affaire ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "185",
+    "question_text": "Prière d'indiquer le nombre total d'entrées en relation à travers des tiers, en les ventilant selon le lieu de résidence du tiers.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.2",
+    "question_number": "186",
+    "question_text": "Prière d'indiquer le nombre total d'entrées en relation à travers des tiers, au cours de la période de déclaration, en les ventilant selon le lieu de résidence du tiers.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "187",
+    "question_text": "Quelle est la forme juridique de votre entité ?",
+    "question_instructions": "Les types de personnes morales incluent: • Associations monégasques • Autres sociétés civiles • Autres sociétés commerciales • Autres arrangements juridiques • Domaine Privé de l'Etat Monégasque • Entreprise individuelle • Fondation monégasque • Groupement d'intérêt économique GIE • Société en nom collectif SNC • Société civile immobilière SCI • Société civile particulière SCP • Société en commandite simple SCS • Société à responsabilité limitée SARL • Société anonyme monégasque SAM • Société en commandite par actions SCA • Trusts"
+  },
+  {
+    "section": "3.3",
+    "question_number": "188",
+    "question_text": "Veuillez indiquer le nombre total d'employés de votre entité, ainsi que les partenaires et propriétaires non salariés, à la fin de la période de déclaration.",
+    "question_instructions": "L'entité déclarante doit divulguer le nombre d'employés, d'associés et de propriétaires, quelle que soit leur fonction. Le nombre à la fin de la période de déclaration devrait être utilisé."
+  },
+  {
+    "section": "3.3",
+    "question_number": "189",
+    "question_text": "Le titulaire de la carte professionnelle exerçant des activités d'agent immobilier est-il une personne morale ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "190",
+    "question_text": "Veuillez indiquer le nombre d'actionnaires détenant une participation de 25 % ou plus, ventilé par nationalité primaire (personne physique) ou par pays d'établissement (personnes morales et constructions juridiques).",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "191",
+    "question_text": "Veuillez indiquer le nombre de bénéficiaires effectifs détenant, soit une participation de 25 % ou plus, soit contrôlant directement ou indirectement la société, soit étant un représentant légal, ventilé par nationalité primaire.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "192",
+    "question_text": "Votre entité dispose-t-elle des succursales, des filiales ou des agences ?",
+    "question_instructions": "Pour les besoins de cette question, le terme « filiale » désigne une entité secondaire de la société mère. Prière de ne pas inclure les bureaux/ les points de service clientèle souvent connus de manière informelle sous la désignation de « filiales »."
+  },
+  {
+    "section": "3.3",
+    "question_number": "193",
+    "question_text": "Prière d'indiquer le nombre total de succursales, filiales et agences de l'entité locale autorisée, en les ventilant par pays.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "194",
+    "question_text": "Votre entité est-elle une succursale ou une filiale d'une autre entité ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "195",
+    "question_text": "Votre entité est-elle une succursale ou une filiale d'une entité étrangère ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "196",
+    "question_text": "Si oui, dans quel pays opère la société mère ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "197",
+    "question_text": "Prière d'indiquer le nombre total de succursales et de filiales étrangères (à l'extérieur de Monaco).",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "198",
+    "question_text": "Au cours de la période de déclaration, votre entité a-t-elle rencontré l'un des événements suivants : Un changement de dirigeant(s) légal(aux), de membres de la direction générale ou du conseil d'administration ou de surveillance, des associés/actionnaires (participation de 25 % ou plus), des bénéficiaires effectifs, de toute autre personne exerçant un contrôle direct ou indirect sur votre entité ou la conduite de son activité ? A subi une évolution ou une modification significative de ses activités ? D'autres changements statutaires ? Changement de responsables LBC/FT-P ?",
+    "question_instructions": "Un changement de dirigeant(s) légal(aux), de membres de la direction générale ou du conseil d'administration ou de surveillance, des associés/actionnaires (participation de 25 % ou plus), des bénéficiaires effectifs, de toute autre personne exerçant un contrôle direct ou indirect sur votre entité ou la conduite de son activité ? A subi une évolution ou une modification significative de ses activités ? D'autres changements statutaires ? Changement de responsables LBC/FT-P ?"
+  },
+  {
+    "section": "3.3",
+    "question_number": "199",
+    "question_text": "Veuillez renseigner l'évolution ou la modification.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "200",
+    "question_text": "Votre entité fait-elle partie d'un réseau ou d'un groupe international d'entreprises ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "201",
+    "question_text": "Si oui, veuillez préciser lequel.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "202",
+    "question_text": "Votre entité est-elle membre d'une association ou d'une société professionnelle ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.3",
+    "question_number": "203",
+    "question_text": "Si oui, veuillez préciser lequel.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.4",
+    "question_number": "204",
+    "question_text": "Chiffre d'affaires pour la période de déclaration.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.4",
+    "question_number": "205",
+    "question_text": "Chiffre d'affaires pour la période de déclaration réalisé dans la Principauté de Monaco.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.4",
+    "question_number": "206",
+    "question_text": "Chiffre d'affaires pour la période de déclaration réalisé en dehors de la Principauté de Monaco.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.4",
+    "question_number": "207",
+    "question_text": "Veuillez indiquer le montant de votre dernière déclaration annuelle de TVA.",
+    "question_instructions": "Total de douze mensualités. En cas de TVA négative, apporter des précisions dans la prochaine case commentaire."
+  },
+  {
+    "section": "3.5",
+    "question_number": "208",
+    "question_text": "Prière d'indiquer le nombre total de prospects (clients potentiels) qui ont été rejetés en raison de considérations de blanchiment de capitaux, de financement du terrorisme, ou contre le financement de la prolifération des armes de destruction massive au cours de la période de déclaration.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.5",
+    "question_number": "209",
+    "question_text": "Votre entité peut-elle distinguer si un prospect (client potentiel) a été rejeté en raison d'un attribut / activité / déficience du client ou principalement en raison de la pratique discrétionnaire de LBC/FT-P de l'entité ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.5",
+    "question_number": "210",
+    "question_text": "Prière d'indiquer le nombre total de prospects (clients potentiels) qui ont été rejetés en raison de considérations de blanchiment de capitaux, de financement du terrorisme, ou contre le financement de la prolifération des armes de destruction massive au cours de la période de déclaration pour des raisons liées aux attributs, activités ou déficiences du client.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.6",
+    "question_number": "211",
+    "question_text": "Prière d'indiquer le nombre total de relations clients résiliées en raison de considérations liées au blanchiment de capitaux, au financement du terrorisme, ou contre le financement de la prolifération des armes de destruction massive au cours de la période de déclaration.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.6",
+    "question_number": "212",
+    "question_text": "Votre entité peut-elle distinguer si une relation d'affaires a été résiliée en raison d'un attribut / activité / déficience du client ou principalement en raison de la pratique discrétionnaire de LBC/FT-P de l'entité ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.6",
+    "question_number": "213",
+    "question_text": "Prière d'indiquer le nombre total de relations d'affaires avec des clients qui ont été résiliées en raison de considérations de blanchiment de capitaux, de financement du terrorisme, ou contre le financement de la prolifération des armes de destruction massive au cours de la période de déclaration, du fait des attributs / activités / déficiences du client.",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.7",
+    "question_number": "214",
+    "question_text": "Avez-vous des commentaires sur l'une des questions de cette section ?",
+    "question_instructions": ""
+  },
+  {
+    "section": "3.7",
+    "question_number": "215",
+    "question_text": "Prière de partager vos retours et vos commentaires au sujet de cette section.",
+    "question_instructions": ""
+  }
+]
