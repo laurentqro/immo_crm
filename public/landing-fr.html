@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Immo CRM &mdash; Conformit&eacute; LCB/FT pour l'immobilier &agrave; Monaco</title>
+  <meta name="description" content="Immo CRM automatise la conformit&eacute; LCB/FT pour les professionnels de l'immobilier mon&eacute;gasque. Entr&eacute;e en relation, scoring de risque, surveillance des transactions et g&eacute;n&eacute;ration du questionnaire AMSF &mdash; depuis une seule plateforme.">
+  <meta property="og:title" content="Immo CRM &mdash; Conformit&eacute; LCB/FT pour l'immobilier &agrave; Monaco">
+  <meta property="og:description" content="Ne redoutez plus votre d&eacute;claration annuelle AMSF. Immo CRM automatise votre conformit&eacute; pour que vous puissiez vous concentrer sur l'immobilier.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon-512.png">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:locale:alternate" content="en_GB">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: '#f0f3f9',
+              100: '#d9e0f0',
+              200: '#b3c1e0',
+              300: '#8da2d1',
+              400: '#6783c1',
+              500: '#4164b2',
+              600: '#34508e',
+              700: '#273c6b',
+              800: '#1a2847',
+              900: '#0d1424',
+              950: '#070a12',
+            },
+            gold: {
+              400: '#d4a84b',
+              500: '#c9952e',
+              600: '#a67a25',
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+    .fade-in-delay-5 { transition-delay: 0.5s; }
+  </style>
+</head>
+<body class="bg-white text-navy-900 antialiased">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur border-b border-navy-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#hero" class="text-xl font-bold text-navy-800 tracking-tight">Immo<span class="text-gold-500">CRM</span></a>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-navy-600">
+        <a href="#benefits" class="hover:text-navy-900 transition-colors">Avantages</a>
+        <a href="#how-it-works" class="hover:text-navy-900 transition-colors">Fonctionnement</a>
+        <a href="#faq" class="hover:text-navy-900 transition-colors">FAQ</a>
+        <a href="#waitlist" class="bg-navy-800 text-white px-4 py-2 rounded-lg hover:bg-navy-700 transition-colors">Liste d'attente</a>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/landing.html" class="text-sm text-navy-500 hover:text-navy-700 transition-colors border border-navy-200 rounded px-2 py-1">EN</a>
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-navy-600" aria-label="Ouvrir le menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-navy-100 bg-white px-4 py-4 space-y-3">
+      <a href="#benefits" class="block text-sm text-navy-600 hover:text-navy-900">Avantages</a>
+      <a href="#how-it-works" class="block text-sm text-navy-600 hover:text-navy-900">Fonctionnement</a>
+      <a href="#faq" class="block text-sm text-navy-600 hover:text-navy-900">FAQ</a>
+      <a href="#waitlist" class="block text-sm bg-navy-800 text-white text-center px-4 py-2 rounded-lg">Liste d'attente</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative pt-32 pb-20 md:pt-40 md:pb-28 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-gold-500 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-20 w-96 h-96 bg-navy-400 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-white/10 text-white/80 text-sm px-4 py-1.5 rounded-full mb-6 border border-white/10">
+            <svg class="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Con&ccedil;u pour la r&eacute;glementation LCB/FT de Monaco
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+            La conformit&eacute; est obligatoire.<br>
+            <span class="text-gold-400">La migraine, non.</span>
+          </h1>
+          <p class="text-lg text-navy-200 mb-8 max-w-xl">
+            Une seule plateforme pour remplacer les tableurs &eacute;parpill&eacute;s, le XBRL manuel et l'angoisse des audits. Immo CRM g&egrave;re votre conformit&eacute; LCB/KYC pour que vous puissiez vous concentrer sur votre m&eacute;tier.
+          </p>
+          <a href="#waitlist" class="inline-flex items-center gap-2 bg-gold-500 text-navy-900 font-semibold px-6 py-3 rounded-lg hover:bg-gold-400 transition-colors text-lg">
+            Rejoindre la liste d'attente
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </a>
+        </div>
+
+        <!-- Waitlist Form -->
+        <div id="waitlist" class="bg-white rounded-2xl shadow-2xl p-8">
+          <h2 class="text-2xl font-bold text-navy-900 mb-2">Obtenez un acc&egrave;s anticipé</h2>
+          <p class="text-navy-500 mb-6 text-sm">Soyez parmi les premiers inform&eacute;s du lancement d'Immo CRM. Pas de spam, juste des mises &agrave; jour.</p>
+          <form action="/waitlist" method="POST" class="space-y-4">
+            <div>
+              <label for="name" class="block text-sm font-medium text-navy-700 mb-1">Nom complet</label>
+              <input type="text" id="name" name="name" required
+                class="w-full border border-navy-200 rounded-lg px-4 py-2.5 text-navy-900 placeholder-navy-300 focus:ring-2 focus:ring-gold-500 focus:border-gold-500 outline-none transition"
+                placeholder="Jean Dupont">
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-navy-700 mb-1">Email professionnel</label>
+              <input type="email" id="email" name="email" required
+                class="w-full border border-navy-200 rounded-lg px-4 py-2.5 text-navy-900 placeholder-navy-300 focus:ring-2 focus:ring-gold-500 focus:border-gold-500 outline-none transition"
+                placeholder="jean@agence-monaco.mc">
+            </div>
+            <div>
+              <label for="company" class="block text-sm font-medium text-navy-700 mb-1">Nom de la soci&eacute;t&eacute;</label>
+              <input type="text" id="company" name="company" required
+                class="w-full border border-navy-200 rounded-lg px-4 py-2.5 text-navy-900 placeholder-navy-300 focus:ring-2 focus:ring-gold-500 focus:border-gold-500 outline-none transition"
+                placeholder="Monaco Immobilier SARL">
+            </div>
+            <div>
+              <label for="role" class="block text-sm font-medium text-navy-700 mb-1">Votre r&ocirc;le</label>
+              <select id="role" name="role" required
+                class="w-full border border-navy-200 rounded-lg px-4 py-2.5 text-navy-900 focus:ring-2 focus:ring-gold-500 focus:border-gold-500 outline-none transition bg-white">
+                <option value="" disabled selected>S&eacute;lectionnez votre r&ocirc;le</option>
+                <option value="agent_immobilier">Agent immobilier</option>
+                <option value="notaire">Notaire</option>
+                <option value="promoteur">Promoteur</option>
+                <option value="syndic">Syndic</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <button type="submit"
+              class="w-full bg-navy-800 text-white font-semibold py-3 rounded-lg hover:bg-navy-700 transition-colors">
+              Rejoindre la liste d'attente
+            </button>
+            <p class="text-xs text-navy-400 text-center">Nous respectons votre vie priv&eacute;e. D&eacute;sinscription &agrave; tout moment.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section id="benefits" class="py-20 md:py-28 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Tout ce dont vous avez besoin, rien de superflu</h2>
+        <p class="text-lg text-navy-500 max-w-2xl mx-auto">Con&ccedil;u sp&eacute;cifiquement pour la conformit&eacute; immobili&egrave;re &agrave; Monaco. Chaque fonctionnalit&eacute; correspond directement aux exigences de l'AMSF.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="fade-in bg-white rounded-xl p-8 shadow-sm border border-navy-100 hover:shadow-md hover:border-gold-400/40 transition-all duration-300">
+          <div class="w-12 h-12 bg-navy-100 text-navy-700 rounded-lg flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy-900 mb-2">Questionnaires AMSF automatis&eacute;s</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Vos d&eacute;clarations r&eacute;glementaires annuelles g&eacute;n&eacute;r&eacute;es &agrave; partir de vos donn&eacute;es en temps r&eacute;el. Les 323 champs, remplis automatiquement. Plus jamais de saisie XBRL manuelle.</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="fade-in fade-in-delay-1 bg-white rounded-xl p-8 shadow-sm border border-navy-100 hover:shadow-md hover:border-gold-400/40 transition-all duration-300">
+          <div class="w-12 h-12 bg-navy-100 text-navy-700 rounded-lg flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy-900 mb-2">Entr&eacute;e en relation & KYC</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Processus structur&eacute; d'entr&eacute;e en relation avec collecte de documents, v&eacute;rification PPE et scoring de risque. Chaque &eacute;tape enregistr&eacute;e pour vos audits.</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="fade-in fade-in-delay-2 bg-white rounded-xl p-8 shadow-sm border border-navy-100 hover:shadow-md hover:border-gold-400/40 transition-all duration-300">
+          <div class="w-12 h-12 bg-navy-100 text-navy-700 rounded-lg flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy-900 mb-2">Suivi des b&eacute;n&eacute;ficiaires effectifs</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Cha&icirc;nes compl&egrave;tes de b&eacute;n&eacute;ficiaires effectifs avec classification HNWI/UHNWI. Les structures de d&eacute;tention automatiquement refl&eacute;t&eacute;es dans vos rapports de conformit&eacute;.</p>
+        </div>
+        <!-- Card 4 -->
+        <div class="fade-in fade-in-delay-3 bg-white rounded-xl p-8 shadow-sm border border-navy-100 hover:shadow-md hover:border-gold-400/40 transition-all duration-300">
+          <div class="w-12 h-12 bg-navy-100 text-navy-700 rounded-lg flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy-900 mb-2">Surveillance des transactions</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Suivez les paiements en esp&egrave;ces, les virements transfrontaliers et les activit&eacute;s suspectes. Pistes d'audit compl&egrave;tes avec horodatages et d&eacute;cisions document&eacute;es.</p>
+        </div>
+        <!-- Card 5 -->
+        <div class="fade-in fade-in-delay-4 bg-white rounded-xl p-8 shadow-sm border border-navy-100 hover:shadow-md hover:border-gold-400/40 transition-all duration-300">
+          <div class="w-12 h-12 bg-navy-100 text-navy-700 rounded-lg flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy-900 mb-2">Gestion de la formation</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Enregistrez les heures de formation LCB par collaborateur, suivez les certifications et satisfaites les exigences r&eacute;glementaires &mdash; le tout automatiquement int&eacute;gr&eacute; &agrave; votre questionnaire.</p>
+        </div>
+        <!-- Card 6 -->
+        <div class="fade-in fade-in-delay-5 bg-white rounded-xl p-8 shadow-sm border border-navy-100 hover:shadow-md hover:border-gold-400/40 transition-all duration-300">
+          <div class="w-12 h-12 bg-navy-100 text-navy-700 rounded-lg flex items-center justify-center mb-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy-900 mb-2">Pr&ecirc;t pour l'audit &agrave; tout moment</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Chaque d&eacute;cision document&eacute;e, chaque champ tra&ccedil;able. Quand l'AMSF se pr&eacute;sente, vous &ecirc;tes pr&ecirc;t &mdash; pas en train de courir dans tous les sens.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="py-16 bg-navy-900">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+        <div class="fade-in">
+          <div class="text-gold-400 font-bold text-3xl mb-2">323</div>
+          <p class="text-navy-200 text-sm">champs du questionnaire AMSF, enti&egrave;rement automatis&eacute;s</p>
+        </div>
+        <div class="fade-in fade-in-delay-1">
+          <div class="text-gold-400 font-bold text-3xl mb-2">100%</div>
+          <p class="text-navy-200 text-sm">Conforme aux exigences de l'AMSF (amsf.mc)</p>
+        </div>
+        <div class="fade-in fade-in-delay-2">
+          <div class="text-gold-400 font-bold text-3xl mb-2">Monaco</div>
+          <p class="text-navy-200 text-sm">Con&ccedil;u par des professionnels de la conformit&eacute; &agrave; Monaco</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Trois &eacute;tapes vers la s&eacute;r&eacute;nit&eacute; r&eacute;glementaire</h2>
+        <p class="text-lg text-navy-500 max-w-2xl mx-auto">Aucune courbe d'apprentissage. Aucune expertise XBRL requise. Ajoutez vos donn&eacute;es et laissez Immo CRM faire le reste.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-12">
+        <div class="fade-in text-center">
+          <div class="w-16 h-16 bg-navy-800 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">1</div>
+          <h3 class="text-xl font-bold text-navy-900 mb-3">Ajoutez vos clients et biens</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Saisissez les informations clients, t&eacute;l&eacute;chargez les documents et enregistrez les biens immobiliers. Immo CRM structure tout pour la conformit&eacute; d&egrave;s le premier jour.</p>
+        </div>
+        <div class="fade-in fade-in-delay-1 text-center">
+          <div class="w-16 h-16 bg-navy-800 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">2</div>
+          <h3 class="text-xl font-bold text-navy-900 mb-3">Scoring de risque & suivi automatiques</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Immo CRM &eacute;value les risques clients, suit les b&eacute;n&eacute;ficiaires effectifs, surveille les transactions et signale tout ce qui n&eacute;cessite votre attention.</p>
+        </div>
+        <div class="fade-in fade-in-delay-2 text-center">
+          <div class="w-16 h-16 bg-gold-500 text-navy-900 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">3</div>
+          <h3 class="text-xl font-bold text-navy-900 mb-3">G&eacute;n&eacute;rez & soumettez votre questionnaire AMSF</h3>
+          <p class="text-navy-500 text-sm leading-relaxed">Un clic g&eacute;n&egrave;re votre questionnaire AMSF complet &mdash; les 323 champs remplis &agrave; partir de vos donn&eacute;es en temps r&eacute;el. V&eacute;rifiez, validez et soumettez.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-20 md:py-28 bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-3xl sm:text-4xl font-bold text-navy-900 mb-4">Questions fr&eacute;quentes</h2>
+      </div>
+      <div class="space-y-4">
+        <!-- FAQ 1 -->
+        <div class="fade-in bg-white rounded-xl border border-navy-100 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between" aria-expanded="false">
+            <span class="font-semibold text-navy-900">&Agrave; qui s'adresse Immo CRM ?</span>
+            <svg class="faq-icon w-5 h-5 text-navy-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-5">
+            <p class="text-navy-500 text-sm leading-relaxed">Immo CRM est con&ccedil;u pour les professionnels de l'immobilier mon&eacute;gasque soumis &agrave; la r&eacute;glementation LCB/FT : agents immobiliers, notaires, promoteurs, syndics, et toute personne devant soumettre des questionnaires annuels &agrave; l'AMSF. Si vous avez d&eacute;j&agrave; lutt&eacute; avec des fichiers XBRL ou redout&eacute; un audit, c'est pour vous.</p>
+          </div>
+        </div>
+        <!-- FAQ 2 -->
+        <div class="fade-in fade-in-delay-1 bg-white rounded-xl border border-navy-100 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between" aria-expanded="false">
+            <span class="font-semibold text-navy-900">Quelles r&eacute;glementations sont couvertes ?</span>
+            <svg class="faq-icon w-5 h-5 text-navy-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-5">
+            <p class="text-navy-500 text-sm leading-relaxed">Immo CRM couvre le cadre r&eacute;glementaire LCB/FT de Monaco tel qu'appliqu&eacute; par l'AMSF (Autorit&eacute; Mon&eacute;gasque de S&eacute;curit&eacute; Financi&egrave;re). Cela inclut les mesures de vigilance (CDD), la vigilance renforc&eacute;e (EDD), l'identification des b&eacute;n&eacute;ficiaires effectifs, la surveillance des transactions, la d&eacute;claration d'activit&eacute;s suspectes et la soumission du questionnaire r&eacute;glementaire annuel.</p>
+          </div>
+        </div>
+        <!-- FAQ 3 -->
+        <div class="fade-in fade-in-delay-2 bg-white rounded-xl border border-navy-100 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between" aria-expanded="false">
+            <span class="font-semibold text-navy-900">Faut-il comprendre le XBRL ?</span>
+            <svg class="faq-icon w-5 h-5 text-navy-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-5">
+            <p class="text-navy-500 text-sm leading-relaxed">Non. Vous ne verrez jamais une seule ligne de XBRL. Immo CRM g&egrave;re l'int&eacute;gralit&eacute; du format technique en arri&egrave;re-plan. Vous travaillez en langage courant &mdash; noms de clients, niveaux de risque, montants de transactions &mdash; et le syst&egrave;me g&eacute;n&egrave;re le fichier XBRL requis par l'AMSF.</p>
+          </div>
+        </div>
+        <!-- FAQ 4 -->
+        <div class="fade-in fade-in-delay-3 bg-white rounded-xl border border-navy-100 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between" aria-expanded="false">
+            <span class="font-semibold text-navy-900">Quand sera-t-il disponible ?</span>
+            <svg class="faq-icon w-5 h-5 text-navy-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-5">
+            <p class="text-navy-500 text-sm leading-relaxed">Nous sommes actuellement en version b&ecirc;ta priv&eacute;e avec des cabinets mon&eacute;gasques s&eacute;lectionn&eacute;s. Inscrivez-vous sur la liste d'attente pour &ecirc;tre inform&eacute; de l'ouverture des acc&egrave;s. Les premiers inscrits b&eacute;n&eacute;ficieront d'un accompagnement prioritaire et d'un support d&eacute;di&eacute; &agrave; la mise en place.</p>
+          </div>
+        </div>
+        <!-- FAQ 5 -->
+        <div class="fade-in fade-in-delay-4 bg-white rounded-xl border border-navy-100 overflow-hidden">
+          <button class="faq-toggle w-full text-left px-6 py-5 flex items-center justify-between" aria-expanded="false">
+            <span class="font-semibold text-navy-900">Mes donn&eacute;es sont-elles s&eacute;curis&eacute;es ?</span>
+            <svg class="faq-icon w-5 h-5 text-navy-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-6 pb-5">
+            <p class="text-navy-500 text-sm leading-relaxed">La s&eacute;curit&eacute; est au c&oelig;ur de notre architecture. Toutes les donn&eacute;es sont chiffr&eacute;es au repos et en transit. Les contr&ocirc;les d'acc&egrave;s sont bas&eacute;s sur les r&ocirc;les, avec un journal d'audit complet de chaque action. Vos donn&eacute;es de conformit&eacute; sont h&eacute;berg&eacute;es dans des centres de donn&eacute;es europ&eacute;ens et ne sont jamais partag&eacute;es avec des tiers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="py-20 md:py-28 bg-navy-900">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Ne redoutez plus votre prochaine d&eacute;claration AMSF</h2>
+      <p class="text-navy-200 text-lg mb-8 max-w-xl mx-auto">Rejoignez les professionnels de l'immobilier mon&eacute;gasque pr&ecirc;ts &agrave; abandonner les tableurs et le XBRL manuel.</p>
+      <a href="#waitlist" class="inline-flex items-center gap-2 bg-gold-500 text-navy-900 font-semibold px-8 py-4 rounded-lg hover:bg-gold-400 transition-colors text-lg">
+        Rejoindre la liste d'attente
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-navy-950 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <span class="text-lg font-bold text-white tracking-tight">Immo<span class="text-gold-500">CRM</span></span>
+          <span class="text-navy-500 text-sm">&mdash; Conformit&eacute; LCB/KYC pour l'immobilier mon&eacute;gasque</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-navy-400">
+          <a href="mailto:contact@immocrm.mc" class="hover:text-white transition-colors">contact@immocrm.mc</a>
+          <span class="text-navy-600">|</span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-3" viewBox="0 0 640 480"><rect width="213.3" height="480" fill="#CE1126"/><rect x="213.3" width="213.4" height="480" fill="#fff"/><rect x="426.7" width="213.3" height="480" fill="#CE1126"/></svg>
+            Monaco
+          </span>
+          <span class="text-navy-600">|</span>
+          <a href="/landing.html" class="hover:text-white transition-colors">English</a>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-navy-800 text-center text-sm text-navy-500">
+        &copy; 2026 Immo CRM. Tous droits r&eacute;serv&eacute;s.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.faq-icon');
+        const isOpen = !content.classList.contains('hidden');
+
+        // Close all
+        document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+        document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = '');
+        document.querySelectorAll('.faq-toggle').forEach(b => b.setAttribute('aria-expanded', 'false'));
+
+        // Toggle current
+        if (!isOpen) {
+          content.classList.remove('hidden');
+          icon.style.transform = 'rotate(180deg)';
+          button.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
