@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Jumpstart Pro Rails is a commercial multi-tenant SaaS starter application built with Rails 8. It provides subscription billing, team management, authentication, and modern Rails patterns for building subscription-based web applications.
+Immo CRM is an AML/KYC compliance CRM for Luxembourg real estate professionals, built on Jumpstart Pro Rails 8. It manages client onboarding, beneficial owner tracking, transaction monitoring, managed properties, staff training records, and annual AMSF regulatory survey submissions (XBRL via `amsf_survey` gem).
 
 ## Development Commands
 
@@ -91,6 +91,7 @@ end
 ## Routes Organization
 
 Routes are modularized in `config/routes/`:
+- `crm.rb` - CRM resources: clients, beneficial owners, transactions, submissions, settings, etc.
 - `accounts.rb` - Account management, switching, invitations
 - `billing.rb` - Subscription, payment, receipt routes
 - `users.rb` - User profile, settings, authentication
@@ -98,6 +99,8 @@ Routes are modularized in `config/routes/`:
 
 ## Key Directories
 
+- `app/models/survey/fields/` - AMSF survey field implementations (5 modules + helpers)
+- `app/controllers/` - CRM controllers (clients, beneficial_owners, transactions, submissions, etc.)
 - `app/controllers/accounts/` - Account-scoped controllers
 - `app/models/concerns/` - Shared model modules
 - `app/policies/` - Pundit authorization policies
