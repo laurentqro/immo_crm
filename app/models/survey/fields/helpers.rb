@@ -81,6 +81,34 @@ class Survey
           .group(:incorporation_country)
           .count
       end
+
+      # VASP clients NOT in AMSF named types, grouped by country (for "other" bucket)
+      def vasp_clients_grouped_by_country_other
+        clients_kept
+          .where(is_vasp: true)
+          .where.not(vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES)
+          .where.not(incorporation_country: [nil, ""])
+          .group(:incorporation_country)
+          .count
+      end
+
+      # VASP transactions NOT in AMSF named types
+      def vasp_transactions_by_type_other
+        year_transactions
+          .joins(:client)
+          .where(clients: { is_vasp: true })
+          .where.not(clients: { vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES })
+          .count
+      end
+
+      # VASP funds NOT in AMSF named types
+      def vasp_funds_by_type_other
+        year_transactions
+          .joins(:client)
+          .where(clients: { is_vasp: true })
+          .where.not(clients: { vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES })
+          .sum(:transaction_value)
+      end
     end
   end
 end

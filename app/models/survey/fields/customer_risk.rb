@@ -297,15 +297,18 @@ class Survey
       end
 
       def a13601other
-        clients_kept.where(is_vasp: true, vasp_type: "OTHER").exists? ? "Oui" : "Non"
+        clients_kept
+          .where(is_vasp: true)
+          .where.not(vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES)
+          .exists? ? "Oui" : "Non"
       end
 
       def a13603db
-        vasp_transactions_by_type("OTHER")
+        vasp_transactions_by_type_other
       end
 
       def a13604db
-        vasp_funds_by_type("OTHER")
+        vasp_funds_by_type_other
       end
 
       # Does entity provide other VASP services
@@ -313,8 +316,27 @@ class Survey
         setting_value("a13601") || "Non"
       end
 
+      # Description of "other" VASP services — derived from client data.
+      # Collects VASP_TYPE_LABELS for non-AMSF-named types + any free-text vasp_other_service_type values.
       def a13604e
-        setting_value("vasp_other_services")
+        other_vasp_clients = clients_kept
+          .where(is_vasp: true)
+          .where.not(vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES)
+
+        labels = other_vasp_clients
+          .where.not(vasp_type: "OTHER")
+          .distinct
+          .pluck(:vasp_type)
+          .filter_map { |t| AmsfConstants::VASP_TYPE_LABELS[t] }
+
+        free_texts = other_vasp_clients
+          .where(vasp_type: "OTHER")
+          .where.not(vasp_other_service_type: [nil, ""])
+          .distinct
+          .pluck(:vasp_other_service_type)
+
+        combined = (labels + free_texts).uniq
+        combined.any? ? combined.join(", ") : nil
       end
 
       # === Beneficial Owner Statistics ===
@@ -693,9 +715,9 @@ class Survey
         vasp_clients_grouped_by_country("ICO")
       end
 
-      # VASP Other clients grouped by country
+      # VASP Other clients grouped by country (all non-AMSF-named types)
       def a13602d
-        vasp_clients_grouped_by_country("OTHER")
+        vasp_clients_grouped_by_country_other
       end
 
       # Secondary nationalities for individuals

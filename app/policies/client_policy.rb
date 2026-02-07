@@ -49,6 +49,7 @@ class ClientPolicy < ApplicationPolicy
       :risk_level,
       :is_vasp,
       :vasp_type,
+      :vasp_other_service_type,
       :legal_person_type,
       :business_sector,
       :became_client_at,

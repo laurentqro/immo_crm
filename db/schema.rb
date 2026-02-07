@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_04_212755) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_07_171910) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -203,6 +203,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_04_212755) do
     t.string "trustee_name"
     t.string "trustee_nationality"
     t.datetime "updated_at", null: false
+    t.string "vasp_other_service_type"
     t.string "vasp_type"
     t.index ["client_type"], name: "index_clients_on_client_type"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at"

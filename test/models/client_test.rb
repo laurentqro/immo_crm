@@ -190,17 +190,63 @@ class ClientTest < ActiveSupport::TestCase
   end
 
   test "accepts all valid vasp_types" do
-    %w[CUSTODIAN EXCHANGE ICO OTHER].each do |type|
-      client = Client.new(
+    AmsfConstants::VASP_TYPES.each do |type|
+      attrs = {
         organization: @organization,
         name: "VASP Client",
         client_type: "LEGAL_ENTITY",
         legal_person_type: "SARL",
         is_vasp: true,
         vasp_type: type
-      )
-      assert client.valid?, "Expected vasp_type '#{type}' to be valid"
+      }
+      # OTHER requires vasp_other_service_type
+      attrs[:vasp_other_service_type] = "Test service" if type == "OTHER"
+
+      client = Client.new(attrs)
+      assert client.valid?, "Expected vasp_type '#{type}' to be valid, errors: #{client.errors.full_messages}"
     end
+  end
+
+  test "requires vasp_other_service_type when vasp_type is OTHER" do
+    client = Client.new(
+      organization: @organization,
+      name: "Other VASP",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "SARL",
+      is_vasp: true,
+      vasp_type: "OTHER"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:vasp_other_service_type], "can't be blank"
+  end
+
+  test "vasp_other_service_type not required when vasp_type is not OTHER" do
+    client = Client.new(
+      organization: @organization,
+      name: "Exchange VASP",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "SARL",
+      is_vasp: true,
+      vasp_type: "EXCHANGE"
+    )
+    assert client.valid?
+  end
+
+  test "clears vasp_other_service_type when vasp_type changes from OTHER" do
+    client = Client.create!(
+      organization: @organization,
+      name: "Other VASP",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "SARL",
+      is_vasp: true,
+      vasp_type: "OTHER",
+      vasp_other_service_type: "Crypto ATM operator"
+    )
+
+    client.update!(vasp_type: "EXCHANGE")
+    client.reload
+
+    assert_nil client.vasp_other_service_type
   end
 
   # === Optional Field Validations ===

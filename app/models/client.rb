@@ -33,6 +33,7 @@ class Client < ApplicationRecord
 
   validates :vasp_type, presence: true, if: :is_vasp?
   validates :vasp_type, inclusion: { in: VASP_TYPES }, allow_blank: true
+  validates :vasp_other_service_type, presence: true, if: -> { is_vasp? && vasp_type == "OTHER" }
 
   # Trust-specific validations
   validates :trustee_name, presence: true, if: :trust?
@@ -162,9 +163,13 @@ class Client < ApplicationRecord
     self.pep_type = nil unless is_pep?
   end
 
-  # Clear vasp_type when is_vasp is set to false to maintain data consistency
+  # Clear vasp_type and vasp_other_service_type when is_vasp is false or vasp_type changes from OTHER
   def clear_vasp_type_if_not_vasp
-    self.vasp_type = nil unless is_vasp?
+    unless is_vasp?
+      self.vasp_type = nil
+      self.vasp_other_service_type = nil
+    end
+    self.vasp_other_service_type = nil if vasp_type != "OTHER"
   end
 
   # Clear third-party CDD fields when third_party_cdd is set to false

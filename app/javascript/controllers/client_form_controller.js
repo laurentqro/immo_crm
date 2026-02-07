@@ -14,6 +14,7 @@ export default class extends Controller {
     "pepType",
     "isVasp",
     "vaspType",
+    "vaspOtherServiceType",
     "dueDiligenceLevel",
     "simplifiedDdReason",
     "introducedByThirdParty",
@@ -74,6 +75,13 @@ export default class extends Controller {
 
     const isVasp = this.isVaspTarget.checked
     this.vaspTypeTarget.classList.toggle("hidden", !isVasp)
+
+    // Show/hide free-text field for "OTHER" vasp type
+    if (this.hasVaspOtherServiceTypeTarget) {
+      const vaspTypeSelect = this.vaspTypeTarget.querySelector("select")
+      const isOther = isVasp && vaspTypeSelect?.value === "OTHER"
+      this.vaspOtherServiceTypeTarget.classList.toggle("hidden", !isOther)
+    }
   }
 
   toggleSimplifiedReason() {

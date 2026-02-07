@@ -598,15 +598,17 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 1, result["CH"]
   end
 
-  test "a13602d returns Hash of VASP other clients grouped by country" do
+  test "a13602d returns Hash of all non-AMSF-named VASP clients grouped by country" do
     org = organizations(:compliance_test_org)
     survey = Survey.new(organization: org, year: Date.current.year)
 
     result = survey.send(:a13602d)
 
     assert_kind_of Hash, result
-    assert_equal 1, result.values.sum
+    # vasp_other_mc (DEFI, MC) + vasp_other_freetext_de (OTHER, DE)
+    assert_equal 2, result.values.sum
     assert_equal 1, result["MC"]
+    assert_equal 1, result["DE"]
   end
 
   test "a13602a returns empty Hash when no VASP exchange clients exist" do
@@ -619,11 +621,23 @@ class SurveyTest < ActiveSupport::TestCase
     assert result.empty?
   end
 
-  test "a13604e returns setting value for other VASP services description" do
+  test "a13604e returns nil when no non-AMSF-named VASP clients exist" do
     result = @survey.send(:a13604e)
 
-    # No setting configured in default org, should be nil
+    # Org :one has only one VASP client (EXCHANGE), no "other" bucket types
     assert_nil result
+  end
+
+  test "a13604e derives description from client VASP types and free-text" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a13604e)
+
+    assert_not_nil result
+    # Should include the DEFI label and the free-text from OTHER client
+    assert_includes result, "DeFi services (lending, staking, yield)"
+    assert_includes result, "Crypto ATM operator"
   end
 
 end

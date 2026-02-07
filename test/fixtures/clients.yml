@@ -545,7 +545,7 @@ vasp_ico_ch:
   business_sector: "Blockchain"
   became_client_at: <%= 1.month.ago %>
 
-# VASP Other client incorporated in Monaco
+# VASP DeFi client incorporated in Monaco (maps to AMSF "other" bucket)
 vasp_other_mc:
   organization: compliance_test_org
   name: "Monaco DeFi Services"
@@ -556,7 +556,24 @@ vasp_other_mc:
   incorporation_country: "MC"
   is_pep: false
   is_vasp: true
-  vasp_type: "OTHER"
+  vasp_type: "DEFI"
   risk_level: "HIGH"
   business_sector: "DeFi"
+  became_client_at: <%= 1.month.ago %>
+
+# VASP Other client with free-text description, incorporated in Germany
+vasp_other_freetext_de:
+  organization: compliance_test_org
+  name: "Berlin Crypto ATM Operator"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "OTHER"
+  nationality: "DE"
+  residence_country: "DE"
+  incorporation_country: "DE"
+  is_pep: false
+  is_vasp: true
+  vasp_type: "OTHER"
+  vasp_other_service_type: "Crypto ATM operator"
+  risk_level: "HIGH"
+  business_sector: "Cryptocurrency"
   became_client_at: <%= 1.month.ago %>

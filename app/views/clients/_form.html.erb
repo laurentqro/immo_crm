@@ -160,14 +160,18 @@
       <div class="form-group mt-4 ml-7 <%= 'hidden' unless client.is_vasp? %>" data-client-form-target="vaspType">
         <%= form.label :vasp_type, "VASP type" %>
         <%= form.select :vasp_type,
-            options_for_select([
-              ["Virtual currency exchange provider", "EXCHANGE"],
-              ["Custodian wallet provider", "CUSTODIAN"],
-              ["ICO-related services (token offering)", "ICO"],
-              ["Other VASP services", "OTHER"]
-            ], client.vasp_type),
-            { include_blank: "Select VASP type..." } %>
-        <p class="form-hint">Type of virtual asset service provided by this client (AMSF classification).</p>
+            options_for_select(AmsfConstants::VASP_TYPE_LABELS.map { |k, v| [v, k] }, client.vasp_type),
+            { include_blank: "Select VASP type..." },
+            { data: { action: "change->client-form#toggleVaspType" } } %>
+        <p class="form-hint">Type of virtual asset service provided by this client.</p>
+      </div>
+
+      <div class="form-group mt-4 ml-7 <%= 'hidden' unless client.is_vasp? && client.vasp_type == 'OTHER' %>" data-client-form-target="vaspOtherServiceType">
+        <%= form.label :vasp_other_service_type, "Describe other VASP service" %>
+        <%= form.text_field :vasp_other_service_type,
+            class: "form-control",
+            placeholder: "e.g., Crypto ATM operator, P2P trading platform..." %>
+        <p class="form-hint">Required when VASP type is "Other".</p>
       </div>
     </div>
 

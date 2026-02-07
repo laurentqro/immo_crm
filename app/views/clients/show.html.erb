@@ -36,7 +36,10 @@
         <% end %>
         <% if @client.is_vasp? %>
           <span class="inline-flex items-center rounded-full bg-indigo-100 dark:bg-indigo-900/30 px-2 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-300 mt-2">
-            VASP - <%= @client.vasp_type %>
+            VASP - <%= AmsfConstants::VASP_TYPE_LABELS[@client.vasp_type] || @client.vasp_type %>
+            <% if @client.vasp_type == "OTHER" && @client.vasp_other_service_type.present? %>
+              (<%= @client.vasp_other_service_type %>)
+            <% end %>
           </span>
         <% end %>
       </div>
