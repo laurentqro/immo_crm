@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_07_171910) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_07_175235) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -181,6 +181,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_171910) do
     t.boolean "is_professional_trustee", default: false
     t.boolean "is_vasp", default: false, null: false
     t.string "legal_person_type"
+    t.string "legal_person_type_other"
     t.string "name", null: false
     t.string "nationality"
     t.text "notes"

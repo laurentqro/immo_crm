@@ -109,15 +109,55 @@ class ClientTest < ActiveSupport::TestCase
   end
 
   test "accepts all valid legal_person_types" do
-    %w[SCI SARL SAM SNC SA OTHER].each do |type|
-      client = Client.new(
+    AmsfConstants::LEGAL_PERSON_TYPES.each do |type|
+      attrs = {
         organization: @organization,
         name: "Test Corp",
         client_type: "LEGAL_ENTITY",
         legal_person_type: type
-      )
-      assert client.valid?, "Expected legal_person_type '#{type}' to be valid"
+      }
+      # OTHER requires legal_person_type_other
+      attrs[:legal_person_type_other] = "Test arrangement" if type == "OTHER"
+
+      client = Client.new(attrs)
+      assert client.valid?, "Expected legal_person_type '#{type}' to be valid, errors: #{client.errors.full_messages}"
     end
+  end
+
+  test "requires legal_person_type_other when legal_person_type is OTHER" do
+    client = Client.new(
+      organization: @organization,
+      name: "Other Legal Entity",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "OTHER"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:legal_person_type_other], "can't be blank"
+  end
+
+  test "legal_person_type_other not required when legal_person_type is not OTHER" do
+    client = Client.new(
+      organization: @organization,
+      name: "SCI Corp",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "SCI"
+    )
+    assert client.valid?
+  end
+
+  test "clears legal_person_type_other when legal_person_type changes from OTHER" do
+    client = Client.create!(
+      organization: @organization,
+      name: "Other Corp",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "OTHER",
+      legal_person_type_other: "Fiducie"
+    )
+
+    client.update!(legal_person_type: "FOUNDATION")
+    client.reload
+
+    assert_nil client.legal_person_type_other
   end
 
   test "requires pep_type when is_pep is true" do

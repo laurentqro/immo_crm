@@ -52,8 +52,42 @@ module AmsfConstants
     "OTHER" => "Other"
   }.freeze
 
-  # Legal entity types (Monaco corporate forms)
-  LEGAL_PERSON_TYPES = %w[SCI SARL SAM SNC SA OTHER].freeze
+  # Legal entity types (Monaco corporate forms + AMSF taxonomy types)
+  LEGAL_PERSON_TYPES = %w[
+    SCI SARL SAM SNC SA SCS SCA SCP
+    GIE EI
+    FOUNDATION ASSOCIATION
+    OTHER_CIVIL OTHER_COMMERCIAL
+    STATE_DOMAIN
+    TRUST
+    OTHER
+  ].freeze
+
+  # Human-readable labels for legal person types
+  LEGAL_PERSON_TYPE_LABELS = {
+    "SCI" => "Property Investment Partnership (SCI)",
+    "SARL" => "Limited Liability Company (SARL)",
+    "SAM" => "Joint Stock Company (SAM)",
+    "SNC" => "Commercial Partnership (SNC)",
+    "SA" => "Société Anonyme (SA)",
+    "SCS" => "Limited Partnership (SCS)",
+    "SCA" => "Limited Partnership with Shares (SCA)",
+    "SCP" => "Special Civil-law Partnership (SCP)",
+    "GIE" => "Economic Interest Group (GIE)",
+    "EI" => "Sole Person (EI)",
+    "FOUNDATION" => "Monegasque Foundation",
+    "ASSOCIATION" => "Monegasque Association",
+    "OTHER_CIVIL" => "Other Civil Companies",
+    "OTHER_COMMERCIAL" => "Other Commercial Companies",
+    "STATE_DOMAIN" => "Private Domain of the Monegasque State",
+    "TRUST" => "Trust",
+    "OTHER" => "Other Legal Arrangements"
+  }.freeze
+
+  # Standard commercial/civil forms have dedicated AMSF sections.
+  # Trusts have their own dedicated section (a1801-a1809).
+  # Everything else is "other legal constructions" for field a11006.
+  AMSF_STANDARD_LEGAL_FORMS = %w[SCI SARL SAM SNC SA SCS SCA SCP EI TRUST].freeze
 
   # Purchase purpose
   PURCHASE_PURPOSES = %w[RESIDENCE INVESTMENT].freeze

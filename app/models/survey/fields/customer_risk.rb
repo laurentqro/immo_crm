@@ -192,9 +192,27 @@ class Survey
           .sum(:transaction_value)
       end
 
-      # Description of other legal arrangements
+      # Description of other legal arrangements — derived from client data.
+      # Collects labels for non-standard legal forms + free-text legal_person_type_other values.
       def a11006
-        setting_value("other_legal_constructions")
+        other_constructions = clients_kept
+          .legal_entities
+          .where.not(legal_person_type: [*AmsfConstants::AMSF_STANDARD_LEGAL_FORMS, nil, ""])
+
+        labels = other_constructions
+          .where.not(legal_person_type: "OTHER")
+          .distinct
+          .pluck(:legal_person_type)
+          .filter_map { |t| AmsfConstants::LEGAL_PERSON_TYPE_LABELS[t] }
+
+        free_texts = other_constructions
+          .where(legal_person_type: "OTHER")
+          .where.not(legal_person_type_other: [nil, ""])
+          .distinct
+          .pluck(:legal_person_type_other)
+
+        combined = (labels + free_texts).uniq
+        combined.any? ? combined.join(", ") : nil
       end
 
       # === PEP (Politically Exposed Person) Statistics ===

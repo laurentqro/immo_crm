@@ -21,7 +21,7 @@
               end %>">
           <%= @client.client_type_label %>
           <% if @client.legal_entity? && @client.legal_person_type.present? %>
-            (<%= @client.legal_person_type %>)
+            (<%= AmsfConstants::LEGAL_PERSON_TYPE_LABELS[@client.legal_person_type] || @client.legal_person_type %>)
           <% end %>
         </span>
         <% if @client.risk_level.present? %>
@@ -71,7 +71,12 @@
         <% if @client.legal_entity? %>
           <div class="bg-gray-50 dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Legal Form</dt>
-            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0"><%= @client.legal_person_type %></dd>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0">
+              <%= AmsfConstants::LEGAL_PERSON_TYPE_LABELS[@client.legal_person_type] || @client.legal_person_type %>
+              <% if @client.legal_person_type == "OTHER" && @client.legal_person_type_other.present? %>
+                (<%= @client.legal_person_type_other %>)
+              <% end %>
+            </dd>
           </div>
         <% end %>
         <% if (@client.legal_entity? || @client.trust?) && @client.incorporation_country.present? %>

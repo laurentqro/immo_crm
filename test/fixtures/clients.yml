@@ -81,7 +81,7 @@ high_risk_client:
   organization: one
   name: "Risky Business LLC"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "OTHER"
+  legal_person_type: "GIE"
   nationality: "RU"
   residence_country: "RU"
   is_pep: false
@@ -574,6 +574,39 @@ vasp_other_freetext_de:
   is_vasp: true
   vasp_type: "OTHER"
   vasp_other_service_type: "Crypto ATM operator"
+  legal_person_type_other: "GmbH"
   risk_level: "HIGH"
   business_sector: "Cryptocurrency"
+  became_client_at: <%= 1.month.ago %>
+
+# =============================================================================
+# Other Legal Constructions Test Fixtures
+# These fixtures test a11006 field derivation from client data
+# =============================================================================
+
+# Foundation client (maps to "other constructions" bucket)
+foundation_client:
+  organization: compliance_test_org
+  name: "Monaco Heritage Foundation"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "FOUNDATION"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  business_sector: "Heritage"
+  became_client_at: <%= 2.months.ago %>
+
+# Legal entity with OTHER type + free-text (for a11006 free-text testing)
+other_legal_freetext:
+  organization: compliance_test_org
+  name: "Fiducie du Sud"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "OTHER"
+  legal_person_type_other: "Fiducie"
+  nationality: "MC"
+  residence_country: "MC"
+  is_pep: false
+  risk_level: "LOW"
+  business_sector: "Fiduciary"
   became_client_at: <%= 1.month.ago %>
