@@ -346,14 +346,14 @@ class Survey
 
       # === High-Net-Worth Individual Tracking ===
 
-      # Tracks HNWIs (High Net Worth Individuals)
+      # Are there HNWI beneficial owners? Derived from actual data.
       def a11201bcd
-        setting_value("a11201bcd") || "Non"
+        beneficial_owners_base.hnwis.exists? ? "Oui" : "Non"
       end
 
-      # Tracks UHNWIs (Ultra High Net Worth Individuals)
+      # Are there UHNWI beneficial owners? Derived from actual data.
       def a11201bcdu
-        setting_value("a11201bcdu") || "Non"
+        beneficial_owners_base.uhnwis.exists? ? "Oui" : "Non"
       end
 
       # === Transaction Statistics ===
