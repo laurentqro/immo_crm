@@ -51,6 +51,7 @@ class ClientPolicy < ApplicationPolicy
       :vasp_type,
       :vasp_other_service_type,
       :legal_person_type,
+      :legal_person_type_other,
       :business_sector,
       :became_client_at,
       :relationship_ended_at,

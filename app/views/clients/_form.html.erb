@@ -27,15 +27,18 @@
     <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="legalPersonType">
       <%= form.label :legal_person_type, "Legal form" %>
       <%= form.select :legal_person_type,
-          options_for_select([
-            ["SCI (Société Civile Immobilière)", "SCI"],
-            ["SARL (Société à Responsabilité Limitée)", "SARL"],
-            ["SAM (Société Anonyme Monégasque)", "SAM"],
-            ["SNC (Société en Nom Collectif)", "SNC"],
-            ["SA (Société Anonyme)", "SA"],
-            ["Other", "OTHER"]
-          ], client.legal_person_type),
-          { include_blank: "Select legal form..." } %>
+          options_for_select(AmsfConstants::LEGAL_PERSON_TYPE_LABELS.map { |k, v| [v, k] }, client.legal_person_type),
+          { include_blank: "Select legal form..." },
+          { data: { action: "change->client-form#toggleLegalPersonType" } } %>
+    </div>
+
+    <%# Legal Person Type Other (only when legal_person_type == "OTHER") %>
+    <div class="form-group ml-7 <%= 'hidden' unless client.legal_entity? && client.legal_person_type == 'OTHER' %>" data-client-form-target="legalPersonTypeOther">
+      <%= form.label :legal_person_type_other, "Describe other legal form" %>
+      <%= form.text_field :legal_person_type_other,
+          class: "form-control",
+          placeholder: "e.g., Fiducie, groupement forestier..." %>
+      <p class="form-hint">Required when legal form is "Other Legal Arrangements".</p>
     </div>
 
     <%# Trustee Section (only for Trust) %>

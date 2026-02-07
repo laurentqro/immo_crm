@@ -31,6 +31,8 @@ class Client < ApplicationRecord
   validates :pep_type, presence: true, if: :is_pep?
   validates :pep_type, inclusion: { in: PEP_TYPES }, allow_blank: true
 
+  validates :legal_person_type_other, presence: true, if: -> { legal_entity? && legal_person_type == "OTHER" }
+
   validates :vasp_type, presence: true, if: :is_vasp?
   validates :vasp_type, inclusion: { in: VASP_TYPES }, allow_blank: true
   validates :vasp_other_service_type, presence: true, if: -> { is_vasp? && vasp_type == "OTHER" }
@@ -70,6 +72,7 @@ class Client < ApplicationRecord
   validates :professional_category, inclusion: { in: PROFESSIONAL_CATEGORIES }, allow_blank: true
 
   # === Callbacks ===
+  before_save :clear_legal_person_type_other_if_not_needed
   before_save :clear_pep_type_if_not_pep
   before_save :clear_vasp_type_if_not_vasp
   before_save :clear_third_party_cdd_fields_if_not_used
@@ -157,6 +160,11 @@ class Client < ApplicationRecord
   end
 
   private
+
+  # Clear legal_person_type_other when legal_person_type is not OTHER
+  def clear_legal_person_type_other_if_not_needed
+    self.legal_person_type_other = nil if legal_person_type != "OTHER"
+  end
 
   # Clear pep_type when is_pep is set to false to maintain data consistency
   def clear_pep_type_if_not_pep

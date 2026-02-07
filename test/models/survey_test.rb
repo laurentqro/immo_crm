@@ -640,4 +640,51 @@ class SurveyTest < ActiveSupport::TestCase
     assert_includes result, "Crypto ATM operator"
   end
 
+  # === Other Legal Constructions (a11006) Field Tests ===
+
+  # Use compliance_test_org which has:
+  # - foundation_client (FOUNDATION — non-standard form, maps to a11006)
+  # - other_legal_freetext (OTHER + "Fiducie" — free-text, maps to a11006)
+  # - vasp_other_freetext_de (OTHER + "GmbH" — also maps to a11006)
+  # - calc_legal_5 (OTHER, no legal_person_type_other — excluded)
+  # - Standard forms (SARL, SA, SCI, SAM) — excluded from a11006
+
+  test "a11006 returns nil when no other legal constructions exist" do
+    result = @survey.send(:a11006)
+
+    # Org :one has SARL, SA, SCI, GIE — GIE is non-standard so won't be nil
+    # Let's use org :two which has only SARL
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: Date.current.year)
+    result = survey.send(:a11006)
+
+    assert_nil result
+  end
+
+  test "a11006 derives description from non-standard legal forms and free-text" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a11006)
+
+    assert_not_nil result
+    # Should include the FOUNDATION label
+    assert_includes result, "Monegasque Foundation"
+    # Should include free-text values
+    assert_includes result, "Fiducie"
+    assert_includes result, "GmbH"
+  end
+
+  test "a11006 excludes standard legal forms" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a11006)
+
+    # Standard forms should not appear
+    refute_includes result, "Limited Liability Company (SARL)"
+    refute_includes result, "Société Anonyme (SA)"
+    refute_includes result, "Property Investment Partnership (SCI)"
+  end
+
 end

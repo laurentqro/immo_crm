@@ -14,6 +14,7 @@ export default class extends Controller {
     "pepType",
     "isVasp",
     "vaspType",
+    "legalPersonTypeOther",
     "vaspOtherServiceType",
     "dueDiligenceLevel",
     "simplifiedDdReason",
@@ -26,6 +27,7 @@ export default class extends Controller {
 
   connect() {
     this.toggleFields()
+    this.toggleLegalPersonType()
     this.togglePepType()
     this.toggleVaspType()
     this.toggleSimplifiedReason()
@@ -60,6 +62,18 @@ export default class extends Controller {
     if (this.hasNaturalPersonFieldsTarget) {
       this.naturalPersonFieldsTarget.classList.toggle("hidden", isLegalEntity)
     }
+
+    // Re-evaluate legal person type "other" field visibility
+    this.toggleLegalPersonType()
+  }
+
+  toggleLegalPersonType() {
+    if (!this.hasLegalPersonTypeOtherTarget) return
+
+    const legalPersonTypeSelect = this.legalPersonTypeTarget?.querySelector("select")
+    const isOther = legalPersonTypeSelect?.value === "OTHER"
+    const isLegalEntity = !this.legalPersonTypeTarget?.classList.contains("hidden")
+    this.legalPersonTypeOtherTarget.classList.toggle("hidden", !(isLegalEntity && isOther))
   }
 
   togglePepType() {

@@ -173,20 +173,6 @@
             </div>
           </div>
 
-          <%# Other Legal Constructions Description %>
-          <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-4">Other Legal Constructions</h3>
-            <div>
-              <%= label_tag :other_legal_constructions, "Description of other legal constructions", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Describe any other types of legal constructions not mentioned above that your entity has as clients.</p>
-              <%= text_area_tag "settings[other_legal_constructions]", get_setting_value("other_legal_constructions"),
-                  id: "other_legal_constructions", name: "settings[other_legal_constructions]",
-                  rows: 3,
-                  class: "mt-1 form-control",
-                  placeholder: "e.g., Fiducie, GIE, groupement forestier..." %>
-            </div>
-          </div>
-
         </div>
 
         <%# Compliance Policies Panel %>
