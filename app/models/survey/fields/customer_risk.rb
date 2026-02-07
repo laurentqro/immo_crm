@@ -680,7 +680,9 @@ class Survey
           .count
       end
 
-      # Professional trustees grouped by trust creation country
+      # Professional trustees grouped by country where the trust was created
+      # (AMSF: "ventilé par pays dans lequel le trust a été créé")
+      # Uses the trust client's incorporation_country, not the trustee's nationality.
       def a1809
         Trustee.joins(:client).merge(clients_kept.trusts)
           .where(is_professional: true)
