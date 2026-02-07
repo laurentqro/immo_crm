@@ -19,10 +19,15 @@
               when 'LEGAL_ENTITY' then 'bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300 dark:ring-purple-400/30'
               end %>">
           <%= @client.client_type_label %>
-          <% if @client.legal_entity? && @client.legal_entity_type.present? %>
+          <% if @client.legal_entity? && @client.legal_entity_type.present? && !@client.trust? %>
             (<%= AmsfConstants::LEGAL_ENTITY_TYPE_LABELS[@client.legal_entity_type] || @client.legal_entity_type %>)
           <% end %>
         </span>
+        <% if @client.trust? %>
+          <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset mt-2 bg-amber-50 text-amber-700 ring-amber-700/10 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-400/30">
+            Trust
+          </span>
+        <% end %>
         <% if @client.risk_level.present? %>
           <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium mt-2 <%= @client.risk_badge_class %>">
             <%= @client.risk_level %> Risk

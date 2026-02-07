@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Immo CRM is an AML/KYC compliance CRM for Luxembourg real estate professionals, built on Jumpstart Pro Rails 8. It manages client onboarding, beneficial owner tracking, transaction monitoring, managed properties, staff training records, and annual AMSF regulatory survey submissions (XBRL via `amsf_survey` gem).
+Immo CRM is an AML/KYC compliance CRM for Monaco real estate professionals, built on Jumpstart Pro Rails 8. It manages client onboarding, beneficial owner tracking, trustee tracking (for trusts), transaction monitoring, managed properties, staff training records, and annual AMSF regulatory survey submissions (XBRL via `amsf_survey` gem).
 
 ## Development Commands
 
@@ -96,6 +96,16 @@ Routes are modularized in `config/routes/`:
 - `billing.rb` - Subscription, payment, receipt routes
 - `users.rb` - User profile, settings, authentication
 - `api.rb` - API v1 endpoints with JWT authentication
+
+## CRM Data Model
+
+- **Client** (`app/models/client.rb`): Two `client_type` values: `NATURAL_PERSON` and `LEGAL_ENTITY`
+  - Trusts are legal entities with `legal_entity_type: "TRUST"` (not a separate client type)
+  - `trust?` helper = `legal_entity? && legal_entity_type == "TRUST"`
+- **Trustee** (`app/models/trustee.rb`): `belongs_to :client` (trust only). Tracks name, nationality, `is_professional`
+- **BeneficialOwner** (`app/models/beneficial_owner.rb`): `belongs_to :client` (any legal entity including trusts)
+- **Transaction** (`app/models/transaction.rb`): Purchase/sale/rental linked to a client
+- **ManagedProperty** (`app/models/managed_property.rb`): Property management contracts
 
 ## Key Directories
 

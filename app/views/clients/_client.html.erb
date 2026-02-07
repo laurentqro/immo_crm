@@ -19,7 +19,11 @@
           end %>">
       <%= client.client_type_label %>
     </span>
-    <% if client.legal_entity? && client.legal_entity_type.present? %>
+    <% if client.trust? %>
+      <span class="ml-1 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-amber-50 text-amber-700 ring-amber-700/10 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-400/30">
+        Trust
+      </span>
+    <% elsif client.legal_entity? && client.legal_entity_type.present? %>
       <span class="ml-1 text-gray-400 dark:text-gray-500">(<%= client.legal_entity_type %>)</span>
     <% end %>
   </td>

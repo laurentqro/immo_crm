@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_07_211916) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_07_230000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -210,6 +210,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_211916) do
     t.index ["is_pep"], name: "index_clients_on_is_pep"
     t.index ["is_pep_associated"], name: "index_clients_on_is_pep_associated"
     t.index ["is_pep_related"], name: "index_clients_on_is_pep_related"
+    t.index ["legal_entity_type"], name: "index_clients_on_legal_entity_type"
     t.index ["organization_id", "client_type"], name: "index_clients_on_org_and_type"
     t.index ["organization_id", "deleted_at"], name: "index_clients_on_organization_id_and_deleted_at"
     t.index ["organization_id", "risk_level"], name: "index_clients_on_org_and_risk"
