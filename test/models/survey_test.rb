@@ -501,4 +501,60 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal "Non", result
   end
 
+  # === HNWI/UHNWI Gate Field Tests ===
+
+  test "a11201bcd returns Oui when HNWI beneficial owners exist" do
+    # Org :one has hnwi_owner (10M) and uhnwi_owner (75M) fixtures
+    result = @survey.send(:a11201bcd)
+
+    assert_equal "Oui", result
+  end
+
+  test "a11201bcd returns Non when no HNWI beneficial owners exist" do
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a11201bcd)
+
+    assert_equal "Non", result
+  end
+
+  test "a11201bcdu returns Oui when UHNWI beneficial owners exist" do
+    # Org :one has uhnwi_owner (75M) fixture
+    result = @survey.send(:a11201bcdu)
+
+    assert_equal "Oui", result
+  end
+
+  test "a11201bcdu returns Non when no UHNWI beneficial owners exist" do
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a11201bcdu)
+
+    assert_equal "Non", result
+  end
+
+  test "a11201bcd is consistent with a11206b — Oui iff breakdown has data" do
+    result_gate = @survey.send(:a11201bcd)
+    result_breakdown = @survey.send(:a11206b)
+
+    if result_breakdown.any?
+      assert_equal "Oui", result_gate, "Gate must be Oui when HNWI breakdown has data"
+    else
+      assert_equal "Non", result_gate, "Gate must be Non when HNWI breakdown is empty"
+    end
+  end
+
+  test "a11201bcdu is consistent with a112012b — Oui iff breakdown has data" do
+    result_gate = @survey.send(:a11201bcdu)
+    result_breakdown = @survey.send(:a112012b)
+
+    if result_breakdown.any?
+      assert_equal "Oui", result_gate, "Gate must be Oui when UHNWI breakdown has data"
+    else
+      assert_equal "Non", result_gate, "Gate must be Non when UHNWI breakdown is empty"
+    end
+  end
+
 end
