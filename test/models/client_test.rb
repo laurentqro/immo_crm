@@ -160,6 +160,22 @@ class ClientTest < ActiveSupport::TestCase
     assert_nil client.legal_person_type_other
   end
 
+  test "changing client_type from LEGAL_ENTITY+OTHER to NATURAL_PERSON succeeds and clears stale fields" do
+    client = Client.create!(
+      organization: @organization,
+      name: "Was Legal Entity",
+      client_type: "LEGAL_ENTITY",
+      legal_person_type: "OTHER",
+      legal_person_type_other: "Fiducie"
+    )
+
+    client.update!(client_type: "NATURAL_PERSON", legal_person_type: nil)
+    client.reload
+
+    assert client.natural_person?
+    assert_nil client.legal_person_type_other
+  end
+
   test "requires pep_type when is_pep is true" do
     client = Client.new(
       organization: @organization,
