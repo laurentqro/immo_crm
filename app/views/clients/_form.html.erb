@@ -47,7 +47,7 @@
         <h3 class="text-sm font-medium mb-4">Trustees</h3>
 
         <div data-client-form-target="trusteesContainer">
-          <% (client.trustees.presence || [client.trustees.build]).each_with_index do |trustee, index| %>
+          <% client.trustees.each_with_index do |trustee, index| %>
             <%= form.fields_for :trustees, trustee do |tf| %>
               <%= render "clients/trustee_fields", form: tf, index: index %>
             <% end %>

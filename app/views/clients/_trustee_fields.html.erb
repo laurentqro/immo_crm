@@ -23,10 +23,8 @@
 
       <% if form.object.persisted? %>
         <%= form.hidden_field :_destroy, value: "0", data: { client_form_target: "destroyField" } %>
-        <button type="button" class="btn btn-sm text-red-600" data-action="client-form#removeTrustee">Remove</button>
-      <% else %>
-        <button type="button" class="btn btn-sm text-red-600" data-action="client-form#removeTrustee">Remove</button>
       <% end %>
+      <button type="button" class="btn btn-sm text-red-600" data-action="client-form#removeTrustee">Remove</button>
     </div>
   </div>
   <%= form.hidden_field :id if form.object.persisted? %>
