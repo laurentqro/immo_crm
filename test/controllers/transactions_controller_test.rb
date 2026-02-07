@@ -82,7 +82,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   test "index responds to turbo frame request" do
     sign_in @user
 
-    get transactions_path, headers: { "Turbo-Frame" => "transactions_list" }
+    get transactions_path, headers: {"Turbo-Frame" => "transactions_list"}
     assert_response :success
   end
 
@@ -116,7 +116,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   test "new form responds to turbo frame request" do
     sign_in @user
 
-    get new_transaction_path, headers: { "Turbo-Frame" => "modal" }
+    get new_transaction_path, headers: {"Turbo-Frame" => "modal"}
     assert_response :success
   end
 
@@ -212,7 +212,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
         transaction_date: Date.current,
         transaction_type: "RENTAL"
       }
-    }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
@@ -274,7 +274,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch transaction_path(other_transaction), params: {
-      transaction: { transaction_value: 999_999 }
+      transaction: {transaction_value: 999_999}
     }
 
     assert_response :not_found
@@ -284,7 +284,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch transaction_path(@transaction), params: {
-      transaction: { transaction_type: "INVALID" }
+      transaction: {transaction_type: "INVALID"}
     }
 
     assert_response :unprocessable_entity
@@ -294,8 +294,8 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch transaction_path(@transaction), params: {
-      transaction: { notes: "Updated notes" }
-    }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      transaction: {notes: "Updated notes"}
+    }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
@@ -326,7 +326,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
   test "destroy responds with turbo stream" do
     sign_in @user
 
-    delete transaction_path(@transaction), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    delete transaction_path(@transaction), headers: {"Accept" => "text/vnd.turbo-stream.html"}
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
   end
@@ -351,7 +351,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch transaction_path(@transaction), params: {
-      transaction: { notes: "Updated" }
+      transaction: {notes: "Updated"}
     }
 
     assert_equal "Transaction was successfully updated.", flash[:notice]

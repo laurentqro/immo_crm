@@ -96,8 +96,8 @@ class Survey
       def vasp_transactions_by_type_other
         year_transactions
           .joins(:client)
-          .where(clients: { is_vasp: true })
-          .where.not(clients: { vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES })
+          .where(clients: {is_vasp: true})
+          .where.not(clients: {vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES})
           .count
       end
 
@@ -105,8 +105,8 @@ class Survey
       def vasp_funds_by_type_other
         year_transactions
           .joins(:client)
-          .where(clients: { is_vasp: true })
-          .where.not(clients: { vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES })
+          .where(clients: {is_vasp: true})
+          .where.not(clients: {vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES})
           .sum(:transaction_value)
       end
     end

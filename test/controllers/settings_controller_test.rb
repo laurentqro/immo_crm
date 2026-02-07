@@ -18,7 +18,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "requires authentication for update" do
-    patch settings_path, params: { settings: {} }
+    patch settings_path, params: {settings: {}}
     assert_redirected_to new_user_session_path
   end
 
@@ -151,7 +151,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
       settings: {
         edd_for_peps: "true"
       }
-    }, headers: { "Turbo-Frame" => "settings_form" }
+    }, headers: {"Turbo-Frame" => "settings_form"}
 
     # Turbo frames follow redirects automatically
     assert_redirected_to settings_path
@@ -163,7 +163,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch settings_path, params: {
-      settings: { entity_name: "Flash Test" }
+      settings: {entity_name: "Flash Test"}
     }
 
     assert_redirected_to settings_path

@@ -23,7 +23,7 @@ class StrReport < ApplicationRecord
 
   # === Validations ===
   validates :report_date, presence: true
-  validates :reason, presence: true, inclusion: { in: STR_REASONS }
+  validates :reason, presence: true, inclusion: {in: STR_REASONS}
 
   # Ensure client belongs to the same organization (if provided)
   validate :client_belongs_to_organization

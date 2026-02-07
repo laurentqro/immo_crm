@@ -93,7 +93,7 @@ class AuditLogTest < ActiveSupport::TestCase
   test "rejects ip_address longer than 45 chars" do
     audit_log = AuditLog.new(
       action: :login,
-      metadata: { "ip_address" => "a" * 46 }
+      metadata: {"ip_address" => "a" * 46}
     )
     assert_not audit_log.valid?
     assert audit_log.errors[:metadata].any? { |e| e.include?("ip_address") }
@@ -102,7 +102,7 @@ class AuditLogTest < ActiveSupport::TestCase
   test "rejects user_agent longer than 500 chars" do
     audit_log = AuditLog.new(
       action: :login,
-      metadata: { "user_agent" => "a" * 501 }
+      metadata: {"user_agent" => "a" * 501}
     )
     assert_not audit_log.valid?
     assert audit_log.errors[:metadata].any? { |e| e.include?("user_agent") }
@@ -111,7 +111,7 @@ class AuditLogTest < ActiveSupport::TestCase
   test "rejects non-array changed_fields" do
     audit_log = AuditLog.new(
       action: :update,
-      metadata: { "changed_fields" => "not_an_array" }
+      metadata: {"changed_fields" => "not_an_array"}
     )
     assert_not audit_log.valid?
     assert audit_log.errors[:metadata].any? { |e| e.include?("changed_fields") }
@@ -120,7 +120,7 @@ class AuditLogTest < ActiveSupport::TestCase
   test "rejects changed_fields with non-string elements" do
     audit_log = AuditLog.new(
       action: :update,
-      metadata: { "changed_fields" => ["valid", 123, "also_valid"] }
+      metadata: {"changed_fields" => ["valid", 123, "also_valid"]}
     )
     assert_not audit_log.valid?
     assert audit_log.errors[:metadata].any? { |e| e.include?("changed_fields") }

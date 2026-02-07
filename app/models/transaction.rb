@@ -21,22 +21,22 @@ class Transaction < ApplicationRecord
 
   # === Validations ===
   validates :transaction_date, presence: true
-  validates :transaction_type, presence: true, inclusion: { in: TRANSACTION_TYPES }
+  validates :transaction_type, presence: true, inclusion: {in: TRANSACTION_TYPES}
 
   # Optional field validations
-  validates :payment_method, inclusion: { in: PAYMENT_METHODS }, allow_blank: true
-  validates :agency_role, inclusion: { in: AGENCY_ROLES }, allow_blank: true
-  validates :purchase_purpose, inclusion: { in: PURCHASE_PURPOSES }, allow_blank: true
-  validates :direction, inclusion: { in: TRANSACTION_DIRECTIONS }, allow_blank: true
-  validates :transaction_value, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :payment_method, inclusion: {in: PAYMENT_METHODS}, allow_blank: true
+  validates :agency_role, inclusion: {in: AGENCY_ROLES}, allow_blank: true
+  validates :purchase_purpose, inclusion: {in: PURCHASE_PURPOSES}, allow_blank: true
+  validates :direction, inclusion: {in: TRANSACTION_DIRECTIONS}, allow_blank: true
+  validates :transaction_value, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
 
   # AMSF Data Capture validations
-  validates :property_type, inclusion: { in: PROPERTY_TYPES }, allow_blank: true
+  validates :property_type, inclusion: {in: PROPERTY_TYPES}, allow_blank: true
   validates :counterparty_country,
-    format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
+    format: {with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format"},
     allow_blank: true
-  validates :rental_annual_value, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
-  validates :rental_tenant_type, inclusion: { in: TENANT_TYPES }, allow_blank: true
+  validates :rental_annual_value, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :rental_tenant_type, inclusion: {in: TENANT_TYPES}, allow_blank: true
 
   # Ensure client belongs to the same organization
   validate :client_belongs_to_organization

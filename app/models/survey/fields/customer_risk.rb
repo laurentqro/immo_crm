@@ -686,7 +686,7 @@ class Survey
       def a1809
         Trustee.joins(:client).merge(clients_kept.trusts)
           .where(is_professional: true)
-          .where.not(clients: { incorporation_country: [nil, ""] })
+          .where.not(clients: {incorporation_country: [nil, ""]})
           .group("clients.incorporation_country")
           .count
       end

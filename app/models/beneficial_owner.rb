@@ -35,11 +35,11 @@ class BeneficialOwner < ApplicationRecord
     },
     allow_nil: true
 
-  validates :control_type, inclusion: { in: CONTROL_TYPES }, allow_blank: true
+  validates :control_type, inclusion: {in: CONTROL_TYPES}, allow_blank: true
 
   # PEP validation (same as Client)
   validates :pep_type, presence: true, if: :is_pep?
-  validates :pep_type, inclusion: { in: PEP_TYPES }, allow_blank: true
+  validates :pep_type, inclusion: {in: PEP_TYPES}, allow_blank: true
 
   # Client type validation - beneficial owners only for PM/TRUST
   validate :client_must_be_legal_entity_or_trust

@@ -71,7 +71,7 @@ class BeneficialOwnerPolicy < ApplicationPolicy
       org = account_user.account.organization
       return scope.none if org.nil?
 
-      scope.joins(:client).where(clients: { organization_id: org.id })
+      scope.joins(:client).where(clients: {organization_id: org.id})
     end
   end
 end

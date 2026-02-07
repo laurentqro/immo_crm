@@ -26,7 +26,7 @@ class CurrentContextTest < ActionDispatch::IntegrationTest
     sign_in user
 
     # Simulate request with specific IP
-    get dashboard_path, headers: { "REMOTE_ADDR" => "192.168.1.100" }
+    get dashboard_path, headers: {"REMOTE_ADDR" => "192.168.1.100"}
 
     # Request should complete successfully
     assert_response :success
@@ -37,7 +37,7 @@ class CurrentContextTest < ActionDispatch::IntegrationTest
     sign_in user
 
     # Simulate request with specific user agent
-    get dashboard_path, headers: { "HTTP_USER_AGENT" => "Mozilla/5.0 Test Browser" }
+    get dashboard_path, headers: {"HTTP_USER_AGENT" => "Mozilla/5.0 Test Browser"}
 
     # Request should complete successfully
     assert_response :success

@@ -24,49 +24,49 @@ class Client < ApplicationRecord
 
   # === Validations ===
   validates :name, presence: true
-  validates :client_type, presence: true, inclusion: { in: CLIENT_TYPES }
+  validates :client_type, presence: true, inclusion: {in: CLIENT_TYPES}
 
   # Conditional validations
   validates :legal_entity_type, presence: true, if: :legal_entity?
-  validates :legal_entity_type, inclusion: { in: LEGAL_ENTITY_TYPES }, allow_blank: true
+  validates :legal_entity_type, inclusion: {in: LEGAL_ENTITY_TYPES}, allow_blank: true
 
   validates :pep_type, presence: true, if: :is_pep?
-  validates :pep_type, inclusion: { in: PEP_TYPES }, allow_blank: true
+  validates :pep_type, inclusion: {in: PEP_TYPES}, allow_blank: true
 
   validates :legal_entity_type_other, presence: true, if: -> { legal_entity? && legal_entity_type == "OTHER" }
 
   validates :vasp_type, presence: true, if: :is_vasp?
-  validates :vasp_type, inclusion: { in: VASP_TYPES }, allow_blank: true
+  validates :vasp_type, inclusion: {in: VASP_TYPES}, allow_blank: true
   validates :vasp_other_service_type, presence: true, if: -> { is_vasp? && vasp_type == "OTHER" }
 
-  validates :risk_level, inclusion: { in: RISK_LEVELS }, allow_blank: true
-  validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_blank: true
-  validates :residence_status, inclusion: { in: RESIDENCE_STATUSES }, allow_blank: true
+  validates :risk_level, inclusion: {in: RISK_LEVELS}, allow_blank: true
+  validates :rejection_reason, inclusion: {in: REJECTION_REASONS}, allow_blank: true
+  validates :residence_status, inclusion: {in: RESIDENCE_STATUSES}, allow_blank: true
   validates :incorporation_country,
-    format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
+    format: {with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format"},
     allow_blank: true
 
   validates :introducer_country,
     presence: true,
-    format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
+    format: {with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format"},
     if: :introduced_by_third_party?
 
   # Third-party CDD validations
   validates :third_party_cdd_type,
     presence: true,
-    inclusion: { in: THIRD_PARTY_CDD_TYPES },
+    inclusion: {in: THIRD_PARTY_CDD_TYPES},
     if: :third_party_cdd?
 
   validates :third_party_cdd_country,
     presence: true,
-    format: { with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format" },
+    format: {with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format"},
     if: -> { third_party_cdd? && third_party_cdd_type == "FOREIGN" }
 
   # AMSF Data Capture validations
-  validates :due_diligence_level, inclusion: { in: DUE_DILIGENCE_LEVELS }, allow_blank: true
+  validates :due_diligence_level, inclusion: {in: DUE_DILIGENCE_LEVELS}, allow_blank: true
   validates :simplified_dd_reason, presence: true, if: -> { due_diligence_level == "SIMPLIFIED" }
-  validates :relationship_end_reason, inclusion: { in: RELATIONSHIP_END_REASONS }, allow_blank: true
-  validates :professional_category, inclusion: { in: PROFESSIONAL_CATEGORIES }, allow_blank: true
+  validates :relationship_end_reason, inclusion: {in: RELATIONSHIP_END_REASONS}, allow_blank: true
+  validates :professional_category, inclusion: {in: PROFESSIONAL_CATEGORIES}, allow_blank: true
 
   # === Callbacks ===
   before_save :clear_legal_entity_type_other_if_not_needed

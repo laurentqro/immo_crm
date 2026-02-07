@@ -213,7 +213,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     draft_submission = @submission
     sign_in @user
 
-    get download_submission_path(draft_submission), params: { unvalidated: true }
+    get download_submission_path(draft_submission), params: {unvalidated: true}
     assert_response :success
 
     draft_submission.reload
@@ -356,7 +356,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     post submissions_path, params: {
-      submission: { year: 2032 }
+      submission: {year: 2032}
     }
 
     assert_equal "Submission started for 2032.", flash[:notice]
@@ -374,7 +374,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
   test "index responds to turbo frame request" do
     sign_in @user
 
-    get submissions_path, headers: { "Turbo-Frame" => "submissions_list" }
+    get submissions_path, headers: {"Turbo-Frame" => "submissions_list"}
     assert_response :success
   end
 
@@ -471,7 +471,7 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_difference "AuditLog.count" do
       post submissions_path, params: {
-        submission: { year: 2033 }
+        submission: {year: 2033}
       }
     end
   end

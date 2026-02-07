@@ -77,7 +77,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
   test "index responds to turbo frame request" do
     sign_in @user
 
-    get clients_path, headers: { "Turbo-Frame" => "clients_list" }
+    get clients_path, headers: {"Turbo-Frame" => "clients_list"}
     assert_response :success
   end
 
@@ -129,7 +129,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
   test "new form responds to turbo frame request" do
     sign_in @user
 
-    get new_client_path, headers: { "Turbo-Frame" => "modal" }
+    get new_client_path, headers: {"Turbo-Frame" => "modal"}
     assert_response :success
   end
 
@@ -215,7 +215,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
         name: "Turbo Client",
         client_type: "NATURAL_PERSON"
       }
-    }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
@@ -260,7 +260,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch client_path(other_client), params: {
-      client: { name: "Hacked" }
+      client: {name: "Hacked"}
     }
 
     assert_response :not_found
@@ -270,7 +270,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch client_path(@client), params: {
-      client: { name: "" }
+      client: {name: ""}
     }
 
     assert_response :unprocessable_entity
@@ -280,8 +280,8 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch client_path(@client), params: {
-      client: { name: "Turbo Update" }
-    }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      client: {name: "Turbo Update"}
+    }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
@@ -312,7 +312,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
   test "destroy responds with turbo stream" do
     sign_in @user
 
-    delete client_path(@client), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    delete client_path(@client), headers: {"Accept" => "text/vnd.turbo-stream.html"}
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
   end
@@ -463,7 +463,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch client_path(@client), params: {
-      client: { name: "Updated" }
+      client: {name: "Updated"}
     }
 
     assert_equal "Client was successfully updated.", flash[:notice]

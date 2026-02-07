@@ -60,7 +60,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     get client_beneficial_owners_path(@legal_entity),
-        headers: { "Turbo-Frame" => "beneficial_owners" }
+        headers: {"Turbo-Frame" => "beneficial_owners"}
     assert_response :success
   end
 
@@ -78,7 +78,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     get new_client_beneficial_owner_path(@legal_entity),
-        headers: { "Turbo-Frame" => "new_beneficial_owner" }
+        headers: {"Turbo-Frame" => "new_beneficial_owner"}
     assert_response :success
   end
 
@@ -140,7 +140,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     post client_beneficial_owners_path(other_client), params: {
-      beneficial_owner: { name: "Hacker" }
+      beneficial_owner: {name: "Hacker"}
     }
 
     assert_response :not_found
@@ -153,7 +153,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
       beneficial_owner: {
         name: "Turbo Owner"
       }
-    }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
@@ -201,7 +201,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch beneficial_owner_path(other_owner), params: {
-      beneficial_owner: { name: "Hacked" }
+      beneficial_owner: {name: "Hacked"}
     }
 
     assert_response :not_found
@@ -211,7 +211,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch beneficial_owner_path(@beneficial_owner), params: {
-      beneficial_owner: { name: "" }
+      beneficial_owner: {name: ""}
     }
 
     assert_response :unprocessable_entity
@@ -221,8 +221,8 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch beneficial_owner_path(@beneficial_owner), params: {
-      beneficial_owner: { name: "Turbo Update" }
-    }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      beneficial_owner: {name: "Turbo Update"}
+    }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
@@ -252,7 +252,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     delete beneficial_owner_path(@beneficial_owner),
-           headers: { "Accept" => "text/vnd.turbo-stream.html" }
+           headers: {"Accept" => "text/vnd.turbo-stream.html"}
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
   end
@@ -263,7 +263,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     post client_beneficial_owners_path(@legal_entity), params: {
-      beneficial_owner: { name: "Flash Test" }
+      beneficial_owner: {name: "Flash Test"}
     }
 
     assert_equal "Beneficial owner was successfully added.", flash[:notice]
@@ -273,7 +273,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch beneficial_owner_path(@beneficial_owner), params: {
-      beneficial_owner: { name: "Updated" }
+      beneficial_owner: {name: "Updated"}
     }
 
     assert_equal "Beneficial owner was successfully updated.", flash[:notice]

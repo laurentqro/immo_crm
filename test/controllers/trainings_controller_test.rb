@@ -24,7 +24,7 @@ class TrainingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "requires authentication for create" do
-    post trainings_path, params: { training: { training_date: Date.current } }
+    post trainings_path, params: {training: {training_date: Date.current}}
     assert_response :redirect
   end
 
@@ -39,7 +39,7 @@ class TrainingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "requires authentication for update" do
-    patch training_path(@training), params: { training: { staff_count: 10 } }
+    patch training_path(@training), params: {training: {staff_count: 10}}
     assert_response :redirect
   end
 
@@ -61,14 +61,14 @@ class TrainingsControllerTest < ActionDispatch::IntegrationTest
   test "index filters by training_type" do
     sign_in @user
 
-    get trainings_path, params: { training_type: "REFRESHER" }
+    get trainings_path, params: {training_type: "REFRESHER"}
     assert_response :success
   end
 
   test "index filters by year" do
     sign_in @user
 
-    get trainings_path, params: { year: 2025 }
+    get trainings_path, params: {year: 2025}
     assert_response :success
   end
 
@@ -194,7 +194,7 @@ class TrainingsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch training_path(@training), params: {
-      training: { staff_count: 0 }
+      training: {staff_count: 0}
     }
 
     assert_response :unprocessable_entity
@@ -205,7 +205,7 @@ class TrainingsControllerTest < ActionDispatch::IntegrationTest
     other_training = trainings(:other_org_training)
 
     patch training_path(other_training), params: {
-      training: { staff_count: 10 }
+      training: {staff_count: 10}
     }
 
     assert_response :not_found

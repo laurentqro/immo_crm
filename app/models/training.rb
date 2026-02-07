@@ -17,11 +17,11 @@ class Training < ApplicationRecord
 
   # === Validations ===
   validates :training_date, presence: true
-  validates :training_type, presence: true, inclusion: { in: TRAINING_TYPES }
-  validates :topic, presence: true, inclusion: { in: TRAINING_TOPICS }
-  validates :provider, presence: true, inclusion: { in: TRAINING_PROVIDERS }
-  validates :staff_count, presence: true, numericality: { greater_than: 0 }
-  validates :duration_hours, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :training_type, presence: true, inclusion: {in: TRAINING_TYPES}
+  validates :topic, presence: true, inclusion: {in: TRAINING_TOPICS}
+  validates :provider, presence: true, inclusion: {in: TRAINING_PROVIDERS}
+  validates :staff_count, presence: true, numericality: {greater_than: 0}
+  validates :duration_hours, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
 
   # === Scopes ===
   scope :for_year, ->(year) {

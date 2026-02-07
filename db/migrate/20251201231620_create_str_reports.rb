@@ -3,7 +3,7 @@ class CreateStrReports < ActiveRecord::Migration[8.1]
     create_table :str_reports do |t|
       t.references :organization, null: false, foreign_key: true
       t.references :client, foreign_key: true                   # Optional - may not have identified client
-      t.references :transaction, foreign_key: { to_table: :transactions } # Optional - may not be transaction-related
+      t.references :transaction, foreign_key: {to_table: :transactions} # Optional - may not be transaction-related
       t.date :report_date, null: false
       t.string :reason, null: false                             # CASH, PEP, UNUSUAL_PATTERN, OTHER
       t.text :notes

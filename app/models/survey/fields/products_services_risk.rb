@@ -324,7 +324,7 @@ class Survey
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .merge(Client.natural_persons)
-          .where.not(clients: { nationality: [nil, ""] })
+          .where.not(clients: {nationality: [nil, ""]})
           .group("clients.nationality")
           .count
 
@@ -333,7 +333,7 @@ class Survey
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .merge(Client.legal_entities)
-          .where.not(clients: { incorporation_country: [nil, ""] })
+          .where.not(clients: {incorporation_country: [nil, ""]})
           .group("clients.incorporation_country")
           .count
 

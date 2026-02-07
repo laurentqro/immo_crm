@@ -69,7 +69,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
   test "index responds to turbo frame request" do
     sign_in @user
 
-    get str_reports_path, headers: { "Turbo-Frame" => "str_reports_list" }
+    get str_reports_path, headers: {"Turbo-Frame" => "str_reports_list"}
     assert_response :success
   end
 
@@ -103,7 +103,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
   test "new form responds to turbo frame request" do
     sign_in @user
 
-    get new_str_report_path, headers: { "Turbo-Frame" => "modal" }
+    get new_str_report_path, headers: {"Turbo-Frame" => "modal"}
     assert_response :success
   end
 
@@ -212,7 +212,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
         report_date: Date.current,
         reason: "OTHER"
       }
-    }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
@@ -291,7 +291,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch str_report_path(other_str), params: {
-      str_report: { notes: "Hacked" }
+      str_report: {notes: "Hacked"}
     }
 
     assert_response :not_found
@@ -301,7 +301,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch str_report_path(@str_report), params: {
-      str_report: { reason: "INVALID" }
+      str_report: {reason: "INVALID"}
     }
 
     assert_response :unprocessable_entity
@@ -311,8 +311,8 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch str_report_path(@str_report), params: {
-      str_report: { notes: "Turbo update" }
-    }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      str_report: {notes: "Turbo update"}
+    }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
@@ -343,7 +343,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
   test "destroy responds with turbo stream" do
     sign_in @user
 
-    delete str_report_path(@str_report), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    delete str_report_path(@str_report), headers: {"Accept" => "text/vnd.turbo-stream.html"}
     assert_response :success
     assert_includes response.media_type, "turbo-stream"
   end
@@ -367,7 +367,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch str_report_path(@str_report), params: {
-      str_report: { notes: "Updated" }
+      str_report: {notes: "Updated"}
     }
 
     assert_equal "STR report was successfully updated.", flash[:notice]
