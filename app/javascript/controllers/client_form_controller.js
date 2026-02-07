@@ -29,6 +29,7 @@ export default class extends Controller {
   ]
 
   connect() {
+    this.trusteeCounter = 0
     this.toggleFields()
     this.toggleLegalEntityType()
     this.togglePepType()
@@ -143,7 +144,7 @@ export default class extends Controller {
     if (!this.hasTrusteesContainerTarget) return
 
     const container = this.trusteesContainerTarget
-    const timestamp = new Date().getTime()
+    const id = `new_${++this.trusteeCounter}`
 
     // Clone country options from the reference select, clearing any pre-selection
     let countryOptionsHtml = '<option value="">Select country...</option>'
@@ -158,21 +159,21 @@ export default class extends Controller {
       <div class="trustee-entry border-b pb-3 mb-3" style="border-color: var(--base-border-tertiary);" data-client-form-target="trusteeEntry">
         <div class="grid sm:grid-cols-3 gap-4">
           <div class="form-group">
-            <label for="client_trustees_attributes_${timestamp}_name">Trustee name</label>
-            <input type="text" name="client[trustees_attributes][${timestamp}][name]" id="client_trustees_attributes_${timestamp}_name" class="form-control">
+            <label for="client_trustees_attributes_${id}_name">Trustee name</label>
+            <input type="text" name="client[trustees_attributes][${id}][name]" id="client_trustees_attributes_${id}_name" class="form-control">
           </div>
           <div class="form-group">
-            <label for="client_trustees_attributes_${timestamp}_nationality">Nationality</label>
-            <select name="client[trustees_attributes][${timestamp}][nationality]" id="client_trustees_attributes_${timestamp}_nationality" class="form-control">
+            <label for="client_trustees_attributes_${id}_nationality">Nationality</label>
+            <select name="client[trustees_attributes][${id}][nationality]" id="client_trustees_attributes_${id}_nationality" class="form-control">
               ${countryOptionsHtml}
             </select>
           </div>
           <div class="form-group flex items-end gap-4">
             <div class="form-picker-group flex-1">
-              <input type="hidden" name="client[trustees_attributes][${timestamp}][is_professional]" value="0">
-              <input type="checkbox" name="client[trustees_attributes][${timestamp}][is_professional]" id="client_trustees_attributes_${timestamp}_is_professional" value="1">
+              <input type="hidden" name="client[trustees_attributes][${id}][is_professional]" value="0">
+              <input type="checkbox" name="client[trustees_attributes][${id}][is_professional]" id="client_trustees_attributes_${id}_is_professional" value="1">
               <div>
-                <label for="client_trustees_attributes_${timestamp}_is_professional">Professional</label>
+                <label for="client_trustees_attributes_${id}_is_professional">Professional</label>
               </div>
             </div>
             <button type="button" class="btn btn-sm text-red-600" data-action="client-form#removeTrustee">Remove</button>

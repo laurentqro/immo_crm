@@ -3,8 +3,10 @@
 class Trustee < ApplicationRecord
   belongs_to :client
 
+  scope :professional, -> { where(is_professional: true) }
+
   validates :name, presence: true
-  validates :nationality, format: {with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format"}, allow_blank: true
+  validates :nationality, inclusion: {in: ISO3166::Country.codes}, allow_blank: true
   validate :client_must_be_trust
 
   private

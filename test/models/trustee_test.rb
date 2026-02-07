@@ -20,10 +20,10 @@ class TrusteeTest < ActiveSupport::TestCase
     assert_includes @trustee.errors[:name], "can't be blank"
   end
 
-  test "validates nationality format when present" do
-    @trustee.nationality = "france"
+  test "validates nationality is a valid ISO country code" do
+    @trustee.nationality = "ZZ"
     assert_not @trustee.valid?
-    assert_includes @trustee.errors[:nationality], "must be ISO 3166-1 alpha-2 format"
+    assert_not_empty @trustee.errors[:nationality]
   end
 
   test "allows blank nationality" do

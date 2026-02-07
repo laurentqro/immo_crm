@@ -70,7 +70,7 @@ class ClientsController < ApplicationController
   private
 
   def set_client
-    @client = policy_scope(Client.with_discarded).find_by(id: params[:id])
+    @client = policy_scope(Client.with_discarded).includes(:trustees, :beneficial_owners).find_by(id: params[:id])
     render_not_found unless @client
   end
 
