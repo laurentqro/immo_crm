@@ -10,6 +10,7 @@ export default class extends Controller {
     "trusteeSection",
     "trusteesContainer",
     "trusteeEntry",
+    "countryOptions",
     "incorporationCountry",
     "naturalPersonFields",
     "isPep",
@@ -143,6 +144,16 @@ export default class extends Controller {
 
     const container = this.trusteesContainerTarget
     const timestamp = new Date().getTime()
+
+    // Clone country options from the reference select, clearing any pre-selection
+    let countryOptionsHtml = '<option value="">Select country...</option>'
+    if (this.hasCountryOptionsTarget) {
+      const temp = this.countryOptionsTarget.cloneNode(true)
+      temp.selectedIndex = 0
+      Array.from(temp.options).forEach(opt => opt.removeAttribute("selected"))
+      countryOptionsHtml = temp.innerHTML
+    }
+
     const template = `
       <div class="trustee-entry border-b pb-3 mb-3" style="border-color: var(--base-border-tertiary);" data-client-form-target="trusteeEntry">
         <div class="grid sm:grid-cols-3 gap-4">
@@ -153,7 +164,7 @@ export default class extends Controller {
           <div class="form-group">
             <label for="client_trustees_attributes_${timestamp}_nationality">Nationality</label>
             <select name="client[trustees_attributes][${timestamp}][nationality]" id="client_trustees_attributes_${timestamp}_nationality" class="form-control">
-              <option value="">Select country...</option>
+              ${countryOptionsHtml}
             </select>
           </div>
           <div class="form-group flex items-end gap-4">
