@@ -40,41 +40,36 @@ class ClientPolicy < ApplicationPolicy
   # Define which attributes users can set
   def permitted_attributes
     [
-      :name,
-      :client_type,
-      :nationality,
-      :residence_country,
-      :is_pep,
-      :pep_type,
-      :risk_level,
-      :is_vasp,
-      :vasp_type,
-      :vasp_other_service_type,
-      :legal_entity_type,
-      :legal_entity_type_other,
-      :business_sector,
       :became_client_at,
-      :relationship_ended_at,
-      :rejection_reason,
-      :notes,
-      # AMSF Compliance fields (US2)
+      :business_sector,
+      :client_type,
       :due_diligence_level,
-      :simplified_dd_reason,
-      :professional_category,
-      :relationship_end_reason,
-      :source_of_funds_verified,
-      :source_of_wealth_verified,
-      # Introducer tracking fields
+      :incorporation_country,
       :introduced_by_third_party,
       :introducer_country,
-      # Third-party CDD tracking fields
+      :is_pep,
+      :is_vasp,
+      :legal_entity_type,
+      :legal_entity_type_other,
+      :name,
+      :nationality,
+      :notes,
+      :pep_type,
+      :professional_category,
+      :rejection_reason,
+      :relationship_end_reason,
+      :relationship_ended_at,
+      :residence_country,
+      :risk_level,
+      :simplified_dd_reason,
+      :source_of_funds_verified,
+      :source_of_wealth_verified,
       :third_party_cdd,
-      :third_party_cdd_type,
       :third_party_cdd_country,
-      # Incorporation country (for legal entities)
-      :incorporation_country,
-      # Trustee nested attributes (for trust legal entities)
-      trustees_attributes: [:id, :name, :nationality, :is_professional, :_destroy]
+      :third_party_cdd_type,
+      :vasp_other_service_type,
+      :vasp_type,
+      trustees_attributes: [:id, :_destroy, :is_professional, :name, :nationality]
     ]
   end
 
