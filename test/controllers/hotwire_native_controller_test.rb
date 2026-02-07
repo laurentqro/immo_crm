@@ -7,7 +7,7 @@ class HotwireNativeTest < ActionDispatch::IntegrationTest
   end
 
   test "unauthenticated hotwire native requests" do
-    get "/account/password", headers: {HTTP_USER_AGENT: "Hotwire Native iOS"}
+    get "/account/password", headers: { HTTP_USER_AGENT: "Hotwire Native iOS" }
     assert_response :unauthorized
   end
 end

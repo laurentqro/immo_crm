@@ -22,7 +22,7 @@ class NavHelperTest < ActionView::TestCase
   end
 
   test "test_link_with_data_attributes" do
-    link = nav_link_to("Link with data attrs", "/link-attrs", class: "nav", data: {test: "foo"})
+    link = nav_link_to("Link with data attrs", "/link-attrs", class: "nav", data: { test: "foo" })
     assert_equal %(<a class="nav" data-test="foo" href="/link-attrs">Link with data attrs</a>), link
   end
 

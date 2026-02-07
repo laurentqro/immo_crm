@@ -21,8 +21,8 @@ class Submission < ApplicationRecord
       greater_than_or_equal_to: MIN_SUBMISSION_YEAR,
       less_than_or_equal_to: MAX_SUBMISSION_YEAR
     }
-  validates :year, uniqueness: {scope: :organization_id}
-  validates :status, presence: true, inclusion: {in: SUBMISSION_STATUSES}
+  validates :year, uniqueness: { scope: :organization_id }
+  validates :status, presence: true, inclusion: { in: SUBMISSION_STATUSES }
   validates :taxonomy_version, presence: true
 
   # === Callbacks ===

@@ -3,7 +3,7 @@ class ApplicationNotifier < Noticed::Event
   def to_websocket(notification)
     {
       account_id: account_id,
-      html: ApplicationController.render(partial: "notifications/notification", locals: {notification: notification})
+      html: ApplicationController.render(partial: "notifications/notification", locals: { notification: notification })
     }
   end
 

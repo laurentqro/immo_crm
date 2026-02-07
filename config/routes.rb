@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   resources :announcements, only: [:index, :show]
 
   namespace :action_text do
-    resources :embeds, only: [:create], constraints: {id: /[^\/]+/} do
+    resources :embeds, only: [:create], constraints: { id: /[^\/]+/ } do
       collection do
         get :patterns
       end

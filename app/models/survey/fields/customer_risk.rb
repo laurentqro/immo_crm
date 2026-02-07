@@ -242,7 +242,7 @@ class Survey
       def a11309b
         year_transactions
           .joins(client: :beneficial_owners)
-          .where(beneficial_owners: {is_pep: true})
+          .where(beneficial_owners: { is_pep: true })
           .distinct
           .count
       end
@@ -601,7 +601,7 @@ class Survey
         beneficial_owners_base
           .joins(:client)
           .merge(Client.legal_entities)
-          .where.not(beneficial_owners: {nationality: [nil, ""]})
+          .where.not(beneficial_owners: { nationality: [nil, ""] })
           .group(:nationality)
           .count
       end

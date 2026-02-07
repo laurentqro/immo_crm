@@ -6,7 +6,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "authorization header" do
-    stub_request(:get, "https://example.org/").with(headers: {"Authorization" => "Bearer test"})
+    stub_request(:get, "https://example.org/").with(headers: { "Authorization" => "Bearer test" })
     assert_nothing_raised do
       @client.send(:get, "/")
     end
@@ -14,9 +14,9 @@ class ApplicationClientTest < ActiveSupport::TestCase
 
   test "basic auth" do
     stub_request(:get, "https://example.org/")
-    client = ApplicationClient.new(basic_auth: {username: "user", password: "pass"})
+    client = ApplicationClient.new(basic_auth: { username: "user", password: "pass" })
     client.send(:get, "/")
-    assert_requested(:get, "https://example.org/", headers: {"Authorization" => "Basic #{Base64.strict_encode64("user:pass")}"})
+    assert_requested(:get, "https://example.org/", headers: { "Authorization" => "Basic #{Base64.strict_encode64("user:pass")}" })
   end
 
   test "get" do
@@ -27,14 +27,14 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "get with query params" do
-    stub_request(:get, "https://example.org/test").with(query: {"foo" => "bar"})
+    stub_request(:get, "https://example.org/test").with(query: { "foo" => "bar" })
     assert_nothing_raised do
-      @client.send(:get, "/test", query: {foo: "bar"})
+      @client.send(:get, "/test", query: { foo: "bar" })
     end
   end
 
   test "get with query params as a string" do
-    stub_request(:get, "https://example.org/test").with(query: {"foo" => "bar"})
+    stub_request(:get, "https://example.org/test").with(query: { "foo" => "bar" })
     assert_nothing_raised do
       @client.send(:get, "/test", query: "foo=bar")
     end
@@ -48,9 +48,9 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "post" do
-    stub_request(:post, "https://example.org/test").with(body: {"foo" => {"bar" => "baz"}}.to_json)
+    stub_request(:post, "https://example.org/test").with(body: { "foo" => { "bar" => "baz" } }.to_json)
     assert_nothing_raised do
-      @client.send(:post, "/test", body: {foo: {bar: "baz"}})
+      @client.send(:post, "/test", body: { foo: { bar: "baz" } })
     end
   end
 
@@ -62,10 +62,10 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "post with custom content-type" do
-    headers = {"Content-Type" => "application/x-www-form-urlencoded"}
-    stub_request(:post, "https://example.org/test").with(body: {"foo" => "bar"}.to_json, headers: headers)
+    headers = { "Content-Type" => "application/x-www-form-urlencoded" }
+    stub_request(:post, "https://example.org/test").with(body: { "foo" => "bar" }.to_json, headers: headers)
     assert_nothing_raised do
-      @client.send(:post, "/test", body: {foo: "bar"}, headers: headers)
+      @client.send(:post, "/test", body: { foo: "bar" }, headers: headers)
     end
   end
 
@@ -83,9 +83,9 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "patch" do
-    stub_request(:patch, "https://example.org/test").with(body: {"foo" => "bar"}.to_json)
+    stub_request(:patch, "https://example.org/test").with(body: { "foo" => "bar" }.to_json)
     assert_nothing_raised do
-      @client.send(:patch, "/test", body: {foo: "bar"})
+      @client.send(:patch, "/test", body: { foo: "bar" })
     end
   end
 
@@ -105,9 +105,9 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "put" do
-    stub_request(:put, "https://example.org/test").with(body: {"foo" => "bar"}.to_json)
+    stub_request(:put, "https://example.org/test").with(body: { "foo" => "bar" }.to_json)
     assert_nothing_raised do
-      @client.send(:put, "/test", body: {foo: "bar"})
+      @client.send(:put, "/test", body: { foo: "bar" })
     end
   end
 
@@ -134,7 +134,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "response object parses json" do
-    stub_request(:get, "https://example.org/test").to_return(body: {"foo" => {"bar" => "baz"}}.to_json, headers: {content_type: "application/json"})
+    stub_request(:get, "https://example.org/test").to_return(body: { "foo" => { "bar" => "baz" } }.to_json, headers: { content_type: "application/json" })
     result = @client.send(:get, "/test")
     assert_equal "200", result.code
     assert_equal "application/json", result.content_type
@@ -142,7 +142,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "response object parses xml" do
-    stub_request(:get, "https://example.org/test").to_return(body: {"foo" => "bar"}.to_xml, headers: {content_type: "application/xml"})
+    stub_request(:get, "https://example.org/test").to_return(body: { "foo" => "bar" }.to_xml, headers: { content_type: "application/xml" })
     result = @client.send(:get, "/test")
     assert_equal "200", result.code
     assert_equal "application/xml", result.content_type
@@ -192,7 +192,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
   end
 
   test "parses link header" do
-    stub_request(:get, "https://example.org/pages").to_return(headers: {"Link" => "<https://example.org/pages?page=2>; rel=\"next\", <https://example.org/pages?page=1>; rel=\"prev\""})
+    stub_request(:get, "https://example.org/pages").to_return(headers: { "Link" => "<https://example.org/pages?page=2>; rel=\"next\", <https://example.org/pages?page=1>; rel=\"prev\"" })
     response = @client.send(:get, "/pages")
     assert_equal "https://example.org/pages?page=2", response.link_header[:next]
     assert_equal "https://example.org/pages?page=1", response.link_header[:prev]
@@ -210,7 +210,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
         self::BASE_URI = "https://example.org"
 
         def basic_auth
-          {username: "user", password: "pass"}
+          { username: "user", password: "pass" }
         end
       end
     end
@@ -218,7 +218,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
     test "basic auth" do
       stub_request(:get, "https://example.org/")
       @basic_auth_client.new.send :get, "/"
-      assert_requested(:get, "https://example.org/", headers: {"Authorization" => "Basic #{Base64.strict_encode64("user:pass")}"})
+      assert_requested(:get, "https://example.org/", headers: { "Authorization" => "Basic #{Base64.strict_encode64("user:pass")}" })
     end
   end
 
@@ -236,22 +236,22 @@ class ApplicationClientTest < ActiveSupport::TestCase
         end
 
         def all_pages
-          with_pagination("/pages", query: {per_page: 100}) do |response|
+          with_pagination("/pages", query: { per_page: 100 }) do |response|
             response.link_header[:next]
           end
         end
 
         def all_projects
-          with_pagination("/projects", query: {per_page: 100}) do |response|
+          with_pagination("/projects", query: { per_page: 100 }) do |response|
             next_page = response.parsed_body.pagination.next_page
-            {page: next_page} if next_page
+            { page: next_page } if next_page
           end
         end
       end
     end
 
     test "with_pagination and url" do
-      stub_request(:get, "https://test.example.org/pages?per_page=100").to_return(headers: {"Link" => "<https://test.example.org/pages?page=2>; rel=\"next\""})
+      stub_request(:get, "https://test.example.org/pages?per_page=100").to_return(headers: { "Link" => "<https://test.example.org/pages?page=2>; rel=\"next\"" })
       stub_request(:get, "https://test.example.org/pages?per_page=100&page=2")
       assert_nothing_raised do
         @test_api_client.new(token: "test").all_pages
@@ -259,8 +259,8 @@ class ApplicationClientTest < ActiveSupport::TestCase
     end
 
     test "with_pagination with query hash" do
-      stub_request(:get, "https://test.example.org/projects?per_page=100").to_return(body: {pagination: {next_page: 2}}.to_json, headers: {content_type: "application/json"})
-      stub_request(:get, "https://test.example.org/projects?per_page=100&page=2").to_return(body: {pagination: {prev_page: 1}}.to_json, headers: {content_type: "application/json"})
+      stub_request(:get, "https://test.example.org/projects?per_page=100").to_return(body: { pagination: { next_page: 2 } }.to_json, headers: { content_type: "application/json" })
+      stub_request(:get, "https://test.example.org/projects?per_page=100&page=2").to_return(body: { pagination: { prev_page: 1 } }.to_json, headers: { content_type: "application/json" })
       assert_nothing_raised do
         @test_api_client.new(token: "test").all_projects
       end
@@ -274,7 +274,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
     end
 
     test "content type" do
-      stub_request(:get, "https://test.example.org/").with(headers: {"Accept" => "application/xml"})
+      stub_request(:get, "https://test.example.org/").with(headers: { "Accept" => "application/xml" })
       assert_nothing_raised do
         @test_api_client.new(token: "test").root
       end
@@ -297,7 +297,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
     end
 
     test "custom json object class" do
-      stub_request(:get, "https://example.org/").to_return(body: {foo: :bar}.to_json, headers: {content_type: "application/json"})
+      stub_request(:get, "https://example.org/").to_return(body: { foo: :bar }.to_json, headers: { content_type: "application/json" })
       response = @custom_response_client.new.send :get, "/"
       assert_requested(:get, "https://example.org/")
       assert_instance_of Hash, response.parsed_body
@@ -312,7 +312,7 @@ class ApplicationClientTest < ActiveSupport::TestCase
     end
 
     test "no content type" do
-      stub_request(:get, "https://example.org/").to_return(body: {foo: :bar}.to_json)
+      stub_request(:get, "https://example.org/").to_return(body: { foo: :bar }.to_json)
       response = @fallback_client.new.send :get, "/"
       assert_nil response.content_type
     end

@@ -139,33 +139,33 @@ class AuditLogTest < ActiveSupport::TestCase
   end
 
   test "accepts valid IPv4 address" do
-    audit_log = AuditLog.new(action: :login, metadata: {"ip_address" => "192.168.1.1"})
+    audit_log = AuditLog.new(action: :login, metadata: { "ip_address" => "192.168.1.1" })
     assert audit_log.valid?
   end
 
   test "accepts valid IPv6 address" do
-    audit_log = AuditLog.new(action: :login, metadata: {"ip_address" => "2001:0db8:85a3:0000:0000:8a2e:0370:7334"})
+    audit_log = AuditLog.new(action: :login, metadata: { "ip_address" => "2001:0db8:85a3:0000:0000:8a2e:0370:7334" })
     assert audit_log.valid?
   end
 
   test "accepts localhost IPv4" do
-    audit_log = AuditLog.new(action: :login, metadata: {"ip_address" => "127.0.0.1"})
+    audit_log = AuditLog.new(action: :login, metadata: { "ip_address" => "127.0.0.1" })
     assert audit_log.valid?
   end
 
   test "accepts localhost IPv6" do
-    audit_log = AuditLog.new(action: :login, metadata: {"ip_address" => "::1"})
+    audit_log = AuditLog.new(action: :login, metadata: { "ip_address" => "::1" })
     assert audit_log.valid?
   end
 
   test "rejects invalid IP address format" do
-    audit_log = AuditLog.new(action: :login, metadata: {"ip_address" => "not-an-ip"})
+    audit_log = AuditLog.new(action: :login, metadata: { "ip_address" => "not-an-ip" })
     assert_not audit_log.valid?
     assert audit_log.errors[:metadata].any? { |e| e.include?("valid IPv4 or IPv6") }
   end
 
   test "rejects IP address with invalid octets" do
-    audit_log = AuditLog.new(action: :login, metadata: {"ip_address" => "999.999.999.999"})
+    audit_log = AuditLog.new(action: :login, metadata: { "ip_address" => "999.999.999.999" })
     assert_not audit_log.valid?
     assert audit_log.errors[:metadata].any? { |e| e.include?("valid IPv4 or IPv6") }
   end
@@ -173,7 +173,7 @@ class AuditLogTest < ActiveSupport::TestCase
   test "rejects changed_fields with more than 100 items" do
     audit_log = AuditLog.new(
       action: :update,
-      metadata: {"changed_fields" => Array.new(101) { |i| "field_#{i}" }}
+      metadata: { "changed_fields" => Array.new(101) { |i| "field_#{i}" } }
     )
     assert_not audit_log.valid?
     assert audit_log.errors[:metadata].any? { |e| e.include?("max 100") }

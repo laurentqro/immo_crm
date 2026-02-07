@@ -24,7 +24,7 @@ module Jumpstart
         if (account = Account.find_by(id: account_id))
           Current.account = account
         else
-          return [302, {"Location" => "/"}, []]
+          return [302, { "Location" => "/" }, []]
         end
 
         request.script_name = "/#{account_id}"

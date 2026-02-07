@@ -280,8 +280,8 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     stub_request(:post, "http://localhost:8000/validate")
       .to_return(
         status: 200,
-        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
-        headers: {"Content-Type" => "application/json"}
+        body: { valid: true, summary: { errors: 0 }, messages: [] }.to_json,
+        headers: { "Content-Type" => "application/json" }
       )
 
     sign_in @user
@@ -301,13 +301,13 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
         status: 200,
         body: {
           valid: false,
-          summary: {errors: 2},
+          summary: { errors: 2 },
           messages: [
-            {severity: "error", code: "a1101", message: "Missing required field a1101"},
-            {severity: "error", code: "a1102", message: "Missing required field a1102"}
+            { severity: "error", code: "a1101", message: "Missing required field a1101" },
+            { severity: "error", code: "a1102", message: "Missing required field a1102" }
           ]
         }.to_json,
-        headers: {"Content-Type" => "application/json"}
+        headers: { "Content-Type" => "application/json" }
       )
 
     sign_in @user
@@ -404,10 +404,10 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
         status: 200,
         body: {
           valid: false,
-          summary: {errors: 1, warnings: 0, info: 2},
-          messages: [{severity: "error", code: "test", message: "Test error"}]
+          summary: { errors: 1, warnings: 0, info: 2 },
+          messages: [{ severity: "error", code: "test", message: "Test error" }]
         }.to_json,
-        headers: {"Content-Type" => "application/json"}
+        headers: { "Content-Type" => "application/json" }
       )
 
     sign_in @user
@@ -424,8 +424,8 @@ class SubmissionsControllerTest < ActionDispatch::IntegrationTest
     stub_request(:post, "http://localhost:8000/validate")
       .to_return(
         status: 200,
-        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
-        headers: {"Content-Type" => "application/json"}
+        body: { valid: true, summary: { errors: 0 }, messages: [] }.to_json,
+        headers: { "Content-Type" => "application/json" }
       )
 
     sign_in @user

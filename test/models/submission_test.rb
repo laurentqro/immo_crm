@@ -21,8 +21,8 @@ class SubmissionTest < ActiveSupport::TestCase
     stub_request(:post, "http://localhost:8000/validate")
       .to_return(
         status: 200,
-        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
-        headers: {"Content-Type" => "application/json"}
+        body: { valid: true, summary: { errors: 0 }, messages: [] }.to_json,
+        headers: { "Content-Type" => "application/json" }
       )
 
     with_arelle_enabled do
@@ -37,13 +37,13 @@ class SubmissionTest < ActiveSupport::TestCase
         status: 200,
         body: {
           valid: false,
-          summary: {errors: 2},
+          summary: { errors: 2 },
           messages: [
-            {severity: "error", code: "e1", message: "Error 1"},
-            {severity: "error", code: "e2", message: "Error 2"}
+            { severity: "error", code: "e1", message: "Error 1" },
+            { severity: "error", code: "e2", message: "Error 2" }
           ]
         }.to_json,
-        headers: {"Content-Type" => "application/json"}
+        headers: { "Content-Type" => "application/json" }
       )
 
     with_arelle_enabled do

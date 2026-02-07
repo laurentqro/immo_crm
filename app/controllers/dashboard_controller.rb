@@ -66,14 +66,14 @@ class DashboardController < ApplicationController
   end
 
   def fetch_submission_status
-    return {status: :not_started, year: @year} unless defined?(Submission) && Submission.table_exists?
+    return { status: :not_started, year: @year } unless defined?(Submission) && Submission.table_exists?
 
     submission = organization_scope(Submission).find_by(year: @year)
 
     if submission
-      {status: submission.status.to_sym, year: @year, submission: submission}
+      { status: submission.status.to_sym, year: @year, submission: submission }
     else
-      {status: :not_started, year: @year}
+      { status: :not_started, year: @year }
     end
   end
 end

@@ -49,7 +49,7 @@ class MetaTags
   attribute :prev_url
   attribute :web_app_capable, default: true
   attribute :noindex
-  attribute :icons, default: [{href: "/favicon.ico", sizes: :any}, {href: "/icon.svg", type: "image/svg+xml", sizes: :any}]
+  attribute :icons, default: [{ href: "/favicon.ico", sizes: :any }, { href: "/icon.svg", type: "image/svg+xml", sizes: :any }]
   attribute :apple_touch_icon, default: "/apple-touch-icon.png"
 
   # Separator for title & site
@@ -70,7 +70,7 @@ class MetaTags
     full_title = [view_context.content_for(:title) || title, site].compact.join(" #{separator} ")
     image_url = image.start_with?("http") ? image : view_context.image_url(image)
 
-    view_context.render inline: <<~CONTENT, locals: {full_title: full_title, image_url: image_url}.merge(attributes.symbolize_keys)
+    view_context.render inline: <<~CONTENT, locals: { full_title: full_title, image_url: image_url }.merge(attributes.symbolize_keys)
       <%= tag.title full_title %>
       <%= tag.meta name: :title, content: full_title %>
       <%= tag.meta name: :description, content: description %>

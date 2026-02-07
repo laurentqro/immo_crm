@@ -216,8 +216,8 @@ class SurveyTest < ActiveSupport::TestCase
     stub_request(:post, "http://localhost:8000/validate")
       .to_return(
         status: 200,
-        body: {valid: true, summary: {errors: 0}, messages: []}.to_json,
-        headers: {"Content-Type" => "application/json"}
+        body: { valid: true, summary: { errors: 0 }, messages: [] }.to_json,
+        headers: { "Content-Type" => "application/json" }
       )
 
     with_arelle_enabled do
@@ -242,10 +242,10 @@ class SurveyTest < ActiveSupport::TestCase
         status: 200,
         body: {
           valid: false,
-          summary: {errors: 1},
-          messages: [{severity: "error", code: "test", message: "Missing field"}]
+          summary: { errors: 1 },
+          messages: [{ severity: "error", code: "test", message: "Missing field" }]
         }.to_json,
-        headers: {"Content-Type" => "application/json"}
+        headers: { "Content-Type" => "application/json" }
       )
 
     with_arelle_enabled do

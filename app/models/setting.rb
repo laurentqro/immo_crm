@@ -18,8 +18,8 @@ class Setting < ApplicationRecord
 
   belongs_to :organization
 
-  validates :key, presence: true, uniqueness: {scope: :organization_id}
-  validates :category, presence: true, inclusion: {in: CATEGORIES}
+  validates :key, presence: true, uniqueness: { scope: :organization_id }
+  validates :category, presence: true, inclusion: { in: CATEGORIES }
 
   # === Scopes ===
 

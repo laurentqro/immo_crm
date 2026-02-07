@@ -7,7 +7,7 @@ class ApiBaseControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "successful when user logged in" do
-    get api_v1_me_url, headers: {Authorization: "token #{users(:one).api_tokens.first.token}"}
+    get api_v1_me_url, headers: { Authorization: "token #{users(:one).api_tokens.first.token}" }
     assert_response :success
 
     # Doesn't set Devise cookies

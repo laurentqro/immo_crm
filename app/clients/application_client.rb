@@ -89,7 +89,7 @@ class ApplicationClient
   #
   #   { "X-API-Key" => token }
   #   { "AccessKey" => token }
-  def authorization_header = {"Authorization" => "Bearer #{auth&.token || token}"}
+  def authorization_header = { "Authorization" => "Bearer #{auth&.token || token}" }
 
   # Override to customize default query params
   # Returns a Hash

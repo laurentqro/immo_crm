@@ -235,7 +235,7 @@ class ManagedPropertiesControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch managed_property_path(other_property), params: {
-      managed_property: {monthly_rent: 9999}
+      managed_property: { monthly_rent: 9999 }
     }
 
     assert_response :not_found
@@ -282,7 +282,7 @@ class ManagedPropertiesControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     patch managed_property_path(@managed_property), params: {
-      managed_property: {monthly_rent: 5500}
+      managed_property: { monthly_rent: 5500 }
     }
 
     assert_equal "Managed property was successfully updated.", flash[:notice]

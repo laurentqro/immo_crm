@@ -8,7 +8,7 @@ class NotificationTokensControllerTest < ActionDispatch::IntegrationTest
 
   test "creates a notification token" do
     assert_difference "NotificationToken.count" do
-      post api_v1_notification_tokens_path, params: {token: "test", platform: "iOS"}
+      post api_v1_notification_tokens_path, params: { token: "test", platform: "iOS" }
       assert_response :success
     end
   end

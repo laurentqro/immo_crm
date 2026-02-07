@@ -8,7 +8,7 @@ class Users::AgreementsController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.json { render json: {error: t(".description", agreement: @agreement.title)} }
+      format.json { render json: { error: t(".description", agreement: @agreement.title) } }
     end
   end
 
