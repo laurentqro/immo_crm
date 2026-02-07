@@ -557,4 +557,73 @@ class SurveyTest < ActiveSupport::TestCase
     end
   end
 
+  # === VASP Field Tests ===
+
+  # Use compliance_test_org which has VASP fixtures:
+  # - vasp_exchange_fr (EXCHANGE, incorporation_country: FR)
+  # - vasp_custodian_lu (CUSTODIAN, incorporation_country: LU)
+  # - vasp_ico_ch (ICO, incorporation_country: CH)
+  # - vasp_other_mc (OTHER, incorporation_country: MC)
+
+  test "a13602a returns Hash of VASP exchange clients grouped by country" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a13602a)
+
+    assert_kind_of Hash, result
+    assert_equal 1, result.values.sum
+    assert_equal 1, result["FR"]
+  end
+
+  test "a13602b returns Hash of VASP custodian clients grouped by country" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a13602b)
+
+    assert_kind_of Hash, result
+    assert_equal 1, result.values.sum
+    assert_equal 1, result["LU"]
+  end
+
+  test "a13602c returns Hash of VASP ICO clients grouped by country" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a13602c)
+
+    assert_kind_of Hash, result
+    assert_equal 1, result.values.sum
+    assert_equal 1, result["CH"]
+  end
+
+  test "a13602d returns Hash of VASP other clients grouped by country" do
+    org = organizations(:compliance_test_org)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a13602d)
+
+    assert_kind_of Hash, result
+    assert_equal 1, result.values.sum
+    assert_equal 1, result["MC"]
+  end
+
+  test "a13602a returns empty Hash when no VASP exchange clients exist" do
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: Date.current.year)
+
+    result = survey.send(:a13602a)
+
+    assert_kind_of Hash, result
+    assert result.empty?
+  end
+
+  test "a13604e returns setting value for other VASP services description" do
+    result = @survey.send(:a13604e)
+
+    # No setting configured in default org, should be nil
+    assert_nil result
+  end
+
 end

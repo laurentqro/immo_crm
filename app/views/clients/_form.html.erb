@@ -146,6 +146,31 @@
       </div>
     </div>
 
+    <%# VASP Section %>
+    <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+      <div class="form-picker-group">
+        <%= form.check_box :is_vasp,
+            data: { client_form_target: "isVasp", action: "change->client-form#toggleVaspType" } %>
+        <div>
+          <%= form.label :is_vasp, "Virtual Asset Service Provider (VASP)" %>
+          <p class="form-hint">Client is a PSAV/VASP (prestataire de services sur actifs virtuels).</p>
+        </div>
+      </div>
+
+      <div class="form-group mt-4 ml-7 <%= 'hidden' unless client.is_vasp? %>" data-client-form-target="vaspType">
+        <%= form.label :vasp_type, "VASP type" %>
+        <%= form.select :vasp_type,
+            options_for_select([
+              ["Virtual currency exchange provider", "EXCHANGE"],
+              ["Custodian wallet provider", "CUSTODIAN"],
+              ["ICO-related services (token offering)", "ICO"],
+              ["Other VASP services", "OTHER"]
+            ], client.vasp_type),
+            { include_blank: "Select VASP type..." } %>
+        <p class="form-hint">Type of virtual asset service provided by this client (AMSF classification).</p>
+      </div>
+    </div>
+
     <%# Risk Level %>
     <div class="form-group">
       <%= form.label :risk_level, "Risk level" %>

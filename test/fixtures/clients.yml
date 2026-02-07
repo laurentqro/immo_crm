@@ -155,6 +155,7 @@ vasp_client:
   legal_person_type: "SAM"
   nationality: "MC"
   residence_country: "MC"
+  incorporation_country: "MC"
   is_pep: false
   is_vasp: true
   vasp_type: "EXCHANGE"
@@ -490,3 +491,72 @@ foreign_third_party_cdd_swiss:
   third_party_cdd: true
   third_party_cdd_type: "FOREIGN"
   third_party_cdd_country: "CH"
+
+# =============================================================================
+# VASP Test Fixtures
+# These fixtures test VASP survey fields a13602a-d (VASP clients by type/country)
+# =============================================================================
+
+# VASP Exchange client incorporated in France
+vasp_exchange_fr:
+  organization: compliance_test_org
+  name: "French Crypto Exchange"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "SA"
+  nationality: "FR"
+  residence_country: "FR"
+  incorporation_country: "FR"
+  is_pep: false
+  is_vasp: true
+  vasp_type: "EXCHANGE"
+  risk_level: "HIGH"
+  business_sector: "Cryptocurrency"
+  became_client_at: <%= 3.months.ago %>
+
+# VASP Custodian client incorporated in Luxembourg
+vasp_custodian_lu:
+  organization: compliance_test_org
+  name: "Luxembourg Wallet Provider"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "SA"
+  nationality: "LU"
+  residence_country: "LU"
+  incorporation_country: "LU"
+  is_pep: false
+  is_vasp: true
+  vasp_type: "CUSTODIAN"
+  risk_level: "HIGH"
+  business_sector: "Digital Assets"
+  became_client_at: <%= 2.months.ago %>
+
+# VASP ICO client incorporated in Switzerland
+vasp_ico_ch:
+  organization: compliance_test_org
+  name: "Swiss Token Services"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "OTHER"
+  nationality: "CH"
+  residence_country: "CH"
+  incorporation_country: "CH"
+  is_pep: false
+  is_vasp: true
+  vasp_type: "ICO"
+  risk_level: "HIGH"
+  business_sector: "Blockchain"
+  became_client_at: <%= 1.month.ago %>
+
+# VASP Other client incorporated in Monaco
+vasp_other_mc:
+  organization: compliance_test_org
+  name: "Monaco DeFi Services"
+  client_type: "LEGAL_ENTITY"
+  legal_person_type: "SAM"
+  nationality: "MC"
+  residence_country: "MC"
+  incorporation_country: "MC"
+  is_pep: false
+  is_vasp: true
+  vasp_type: "OTHER"
+  risk_level: "HIGH"
+  business_sector: "DeFi"
+  became_client_at: <%= 1.month.ago %>

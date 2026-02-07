@@ -194,7 +194,7 @@ class Survey
 
       # Description of other legal arrangements
       def a11006
-        setting_value("a11006")
+        setting_value("other_legal_constructions")
       end
 
       # === PEP (Politically Exposed Person) Statistics ===
@@ -314,7 +314,7 @@ class Survey
       end
 
       def a13604e
-        setting_value("a13604e")
+        setting_value("vasp_other_services")
       end
 
       # === Beneficial Owner Statistics ===

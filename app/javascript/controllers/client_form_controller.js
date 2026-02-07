@@ -12,6 +12,8 @@ export default class extends Controller {
     "naturalPersonFields",
     "isPep",
     "pepType",
+    "isVasp",
+    "vaspType",
     "dueDiligenceLevel",
     "simplifiedDdReason",
     "introducedByThirdParty",
@@ -24,6 +26,7 @@ export default class extends Controller {
   connect() {
     this.toggleFields()
     this.togglePepType()
+    this.toggleVaspType()
     this.toggleSimplifiedReason()
     this.toggleIntroducerCountry()
     this.toggleThirdPartyCdd()
@@ -64,6 +67,13 @@ export default class extends Controller {
     if (this.hasPepTypeTarget) {
       this.pepTypeTarget.classList.toggle("hidden", !isPep)
     }
+  }
+
+  toggleVaspType() {
+    if (!this.hasIsVaspTarget || !this.hasVaspTypeTarget) return
+
+    const isVasp = this.isVaspTarget.checked
+    this.vaspTypeTarget.classList.toggle("hidden", !isVasp)
   }
 
   toggleSimplifiedReason() {
