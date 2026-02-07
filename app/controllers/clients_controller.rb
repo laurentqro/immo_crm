@@ -8,7 +8,7 @@ class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :edit, :update, :destroy]
 
   def index
-    @clients = policy_scope(Client).includes(:beneficial_owners)
+    @clients = policy_scope(Client).includes(:beneficial_owners, :trustees)
     @clients = @clients.where(client_type: params[:client_type]) if params[:client_type].present?
     @clients = @clients.where(risk_level: params[:risk_level]) if params[:risk_level].present?
     @clients = @clients.search(params[:q]) if params[:q].present?
