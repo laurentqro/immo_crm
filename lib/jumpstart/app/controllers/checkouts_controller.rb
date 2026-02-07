@@ -59,14 +59,14 @@ class CheckoutsController < ApplicationController
 
     subscription_data = {
       metadata: params.fetch(:metadata, {}).permit!.to_h,
-      trial_settings: { end_behavior: { missing_payment_method: "pause" } },
+      trial_settings: {end_behavior: {missing_payment_method: "pause"}},
       trial_period_days: ((@plan.trial_period_days.to_i > 1 && trial_allowed) ? @plan.trial_period_days : nil)
     }.compact
     args = {
       allow_promotion_codes: true,
-      automatic_tax: { enabled: @plan.taxed? },
-      consent_collection: { terms_of_service: :required },
-      customer_update: { address: :auto },
+      automatic_tax: {enabled: @plan.taxed?},
+      consent_collection: {terms_of_service: :required},
+      customer_update: {address: :auto},
       mode: :subscription,
       line_items: @plan.id_for_processor(:stripe),
       payment_method_collection: :if_required,

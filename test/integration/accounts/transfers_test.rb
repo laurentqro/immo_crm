@@ -13,7 +13,7 @@ class Jumpstart::AccountsTransferTest < ActionDispatch::IntegrationTest
     end
 
     test "can transfer account" do
-      patch account_transfer_path(@account), params: { user_id: @regular_user.id }
+      patch account_transfer_path(@account), params: {user_id: @regular_user.id}
       assert_redirected_to account_path(@account)
       assert_equal @regular_user, @account.reload.owner
     end

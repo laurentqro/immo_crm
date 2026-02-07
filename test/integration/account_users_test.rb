@@ -28,7 +28,7 @@ class Jumpstart::AccountUsersTest < ActionDispatch::IntegrationTest
 
     test "can update account user" do
       account_user = account_users(:company_regular_user)
-      put account_account_user_path(@account, account_user), params: { account_user: { admin: "1" } }
+      put account_account_user_path(@account, account_user), params: {account_user: {admin: "1"}}
       assert_response :redirect
       assert account_user.reload.admin?
     end
@@ -90,12 +90,12 @@ class Jumpstart::AccountUsersTest < ActionDispatch::IntegrationTest
     test "Regular user cannot update account users" do
       # Cannot edit themselves
       account_user = @account.account_users.find_by(user: @regular_user)
-      put account_account_user_path(@account, account_user), params: { admin: "1" }
+      put account_account_user_path(@account, account_user), params: {admin: "1"}
       assert_redirected_to account_path(@account)
 
       # Cannot edit admin user
       account_user = @account.account_users.find_by(user: @admin)
-      put account_account_user_path(@account, account_user), params: { admin: "0" }
+      put account_account_user_path(@account, account_user), params: {admin: "0"}
       assert_redirected_to account_path(@account)
     end
 

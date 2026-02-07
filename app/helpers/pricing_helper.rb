@@ -4,7 +4,7 @@ module PricingHelper
   end
 
   def pricing_link_to(plan, **opts)
-    default_options = { class: "btn btn-secondary btn-large btn-block" }
+    default_options = {class: "btn btn-secondary btn-large btn-block"}
     opts = default_options.merge(opts)
 
     if plan.contact_url.present?

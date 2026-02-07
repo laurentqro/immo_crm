@@ -4,7 +4,7 @@ if defined? OmniAuth
   class Jumpstart::OmniauthCallbacksTest < ActionDispatch::IntegrationTest
     setup do
       OmniAuth.config.test_mode = true
-      OmniAuth.config.add_mock(:developer, uid: "12345", info: { email: "twitter@example.com" }, credentials: { token: 1, expires_in: 100 })
+      OmniAuth.config.add_mock(:developer, uid: "12345", info: {email: "twitter@example.com"}, credentials: {token: 1, expires_in: 100})
     end
 
     test "can register and login with a social account" do
@@ -41,7 +41,7 @@ if defined? OmniAuth
       user = users(:one)
       user.connected_accounts.delete_all
 
-      OmniAuth.config.add_mock(:developer, uid: "12345", info: { email: user.email }, credentials: { token: 1 })
+      OmniAuth.config.add_mock(:developer, uid: "12345", info: {email: user.email}, credentials: {token: 1})
 
       get "/users/auth/developer/callback"
 
@@ -71,7 +71,7 @@ if defined? OmniAuth
       assert_not_equal connected_account.owner, user
 
       sign_in user
-      OmniAuth.config.add_mock(:developer, uid: connected_account.uid, info: { email: connected_account.owner.email }, credentials: { token: 1 })
+      OmniAuth.config.add_mock(:developer, uid: connected_account.uid, info: {email: connected_account.owner.email}, credentials: {token: 1})
       get "/users/auth/developer/callback"
 
       assert user.connected_accounts.developer.none?

@@ -9,11 +9,11 @@ class ArelleClientTest < ActiveSupport::TestCase
 
   test "validate returns ValidationResult on success" do
     stub_request(:post, "http://localhost:8000/validate")
-      .with(body: "<xml/>", headers: { "Content-Type" => "application/xml" })
+      .with(body: "<xml/>", headers: {"Content-Type" => "application/xml"})
       .to_return(
         status: 200,
-        body: { valid: true, summary: { errors: 0, warnings: 0, info: 1 }, messages: [] }.to_json,
-        headers: { "Content-Type" => "application/json" }
+        body: {valid: true, summary: {errors: 0, warnings: 0, info: 1}, messages: []}.to_json,
+        headers: {"Content-Type" => "application/json"}
       )
 
     result = @client.validate("<xml/>")
@@ -29,10 +29,10 @@ class ArelleClientTest < ActiveSupport::TestCase
         status: 200,
         body: {
           valid: false,
-          summary: { errors: 1, warnings: 0, info: 0 },
-          messages: [{ severity: "error", code: "test", message: "Test error" }]
+          summary: {errors: 1, warnings: 0, info: 0},
+          messages: [{severity: "error", code: "test", message: "Test error"}]
         }.to_json,
-        headers: { "Content-Type" => "application/json" }
+        headers: {"Content-Type" => "application/json"}
       )
 
     result = @client.validate("<xml/>")
@@ -78,7 +78,7 @@ class ArelleClientTest < ActiveSupport::TestCase
       .to_return(
         status: 200,
         body: "not valid json",
-        headers: { "Content-Type" => "application/json" }
+        headers: {"Content-Type" => "application/json"}
       )
 
     assert_raises(ArelleClient::Error) do
@@ -90,8 +90,8 @@ class ArelleClientTest < ActiveSupport::TestCase
     stub_request(:post, "http://localhost:8000/validate")
       .to_return(
         status: 200,
-        body: { unexpected: "format" }.to_json,
-        headers: { "Content-Type" => "application/json" }
+        body: {unexpected: "format"}.to_json,
+        headers: {"Content-Type" => "application/json"}
       )
 
     assert_raises(ArelleClient::Error) do
@@ -105,14 +105,14 @@ class ArelleClientTest < ActiveSupport::TestCase
         status: 200,
         body: {
           valid: true,
-          summary: { errors: 0, warnings: 2, info: 1 },
+          summary: {errors: 0, warnings: 2, info: 1},
           messages: [
-            { severity: "warning", code: "w1", message: "Warning 1" },
-            { severity: "warning", code: "w2", message: "Warning 2" },
-            { severity: "info", code: "i1", message: "Info 1" }
+            {severity: "warning", code: "w1", message: "Warning 1"},
+            {severity: "warning", code: "w2", message: "Warning 2"},
+            {severity: "info", code: "i1", message: "Info 1"}
           ]
         }.to_json,
-        headers: { "Content-Type" => "application/json" }
+        headers: {"Content-Type" => "application/json"}
       )
 
     result = @client.validate("<xml/>")
@@ -125,8 +125,8 @@ class ArelleClientTest < ActiveSupport::TestCase
     stub_request(:post, "http://localhost:8000/validate")
       .to_return(
         status: 200,
-        body: { valid: true, summary: {}, messages: [] }.to_json,
-        headers: { "Content-Type" => "application/json" }
+        body: {valid: true, summary: {}, messages: []}.to_json,
+        headers: {"Content-Type" => "application/json"}
       )
 
     result = @client.validate("<xml/>")

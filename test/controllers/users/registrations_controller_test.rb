@@ -4,15 +4,15 @@ class Users::RegistrationsControllerTest < ActionDispatch::IntegrationTest
   include InvisibleCaptcha
 
   setup do
-    @user_params = { user:
-                        { name: "Test User",
+    @user_params = {user:
+                        {name: "Test User",
                          email: "user@test.com",
                          password: "TestPassword",
-                         terms_of_service: "1" } }
+                         terms_of_service: "1"}}
 
     # With this feature enabled, we also need to submit an account
     if Jumpstart.config.register_with_account?
-      @user_params[:user][:owned_accounts_attributes] = [{ name: "Test Account" }]
+      @user_params[:user][:owned_accounts_attributes] = [{name: "Test Account"}]
     end
   end
 

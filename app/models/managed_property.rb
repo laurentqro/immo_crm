@@ -18,12 +18,12 @@ class ManagedProperty < ApplicationRecord
   # === Validations ===
   validates :property_address, presence: true
   validates :management_start_date, presence: true
-  validates :property_type, inclusion: { in: MANAGED_PROPERTY_TYPES }, allow_blank: true
-  validates :tenant_type, inclusion: { in: TENANT_TYPES }, allow_blank: true
-  validates :tenant_country, format: { with: /\A[A-Z]{2}\z/ }, allow_blank: true
-  validates :monthly_rent, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
-  validates :management_fee_percent, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_blank: true
-  validates :management_fee_fixed, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :property_type, inclusion: {in: MANAGED_PROPERTY_TYPES}, allow_blank: true
+  validates :tenant_type, inclusion: {in: TENANT_TYPES}, allow_blank: true
+  validates :tenant_country, format: {with: /\A[A-Z]{2}\z/}, allow_blank: true
+  validates :monthly_rent, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :management_fee_percent, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 100}, allow_blank: true
+  validates :management_fee_fixed, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
 
   validate :client_belongs_to_organization
   validate :fee_structure_present

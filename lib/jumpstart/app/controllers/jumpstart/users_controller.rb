@@ -10,7 +10,7 @@ module Jumpstart
     def create
       user = User.find(params[:id])
       Jumpstart.grant_system_admin! user
-      render turbo_stream: turbo_stream.append("admin_users", partial: "jumpstart/users/user", locals: { user: user })
+      render turbo_stream: turbo_stream.append("admin_users", partial: "jumpstart/users/user", locals: {user: user})
     end
   end
 end

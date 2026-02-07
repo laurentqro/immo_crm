@@ -6,13 +6,13 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
 
     user = users(:one)
-    post api_v1_auth_url, params: { email: user.email, password: "invalidpassword" }
+    post api_v1_auth_url, params: {email: user.email, password: "invalidpassword"}
     assert_response :unauthorized
   end
 
   test "returns an api token on successful auth" do
     user = users(:one)
-    post api_v1_auth_url, params: { email: user.email, password: UNIQUE_PASSWORD }
+    post api_v1_auth_url, params: {email: user.email, password: UNIQUE_PASSWORD}
     assert_response :success
     assert_not_nil response.parsed_body["token"]
   end
@@ -21,7 +21,7 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
     user = users(:one)
     user.enable_two_factor!
     user.set_otp_secret!
-    post api_v1_auth_url, params: { email: user.email, password: UNIQUE_PASSWORD }
+    post api_v1_auth_url, params: {email: user.email, password: UNIQUE_PASSWORD}
     assert_response :unprocessable_content
   end
 
@@ -29,7 +29,7 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
     user = users(:one)
     user.enable_two_factor!
     user.set_otp_secret!
-    post api_v1_auth_url, params: { email: user.email, password: UNIQUE_PASSWORD, otp_attempt: "123456" }
+    post api_v1_auth_url, params: {email: user.email, password: UNIQUE_PASSWORD, otp_attempt: "123456"}
     assert_response :unauthorized
   end
 
@@ -37,7 +37,7 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
     user = users(:one)
     user.enable_two_factor!
     user.set_otp_secret!
-    post api_v1_auth_url, params: { email: user.email, password: UNIQUE_PASSWORD, otp_attempt: user.current_otp }
+    post api_v1_auth_url, params: {email: user.email, password: UNIQUE_PASSWORD, otp_attempt: user.current_otp}
     assert_response :success
     assert_not_nil response.parsed_body["token"]
   end
@@ -45,7 +45,7 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
   test "creates a new default api token if one didn't exist" do
     user = users(:one)
     assert_difference "user.api_tokens.count" do
-      post api_v1_auth_url, params: { email: user.email, password: UNIQUE_PASSWORD }
+      post api_v1_auth_url, params: {email: user.email, password: UNIQUE_PASSWORD}
       assert_response :success
     end
     assert_equal user.api_tokens.find_by(name: ApiToken::DEFAULT_NAME).token, response.parsed_body["token"]
@@ -53,7 +53,7 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
 
   test "sets auth cookie during hotwire app login" do
     user = users(:one)
-    post api_v1_auth_url, params: { email: user.email, password: UNIQUE_PASSWORD }, headers: { HTTP_USER_AGENT: "Turbo Native iOS" }
+    post api_v1_auth_url, params: {email: user.email, password: UNIQUE_PASSWORD}, headers: {HTTP_USER_AGENT: "Turbo Native iOS"}
     assert_response :success
 
     # Set Devise cookies for Turbo Native apps
@@ -65,7 +65,7 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
 
     assert_difference "NotificationToken.count", -1 do
       sign_in notification_token.user
-      delete api_v1_auth_url, params: { notification_token: notification_token.token }
+      delete api_v1_auth_url, params: {notification_token: notification_token.token}
       assert_response :success
     end
   end

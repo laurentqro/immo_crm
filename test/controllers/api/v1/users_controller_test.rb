@@ -13,7 +13,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     Jumpstart.config.stub(:register_with_account?, false) do
       assert_difference "User.count" do
-        post api_v1_users_url, params: { user: { email: email, name: "API User", password: "password", password_confirmation: "password", terms_of_service: "1" } }
+        post api_v1_users_url, params: {user: {email: email, name: "API User", password: "password", password_confirmation: "password", terms_of_service: "1"}}
         assert_response :success
       end
     end
@@ -27,7 +27,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     Jumpstart.config.stub(:personal_accounts?, true) do
       Jumpstart.config.stub(:register_with_account?, false) do
         assert_difference "User.count" do
-          post api_v1_users_url, params: { user: { email: "api-user@example.com", name: "API User", password: "password", password_confirmation: "password", terms_of_service: "1" } }, headers: { HTTP_USER_AGENT: "Turbo Native iOS" }
+          post api_v1_users_url, params: {user: {email: "api-user@example.com", name: "API User", password: "password", password_confirmation: "password", terms_of_service: "1"}}, headers: {HTTP_USER_AGENT: "Turbo Native iOS"}
           assert_response :success
         end
       end
@@ -49,7 +49,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     Jumpstart.config.stub(:register_with_account?, true) do
       # Depending on configuration, may have a personal account
       assert_difference "Account.count", ((Jumpstart.config.account_types == "team") ? 1 : 2) do
-        post api_v1_users_url, params: { user: { email: "api-user@example.com", name: "API User", password: "password", password_confirmation: "password", terms_of_service: "1", owned_accounts_attributes: [{ name: "Test Account" }] } }, headers: { HTTP_USER_AGENT: "Turbo Native iOS" }
+        post api_v1_users_url, params: {user: {email: "api-user@example.com", name: "API User", password: "password", password_confirmation: "password", terms_of_service: "1", owned_accounts_attributes: [{name: "Test Account"}]}}, headers: {HTTP_USER_AGENT: "Turbo Native iOS"}
         assert_response :success
       end
 

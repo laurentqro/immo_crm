@@ -9,7 +9,7 @@ class AccountUser < ApplicationRecord
   belongs_to :account, counter_cache: true
   belongs_to :user
 
-  validates :user_id, uniqueness: { scope: :account_id }
+  validates :user_id, uniqueness: {scope: :account_id}
   validate :owner_must_be_admin, on: :update, if: -> { admin_changed? && account_owner? }
 
   # Updates the subscription quantity automatically when charge_per_unit is enabled

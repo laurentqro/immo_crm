@@ -354,7 +354,7 @@ module Jumpstart
     end
 
     def procfile_content(dev: false)
-      content = { web: "bundle exec rails s" }
+      content = {web: "bundle exec rails s"}
 
       # Background workers
       if (worker_command = job_command(queue_adapter))

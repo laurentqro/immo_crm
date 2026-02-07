@@ -28,7 +28,7 @@ class Survey
       def beneficial_owners_base
         BeneficialOwner.joins(:client)
           .merge(Client.kept)
-          .where(clients: { organization_id: organization.id })
+          .where(clients: {organization_id: organization.id})
       end
 
       # Retrieve a setting value by key from the cached settings hash
@@ -53,7 +53,7 @@ class Survey
       def vasp_transactions_by_type(vasp_type)
         year_transactions
           .joins(:client)
-          .where(clients: { is_vasp: true, vasp_type: vasp_type })
+          .where(clients: {is_vasp: true, vasp_type: vasp_type})
           .count
       end
 
@@ -61,7 +61,7 @@ class Survey
       def vasp_funds_by_type(vasp_type)
         year_transactions
           .joins(:client)
-          .where(clients: { is_vasp: true, vasp_type: vasp_type })
+          .where(clients: {is_vasp: true, vasp_type: vasp_type})
           .sum(:transaction_value)
       end
 
