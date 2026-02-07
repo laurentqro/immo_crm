@@ -58,37 +58,31 @@ class ClientTest < ActiveSupport::TestCase
   end
 
   test "accepts all valid client_types" do
-    %w[NATURAL_PERSON LEGAL_ENTITY TRUST].each do |type|
+    %w[NATURAL_PERSON LEGAL_ENTITY].each do |type|
       client = Client.new(
         organization: @organization,
         name: "Test Client",
         client_type: type
       )
-      # LEGAL_ENTITY requires legal_person_type
-      client.legal_person_type = "SCI" if type == "LEGAL_ENTITY"
-      # TRUST requires trustee fields
-      if type == "TRUST"
-        client.trustee_name = "Test Trustee"
-        client.trustee_nationality = "MC"
-        client.trustee_country = "MC"
-      end
+      # LEGAL_ENTITY requires legal_entity_type
+      client.legal_entity_type = "SCI" if type == "LEGAL_ENTITY"
       assert client.valid?, "Expected client_type '#{type}' to be valid"
     end
   end
 
   # === Conditional Validations ===
 
-  test "requires legal_person_type for PM clients" do
+  test "requires legal_entity_type for PM clients" do
     client = Client.new(
       organization: @organization,
       name: "Monaco Corp",
       client_type: "LEGAL_ENTITY"
     )
     assert_not client.valid?
-    assert_includes client.errors[:legal_person_type], "can't be blank"
+    assert_includes client.errors[:legal_entity_type], "can't be blank"
   end
 
-  test "legal_person_type not required for PP clients" do
+  test "legal_entity_type not required for PP clients" do
     client = Client.new(
       organization: @organization,
       name: "John Doe",
@@ -97,67 +91,67 @@ class ClientTest < ActiveSupport::TestCase
     assert client.valid?
   end
 
-  test "legal_person_type must be valid when present" do
+  test "legal_entity_type must be valid when present" do
     client = Client.new(
       organization: @organization,
       name: "Monaco Corp",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "INVALID"
+      legal_entity_type: "INVALID"
     )
     assert_not client.valid?
-    assert_includes client.errors[:legal_person_type], "is not included in the list"
+    assert_includes client.errors[:legal_entity_type], "is not included in the list"
   end
 
-  test "accepts all valid legal_person_types" do
-    AmsfConstants::LEGAL_PERSON_TYPES.each do |type|
+  test "accepts all valid legal_entity_types" do
+    AmsfConstants::LEGAL_ENTITY_TYPES.each do |type|
       attrs = {
         organization: @organization,
         name: "Test Corp",
         client_type: "LEGAL_ENTITY",
-        legal_person_type: type
+        legal_entity_type: type
       }
-      # OTHER requires legal_person_type_other
-      attrs[:legal_person_type_other] = "Test arrangement" if type == "OTHER"
+      # OTHER requires legal_entity_type_other
+      attrs[:legal_entity_type_other] = "Test arrangement" if type == "OTHER"
 
       client = Client.new(attrs)
-      assert client.valid?, "Expected legal_person_type '#{type}' to be valid, errors: #{client.errors.full_messages}"
+      assert client.valid?, "Expected legal_entity_type '#{type}' to be valid, errors: #{client.errors.full_messages}"
     end
   end
 
-  test "requires legal_person_type_other when legal_person_type is OTHER" do
+  test "requires legal_entity_type_other when legal_entity_type is OTHER" do
     client = Client.new(
       organization: @organization,
       name: "Other Legal Entity",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "OTHER"
+      legal_entity_type: "OTHER"
     )
     assert_not client.valid?
-    assert_includes client.errors[:legal_person_type_other], "can't be blank"
+    assert_includes client.errors[:legal_entity_type_other], "can't be blank"
   end
 
-  test "legal_person_type_other not required when legal_person_type is not OTHER" do
+  test "legal_entity_type_other not required when legal_entity_type is not OTHER" do
     client = Client.new(
       organization: @organization,
       name: "SCI Corp",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "SCI"
+      legal_entity_type: "SCI"
     )
     assert client.valid?
   end
 
-  test "clears legal_person_type_other when legal_person_type changes from OTHER" do
+  test "clears legal_entity_type_other when legal_entity_type changes from OTHER" do
     client = Client.create!(
       organization: @organization,
       name: "Other Corp",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "OTHER",
-      legal_person_type_other: "Fiducie"
+      legal_entity_type: "OTHER",
+      legal_entity_type_other: "Fiducie"
     )
 
-    client.update!(legal_person_type: "FOUNDATION")
+    client.update!(legal_entity_type: "FOUNDATION")
     client.reload
 
-    assert_nil client.legal_person_type_other
+    assert_nil client.legal_entity_type_other
   end
 
   test "changing client_type from LEGAL_ENTITY+OTHER to NATURAL_PERSON succeeds and clears stale fields" do
@@ -165,15 +159,15 @@ class ClientTest < ActiveSupport::TestCase
       organization: @organization,
       name: "Was Legal Entity",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "OTHER",
-      legal_person_type_other: "Fiducie"
+      legal_entity_type: "OTHER",
+      legal_entity_type_other: "Fiducie"
     )
 
-    client.update!(client_type: "NATURAL_PERSON", legal_person_type: nil)
+    client.update!(client_type: "NATURAL_PERSON", legal_entity_type: nil)
     client.reload
 
     assert client.natural_person?
-    assert_nil client.legal_person_type_other
+    assert_nil client.legal_entity_type_other
   end
 
   test "requires pep_type when is_pep is true" do
@@ -227,7 +221,7 @@ class ClientTest < ActiveSupport::TestCase
       organization: @organization,
       name: "Crypto Exchange",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "SARL",
+      legal_entity_type: "SARL",
       is_vasp: true
     )
     assert_not client.valid?
@@ -239,7 +233,7 @@ class ClientTest < ActiveSupport::TestCase
       organization: @organization,
       name: "Regular Corp",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "SARL",
+      legal_entity_type: "SARL",
       is_vasp: false
     )
     assert client.valid?
@@ -251,7 +245,7 @@ class ClientTest < ActiveSupport::TestCase
         organization: @organization,
         name: "VASP Client",
         client_type: "LEGAL_ENTITY",
-        legal_person_type: "SARL",
+        legal_entity_type: "SARL",
         is_vasp: true,
         vasp_type: type
       }
@@ -268,7 +262,7 @@ class ClientTest < ActiveSupport::TestCase
       organization: @organization,
       name: "Other VASP",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "SARL",
+      legal_entity_type: "SARL",
       is_vasp: true,
       vasp_type: "OTHER"
     )
@@ -281,7 +275,7 @@ class ClientTest < ActiveSupport::TestCase
       organization: @organization,
       name: "Exchange VASP",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "SARL",
+      legal_entity_type: "SARL",
       is_vasp: true,
       vasp_type: "EXCHANGE"
     )
@@ -293,7 +287,7 @@ class ClientTest < ActiveSupport::TestCase
       organization: @organization,
       name: "Other VASP",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "SARL",
+      legal_entity_type: "SARL",
       is_vasp: true,
       vasp_type: "OTHER",
       vasp_other_service_type: "Crypto ATM operator"
@@ -391,7 +385,7 @@ class ClientTest < ActiveSupport::TestCase
       organization: @organization,
       name: "Monaco Corp",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "SCI",
+      legal_entity_type: "SCI",
       incorporation_country: "INVALID"
     )
     assert_not client.valid?
@@ -404,7 +398,7 @@ class ClientTest < ActiveSupport::TestCase
         organization: @organization,
         name: "Test Corp",
         client_type: "LEGAL_ENTITY",
-        legal_person_type: "SCI",
+        legal_entity_type: "SCI",
         incorporation_country: code
       )
       assert client.valid?, "Expected incorporation_country '#{code}' to be valid"
@@ -416,7 +410,7 @@ class ClientTest < ActiveSupport::TestCase
       organization: @organization,
       name: "Monaco Corp",
       client_type: "LEGAL_ENTITY",
-      legal_person_type: "SCI",
+      legal_entity_type: "SCI",
       incorporation_country: nil
     )
     assert client.valid?

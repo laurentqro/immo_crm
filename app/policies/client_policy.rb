@@ -50,8 +50,8 @@ class ClientPolicy < ApplicationPolicy
       :is_vasp,
       :vasp_type,
       :vasp_other_service_type,
-      :legal_person_type,
-      :legal_person_type_other,
+      :legal_entity_type,
+      :legal_entity_type_other,
       :business_sector,
       :became_client_at,
       :relationship_ended_at,
@@ -64,11 +64,6 @@ class ClientPolicy < ApplicationPolicy
       :relationship_end_reason,
       :source_of_funds_verified,
       :source_of_wealth_verified,
-      # Trustee fields (for Trust clients)
-      :trustee_name,
-      :trustee_nationality,
-      :trustee_country,
-      :is_professional_trustee,
       # Introducer tracking fields
       :introduced_by_third_party,
       :introducer_country,
@@ -76,8 +71,10 @@ class ClientPolicy < ApplicationPolicy
       :third_party_cdd,
       :third_party_cdd_type,
       :third_party_cdd_country,
-      # Incorporation country (for legal entities and trusts)
-      :incorporation_country
+      # Incorporation country (for legal entities)
+      :incorporation_country,
+      # Trustee nested attributes (for trust legal entities)
+      trustees_attributes: [:id, :name, :nationality, :is_professional, :_destroy]
     ]
   end
 

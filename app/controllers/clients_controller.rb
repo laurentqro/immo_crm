@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # CRUD controller for Client management.
-# Handles natural persons (NATURAL_PERSON), legal entities (LEGAL_ENTITY), and trusts (TRUST).
+# Handles natural persons (NATURAL_PERSON) and legal entities (LEGAL_ENTITY, including trusts).
 class ClientsController < ApplicationController
   include OrganizationScoped
 

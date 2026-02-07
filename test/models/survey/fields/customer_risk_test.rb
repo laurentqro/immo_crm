@@ -7,7 +7,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
     Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
     Client.create!(organization: org, name: "Client 2", client_type: "NATURAL_PERSON")
-    Client.create!(organization: org, name: "Client 3", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
+    Client.create!(organization: org, name: "Client 3", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
 
     survey = Survey.new(organization: org, year: 2025)
 
@@ -274,8 +274,8 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
 
     natural_person = Client.create!(organization: org, name: "Natural Person", client_type: "NATURAL_PERSON")
-    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
-    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST", trustee_name: "Test Trustee", trustee_nationality: "MC", trustee_country: "MC")
+    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
+    trust = Client.create!(organization: org, name: "Trust", client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST", incorporation_country: "MC")
 
     # Natural person purchase (a1403b)
     Transaction.create!(
@@ -362,8 +362,8 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
 
     natural_person = Client.create!(organization: org, name: "Natural Person", client_type: "NATURAL_PERSON")
-    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
-    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST", trustee_name: "Test Trustee", trustee_nationality: "MC", trustee_country: "MC")
+    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
+    trust = Client.create!(organization: org, name: "Trust", client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST", incorporation_country: "MC")
 
     # Natural person transaction (a1404b)
     Transaction.create!(

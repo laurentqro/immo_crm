@@ -102,19 +102,19 @@ class Survey
 
       # === Legal Entity Statistics ===
 
-      # Transactions by legal entity clients
+      # Transactions by legal entity clients (excluding trusts, counted separately in a1806tola)
       def a1502b
         purchases_and_sales = year_transactions
           .by_client
           .joins(:client)
-          .merge(Client.legal_entities)
+          .merge(Client.legal_entities.where.not(legal_entity_type: "TRUST"))
           .where(transaction_type: %w[PURCHASE SALE])
           .count
 
         rental_months = year_transactions
           .by_client
           .joins(:client)
-          .merge(Client.legal_entities)
+          .merge(Client.legal_entities.where.not(legal_entity_type: "TRUST"))
           .rentals
           .where(transaction_value: 10_000..)
           .sum(:rental_duration_months)
@@ -122,12 +122,12 @@ class Survey
         purchases_and_sales + rental_months
       end
 
-      # Total funds from legal entity transactions
+      # Total funds from legal entity transactions (excluding trusts, counted separately in a1807tola)
       def a1503b
         year_transactions
           .by_client
           .joins(:client)
-          .merge(Client.legal_entities)
+          .merge(Client.legal_entities.where.not(legal_entity_type: "TRUST"))
           .sum(:transaction_value)
       end
 
@@ -193,23 +193,23 @@ class Survey
       end
 
       # Description of other legal arrangements — derived from client data.
-      # Collects labels for non-standard legal forms + free-text legal_person_type_other values.
+      # Collects labels for non-standard legal forms + free-text legal_entity_type_other values.
       def a11006
         other_constructions = clients_kept
           .legal_entities
-          .where.not(legal_person_type: [*AmsfConstants::AMSF_STANDARD_LEGAL_FORMS, nil, ""])
+          .where.not(legal_entity_type: [*AmsfConstants::AMSF_STANDARD_LEGAL_FORMS, nil, ""])
 
         labels = other_constructions
-          .where.not(legal_person_type: "OTHER")
+          .where.not(legal_entity_type: "OTHER")
           .distinct
-          .pluck(:legal_person_type)
-          .filter_map { |t| AmsfConstants::LEGAL_PERSON_TYPE_LABELS[t] }
+          .pluck(:legal_entity_type)
+          .filter_map { |t| AmsfConstants::LEGAL_ENTITY_TYPE_LABELS[t] }
 
         free_texts = other_constructions
-          .where(legal_person_type: "OTHER")
-          .where.not(legal_person_type_other: [nil, ""])
+          .where(legal_entity_type: "OTHER")
+          .where.not(legal_entity_type_other: [nil, ""])
           .distinct
-          .pluck(:legal_person_type_other)
+          .pluck(:legal_entity_type_other)
 
         combined = (labels + free_texts).uniq
         combined.any? ? combined.join(", ") : nil
@@ -673,21 +673,19 @@ class Survey
 
       # Professional trustees grouped by trustee nationality
       def a1808
-        clients_kept
-          .trusts
-          .where(is_professional_trustee: true)
-          .where.not(trustee_nationality: [nil, ""])
-          .group(:trustee_nationality)
+        Trustee.joins(:client).merge(clients_kept.trusts)
+          .where(is_professional: true)
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
           .count
       end
 
-      # Professional trustees grouped by trustee country
+      # Professional trustees grouped by trust creation country
       def a1809
-        clients_kept
-          .trusts
-          .where(is_professional_trustee: true)
-          .where.not(trustee_country: [nil, ""])
-          .group(:trustee_country)
+        Trustee.joins(:client).merge(clients_kept.trusts)
+          .where(is_professional: true)
+          .where.not(clients: { incorporation_country: [nil, ""] })
+          .group("clients.incorporation_country")
           .count
       end
 

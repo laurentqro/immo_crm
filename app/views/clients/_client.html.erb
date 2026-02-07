@@ -14,14 +14,13 @@
   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset
       <%= case client.client_type
-          when 'PP' then 'bg-blue-50 text-blue-700 ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-300 dark:ring-blue-400/30'
-          when 'PM' then 'bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300 dark:ring-purple-400/30'
-          when 'TRUST' then 'bg-amber-50 text-amber-700 ring-amber-700/10 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-400/30'
+          when 'NATURAL_PERSON' then 'bg-blue-50 text-blue-700 ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-300 dark:ring-blue-400/30'
+          when 'LEGAL_ENTITY' then 'bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300 dark:ring-purple-400/30'
           end %>">
       <%= client.client_type_label %>
     </span>
-    <% if client.legal_entity? && client.legal_person_type.present? %>
-      <span class="ml-1 text-gray-400 dark:text-gray-500">(<%= client.legal_person_type %>)</span>
+    <% if client.legal_entity? && client.legal_entity_type.present? %>
+      <span class="ml-1 text-gray-400 dark:text-gray-500">(<%= client.legal_entity_type %>)</span>
     <% end %>
   </td>
   <td class="whitespace-nowrap px-3 py-4 text-sm">
