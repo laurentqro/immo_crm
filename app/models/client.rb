@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-# Client model for tracking natural persons, legal entities, and trusts.
+# Client model for tracking natural persons and legal entities (including trusts).
 # Part of the CRM for Monaco real estate AML/CFT compliance.
 #
 # Client types (AMSF terminology):
 # - NATURAL_PERSON (Personne Physique): Natural person
-# - LEGAL_ENTITY (Personne Morale): Legal entity (company)
-# - TRUST (Trust): Trust structure
+# - LEGAL_ENTITY (Personne Morale): Legal entity (company, trust, etc.)
 #
 class Client < ApplicationRecord
   include AmsfConstants
@@ -17,30 +16,28 @@ class Client < ApplicationRecord
   # === Associations ===
   belongs_to :organization
   has_many :beneficial_owners, dependent: :destroy
+  has_many :trustees, dependent: :destroy
   has_many :transactions, dependent: :restrict_with_error
   has_many :str_reports, dependent: :nullify
+
+  accepts_nested_attributes_for :trustees, allow_destroy: true, reject_if: :all_blank
 
   # === Validations ===
   validates :name, presence: true
   validates :client_type, presence: true, inclusion: { in: CLIENT_TYPES }
 
   # Conditional validations
-  validates :legal_person_type, presence: true, if: :legal_entity?
-  validates :legal_person_type, inclusion: { in: LEGAL_PERSON_TYPES }, allow_blank: true
+  validates :legal_entity_type, presence: true, if: :legal_entity?
+  validates :legal_entity_type, inclusion: { in: LEGAL_ENTITY_TYPES }, allow_blank: true
 
   validates :pep_type, presence: true, if: :is_pep?
   validates :pep_type, inclusion: { in: PEP_TYPES }, allow_blank: true
 
-  validates :legal_person_type_other, presence: true, if: -> { legal_entity? && legal_person_type == "OTHER" }
+  validates :legal_entity_type_other, presence: true, if: -> { legal_entity? && legal_entity_type == "OTHER" }
 
   validates :vasp_type, presence: true, if: :is_vasp?
   validates :vasp_type, inclusion: { in: VASP_TYPES }, allow_blank: true
   validates :vasp_other_service_type, presence: true, if: -> { is_vasp? && vasp_type == "OTHER" }
-
-  # Trust-specific validations
-  validates :trustee_name, presence: true, if: :trust?
-  validates :trustee_nationality, presence: true, if: :trust?
-  validates :trustee_country, presence: true, if: :trust?
 
   validates :risk_level, inclusion: { in: RISK_LEVELS }, allow_blank: true
   validates :rejection_reason, inclusion: { in: REJECTION_REASONS }, allow_blank: true
@@ -72,7 +69,7 @@ class Client < ApplicationRecord
   validates :professional_category, inclusion: { in: PROFESSIONAL_CATEGORIES }, allow_blank: true
 
   # === Callbacks ===
-  before_save :clear_legal_person_type_other_if_not_needed
+  before_save :clear_legal_entity_type_other_if_not_needed
   before_save :clear_pep_type_if_not_pep
   before_save :clear_vasp_type_if_not_vasp
   before_save :clear_third_party_cdd_fields_if_not_used
@@ -82,8 +79,7 @@ class Client < ApplicationRecord
   # Client type scopes
   scope :natural_persons, -> { where(client_type: "NATURAL_PERSON") }
   scope :legal_entities, -> { where(client_type: "LEGAL_ENTITY") }
-  scope :trusts, -> { where(client_type: "TRUST") }
-  scope :professional_trustees, -> { trusts.where(is_professional_trustee: true) }
+  scope :trusts, -> { legal_entities.where(legal_entity_type: "TRUST") }
 
   # Risk/compliance scopes
   scope :peps, -> { where(is_pep: true) }
@@ -129,12 +125,11 @@ class Client < ApplicationRecord
   end
 
   def trust?
-    client_type == "TRUST"
+    legal_entity? && legal_entity_type == "TRUST"
   end
 
-  # Legal entities and trusts can have beneficial owners
   def can_have_beneficial_owners?
-    legal_entity? || trust?
+    legal_entity?
   end
 
   def active?
@@ -161,9 +156,9 @@ class Client < ApplicationRecord
 
   private
 
-  # Clear legal_person_type_other when legal_person_type is not OTHER
-  def clear_legal_person_type_other_if_not_needed
-    self.legal_person_type_other = nil if legal_person_type != "OTHER"
+  # Clear legal_entity_type_other when legal_entity_type is not OTHER
+  def clear_legal_entity_type_other_if_not_needed
+    self.legal_entity_type_other = nil if legal_entity_type != "OTHER"
   end
 
   # Clear pep_type when is_pep is set to false to maintain data consistency

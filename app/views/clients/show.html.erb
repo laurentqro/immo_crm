@@ -15,15 +15,19 @@
       <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
         <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset mt-2
           <%= case @client.client_type
-              when 'PP' then 'bg-blue-50 text-blue-700 ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-300 dark:ring-blue-400/30'
-              when 'PM' then 'bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300 dark:ring-purple-400/30'
-              when 'TRUST' then 'bg-amber-50 text-amber-700 ring-amber-700/10 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-400/30'
+              when 'NATURAL_PERSON' then 'bg-blue-50 text-blue-700 ring-blue-700/10 dark:bg-blue-900/30 dark:text-blue-300 dark:ring-blue-400/30'
+              when 'LEGAL_ENTITY' then 'bg-purple-50 text-purple-700 ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-300 dark:ring-purple-400/30'
               end %>">
           <%= @client.client_type_label %>
-          <% if @client.legal_entity? && @client.legal_person_type.present? %>
-            (<%= AmsfConstants::LEGAL_PERSON_TYPE_LABELS[@client.legal_person_type] || @client.legal_person_type %>)
+          <% if @client.legal_entity? && @client.legal_entity_type.present? && !@client.trust? %>
+            (<%= AmsfConstants::LEGAL_ENTITY_TYPE_LABELS[@client.legal_entity_type] || @client.legal_entity_type %>)
           <% end %>
         </span>
+        <% if @client.trust? %>
+          <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset mt-2 bg-amber-50 text-amber-700 ring-amber-700/10 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-400/30">
+            Trust
+          </span>
+        <% end %>
         <% if @client.risk_level.present? %>
           <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium mt-2 <%= @client.risk_badge_class %>">
             <%= @client.risk_level %> Risk
@@ -72,16 +76,16 @@
           <div class="bg-gray-50 dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Legal Form</dt>
             <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0">
-              <%= AmsfConstants::LEGAL_PERSON_TYPE_LABELS[@client.legal_person_type] || @client.legal_person_type %>
-              <% if @client.legal_person_type == "OTHER" && @client.legal_person_type_other.present? %>
-                (<%= @client.legal_person_type_other %>)
+              <%= AmsfConstants::LEGAL_ENTITY_TYPE_LABELS[@client.legal_entity_type] || @client.legal_entity_type %>
+              <% if @client.legal_entity_type == "OTHER" && @client.legal_entity_type_other.present? %>
+                (<%= @client.legal_entity_type_other %>)
               <% end %>
             </dd>
           </div>
         <% end %>
-        <% if (@client.legal_entity? || @client.trust?) && @client.incorporation_country.present? %>
+        <% if @client.legal_entity? && @client.incorporation_country.present? %>
           <div class="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Country of Incorporation</dt>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= @client.trust? ? "Country of Creation" : "Country of Incorporation" %></dt>
             <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:col-span-2 sm:mt-0">
               <%= ISO3166::Country[@client.incorporation_country]&.iso_short_name || @client.incorporation_country %>
             </dd>
@@ -117,7 +121,39 @@
     </div>
   </div>
 
-  <%# Beneficial Owners Section (only for PM/TRUST) %>
+  <%# Trustees Section (only for Trust clients) %>
+  <% if @client.trust? && @client.trustees.any? %>
+    <div class="mt-8 overflow-hidden bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">Trustees</h3>
+      </div>
+      <div class="border-t border-gray-200 dark:border-gray-700">
+        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+          <% @client.trustees.each do |trustee| %>
+            <li class="px-4 py-4 sm:px-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900 dark:text-white"><%= trustee.name %></p>
+                  <% if trustee.nationality.present? %>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                      <%= ISO3166::Country[trustee.nationality]&.iso_short_name || trustee.nationality %>
+                    </p>
+                  <% end %>
+                </div>
+                <% if trustee.is_professional? %>
+                  <span class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/30 px-2 py-1 text-xs font-medium text-amber-700 dark:text-amber-300">
+                    Professional
+                  </span>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <%# Beneficial Owners Section (only for Legal Entity) %>
   <% if @client.can_have_beneficial_owners? %>
     <div class="beneficial-owners mt-8 overflow-hidden bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
       <div class="px-4 py-5 sm:px-6 flex items-center justify-between">

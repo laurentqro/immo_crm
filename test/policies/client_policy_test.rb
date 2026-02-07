@@ -155,7 +155,7 @@ class ClientPolicyTest < ActiveSupport::TestCase
     assert_includes attrs, :is_pep
     assert_includes attrs, :pep_type
     assert_includes attrs, :risk_level
-    assert_includes attrs, :legal_person_type
+    assert_includes attrs, :legal_entity_type
     assert_includes attrs, :is_vasp
     assert_includes attrs, :vasp_type
     assert_includes attrs, :business_sector

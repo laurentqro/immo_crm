@@ -1,0 +1,15 @@
+# Trustee fixtures for trust clients
+
+# Professional trustee for the trust fixture
+trust_trustee:
+  client: trust
+  name: "Monaco Trust Services"
+  nationality: "MC"
+  is_professional: true
+
+# Professional trustee for compliance trust
+compliance_trust_trustee:
+  client: calc_trust_1
+  name: "Compliance Trust Company"
+  nationality: "MC"
+  is_professional: true

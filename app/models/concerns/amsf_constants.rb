@@ -11,8 +11,8 @@
 module AmsfConstants
   extend ActiveSupport::Concern
 
-  # Client types (Personne Physique, Personne Morale, Trust)
-  CLIENT_TYPES = %w[NATURAL_PERSON LEGAL_ENTITY TRUST].freeze
+  # Client types (Personne Physique, Personne Morale)
+  CLIENT_TYPES = %w[NATURAL_PERSON LEGAL_ENTITY].freeze
 
   # Transaction types
   TRANSACTION_TYPES = %w[PURCHASE SALE RENTAL].freeze
@@ -53,7 +53,7 @@ module AmsfConstants
   }.freeze
 
   # Legal entity types (Monaco corporate forms + AMSF taxonomy types)
-  LEGAL_PERSON_TYPES = %w[
+  LEGAL_ENTITY_TYPES = %w[
     SCI SARL SAM SNC SA SCS SCA SCP
     GIE EI
     FOUNDATION ASSOCIATION
@@ -63,8 +63,8 @@ module AmsfConstants
     OTHER
   ].freeze
 
-  # Human-readable labels for legal person types
-  LEGAL_PERSON_TYPE_LABELS = {
+  # Human-readable labels for legal entity types
+  LEGAL_ENTITY_TYPE_LABELS = {
     "SCI" => "Property Investment Partnership (SCI)",
     "SARL" => "Limited Liability Company (SARL)",
     "SAM" => "Joint Stock Company (SAM)",

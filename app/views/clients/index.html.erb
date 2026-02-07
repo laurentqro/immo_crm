@@ -5,7 +5,7 @@
     <div class="sm:flex-auto">
       <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">Clients</h1>
       <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
-        Manage your clients - natural persons, legal entities, and trusts.
+        Manage your clients - natural persons and legal entities.
       </p>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -27,9 +27,8 @@
         <%= f.select :client_type,
             options_for_select([
               ["All Types", ""],
-              ["Natural Person", "PP"],
-              ["Legal Entity", "PM"],
-              ["Trust", "TRUST"]
+              ["Natural Person", "NATURAL_PERSON"],
+              ["Legal Entity", "LEGAL_ENTITY"]
             ], params[:client_type]),
             {},
             { data: { action: "change->client-search#submit" } } %>

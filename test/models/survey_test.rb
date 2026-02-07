@@ -646,7 +646,7 @@ class SurveyTest < ActiveSupport::TestCase
   # - foundation_client (FOUNDATION — non-standard form, maps to a11006)
   # - other_legal_freetext (OTHER + "Fiducie" — free-text, maps to a11006)
   # - vasp_other_freetext_de (OTHER + "GmbH" — also maps to a11006)
-  # - calc_legal_5 (OTHER, no legal_person_type_other — excluded)
+  # - calc_legal_5 (OTHER, no legal_entity_type_other — excluded)
   # - Standard forms (SARL, SA, SCI, SAM) — excluded from a11006
 
   test "a11006 returns nil when no other legal constructions exist" do

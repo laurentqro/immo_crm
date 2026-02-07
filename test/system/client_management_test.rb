@@ -116,13 +116,13 @@ class ClientManagementTest < ApplicationSystemTestCase
 
     visit new_client_path
 
-    # Initially, legal_person_type should be hidden for PP
+    # Initially, legal_entity_type should be hidden for PP
     select "Natural Person", from: "Client type"
-    assert_no_selector "#client_legal_person_type:not([hidden])"
+    assert_no_selector "#client_legal_entity_type:not([hidden])"
 
-    # When PM is selected, legal_person_type should appear
+    # When PM is selected, legal_entity_type should appear
     select "Legal Entity", from: "Client type"
-    assert_selector "#client_legal_person_type"
+    assert_selector "#client_legal_entity_type"
   end
 
   # === View Client Details ===
@@ -342,14 +342,14 @@ class ClientManagementTest < ApplicationSystemTestCase
     assert_text "can't be blank"
   end
 
-  test "legal entity requires legal_person_type" do
+  test "legal entity requires legal_entity_type" do
     login_as @user, scope: :user
 
     visit new_client_path
 
     fill_in "Name", with: "Corp Without Type"
     select "Legal Entity", from: "Client type"
-    # Intentionally don't select legal_person_type
+    # Intentionally don't select legal_entity_type
 
     click_button "Create Client"
 

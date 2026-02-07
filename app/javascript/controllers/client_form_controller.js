@@ -5,16 +5,19 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "clientType",
-    "legalPersonType",
+    "legalEntityType",
     "businessSector",
     "trusteeSection",
+    "trusteesContainer",
+    "trusteeEntry",
+    "countryOptions",
     "incorporationCountry",
     "naturalPersonFields",
     "isPep",
     "pepType",
     "isVasp",
     "vaspType",
-    "legalPersonTypeOther",
+    "legalEntityTypeOther",
     "vaspOtherServiceType",
     "dueDiligenceLevel",
     "simplifiedDdReason",
@@ -26,8 +29,9 @@ export default class extends Controller {
   ]
 
   connect() {
+    this.trusteeCounter = 0
     this.toggleFields()
-    this.toggleLegalPersonType()
+    this.toggleLegalEntityType()
     this.togglePepType()
     this.toggleVaspType()
     this.toggleSimplifiedReason()
@@ -40,40 +44,46 @@ export default class extends Controller {
     const clientType = this.element.querySelector('input[name="client[client_type]"]:checked')?.value
       || this.clientTypeTarget?.value
     const isLegalEntity = clientType === "LEGAL_ENTITY"
-    const isTrust = clientType === "TRUST"
     const isNaturalPerson = clientType === "NATURAL_PERSON"
 
     // Show/hide legal entity specific fields
-    if (this.hasLegalPersonTypeTarget) {
-      this.legalPersonTypeTarget.classList.toggle("hidden", !isLegalEntity)
+    if (this.hasLegalEntityTypeTarget) {
+      this.legalEntityTypeTarget.classList.toggle("hidden", !isLegalEntity)
     }
     if (this.hasBusinessSectorTarget) {
       this.businessSectorTarget.classList.toggle("hidden", !isLegalEntity)
     }
-    // Show/hide trust specific fields
-    if (this.hasTrusteeSectionTarget) {
-      this.trusteeSectionTarget.classList.toggle("hidden", !isTrust)
-    }
-    // Show/hide incorporation country for legal entities and trusts
+    // Show/hide incorporation country for legal entities
     if (this.hasIncorporationCountryTarget) {
-      this.incorporationCountryTarget.classList.toggle("hidden", !isLegalEntity && !isTrust)
+      this.incorporationCountryTarget.classList.toggle("hidden", !isLegalEntity)
     }
-    // Show/hide nationality and residence fields (only for natural persons and trusts, not legal entities)
+    // Show/hide nationality and residence fields (only for natural persons, not legal entities)
     if (this.hasNaturalPersonFieldsTarget) {
       this.naturalPersonFieldsTarget.classList.toggle("hidden", isLegalEntity)
     }
 
-    // Re-evaluate legal person type "other" field visibility
-    this.toggleLegalPersonType()
+    // Re-evaluate legal entity type dependent fields
+    this.toggleLegalEntityType()
   }
 
-  toggleLegalPersonType() {
-    if (!this.hasLegalPersonTypeOtherTarget) return
+  toggleLegalEntityType() {
+    if (!this.hasLegalEntityTypeTarget) return
 
-    const legalPersonTypeSelect = this.legalPersonTypeTarget?.querySelector("select")
-    const isOther = legalPersonTypeSelect?.value === "OTHER"
-    const isLegalEntity = !this.legalPersonTypeTarget?.classList.contains("hidden")
-    this.legalPersonTypeOtherTarget.classList.toggle("hidden", !(isLegalEntity && isOther))
+    const legalEntityTypeSelect = this.legalEntityTypeTarget.querySelector("select")
+    const value = legalEntityTypeSelect?.value
+    const isLegalEntity = !this.legalEntityTypeTarget.classList.contains("hidden")
+
+    // Show/hide "other" text field
+    if (this.hasLegalEntityTypeOtherTarget) {
+      const isOther = value === "OTHER"
+      this.legalEntityTypeOtherTarget.classList.toggle("hidden", !(isLegalEntity && isOther))
+    }
+
+    // Show/hide trustee section when legal entity type is TRUST
+    if (this.hasTrusteeSectionTarget) {
+      const isTrust = isLegalEntity && value === "TRUST"
+      this.trusteeSectionTarget.classList.toggle("hidden", !isTrust)
+    }
   }
 
   togglePepType() {
@@ -127,6 +137,65 @@ export default class extends Controller {
       const typeValue = this.element.querySelector('input[name="client[third_party_cdd_type]"]:checked')?.value
       const showCountry = isEnabled && typeValue === "FOREIGN"
       this.thirdPartyCddCountryTarget.classList.toggle("hidden", !showCountry)
+    }
+  }
+
+  addTrustee() {
+    if (!this.hasTrusteesContainerTarget) return
+
+    const container = this.trusteesContainerTarget
+    const id = `new_${++this.trusteeCounter}`
+
+    // Clone country options from the reference select, clearing any pre-selection
+    let countryOptionsHtml = '<option value="">Select country...</option>'
+    if (this.hasCountryOptionsTarget) {
+      const temp = this.countryOptionsTarget.cloneNode(true)
+      temp.selectedIndex = 0
+      Array.from(temp.options).forEach(opt => opt.removeAttribute("selected"))
+      countryOptionsHtml = temp.innerHTML
+    }
+
+    const template = `
+      <div class="trustee-entry border-b pb-3 mb-3" style="border-color: var(--base-border-tertiary);" data-client-form-target="trusteeEntry">
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="form-group">
+            <label for="client_trustees_attributes_${id}_name">Trustee name</label>
+            <input type="text" name="client[trustees_attributes][${id}][name]" id="client_trustees_attributes_${id}_name" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="client_trustees_attributes_${id}_nationality">Nationality</label>
+            <select name="client[trustees_attributes][${id}][nationality]" id="client_trustees_attributes_${id}_nationality" class="form-control">
+              ${countryOptionsHtml}
+            </select>
+          </div>
+          <div class="form-group flex items-end gap-4">
+            <div class="form-picker-group flex-1">
+              <input type="hidden" name="client[trustees_attributes][${id}][is_professional]" value="0">
+              <input type="checkbox" name="client[trustees_attributes][${id}][is_professional]" id="client_trustees_attributes_${id}_is_professional" value="1">
+              <div>
+                <label for="client_trustees_attributes_${id}_is_professional">Professional</label>
+              </div>
+            </div>
+            <button type="button" class="btn btn-sm text-red-600" data-action="client-form#removeTrustee">Remove</button>
+          </div>
+        </div>
+      </div>
+    `
+    container.insertAdjacentHTML("beforeend", template)
+  }
+
+  removeTrustee(event) {
+    const entry = event.target.closest("[data-client-form-target='trusteeEntry']")
+    if (!entry) return
+
+    const destroyField = entry.querySelector("input[name*='_destroy']")
+    if (destroyField) {
+      // For persisted records, mark for destruction and hide
+      destroyField.value = "1"
+      entry.style.display = "none"
+    } else {
+      // For new records, just remove the DOM element
+      entry.remove()
     }
   }
 }

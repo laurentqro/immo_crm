@@ -12,7 +12,7 @@
     <fieldset class="form-group">
       <legend class="form-label">Client type <span class="text-red-500">*</span></legend>
       <div class="flex gap-6 mt-2">
-        <% [["Natural Person", "NATURAL_PERSON"], ["Legal Entity", "LEGAL_ENTITY"], ["Trust", "TRUST"]].each do |label, value| %>
+        <% [["Natural Person", "NATURAL_PERSON"], ["Legal Entity", "LEGAL_ENTITY"]].each do |label, value| %>
           <label class="flex items-center gap-2 cursor-pointer">
             <%= form.radio_button :client_type, value,
                 data: { client_form_target: "clientType", action: "change->client-form#toggleFields" },
@@ -23,71 +23,50 @@
       </div>
     </fieldset>
 
-    <%# Legal Person Type (only for Legal Entity) %>
-    <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="legalPersonType">
-      <%= form.label :legal_person_type, "Legal form" %>
-      <%= form.select :legal_person_type,
-          options_for_select(AmsfConstants::LEGAL_PERSON_TYPE_LABELS.map { |k, v| [v, k] }, client.legal_person_type),
+    <%# Legal Entity Type (only for Legal Entity) %>
+    <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="legalEntityType">
+      <%= form.label :legal_entity_type, "Legal form" %>
+      <%= form.select :legal_entity_type,
+          options_for_select(AmsfConstants::LEGAL_ENTITY_TYPE_LABELS.map { |k, v| [v, k] }, client.legal_entity_type),
           { include_blank: "Select legal form..." },
-          { data: { action: "change->client-form#toggleLegalPersonType" } } %>
+          { data: { action: "change->client-form#toggleLegalEntityType" } } %>
     </div>
 
-    <%# Legal Person Type Other (only when legal_person_type == "OTHER") %>
-    <div class="form-group ml-7 <%= 'hidden' unless client.legal_entity? && client.legal_person_type == 'OTHER' %>" data-client-form-target="legalPersonTypeOther">
-      <%= form.label :legal_person_type_other, "Describe other legal form" %>
-      <%= form.text_field :legal_person_type_other,
+    <%# Legal Entity Type Other (only when legal_entity_type == "OTHER") %>
+    <div class="form-group ml-7 <%= 'hidden' unless client.legal_entity? && client.legal_entity_type == 'OTHER' %>" data-client-form-target="legalEntityTypeOther">
+      <%= form.label :legal_entity_type_other, "Describe other legal form" %>
+      <%= form.text_field :legal_entity_type_other,
           class: "form-control",
           placeholder: "e.g., Fiducie, groupement forestier..." %>
       <p class="form-hint">Required when legal form is "Other Legal Arrangements".</p>
     </div>
 
-    <%# Trustee Section (only for Trust) %>
+    <%# Trustees Section (only for Trust legal entities) %>
     <div class="<%= 'hidden' unless client.trust? %>" data-client-form-target="trusteeSection">
       <div class="border rounded-lg p-4 mb-2" style="border-color: var(--base-border-tertiary); background-color: var(--base-bg-secondary)">
-        <h3 class="text-sm font-medium mb-4">Trustee Information</h3>
+        <h3 class="text-sm font-medium mb-4">Trustees</h3>
 
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div class="form-group">
-            <%= form.label :trustee_name, "Trustee name" %>
-            <%= form.text_field :trustee_name, class: "form-control" %>
-          </div>
-
-          <div class="form-group">
-            <%= form.label :trustee_nationality, "Trustee nationality" %>
-            <%= form.select :trustee_nationality,
-                options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.trustee_nationality),
-                { include_blank: "Select country..." },
-                { class: "form-control" } %>
-          </div>
-
-          <div class="form-group">
-            <%= form.label :trustee_country, "Trustee country of residence" %>
-            <%= form.select :trustee_country,
-                options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.trustee_country),
-                { include_blank: "Select country..." },
-                { class: "form-control" } %>
-          </div>
-
-          <div class="form-group flex items-end">
-            <div class="form-picker-group">
-              <%= form.check_box :is_professional_trustee %>
-              <div>
-                <%= form.label :is_professional_trustee, "Professional trustee" %>
-                <p class="form-hint">Trustee acts in a professional capacity (lawyer, accountant, trust company)</p>
-              </div>
-            </div>
-          </div>
+        <div data-client-form-target="trusteesContainer">
+          <% client.trustees.each_with_index do |trustee, index| %>
+            <%= form.fields_for :trustees, trustee do |tf| %>
+              <%= render "clients/trustee_fields", form: tf, index: index %>
+            <% end %>
+          <% end %>
         </div>
+
+        <button type="button" class="btn btn-secondary btn-sm mt-3" data-action="client-form#addTrustee">
+          + Add trustee
+        </button>
       </div>
     </div>
 
-    <%# Country of Incorporation (for Legal Entity and Trust) %>
-    <div class="form-group <%= 'hidden' unless client.legal_entity? || client.trust? %>" data-client-form-target="incorporationCountry">
-      <%= form.label :incorporation_country, "Country of incorporation" %>
+    <%# Country of Incorporation (for Legal Entity) %>
+    <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="incorporationCountry">
+      <%= form.label :incorporation_country, client.trust? ? "Country of creation" : "Country of incorporation" %>
       <%= form.select :incorporation_country,
           options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.incorporation_country),
           { include_blank: "Select country..." },
-          { class: "form-control" } %>
+          { class: "form-control", data: { client_form_target: "countryOptions" } } %>
       <p class="form-hint">Country where the entity is legally registered or has its head office (pays du siège ou de l'immatriculation).</p>
     </div>
 

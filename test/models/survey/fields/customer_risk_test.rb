@@ -7,7 +7,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
     Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
     Client.create!(organization: org, name: "Client 2", client_type: "NATURAL_PERSON")
-    Client.create!(organization: org, name: "Client 3", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
+    Client.create!(organization: org, name: "Client 3", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
 
     survey = Survey.new(organization: org, year: 2025)
 
@@ -274,8 +274,8 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
 
     natural_person = Client.create!(organization: org, name: "Natural Person", client_type: "NATURAL_PERSON")
-    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
-    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST", trustee_name: "Test Trustee", trustee_nationality: "MC", trustee_country: "MC")
+    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
+    trust = Client.create!(organization: org, name: "Trust", client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST", incorporation_country: "MC")
 
     # Natural person purchase (a1403b)
     Transaction.create!(
@@ -358,12 +358,64 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
     assert_equal 1, survey.send(:a1105b), "a1105b should only count BY_CLIENT transactions"
   end
 
+  test "a1502b excludes trust transactions" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+
+    legal_entity = Client.create!(organization: org, name: "SARL Corp", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
+    trust = Client.create!(organization: org, name: "Family Trust", client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST", incorporation_country: "MC")
+
+    # Legal entity transaction — should be counted in a1502b
+    Transaction.create!(
+      organization: org, client: legal_entity,
+      transaction_type: "PURCHASE", transaction_date: Date.new(2025, 3, 15),
+      transaction_value: 500_000, direction: "BY_CLIENT"
+    )
+
+    # Trust transaction — should NOT be counted in a1502b (counted in a1806tola instead)
+    Transaction.create!(
+      organization: org, client: trust,
+      transaction_type: "SALE", transaction_date: Date.new(2025, 5, 15),
+      transaction_value: 750_000, direction: "BY_CLIENT"
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal 1, survey.send(:a1502b), "a1502b should exclude trust transactions"
+    assert_equal 1, survey.send(:a1806tola), "a1806tola should count trust transactions"
+  end
+
+  test "a1503b excludes trust transaction values" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+
+    legal_entity = Client.create!(organization: org, name: "SARL Corp", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
+    trust = Client.create!(organization: org, name: "Family Trust", client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST", incorporation_country: "MC")
+
+    # Legal entity transaction — should be counted in a1503b
+    Transaction.create!(
+      organization: org, client: legal_entity,
+      transaction_type: "PURCHASE", transaction_date: Date.new(2025, 3, 15),
+      transaction_value: 500_000, direction: "BY_CLIENT"
+    )
+
+    # Trust transaction — should NOT be counted in a1503b (counted in a1807tola instead)
+    Transaction.create!(
+      organization: org, client: trust,
+      transaction_type: "SALE", transaction_date: Date.new(2025, 5, 15),
+      transaction_value: 750_000, direction: "BY_CLIENT"
+    )
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal 500_000, survey.send(:a1503b), "a1503b should exclude trust transaction values"
+    assert_equal 750_000, survey.send(:a1807tola), "a1807tola should count trust transaction values"
+  end
+
   test "a1106b equals sum of a1404b, a1503b, a1807tola" do
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
 
     natural_person = Client.create!(organization: org, name: "Natural Person", client_type: "NATURAL_PERSON")
-    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_person_type: "SARL")
-    trust = Client.create!(organization: org, name: "Trust", client_type: "TRUST", trustee_name: "Test Trustee", trustee_nationality: "MC", trustee_country: "MC")
+    legal_entity = Client.create!(organization: org, name: "Legal Entity", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
+    trust = Client.create!(organization: org, name: "Trust", client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST", incorporation_country: "MC")
 
     # Natural person transaction (a1404b)
     Transaction.create!(

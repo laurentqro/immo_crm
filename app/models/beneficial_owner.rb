@@ -94,7 +94,7 @@ class BeneficialOwner < ApplicationRecord
     return unless client
 
     unless client.can_have_beneficial_owners?
-      errors.add(:client, "must be a legal entity (PM) or trust")
+      errors.add(:client, "must be a legal entity")
     end
   end
 

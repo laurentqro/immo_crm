@@ -1,0 +1,31 @@
+<div class="trustee-entry border-b pb-3 mb-3" style="border-color: var(--base-border-tertiary);" data-client-form-target="trusteeEntry">
+  <div class="grid sm:grid-cols-3 gap-4">
+    <div class="form-group">
+      <%= form.label :name, "Trustee name" %>
+      <%= form.text_field :name, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :nationality, "Nationality" %>
+      <%= form.select :nationality,
+          options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, form.object.nationality),
+          { include_blank: "Select country..." },
+          { class: "form-control" } %>
+    </div>
+
+    <div class="form-group flex items-end gap-4">
+      <div class="form-picker-group flex-1">
+        <%= form.check_box :is_professional %>
+        <div>
+          <%= form.label :is_professional, "Professional" %>
+        </div>
+      </div>
+
+      <% if form.object.persisted? %>
+        <%= form.hidden_field :_destroy, value: "0", data: { client_form_target: "destroyField" } %>
+      <% end %>
+      <button type="button" class="btn btn-sm text-red-600" data-action="client-form#removeTrustee">Remove</button>
+    </div>
+  </div>
+  <%= form.hidden_field :id if form.object.persisted? %>
+</div>

@@ -45,7 +45,7 @@ class BeneficialOwnerTest < ActiveSupport::TestCase
       name: "Jean Dupont"
     )
     assert_not owner.valid?
-    assert_includes owner.errors[:client], "must be a legal entity (PM) or trust"
+    assert_includes owner.errors[:client], "must be a legal entity"
   end
 
   test "accepts PM client" do

@@ -24,6 +24,7 @@ ManagedProperty.destroy_all
 StrReport.destroy_all
 Transaction.destroy_all
 BeneficialOwner.destroy_all
+Trustee.destroy_all
 Client.destroy_all
 Organization.destroy_all
 
@@ -157,7 +158,7 @@ INCORPORATION_COUNTRIES = %w[MC FR LU CH GB JE GG LI].freeze
     organization: organization,
     name: "#{Faker::Company.name} #{legal_type}",
     client_type: "LEGAL_ENTITY",
-    legal_person_type: legal_type,
+    legal_entity_type: legal_type,
     nationality: NATIONALITIES.sample,
     residence_country: COUNTRIES.sample,
     incorporation_country: incorporation_country,
@@ -194,13 +195,12 @@ INCORPORATION_COUNTRIES = %w[MC FR LU CH GB JE GG LI].freeze
   puts "  - Created legal entity: #{client.name} (#{owner_count} beneficial owner#{'s' if owner_count > 1})"
 end
 
-# Create trusts (5 clients)
-# Trustee jurisdictions common for Monaco real estate
-TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
+# Create trusts (5 clients) — trusts are legal entities with legal_entity_type "TRUST"
+# Trustee nationalities common for Monaco real estate
+TRUSTEE_NATIONALITIES = %w[CH GB JE GG LI MC].freeze
 
 5.times do |i|
   risk = i < 2 ? "HIGH" : "MEDIUM"
-  trustee_country = TRUSTEE_COUNTRIES.sample
   is_professional = i < 3 # First 3 trusts have professional trustees
 
   # ~20% of clients are introduced by third parties (index 0)
@@ -217,23 +217,28 @@ TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
   client = Client.create!(
     organization: organization,
     name: "#{Faker::Name.last_name} Family Trust",
-    client_type: "TRUST",
-    nationality: %w[CH GB JE GG].sample,
-    residence_country: COUNTRIES.sample,
+    client_type: "LEGAL_ENTITY",
+    legal_entity_type: "TRUST",
     incorporation_country: trust_incorporation_country,
     risk_level: risk,
     became_client_at: Faker::Date.between(from: 5.years.ago, to: Date.today),
     notes: "Trust established for #{Faker::Company.bs}",
-    trustee_name: is_professional ? "#{Faker::Company.name} Trust Services" : Faker::Name.name,
-    trustee_nationality: NATIONALITIES.sample,
-    trustee_country: trustee_country,
-    is_professional_trustee: is_professional,
     introduced_by_third_party: is_introduced,
     introducer_country: is_introduced ? INTRODUCER_COUNTRIES.sample : nil,
     third_party_cdd: has_third_party_cdd,
     third_party_cdd_type: third_party_cdd_type,
     third_party_cdd_country: third_party_cdd_country
   )
+
+  # Add 1-2 trustees per trust
+  rand(1..2).times do
+    Trustee.create!(
+      client: client,
+      name: is_professional ? "#{Faker::Company.name} Trust Services" : Faker::Name.name,
+      nationality: TRUSTEE_NATIONALITIES.sample,
+      is_professional: is_professional
+    )
+  end
 
   # Add 2-4 beneficial owners for each trust
   rand(2..4).times do
@@ -248,7 +253,8 @@ TRUSTEE_COUNTRIES = %w[CH GB JE GG LI MC].freeze
   end
 
   owner_count = client.beneficial_owners.count
-  puts "  - Created trust: #{client.name} (#{owner_count} beneficial owners)"
+  trustee_count = client.trustees.count
+  puts "  - Created trust: #{client.name} (#{trustee_count} trustee#{'s' if trustee_count > 1}, #{owner_count} beneficial owners)"
 end
 
 # Create one ended client relationship
@@ -288,7 +294,7 @@ MONACO_STREETS = [
 MONACO_DISTRICTS = %w[Monte-Carlo Fontvieille La\ Condamine Monaco-Ville Larvotto].freeze
 
 # Get clients who can be landlords (legal entities and wealthy individuals)
-potential_landlords = Client.where(client_type: %w[LEGAL_ENTITY TRUST])
+potential_landlords = Client.where(client_type: "LEGAL_ENTITY")
                             .or(Client.where(client_type: "NATURAL_PERSON", risk_level: %w[HIGH MEDIUM]))
                             .to_a
 

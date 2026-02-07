@@ -17,7 +17,7 @@ legal_entity:
   organization: one
   name: "Monaco Investments SARL"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SARL"
+  legal_entity_type: "SARL"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -30,7 +30,7 @@ legal_entity_two:
   organization: one
   name: "Second Corp SA"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SA"
+  legal_entity_type: "SA"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -42,7 +42,7 @@ legal_entity_with_owners:
   organization: one
   name: "Corp With Owners"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SCI"
+  legal_entity_type: "SCI"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -53,16 +53,12 @@ legal_entity_with_owners:
 trust:
   organization: one
   name: "Martin Family Trust"
-  client_type: "TRUST"
-  nationality: "MC"
-  residence_country: "MC"
+  client_type: "LEGAL_ENTITY"
+  legal_entity_type: "TRUST"
+  incorporation_country: "MC"
   is_pep: false
   risk_level: "MEDIUM"
   became_client_at: <%= 8.months.ago %>
-  trustee_name: "Monaco Trust Services"
-  trustee_nationality: "MC"
-  trustee_country: "MC"
-  is_professional_trustee: true
 
 # PEP client in organization :one
 pep_client:
@@ -81,7 +77,7 @@ high_risk_client:
   organization: one
   name: "Risky Business LLC"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "GIE"
+  legal_entity_type: "GIE"
   nationality: "RU"
   residence_country: "RU"
   is_pep: false
@@ -129,7 +125,7 @@ other_org_legal_entity:
   organization: two
   name: "Other Org Corp"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SARL"
+  legal_entity_type: "SARL"
   nationality: "FR"
   residence_country: "FR"
   is_pep: false
@@ -152,7 +148,7 @@ vasp_client:
   organization: one
   name: "Crypto Exchange Monaco"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SAM"
+  legal_entity_type: "SAM"
   nationality: "MC"
   residence_country: "MC"
   incorporation_country: "MC"
@@ -277,7 +273,7 @@ calc_legal_1:
   organization: compliance_test_org
   name: "Compliance Legal Entity 1 SARL"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SARL"
+  legal_entity_type: "SARL"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -289,7 +285,7 @@ calc_legal_2:
   organization: compliance_test_org
   name: "Compliance Legal Entity 2 SA"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SA"
+  legal_entity_type: "SA"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -301,7 +297,7 @@ calc_legal_3:
   organization: compliance_test_org
   name: "Compliance Legal Entity 3 SCI"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SCI"
+  legal_entity_type: "SCI"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -313,7 +309,7 @@ calc_legal_4:
   organization: compliance_test_org
   name: "Compliance Legal Entity 4 SAM"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SAM"
+  legal_entity_type: "SAM"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -325,7 +321,7 @@ calc_legal_5:
   organization: compliance_test_org
   name: "Compliance Legal Entity 5 LLC"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "OTHER"
+  legal_entity_type: "OTHER"
   nationality: "FR"
   residence_country: "MC"
   is_pep: false
@@ -362,16 +358,12 @@ calc_pep_2:
 calc_trust_1:
   organization: compliance_test_org
   name: "Compliance Family Trust"
-  client_type: "TRUST"
-  nationality: "MC"
-  residence_country: "MC"
+  client_type: "LEGAL_ENTITY"
+  legal_entity_type: "TRUST"
+  incorporation_country: "MC"
   is_pep: false
   risk_level: "MEDIUM"
   became_client_at: <%= 6.months.ago %>
-  trustee_name: "Compliance Trust Company"
-  trustee_nationality: "MC"
-  trustee_country: "MC"
-  is_professional_trustee: true
 
 # =============================================================================
 # Introducer Tracking Test Fixtures
@@ -422,7 +414,7 @@ introduced_from_france_last_year:
   organization: compliance_test_org
   name: "Another Client Introduced From France"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SARL"
+  legal_entity_type: "SARL"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -481,7 +473,7 @@ foreign_third_party_cdd_swiss:
   organization: compliance_test_org
   name: "Client with Swiss Third-Party CDD"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SARL"
+  legal_entity_type: "SARL"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -502,7 +494,7 @@ vasp_exchange_fr:
   organization: compliance_test_org
   name: "French Crypto Exchange"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SA"
+  legal_entity_type: "SA"
   nationality: "FR"
   residence_country: "FR"
   incorporation_country: "FR"
@@ -518,7 +510,7 @@ vasp_custodian_lu:
   organization: compliance_test_org
   name: "Luxembourg Wallet Provider"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SA"
+  legal_entity_type: "SA"
   nationality: "LU"
   residence_country: "LU"
   incorporation_country: "LU"
@@ -534,7 +526,7 @@ vasp_ico_ch:
   organization: compliance_test_org
   name: "Swiss Token Services"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "OTHER"
+  legal_entity_type: "OTHER"
   nationality: "CH"
   residence_country: "CH"
   incorporation_country: "CH"
@@ -550,7 +542,7 @@ vasp_other_mc:
   organization: compliance_test_org
   name: "Monaco DeFi Services"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "SAM"
+  legal_entity_type: "SAM"
   nationality: "MC"
   residence_country: "MC"
   incorporation_country: "MC"
@@ -566,7 +558,7 @@ vasp_other_freetext_de:
   organization: compliance_test_org
   name: "Berlin Crypto ATM Operator"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "OTHER"
+  legal_entity_type: "OTHER"
   nationality: "DE"
   residence_country: "DE"
   incorporation_country: "DE"
@@ -574,7 +566,7 @@ vasp_other_freetext_de:
   is_vasp: true
   vasp_type: "OTHER"
   vasp_other_service_type: "Crypto ATM operator"
-  legal_person_type_other: "GmbH"
+  legal_entity_type_other: "GmbH"
   risk_level: "HIGH"
   business_sector: "Cryptocurrency"
   became_client_at: <%= 1.month.ago %>
@@ -589,7 +581,7 @@ foundation_client:
   organization: compliance_test_org
   name: "Monaco Heritage Foundation"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "FOUNDATION"
+  legal_entity_type: "FOUNDATION"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false
@@ -602,8 +594,8 @@ other_legal_freetext:
   organization: compliance_test_org
   name: "Fiducie du Sud"
   client_type: "LEGAL_ENTITY"
-  legal_person_type: "OTHER"
-  legal_person_type_other: "Fiducie"
+  legal_entity_type: "OTHER"
+  legal_entity_type_other: "Fiducie"
   nationality: "MC"
   residence_country: "MC"
   is_pep: false

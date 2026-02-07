@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_07_175235) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_07_231000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -178,10 +178,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_175235) do
     t.boolean "is_pep", default: false, null: false
     t.boolean "is_pep_associated"
     t.boolean "is_pep_related"
-    t.boolean "is_professional_trustee", default: false
     t.boolean "is_vasp", default: false, null: false
-    t.string "legal_person_type"
-    t.string "legal_person_type_other"
+    t.string "legal_entity_type"
+    t.string "legal_entity_type_other"
     t.string "name", null: false
     t.string "nationality"
     t.text "notes"
@@ -200,9 +199,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_175235) do
     t.boolean "third_party_cdd", default: false, null: false
     t.string "third_party_cdd_country"
     t.string "third_party_cdd_type"
-    t.string "trustee_country"
-    t.string "trustee_name"
-    t.string "trustee_nationality"
     t.datetime "updated_at", null: false
     t.string "vasp_other_service_type"
     t.string "vasp_type"
@@ -214,6 +210,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_175235) do
     t.index ["is_pep"], name: "index_clients_on_is_pep"
     t.index ["is_pep_associated"], name: "index_clients_on_is_pep_associated"
     t.index ["is_pep_related"], name: "index_clients_on_is_pep_related"
+    t.index ["legal_entity_type"], name: "index_clients_on_legal_entity_type"
     t.index ["organization_id", "client_type"], name: "index_clients_on_org_and_type"
     t.index ["organization_id", "deleted_at"], name: "index_clients_on_organization_id_and_deleted_at"
     t.index ["organization_id", "risk_level"], name: "index_clients_on_org_and_risk"
@@ -551,6 +548,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_175235) do
     t.index ["transaction_type"], name: "index_transactions_on_transaction_type"
   end
 
+  create_table "trustees", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "is_professional", default: false, null: false
+    t.string "name", null: false
+    t.string "nationality"
+    t.datetime "updated_at", null: false
+    t.index ["client_id", "is_professional"], name: "index_trustees_on_client_id_and_is_professional"
+    t.index ["client_id"], name: "index_trustees_on_client_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "accepted_privacy_at", precision: nil
     t.datetime "accepted_terms_at", precision: nil
@@ -619,4 +627,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_175235) do
   add_foreign_key "trainings", "organizations"
   add_foreign_key "transactions", "clients"
   add_foreign_key "transactions", "organizations"
+  add_foreign_key "trustees", "clients"
 end

@@ -111,7 +111,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
   test "includes AmsfConstants" do
     assert Organization.include?(AmsfConstants)
-    assert_equal %w[PP PM TRUST], Organization::CLIENT_TYPES
+    assert_equal %w[NATURAL_PERSON LEGAL_ENTITY], Organization::CLIENT_TYPES
   end
 
   test "by_country scope filters correctly" do

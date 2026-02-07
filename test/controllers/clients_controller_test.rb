@@ -156,7 +156,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to client_path(client)
   end
 
-  test "creates legal entity with legal_person_type" do
+  test "creates legal entity with legal_entity_type" do
     sign_in @user
 
     assert_difference "Client.count", 1 do
@@ -164,7 +164,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
         client: {
           name: "Monaco Corp",
           client_type: "LEGAL_ENTITY",
-          legal_person_type: "SARL",
+          legal_entity_type: "SARL",
           nationality: "MC"
         }
       }
@@ -172,7 +172,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
 
     client = Client.last
     assert_equal "LEGAL_ENTITY", client.client_type
-    assert_equal "SARL", client.legal_person_type
+    assert_equal "SARL", client.legal_entity_type
   end
 
   test "creates PEP client with pep_type" do

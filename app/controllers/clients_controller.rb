@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 # CRUD controller for Client management.
-# Handles natural persons (NATURAL_PERSON), legal entities (LEGAL_ENTITY), and trusts (TRUST).
+# Handles natural persons (NATURAL_PERSON) and legal entities (LEGAL_ENTITY, including trusts).
 class ClientsController < ApplicationController
   include OrganizationScoped
 
   before_action :set_client, only: [:show, :edit, :update, :destroy]
 
   def index
-    @clients = policy_scope(Client).includes(:beneficial_owners)
+    @clients = policy_scope(Client).includes(:beneficial_owners, :trustees)
     @clients = @clients.where(client_type: params[:client_type]) if params[:client_type].present?
     @clients = @clients.where(risk_level: params[:risk_level]) if params[:risk_level].present?
     @clients = @clients.search(params[:q]) if params[:q].present?
@@ -70,7 +70,7 @@ class ClientsController < ApplicationController
   private
 
   def set_client
-    @client = policy_scope(Client.with_discarded).find_by(id: params[:id])
+    @client = policy_scope(Client.with_discarded).includes(:trustees, :beneficial_owners).find_by(id: params[:id])
     render_not_found unless @client
   end
 
