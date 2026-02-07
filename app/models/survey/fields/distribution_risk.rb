@@ -159,13 +159,11 @@ class Survey
 
       # Q181: Can you provide client nationality for introduced clients?
       def a3501b
-        # Yes - we track nationality on all clients
         "Oui"
       end
 
       # Q184: Can you provide introducer country/residency?
       def a3501c
-        # Yes - we track introducer_country when introduced_by_third_party is true
         "Oui"
       end
 

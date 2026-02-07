@@ -128,7 +128,7 @@ class Survey
       next unless respond_to?(question_id, true)
 
       value = send(question_id)
-      sub[question.id] = value if value.present?
+      sub[question.id] = value unless value.nil?
     end
   end
 end
