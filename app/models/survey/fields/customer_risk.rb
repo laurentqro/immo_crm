@@ -379,9 +379,14 @@ class Survey
         setting_value("a1203") || "Non"
       end
 
-      # Ownership structure documentation
+      # Q80: Have you had Monegasque clients (purchases and sales) during the reporting period?
+      # Checks if any MC nationality clients had purchase/sale transactions in the year
       def ac171
-        setting_value("ac171") || "Oui"
+        year_transactions
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .where(clients: { nationality: "MC" })
+          .exists? ? "Oui" : "Non"
       end
 
       # === High-Net-Worth Individual Tracking ===
