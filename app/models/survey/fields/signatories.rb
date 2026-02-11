@@ -25,8 +25,7 @@ class Survey
       def ac1701
         clients_kept
           .where(due_diligence_level: "REINFORCED")
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .count
       end
 

@@ -102,8 +102,7 @@ class Survey
       def a3303
         clients_kept
           .where(due_diligence_level: "SIMPLIFIED")
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .where.not(nationality: [nil, ""])
           .group(:nationality)
           .count
@@ -168,8 +167,7 @@ class Survey
       def a3401
         clients_kept
           .where.not(rejection_reason: [nil, ""])
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .count
       end
 
@@ -183,8 +181,7 @@ class Survey
       def a3403
         clients_kept
           .where(rejection_reason: "AML_CFT")
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .count
       end
 
@@ -192,8 +189,7 @@ class Survey
       def a3414
         clients_kept
           .where.not(relationship_end_reason: [nil, ""])
-          .where("relationship_ended_at >= ?", Date.new(year, 1, 1))
-          .where("relationship_ended_at <= ?", Date.new(year, 12, 31))
+          .where(relationship_ended_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .count
       end
 
@@ -206,8 +202,7 @@ class Survey
       def a3416
         clients_kept
           .where(relationship_end_reason: "AML_CONCERN")
-          .where("relationship_ended_at >= ?", Date.new(year, 1, 1))
-          .where("relationship_ended_at <= ?", Date.new(year, 12, 31))
+          .where(relationship_ended_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .count
       end
 
