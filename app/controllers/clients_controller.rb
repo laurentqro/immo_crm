@@ -40,7 +40,7 @@ class ClientsController < ApplicationController
     respond_to do |format|
       if @client.save
         format.html { redirect_to @client, notice: "Client was successfully created." }
-        format.turbo_stream
+        format.turbo_stream { redirect_to @client, notice: "Client was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.turbo_stream { render :new, status: :unprocessable_entity }

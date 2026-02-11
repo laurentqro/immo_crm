@@ -207,7 +207,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test "create responds with turbo stream on success" do
+  test "create redirects on turbo stream success" do
     sign_in @user
 
     post clients_path, params: {
@@ -217,8 +217,8 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
       }
     }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
-    assert_response :success
-    assert_includes response.media_type, "turbo-stream"
+    assert_response :redirect
+    assert_redirected_to client_path(Client.last)
   end
 
   # === Edit ===
