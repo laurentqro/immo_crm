@@ -10,14 +10,16 @@ class Survey::Fields::P1SemanticAuditTest < ActiveSupport::TestCase
   end
 
   # ==========================================================================
-  # Q37 (aMLES) — Monaco legal entities grouped by type
+  # Q37 (aMLES) — Monaco legal entities count
+  # Note: Q37 asks "ventilé par type" but aMLES is non-dimensional in the
+  # XBRL taxonomy, so we return a scalar count of MC legal entities.
   # ==========================================================================
 
-  test "amles returns empty hash when no MC legal entities" do
-    assert_equal({}, @survey.send(:amles))
+  test "amles returns 0 when no MC legal entities" do
+    assert_equal 0, @survey.send(:amles)
   end
 
-  test "amles groups MC legal entities by type" do
+  test "amles counts all MC legal entities" do
     Client.create!(organization: @org, name: "SCI Alpha", client_type: "LEGAL_ENTITY",
       legal_entity_type: "SCI", incorporation_country: "MC")
     Client.create!(organization: @org, name: "SCI Beta", client_type: "LEGAL_ENTITY",
@@ -25,9 +27,7 @@ class Survey::Fields::P1SemanticAuditTest < ActiveSupport::TestCase
     Client.create!(organization: @org, name: "SAM Gamma", client_type: "LEGAL_ENTITY",
       legal_entity_type: "SAM", incorporation_country: "MC")
 
-    result = @survey.send(:amles)
-    assert_equal 2, result["SCI"]
-    assert_equal 1, result["SAM"]
+    assert_equal 3, @survey.send(:amles)
   end
 
   test "amles excludes non-MC legal entities" do
@@ -36,20 +36,19 @@ class Survey::Fields::P1SemanticAuditTest < ActiveSupport::TestCase
     Client.create!(organization: @org, name: "MC Corp", client_type: "LEGAL_ENTITY",
       legal_entity_type: "SARL", incorporation_country: "MC")
 
-    result = @survey.send(:amles)
-    assert_equal({"SARL" => 1}, result)
+    assert_equal 1, @survey.send(:amles)
   end
 
   test "amles excludes natural persons" do
     Client.create!(organization: @org, name: "Person", client_type: "NATURAL_PERSON",
       nationality: "MC")
-    assert_equal({}, @survey.send(:amles))
+    assert_equal 0, @survey.send(:amles)
   end
 
   test "amles excludes soft-deleted clients" do
     Client.create!(organization: @org, name: "Deleted SCI", client_type: "LEGAL_ENTITY",
       legal_entity_type: "SCI", incorporation_country: "MC", deleted_at: Time.current)
-    assert_equal({}, @survey.send(:amles))
+    assert_equal 0, @survey.send(:amles)
   end
 
   # ==========================================================================
