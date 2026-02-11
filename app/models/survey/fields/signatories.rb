@@ -20,16 +20,31 @@ class Survey
 
       # === Entity Information ===
 
+      # C67: Total clients with enhanced due diligence (EDD) at onboarding
+      # Counts clients with REINFORCED DD level who became clients during the reporting year
       def ac1701
-        setting_value("legal_form")&.to_i || 0
+        clients_kept
+          .where(due_diligence_level: "REINFORCED")
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
+          .count
       end
 
+      # C68: Total clients with enhanced due diligence during relationship
+      # All clients currently with REINFORCED DD level (reviewed during the period)
       def ac1702
-        setting_value("registration_number")&.to_i || 0
+        clients_kept
+          .where(due_diligence_level: "REINFORCED")
+          .count
       end
 
+      # C69: Percentage of clients with enhanced due diligence
+      # i.e. number of enhanced due diligence clients / total number of clients
       def ac1703
-        setting_value("registration_date")
+        total = clients_kept.count
+        return 0 if total.zero?
+
+        reinforced = clients_kept.where(due_diligence_level: "REINFORCED").count
+        (reinforced.to_f / total * 100).round(2)
       end
 
       # === Business Profile ===
@@ -169,8 +184,15 @@ class Survey
 
       # === Legal Entity Status ===
 
+      # Q37: Monaco legal entity clients grouped by legal_entity_type
+      # Returns dimensional hash of type label => count for MC-incorporated legal entities
       def amles
-        clients_kept.legal_entities.count
+        clients_kept
+          .legal_entities
+          .where(incorporation_country: "MC")
+          .where.not(legal_entity_type: [nil, ""])
+          .group(:legal_entity_type)
+          .count
       end
     end
   end

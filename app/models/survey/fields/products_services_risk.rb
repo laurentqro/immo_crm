@@ -266,9 +266,10 @@ class Survey
         setting_value("air2393")&.to_d || 0
       end
 
+      # Q162: Total unique rental properties during the reporting period
+      # Uses ManagedProperty model for accurate property-level tracking
       def air234
-        # Transaction count for specific category
-        year_transactions.purchases.count
+        organization.managed_properties.active_in_year(year).count
       end
 
       def air236

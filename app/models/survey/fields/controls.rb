@@ -105,8 +105,7 @@ class Survey
       def a3303
         clients_kept
           .where(due_diligence_level: "SIMPLIFIED")
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .where.not(nationality: [nil, ""])
           .group(:nationality)
           .count
@@ -166,39 +165,60 @@ class Survey
       end
 
       # CDD refresh
+      # Q208: Total prospects rejected for AML/CFT/WMD reasons during the reporting period
+      # Counts clients with rejection_reason set who became (were evaluated as) clients in the year
       def a3401
-        setting_value("a3401")&.to_i || 12
+        clients_kept
+          .where.not(rejection_reason: [nil, ""])
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
+          .count
       end
 
+      # Q209: Can the entity distinguish if rejection was due to client attributes vs discretionary practice?
       def a3402
         setting_value("a3402") || "Oui"
       end
 
+      # Q210: Prospects rejected due to client attributes/activities/deficiencies
+      # Counts clients rejected specifically for AML_CFT reasons (client-attributable)
       def a3403
-        setting_value("a3403")&.to_i || 0
+        clients_kept
+          .where(rejection_reason: "AML_CFT")
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
+          .count
       end
 
+      # Q211: Total client relationships terminated for AML/CFT/WMD reasons during reporting period
       def a3414
-        # Clients reviewed with enhanced DD during period
-        0
+        clients_kept
+          .where.not(relationship_end_reason: [nil, ""])
+          .where(relationship_ended_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
+          .count
       end
 
+      # Q212: Can entity distinguish if termination was due to client attributes vs discretionary?
       def a3415
-        setting_value("a3415") || "Non"
+        setting_value("a3415") || "Oui"
       end
 
+      # Q213: Terminations due to client attributes/activities/deficiencies
       def a3416
-        setting_value("a3416")&.to_i || 0
+        clients_kept
+          .where(relationship_end_reason: "AML_CONCERN")
+          .where(relationship_ended_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
+          .count
       end
 
-      # === Risk Scoring ===
+      # === Section 3 Comments ===
 
+      # Q214: Has comments on section 3?
+      def a3701a
+        setting_value("a3701a").present? ? "Oui" : "Non"
+      end
+
+      # Q215: Section 3 comment text
       def a3701
         setting_value("a3701")
-      end
-
-      def a3701a
-        setting_value("a3701a") || "Non"
       end
 
       # === ID Verification and Records ===
@@ -426,10 +446,12 @@ class Survey
 
       # === Record Retention ===
 
+      # C104: Has comments on controls section?
       def ac116a
-        setting_value("ac116a") || "Oui"
+        setting_value("ac116a").present? ? "Oui" : "Non"
       end
 
+      # C105: Controls section comment text
       def ac11601
         setting_value("ac11601")
       end
