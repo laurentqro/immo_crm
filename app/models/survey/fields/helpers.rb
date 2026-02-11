@@ -24,6 +24,35 @@ class Survey
         organization.transactions.kept.for_year(year)
       end
 
+      # Transactions for the reporting year and 4 previous years (5-year lookback)
+      def five_year_transactions
+        organization.transactions.kept
+          .where("transaction_date >= ?", Date.new(year - 4, 1, 1))
+          .where("transaction_date <= ?", Date.new(year, 12, 31))
+      end
+
+      # Group purchase/sale transactions by client nationality or incorporation country.
+      # Returns a hash of { country_code => count_or_sum }.
+      # Natural persons use nationality, legal entities use incorporation_country.
+      def transactions_by_client_country(transactions_scope, aggregate: :count)
+        natural = transactions_scope
+          .joins(:client)
+          .merge(Client.kept.natural_persons)
+          .where.not(clients: {nationality: [nil, ""]})
+          .group("clients.nationality")
+
+        legal = transactions_scope
+          .joins(:client)
+          .merge(Client.kept.legal_entities)
+          .where.not(clients: {incorporation_country: [nil, ""]})
+          .group("clients.incorporation_country")
+
+        natural_result = (aggregate == :sum) ? natural.sum(:transaction_value) : natural.count
+        legal_result = (aggregate == :sum) ? legal.sum(:transaction_value) : legal.count
+
+        natural_result.merge(legal_result) { |_key, v1, v2| v1 + v2 }
+      end
+
       # Beneficial owners through the organization's clients
       def beneficial_owners_base
         BeneficialOwner.joins(:client)
