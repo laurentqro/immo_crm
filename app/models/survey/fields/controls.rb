@@ -45,12 +45,15 @@ class Survey
 
       # === Training ===
 
-      def ab3206
+      # NOTE: These were previously misnamed as ab3206/ab3207 (which are Q173/Q174 new client counts).
+      # aC1102A = total staff headcount (reuses Q188)
+      # aC1102 = FTE count
+      def ac1102a
         organization.trainings.for_year(year).sum(:staff_count)
       end
 
-      def ab3207
-        setting_value("ab3207")&.to_i || 1
+      def ac1102
+        setting_value("ac1102")&.to_i || 1
       end
 
       def ab1801b
