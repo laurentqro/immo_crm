@@ -341,28 +341,22 @@ class Survey
         natural_counts.merge(legal_counts) { |_key, v1, v2| v1 + v2 }
       end
 
-      # Rental transactions, grouped by property country
+      # Q155: Total purchase/sale transactions over 5 years, by client nationality
       def air237b
-        year_transactions.rentals
-          .where.not(property_country: [nil, ""])
-          .group(:property_country)
-          .count
+        scope = five_year_transactions.where(transaction_type: %w[PURCHASE SALE])
+        transactions_by_client_country(scope, aggregate: :count)
       end
 
-      # Rental transaction values, grouped by property country
+      # Q156: Total funds for purchase/sale in current year, by client nationality
       def air238b
-        year_transactions.rentals
-          .where.not(property_country: [nil, ""])
-          .group(:property_country)
-          .sum(:transaction_value)
+        scope = year_transactions.where(transaction_type: %w[PURCHASE SALE])
+        transactions_by_client_country(scope, aggregate: :sum)
       end
 
-      # Additional rental value metric, grouped by property country
+      # Q157: Total funds for purchase/sale over 5 years, by client nationality
       def air239b
-        year_transactions.rentals
-          .where.not(property_country: [nil, ""])
-          .group(:property_country)
-          .sum(:rental_annual_value)
+        scope = five_year_transactions.where(transaction_type: %w[PURCHASE SALE])
+        transactions_by_client_country(scope, aggregate: :sum)
       end
     end
   end
