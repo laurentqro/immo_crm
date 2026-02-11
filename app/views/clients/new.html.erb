@@ -1,20 +1,18 @@
 <% Current.meta_tags.set(title: "New Client") %>
 
-<%= turbo_frame_tag "modal" do %>
-  <div class="px-4 sm:px-6 lg:px-8">
-    <div class="sm:flex sm:items-center">
-      <div class="sm:flex-auto">
-        <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">New Client</h1>
-        <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
-          Add a new client - natural person, legal entity, or trust.
-        </p>
-      </div>
-    </div>
-
-    <div class="mt-8 bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
-      <div class="px-4 py-5 sm:p-6">
-        <%= render "form", client: @client %>
-      </div>
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white">New Client</h1>
+      <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+        Add a new client - natural person, legal entity, or trust.
+      </p>
     </div>
   </div>
-<% end %>
+
+  <div class="mt-8 bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
+    <div class="px-4 py-5 sm:p-6">
+      <%= render "form", client: @client %>
+    </div>
+  </div>
+</div>
