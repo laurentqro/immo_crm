@@ -18,7 +18,7 @@ class Survey
 
       private
 
-      # === Entity Information ===
+      # === Enhanced Due Diligence Statistics ===
 
       # C67: Total clients with enhanced due diligence (EDD) at onboarding
       # Counts clients with REINFORCED DD level who became clients during the reporting year

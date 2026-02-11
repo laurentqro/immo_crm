@@ -447,7 +447,7 @@ class Survey
 
       # C105: Controls section comment text
       def ac11601
-        setting_value("ac11601")
+        nil
       end
 
       # === Audit ===

@@ -616,11 +616,11 @@ class SurveyTest < ActiveSupport::TestCase
     assert result.empty?
   end
 
-  test "a13604e returns nil when no non-AMSF-named VASP clients exist" do
+  test "a13604e returns Néant when no non-AMSF-named VASP clients exist" do
     result = @survey.send(:a13604e)
 
     # Org :one has only one VASP client (EXCHANGE), no "other" bucket types
-    assert_nil result
+    assert_equal "Néant", result
   end
 
   test "a13604e derives description from client VASP types and free-text" do
@@ -644,16 +644,13 @@ class SurveyTest < ActiveSupport::TestCase
   # - calc_legal_5 (OTHER, no legal_entity_type_other — excluded)
   # - Standard forms (SARL, SA, SCI, SAM) — excluded from a11006
 
-  test "a11006 returns nil when no other legal constructions exist" do
-    result = @survey.send(:a11006)
-
-    # Org :one has SARL, SA, SCI, GIE — GIE is non-standard so won't be nil
-    # Let's use org :two which has only SARL
+  test "a11006 returns Néant when no other legal constructions exist" do
+    # Org :two has only SARL (standard form)
     org = organizations(:two)
     survey = Survey.new(organization: org, year: Date.current.year)
     result = survey.send(:a11006)
 
-    assert_nil result
+    assert_equal "Néant", result
   end
 
   test "a11006 derives description from non-standard legal forms and free-text" do

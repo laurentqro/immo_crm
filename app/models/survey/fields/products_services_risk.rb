@@ -305,12 +305,14 @@ class Survey
 
       # === Section Comments ===
 
+      # Gate: "Do you have comments on this section?"
       def a2501a
-        setting_value("a2501a").present? ? "Oui" : "Non"
+        "Non"
       end
 
+      # Comment text (hidden when gate is "Non")
       def a2501
-        setting_value("a2501")
+        nil
       end
 
       # === Additional Transaction Dimensional Fields ===

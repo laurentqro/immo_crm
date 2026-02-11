@@ -19,6 +19,7 @@ end
 
 # Clean up existing data (be careful in production!)
 puts "Cleaning existing data..."
+Setting.destroy_all
 Training.destroy_all
 ManagedProperty.destroy_all
 StrReport.destroy_all
@@ -642,6 +643,68 @@ end
 
 puts "  Created #{Training.for_year(current_year).count} trainings for #{current_year}"
 puts "  Created #{Training.for_year(previous_year).count} trainings for #{previous_year}"
+
+# ============================================
+# Organization Settings (AMSF Survey)
+# ============================================
+puts ""
+puts "Creating organization settings..."
+
+# Helper to create settings concisely
+def create_setting(org, key:, value:, category:)
+  Setting.create!(organization: org, key: key, value: value, category: category)
+end
+
+# --- Entity Information ---
+create_setting(organization, key: "legal_form", value: "SAM", category: "entity_info")
+create_setting(organization, key: "registration_date", value: "2018-03-15", category: "entity_info")
+create_setting(organization, key: "total_employees", value: "12", category: "entity_info")
+# ac1807: "Quels éléments ne sont pas pris en compte ?" (key will be renamed in task #2)
+create_setting(organization, key: "employee_count", value: "Transactions immobilières effectuées hors de Monaco", category: "entity_info")
+# ac1813: "Quelles activités client associez-vous aux clients à haut risque ?" (key will be renamed in task #2)
+create_setting(organization, key: "monaco_offices", value: "Investissement locatif de luxe, achat-revente rapide, transactions avec des structures offshore", category: "entity_info")
+create_setting(organization, key: "is_foreign_subsidiary", value: "false", category: "entity_info")
+create_setting(organization, key: "parent_company_country", value: "FR", category: "entity_info")
+create_setting(organization, key: "last_external_audit", value: "2024-06-20", category: "entity_info")
+# ac1637: "Veuillez préciser les autres données des personnes morales enregistrées" (key will be renamed in task #2)
+create_setting(organization, key: "ancillary_services", value: "Numéro RCI, date de constitution, siège social, liste des dirigeants", category: "entity_info")
+# ac1640a: "Quels outils ?" (key will be renamed in task #2)
+create_setting(organization, key: "legal_services", value: "Logiciel de gestion immobilière, base de données cadastrale Monaco", category: "entity_info")
+
+# --- Signatories ---
+create_setting(organization, key: "status_1", value: "Jean-Pierre Duval, Directeur Général", category: "entity_info")
+create_setting(organization, key: "status_2", value: "Marie Laurent, Responsable Conformité", category: "entity_info")
+create_setting(organization, key: "survey_incomplete", value: "Non", category: "entity_info")
+
+# --- KYC Procedures ---
+create_setting(organization, key: "high_risk_cdd_frequency", value: "Tous les 6 mois", category: "kyc_procedures")
+create_setting(organization, key: "standard_cdd_frequency", value: "Annuellement", category: "kyc_procedures")
+create_setting(organization, key: "compliance_policies_author", value: "Cabinet externe spécialisé LCB/FT (Mazars Monaco)", category: "kyc_procedures")
+create_setting(organization, key: "ac1206", value: "2024-11-15", category: "kyc_procedures")
+create_setting(organization, key: "ac1101z", value: "40", category: "kyc_procedures")
+create_setting(organization, key: "ac1622b", value: "Difficultés liées à l'obtention de documents d'identité certifiés pour les clients non-résidents", category: "kyc_procedures")
+create_setting(organization, key: "ac1619", value: "Vérification renforcée de la source des fonds, visite sur site obligatoire", category: "kyc_procedures")
+create_setting(organization, key: "ac1621", value: "Vérification via registres publics et prestataires spécialisés (Chainalysis)", category: "kyc_procedures")
+create_setting(organization, key: "ac1602", value: "Historique complet des transactions antérieures dans d'autres juridictions", category: "kyc_procedures")
+create_setting(organization, key: "ac1630", value: "Profil de risque, historique des opérations, documents d'identité numérisés", category: "kyc_procedures")
+create_setting(organization, key: "ac11302", value: "Consultation des listes officielles (GAFI, UE, ONU), vérification via World-Check", category: "kyc_procedures")
+create_setting(organization, key: "ac11303", value: "Approbation de la direction pour l'entrée en relation, revue semestrielle du dossier", category: "kyc_procedures")
+create_setting(organization, key: "ac11403", value: "Vérification systématique de l'origine des fonds pour tout paiement en espèces, déclaration SICCFIN au-delà de 30 000 EUR", category: "kyc_procedures")
+create_setting(organization, key: "ac1807", value: "Transactions immobilières effectuées hors de Monaco", category: "kyc_procedures")
+create_setting(organization, key: "ac1813", value: "Investissement locatif de luxe, achat-revente rapide, transactions avec des structures offshore", category: "kyc_procedures")
+create_setting(organization, key: "a3308", value: "Renforcement des procédures de vigilance pour les structures complexes multi-juridictionnelles", category: "kyc_procedures")
+
+# --- Non-Face-to-Face ---
+create_setting(organization, key: "a3211", value: "Visioconférence sécurisée avec vérification d'identité en temps réel", category: "kyc_procedures")
+create_setting(organization, key: "a3211b", value: "Visioconférence sécurisée avec vérification d'identité en temps réel", category: "kyc_procedures")
+
+# --- Compliance Policies ---
+create_setting(organization, key: "ac1403", value: "Aucune violation constatée au cours de la période de déclaration", category: "compliance_policies")
+
+# --- Crypto ---
+create_setting(organization, key: "a2203", value: "Aucune plateforme d'actifs virtuels utilisée directement", category: "compliance_policies")
+
+puts "  Created #{Setting.count} organization settings"
 
 # Summary
 puts ""

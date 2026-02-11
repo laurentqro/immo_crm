@@ -200,7 +200,7 @@ class Survey
           .pluck(:legal_entity_type_other)
 
         combined = (labels + free_texts).uniq
-        combined.any? ? combined.join(", ") : nil
+        combined.any? ? combined.join(", ") : "Néant"
       end
 
       # === PEP (Politically Exposed Person) Statistics ===
@@ -345,7 +345,7 @@ class Survey
           .pluck(:vasp_other_service_type)
 
         combined = (labels + free_texts).uniq
-        combined.any? ? combined.join(", ") : nil
+        combined.any? ? combined.join(", ") : "Néant"
       end
 
       # === Beneficial Owner Statistics ===
@@ -555,12 +555,14 @@ class Survey
 
       # === Section Comments ===
 
+      # Gate: "Do you have comments on this section?"
       def a14801
-        setting_value("a14801").present? ? "Oui" : "Non"
+        "Non"
       end
 
+      # Comment text (hidden when gate is "Non")
       def a14001
-        setting_value("a14001")
+        nil
       end
 
       # === French-labeled fields (ir_*) ===
