@@ -100,4 +100,19 @@ class Survey::Fields::ProductsServicesRiskTest < ActiveSupport::TestCase
 
     assert_equal 0, @survey.send(:air233s)
   end
+
+  test "air233s excludes soft-deleted transactions" do
+    seller = Client.create!(organization: @org, name: "Seller", client_type: "NATURAL_PERSON")
+    t = Transaction.create!(organization: @org, client: seller, transaction_type: "SALE", agency_role: "SELLER_AGENT", transaction_date: Date.new(2025, 6, 1), transaction_value: 500_000)
+    t.discard
+
+    assert_equal 0, @survey.send(:air233s)
+  end
+
+  test "air233s excludes dual agent transactions" do
+    client = Client.create!(organization: @org, name: "Client", client_type: "NATURAL_PERSON")
+    Transaction.create!(organization: @org, client: client, transaction_type: "SALE", agency_role: "DUAL_AGENT", transaction_date: Date.new(2025, 6, 1), transaction_value: 500_000)
+
+    assert_equal 0, @survey.send(:air233s)
+  end
 end
