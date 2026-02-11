@@ -677,9 +677,9 @@ create_setting(organization, key: "status_2", value: "Marie Laurent, Responsable
 create_setting(organization, key: "survey_incomplete", value: "Non", category: "entity_info")
 
 # --- KYC Procedures ---
-create_setting(organization, key: "high_risk_cdd_frequency", value: "Tous les 6 mois", category: "kyc_procedures")
-create_setting(organization, key: "standard_cdd_frequency", value: "Annuellement", category: "kyc_procedures")
-create_setting(organization, key: "compliance_policies_author", value: "Cabinet externe spécialisé LCB/FT (Mazars Monaco)", category: "kyc_procedures")
+create_setting(organization, key: "high_risk_cdd_frequency", value: "< Annuel", category: "kyc_procedures")
+create_setting(organization, key: "standard_cdd_frequency", value: "> Annuel", category: "kyc_procedures")
+create_setting(organization, key: "compliance_policies_author", value: "Par des consultants externes", category: "kyc_procedures")
 create_setting(organization, key: "ac1206", value: "2024-11-15", category: "kyc_procedures")
 create_setting(organization, key: "ac1101z", value: "40", category: "kyc_procedures")
 create_setting(organization, key: "ac1622b", value: "Difficultés liées à l'obtention de documents d'identité certifiés pour les clients non-résidents", category: "kyc_procedures")

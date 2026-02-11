@@ -171,6 +171,39 @@
                 <span id="sdd_applied_description" class="block text-sm text-gray-500 dark:text-gray-400">Apply simplified procedures for low-risk situations</span>
               <% end %>
             </div>
+
+            <div class="mt-6 space-y-4">
+              <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">CDD Review Frequency</h3>
+              <%
+                cdd_frequency_options = [
+                  ["> Annuel (moins fréquent qu'annuel)", "> Annuel"],
+                  ["< Annuel (plus fréquent qu'annuel)", "< Annuel"],
+                  ["< Mensuel (plus fréquent que mensuel)", "< Mensuel"],
+                  ["< Hebdomadaire (plus fréquent qu'hebdomadaire)", "< Hebdomadaire"],
+                  ["Événement déclencheur", "Événement déclencheur"]
+                ]
+              %>
+              <div>
+                <%= label_tag "settings_high_risk_cdd_frequency", "High-risk client CDD frequency", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+                <div class="mt-1">
+                  <%= select_tag "settings[high_risk_cdd_frequency]",
+                      options_for_select(cdd_frequency_options, get_setting_value("high_risk_cdd_frequency")),
+                      include_blank: "-- Select --",
+                      class: "block w-full form-control max-w-xs",
+                      id: "settings_high_risk_cdd_frequency" %>
+                </div>
+              </div>
+              <div>
+                <%= label_tag "settings_standard_cdd_frequency", "Standard client CDD frequency", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+                <div class="mt-1">
+                  <%= select_tag "settings[standard_cdd_frequency]",
+                      options_for_select(cdd_frequency_options, get_setting_value("standard_cdd_frequency")),
+                      include_blank: "-- Select --",
+                      class: "block w-full form-control max-w-xs",
+                      id: "settings_standard_cdd_frequency" %>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
