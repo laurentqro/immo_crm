@@ -398,8 +398,36 @@ class Survey
         setting_value("ac1209c") || "Non"
       end
 
+      # XBRL valid enumeration values for aC1208
+      COMPLIANCE_AUTHOR_VALUES = [
+        "Par des consultants externes",
+        "Par un autre membre du groupe",
+        "Par l\u2019entit\u00e9",
+        "Combinaison de soi, membre ou externe"
+      ].freeze
+
+      # Maps free-text setting values to valid XBRL enum values
+      COMPLIANCE_AUTHOR_MAPPING = {
+        /externe|cabinet|consultant/i => "Par des consultants externes",
+        /groupe|membre/i => "Par un autre membre du groupe",
+        /entit[eé]|soi-m[eê]me|interne/i => "Par l\u2019entit\u00e9",
+        /combinaison|mixte/i => "Combinaison de soi, membre ou externe"
+      }.freeze
+
       def ac1208
-        setting_value("compliance_policies_author")
+        raw = setting_value("compliance_policies_author")
+        return nil if raw.blank?
+
+        # Return as-is if already a valid enum value
+        return raw if COMPLIANCE_AUTHOR_VALUES.include?(raw)
+
+        # Map free text to closest valid enum
+        COMPLIANCE_AUTHOR_MAPPING.each do |pattern, value|
+          return value if raw.match?(pattern)
+        end
+
+        # Default fallback
+        "Par l\u2019entit\u00e9"
       end
 
       def ac1209
