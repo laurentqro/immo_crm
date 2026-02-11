@@ -44,9 +44,10 @@ class Survey
           .transform_values(&:value)
       end
 
-      # Count clients by business sector
+      # Count Monegasque clients by business sector (Q81-Q109)
+      # Questions ask for "clients uniques monégasques" in each sector
       def clients_by_sector(sector)
-        clients_kept.where(business_sector: sector).count
+        clients_kept.where(business_sector: sector, nationality: "MC").count
       end
 
       # Count VASP transactions by VASP type

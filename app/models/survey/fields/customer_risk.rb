@@ -43,19 +43,19 @@ class Survey
         organization.clients.count
       end
 
-      # Clients who are Monegasque nationals
+      # Q23: Natural person clients who are Monegasque nationals
       def a1102
-        clients_kept.where(nationality: "MC").count
+        clients_kept.natural_persons.where(nationality: "MC").count
       end
 
-      # Clients who are foreign residents (not MC nationals but residents)
+      # Q24: Natural person clients who are foreign residents
       def a1103
-        clients_kept.where(residence_status: "RESIDENT").where.not(nationality: "MC").count
+        clients_kept.natural_persons.where(residence_status: "RESIDENT").where.not(nationality: "MC").count
       end
 
-      # Clients who are non-residents
+      # Q25: Natural person clients who are non-residents
       def a1104
-        clients_kept.where(residence_status: "NON_RESIDENT").count
+        clients_kept.natural_persons.where(residence_status: "NON_RESIDENT").count
       end
 
       # === Natural Person Statistics ===
@@ -70,12 +70,13 @@ class Survey
           .count
       end
 
-      # Total funds transferred by individual clients
+      # Q28: Total funds transferred by natural person clients for purchases and sales
       def a1404b
         year_transactions
           .by_client
           .joins(:client)
           .merge(Client.natural_persons)
+          .where(transaction_type: %w[PURCHASE SALE])
           .sum(:transaction_value)
       end
 
@@ -102,32 +103,23 @@ class Survey
 
       # === Legal Entity Statistics ===
 
-      # Transactions by legal entity clients (excluding trusts, counted separately in a1806tola)
+      # Q34: Transactions by legal entity clients for purchases and sales (excluding trusts)
       def a1502b
-        purchases_and_sales = year_transactions
+        year_transactions
           .by_client
           .joins(:client)
           .merge(Client.legal_entities.where.not(legal_entity_type: "TRUST"))
           .where(transaction_type: %w[PURCHASE SALE])
           .count
-
-        rental_months = year_transactions
-          .by_client
-          .joins(:client)
-          .merge(Client.legal_entities.where.not(legal_entity_type: "TRUST"))
-          .rentals
-          .where(transaction_value: 10_000..)
-          .sum(:rental_duration_months)
-
-        purchases_and_sales + rental_months
       end
 
-      # Total funds from legal entity transactions (excluding trusts, counted separately in a1807tola)
+      # Q35: Total funds from legal entity clients for purchases and sales (excluding trusts)
       def a1503b
         year_transactions
           .by_client
           .joins(:client)
           .merge(Client.legal_entities.where.not(legal_entity_type: "TRUST"))
+          .where(transaction_type: %w[PURCHASE SALE])
           .sum(:transaction_value)
       end
 
@@ -163,32 +155,23 @@ class Survey
         a1806tola.positive? ? "Oui" : "Non"
       end
 
-      # Transactions by trust clients
+      # Q46: Transactions by trust clients for purchases and sales
       def a1806tola
-        purchases_and_sales = year_transactions
+        year_transactions
           .by_client
           .joins(:client)
           .merge(Client.trusts)
           .where(transaction_type: %w[PURCHASE SALE])
           .count
-
-        rental_months = year_transactions
-          .by_client
-          .joins(:client)
-          .merge(Client.trusts)
-          .rentals
-          .where(transaction_value: 10_000..)
-          .sum(:rental_duration_months)
-
-        purchases_and_sales + rental_months
       end
 
-      # Total funds from trust transactions
+      # Q47: Total funds from trust clients for purchases and sales
       def a1807tola
         year_transactions
           .by_client
           .joins(:client)
           .merge(Client.trusts)
+          .where(transaction_type: %w[PURCHASE SALE])
           .sum(:transaction_value)
       end
 
@@ -222,19 +205,21 @@ class Survey
         clients_kept.peps.exists? ? "Oui" : "Non"
       end
 
-      # Transactions by PEP clients
+      # Q52: Transactions by PEP clients for purchases and sales
       def a11304b
         year_transactions
           .joins(:client)
           .merge(Client.peps)
+          .where(transaction_type: %w[PURCHASE SALE])
           .count
       end
 
-      # Total funds from PEP transactions
+      # Q53: Total funds from PEP clients for purchases and sales
       def a11305b
         year_transactions
           .joins(:client)
           .merge(Client.peps)
+          .where(transaction_type: %w[PURCHASE SALE])
           .sum(:transaction_value)
       end
 
@@ -411,9 +396,9 @@ class Survey
         purchases_and_sales + rental_months
       end
 
-      # Funds transferred BY clients (client pays directly)
+      # Q6: Funds transferred BY clients for purchases and sales only
       def a1106b
-        year_transactions.by_client.sum(:transaction_value)
+        year_transactions.by_client.where(transaction_type: %w[PURCHASE SALE]).sum(:transaction_value)
       end
 
       # Funds transferred for rentals
