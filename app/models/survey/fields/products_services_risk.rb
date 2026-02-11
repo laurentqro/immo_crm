@@ -243,9 +243,12 @@ class Survey
         year_transactions.sales.count
       end
 
+      # Q158: Purchases and sales for investment (excluding primary residence)
       def air117
-        # Specific count (new construction purchases)
-        year_transactions.purchases.where(is_new_construction: true).count
+        year_transactions
+          .where(transaction_type: %w[PURCHASE SALE])
+          .where(purchase_purpose: "INVESTMENT")
+          .count
       end
 
       def air2391
