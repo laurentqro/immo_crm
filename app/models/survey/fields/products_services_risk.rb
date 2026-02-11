@@ -225,14 +225,22 @@ class Survey
       # === French-labeled transaction fields (ir_*) ===
 
       # Transaction counts for specific regulatory questions
+      # Q150: Unique clients who were buyers during the reporting period
       def air233b
-        # Purchases where agency represents buyer
-        year_transactions.purchases.where(agency_role: "BUYER_AGENT").count
+        year_transactions
+          .purchases
+          .where(agency_role: "BUYER_AGENT")
+          .distinct
+          .count(:client_id)
       end
 
+      # Q151: Unique clients who were sellers during the reporting period
       def air233s
-        # Sales where agency represents seller
-        year_transactions.sales.where(agency_role: "SELLER_AGENT").count
+        year_transactions
+          .sales
+          .where(agency_role: "SELLER_AGENT")
+          .distinct
+          .count(:client_id)
       end
 
       def air235b_2
