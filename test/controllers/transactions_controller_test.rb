@@ -203,7 +203,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test "create responds with turbo stream on success" do
+  test "create redirects on turbo stream success" do
     sign_in @user
 
     post transactions_path, params: {
@@ -214,8 +214,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
-    assert_response :success
-    assert_includes response.media_type, "turbo-stream"
+    assert_response :redirect
   end
 
   test "cannot create transaction with client from different organization" do
@@ -297,8 +296,8 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       transaction: {notes: "Updated notes"}
     }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
-    assert_response :success
-    assert_includes response.media_type, "turbo-stream"
+    assert_response :redirect
+    assert_redirected_to transaction_path(@transaction)
   end
 
   # === Destroy ===

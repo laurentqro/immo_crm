@@ -276,15 +276,15 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test "update responds with turbo stream" do
+  test "update redirects on turbo stream success" do
     sign_in @user
 
     patch client_path(@client), params: {
       client: {name: "Turbo Update"}
     }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
-    assert_response :success
-    assert_includes response.media_type, "turbo-stream"
+    assert_response :redirect
+    assert_redirected_to client_path(@client)
   end
 
   # === Destroy ===

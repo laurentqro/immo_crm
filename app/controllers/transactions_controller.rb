@@ -45,7 +45,7 @@ class TransactionsController < ApplicationController
     respond_to do |format|
       if @transaction.save
         format.html { redirect_to @transaction, notice: "Transaction was successfully created." }
-        format.turbo_stream { flash.now[:notice] = "Transaction was successfully created." }
+        format.turbo_stream { redirect_to @transaction, notice: "Transaction was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.turbo_stream { render :form_errors, status: :unprocessable_entity }
@@ -59,7 +59,7 @@ class TransactionsController < ApplicationController
     respond_to do |format|
       if @transaction.update(transaction_params)
         format.html { redirect_to @transaction, notice: "Transaction was successfully updated." }
-        format.turbo_stream { flash.now[:notice] = "Transaction was successfully updated." }
+        format.turbo_stream { redirect_to @transaction, notice: "Transaction was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.turbo_stream { render :form_errors, status: :unprocessable_entity }

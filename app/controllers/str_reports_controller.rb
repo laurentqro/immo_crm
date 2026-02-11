@@ -44,7 +44,7 @@ class StrReportsController < ApplicationController
     respond_to do |format|
       if @str_report.save
         format.html { redirect_to @str_report, notice: "STR report was successfully created." }
-        format.turbo_stream { flash.now[:notice] = "STR report was successfully created." }
+        format.turbo_stream { redirect_to @str_report, notice: "STR report was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.turbo_stream { render :form_errors, status: :unprocessable_entity }
@@ -58,7 +58,7 @@ class StrReportsController < ApplicationController
     respond_to do |format|
       if @str_report.update(str_report_params)
         format.html { redirect_to @str_report, notice: "STR report was successfully updated." }
-        format.turbo_stream { flash.now[:notice] = "STR report was successfully updated." }
+        format.turbo_stream { redirect_to @str_report, notice: "STR report was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.turbo_stream { render :form_errors, status: :unprocessable_entity }

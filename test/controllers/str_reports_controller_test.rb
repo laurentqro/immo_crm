@@ -204,7 +204,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test "create responds with turbo stream on success" do
+  test "create redirects on turbo stream success" do
     sign_in @user
 
     post str_reports_path, params: {
@@ -214,8 +214,7 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
       }
     }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
-    assert_response :success
-    assert_includes response.media_type, "turbo-stream"
+    assert_response :redirect
   end
 
   test "cannot create STR report with client from different organization" do
@@ -307,15 +306,15 @@ class StrReportsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test "update responds with turbo stream" do
+  test "update redirects on turbo stream success" do
     sign_in @user
 
     patch str_report_path(@str_report), params: {
       str_report: {notes: "Turbo update"}
     }, headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
-    assert_response :success
-    assert_includes response.media_type, "turbo-stream"
+    assert_response :redirect
+    assert_redirected_to str_report_path(@str_report)
   end
 
   # === Destroy ===
