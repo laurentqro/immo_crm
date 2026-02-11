@@ -186,11 +186,13 @@ class Survey
 
       # Q37: Monaco legal entity clients grouped by legal_entity_type
       # Returns dimensional hash of type label => count for MC-incorporated legal entities
-      # Q37: MC legal entities count (by type is dimensional but field is non-dimensional in taxonomy)
+      # Q37: MC legal entities grouped by type (dimensional field)
       def amles
         clients_kept
           .legal_entities
           .where(incorporation_country: "MC")
+          .where.not(legal_entity_type: [nil, ""])
+          .group(:legal_entity_type)
           .count
       end
     end
