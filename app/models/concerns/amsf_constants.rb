@@ -61,6 +61,7 @@ module AmsfConstants
     STATE_DOMAIN
     TRUST
     OTHER
+    UNKNOWN
   ].freeze
 
   # Human-readable labels for legal entity types
@@ -81,7 +82,8 @@ module AmsfConstants
     "OTHER_COMMERCIAL" => "Other Commercial Companies",
     "STATE_DOMAIN" => "Private Domain of the Monegasque State",
     "TRUST" => "Trust",
-    "OTHER" => "Other Legal Arrangements"
+    "OTHER" => "Other Legal Arrangements",
+    "UNKNOWN" => "Unknown"
   }.freeze
 
   # Standard commercial/civil forms have dedicated AMSF sections.
