@@ -9,6 +9,8 @@ class SubmissionsController < ApplicationController
   end
 
   def show
+    @organization = @submission.organization
+    @survey = Survey.new(organization: @organization, year: @submission.year)
   end
 
   def new
@@ -16,10 +18,17 @@ class SubmissionsController < ApplicationController
   end
 
   def create
+    # Resume existing draft if one exists for the same year
+    existing = current_organization.submissions.find_by(year: submission_params[:year])
+    if existing
+      redirect_to review_submission_path(existing), notice: "Resuming existing submission."
+      return
+    end
+
     @submission = current_organization.submissions.build(submission_params)
 
     if @submission.save
-      redirect_to submission_path(@submission), notice: "Submission created successfully."
+      redirect_to review_submission_path(@submission), notice: "Submission created successfully."
     else
       render :new, status: :unprocessable_entity
     end
@@ -37,6 +46,11 @@ class SubmissionsController < ApplicationController
   end
 
   def destroy
+    if @submission.status == "completed"
+      head :unprocessable_entity
+      return
+    end
+
     @submission.destroy
     redirect_to submissions_path, notice: "Submission deleted."
   end
@@ -45,7 +59,14 @@ class SubmissionsController < ApplicationController
     survey = Survey.new(organization: current_organization, year: @submission.year)
     xml_content = survey.to_xbrl
 
-    filename = "amsf_survey_#{Time.current.strftime('%Y_%m_%d_%H%M%S')}.xml"
+    filename = "amsf_#{@submission.year}_#{current_organization.rci_number}_#{Time.current.strftime('%Y%m%d_%H%M%S')}.xml"
+
+    AuditLog.create!(
+      organization: current_organization,
+      user: current_user,
+      action: "download",
+      auditable: @submission
+    )
 
     send_data xml_content,
       filename: filename,
@@ -92,6 +113,6 @@ class SubmissionsController < ApplicationController
   end
 
   def submission_params
-    params.require(:submission).permit(:year, :taxonomy_version)
+    params.require(:submission).permit(:year, :taxonomy_version, :status)
   end
 end

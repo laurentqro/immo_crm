@@ -40,8 +40,10 @@ class ClientsController < ApplicationController
     respond_to do |format|
       if @client.save
         format.html { redirect_to @client, notice: "Client was successfully created." }
+        format.turbo_stream
       else
         format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -52,8 +54,10 @@ class ClientsController < ApplicationController
     respond_to do |format|
       if @client.update(client_params)
         format.html { redirect_to @client, notice: "Client was successfully updated." }
+        format.turbo_stream
       else
         format.html { render :edit, status: :unprocessable_entity }
+        format.turbo_stream { render :edit, status: :unprocessable_entity }
       end
     end
   end
@@ -64,6 +68,7 @@ class ClientsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to clients_path, notice: "Client was successfully deleted." }
+      format.turbo_stream
     end
   end
 

@@ -46,8 +46,8 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
 
     get clients_path
     assert_response :success
-    assert_select "turbo-frame#client_#{@client.id}"
-    assert_select "turbo-frame#client_#{other_org_client.id}", count: 0
+    assert_select "tr#client_#{@client.id}"
+    assert_select "tr#client_#{other_org_client.id}", count: 0
   end
 
   test "filters clients by type" do
@@ -71,7 +71,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
 
     get clients_path(q: @client.name)
     assert_response :success
-    assert_select "turbo-frame#client_#{@client.id}"
+    assert_select "tr#client_#{@client.id}"
   end
 
   test "index responds to turbo frame request" do

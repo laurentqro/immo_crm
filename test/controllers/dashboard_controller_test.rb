@@ -67,8 +67,9 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
 
   # Empty state tests
   test "shows empty state message when no clients" do
-    # Delete transactions first (they depend on clients), then clients
+    # Delete dependents first (transactions and managed_properties reference clients)
     Transaction.where(organization: @organization).destroy_all
+    ManagedProperty.where(organization: @organization).destroy_all
     Client.where(organization: @organization).destroy_all
     sign_in @user
 
@@ -110,6 +111,9 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
 
   # Submission CTA tests
   test "shows start submission button when no active submission" do
+    # Remove any existing submissions for the reporting year
+    reporting_year = Date.current.year - 1
+    Submission.where(organization: @organization, year: reporting_year).destroy_all
     sign_in @user
 
     get dashboard_path
@@ -118,11 +122,12 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
   end
 
   # Year filtering
-  test "displays stats for current year by default" do
+  test "displays stats for previous year by default" do
     sign_in @user
 
     get dashboard_path
     assert_response :success
-    assert_select ".year-indicator", /#{Date.current.year}/
+    # Dashboard defaults to previous year (reporting year)
+    assert_select ".year-indicator", /#{Date.current.year - 1}/
   end
 end

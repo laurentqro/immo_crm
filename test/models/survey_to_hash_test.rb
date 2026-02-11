@@ -15,12 +15,12 @@ class SurveyToHashTest < ActiveSupport::TestCase
     assert result.key?("a1101"), "Expected hash to include a1101 (total clients)"
   end
 
-  test "to_hash values are strings or numbers" do
+  test "to_hash values are strings, numbers, or hashes (dimensional fields)" do
     result = @survey.to_hash
 
     result.each do |key, value|
-      assert [String, Integer, Float, BigDecimal, NilClass].any? { |t| value.is_a?(t) },
-        "Expected #{key} value to be string/number, got #{value.class}"
+      assert [String, Integer, Float, BigDecimal, NilClass, Hash].any? { |t| value.is_a?(t) },
+        "Expected #{key} value to be string/number/hash, got #{value.class}"
     end
   end
 

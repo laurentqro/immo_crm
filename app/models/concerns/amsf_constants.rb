@@ -113,7 +113,7 @@ module AmsfConstants
   SETTING_TYPES = %w[boolean integer decimal string date enum].freeze
 
   # Submission workflow statuses (simplified: draft -> completed)
-  SUBMISSION_STATUSES = %w[draft completed].freeze
+  SUBMISSION_STATUSES = %w[draft in_review completed].freeze
 
   # Source of submission values
   SUBMISSION_VALUE_SOURCES = %w[calculated from_settings manual].freeze
