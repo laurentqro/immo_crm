@@ -164,8 +164,36 @@ class Survey
         setting_value("licensed_agents") || "Non"
       end
 
+      # XBRL valid time range buckets for aC1904 (last external audit date)
+      AUDIT_TIME_RANGES = [
+        [0, 1, "Au cours des 12 derniers mois"],
+        [1, 2, "Entre un et deux ans"],
+        [2, 3, "Entre deux et trois ans"],
+        [3, 4, "Entre trois et quatre ans"],
+        [4, 5, "Entre quatre et cinq ans"],
+        [5, Float::INFINITY, "Plus de 5 ans"]
+      ].freeze
+
       def ac1904
-        setting_value("last_external_audit")
+        raw = setting_value("last_external_audit")
+        return "Jamais" if raw.blank?
+
+        begin
+          audit_date = Date.parse(raw)
+        rescue Date::Error
+          return raw # already a valid label or unparseable
+        end
+
+        period_end = Date.new(year, 12, 31)
+        years_ago = (period_end - audit_date).to_f / 365.25
+
+        return "Jamais" if years_ago.negative?
+
+        AUDIT_TIME_RANGES.each do |min, max, label|
+          return label if years_ago >= min && years_ago < max
+        end
+
+        "Plus de 5 ans"
       end
 
       # === Submission Status ===
