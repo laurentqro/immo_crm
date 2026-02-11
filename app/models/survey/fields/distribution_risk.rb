@@ -113,16 +113,39 @@ class Survey
           .count
       end
 
+      # === New Clients by Type ===
+
+      # Q173: New unique natural person clients in the reporting period
+      def ab3206
+        clients_kept
+          .natural_persons
+          .where("became_client_at >= ?", Date.new(year, 1, 1))
+          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .count
+      end
+
+      # Q174: New unique legal entity clients in the reporting period
+      def ab3207
+        clients_kept
+          .legal_entities
+          .where("became_client_at >= ?", Date.new(year, 1, 1))
+          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .count
+      end
+
+      # Q175: New unique trust/legal construction clients in the reporting period
+      def a3208tola
+        clients_kept
+          .trusts
+          .where("became_client_at >= ?", Date.new(year, 1, 1))
+          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .count
+      end
+
       # === Non-Face-to-Face Relationships ===
 
       def a3209
         setting_value("a3209") || "Non"
-      end
-
-      # Non-face-to-face for trusts
-      def a3208tola
-        # Would need tracking of non-f2f trust relationships - return 0
-        0
       end
 
       def a3210c
