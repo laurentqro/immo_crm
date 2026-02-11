@@ -34,6 +34,8 @@ class Survey
       # Group purchase/sale transactions by client nationality or incorporation country.
       # Returns a hash of { country_code => count_or_sum }.
       # Natural persons use nationality, legal entities use incorporation_country.
+      # Excludes trust clients (legal_entity_type "TRUST") as they don't have a valid
+      # country for XBRL dimension grouping.
       def transactions_by_client_country(transactions_scope, aggregate: :count)
         natural = transactions_scope
           .joins(:client)
@@ -45,12 +47,21 @@ class Survey
           .joins(:client)
           .merge(Client.kept.legal_entities)
           .where.not(clients: {incorporation_country: [nil, ""]})
+          .where.not(clients: {legal_entity_type: "TRUST"})
           .group("clients.incorporation_country")
 
         natural_result = (aggregate == :sum) ? natural.sum(:transaction_value) : natural.count
         legal_result = (aggregate == :sum) ? legal.sum(:transaction_value) : legal.count
 
-        natural_result.merge(legal_result) { |_key, v1, v2| v1 + v2 }
+        filter_valid_country_codes(
+          natural_result.merge(legal_result) { |_key, v1, v2| v1 + v2 }
+        )
+      end
+
+      # Filter out non-ISO country codes from dimensional hashes to prevent
+      # invalid XBRL dimension members (e.g., "TRUST" becoming "sdlTRUST")
+      def filter_valid_country_codes(hash)
+        hash.select { |code, _| code.is_a?(String) && code.match?(/\A[A-Z]{2}\z/) }
       end
 
       # Beneficial owners through the organization's clients
