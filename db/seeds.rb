@@ -665,7 +665,7 @@ create_setting(organization, key: "employee_count", value: "Transactions immobil
 create_setting(organization, key: "monaco_offices", value: "Investissement locatif de luxe, achat-revente rapide, transactions avec des structures offshore", category: "entity_info")
 create_setting(organization, key: "is_foreign_subsidiary", value: "false", category: "entity_info")
 create_setting(organization, key: "parent_company_country", value: "FR", category: "entity_info")
-create_setting(organization, key: "last_external_audit", value: "2024-06-20", category: "entity_info")
+create_setting(organization, key: "last_external_audit", value: "Entre un et deux ans", category: "entity_info")
 # ac1637: "Veuillez préciser les autres données des personnes morales enregistrées" (key will be renamed in task #2)
 create_setting(organization, key: "ancillary_services", value: "Numéro RCI, date de constitution, siège social, liste des dirigeants", category: "entity_info")
 # ac1640a: "Quels outils ?" (key will be renamed in task #2)
