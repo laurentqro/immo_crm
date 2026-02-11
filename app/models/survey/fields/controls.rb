@@ -122,9 +122,12 @@ class Survey
       end
 
       # Parent company country (if entity is a branch/subsidiary of foreign entity)
-      # Returns a country from the XBRL enumeration, or nil if not applicable
+      # Setting stores an ISO alpha-2 code; gem resolves to the XBRL enum label
       def a3305
-        setting_value("parent_company_country")
+        code = setting_value("parent_company_country")
+        return if code.blank?
+
+        questionnaire.question(:a3305).resolve_code(code)
       end
 
       # Q198: Has entity had significant changes (management, shareholders, statutes) during period?
