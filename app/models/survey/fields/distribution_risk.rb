@@ -119,17 +119,16 @@ class Survey
       def ab3206
         clients_kept
           .natural_persons
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .count
       end
 
-      # Q174: New unique legal entity clients in the reporting period
+      # Q174: New unique legal entity clients (excluding trusts) in the reporting period
       def ab3207
         clients_kept
           .legal_entities
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where.not(legal_entity_type: "TRUST")
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .count
       end
 
@@ -137,8 +136,7 @@ class Survey
       def a3208tola
         clients_kept
           .trusts
-          .where("became_client_at >= ?", Date.new(year, 1, 1))
-          .where("became_client_at <= ?", Date.new(year, 12, 31))
+          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
           .count
       end
 

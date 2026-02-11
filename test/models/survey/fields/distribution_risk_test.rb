@@ -72,11 +72,11 @@ class Survey::Fields::DistributionRiskTest < ActiveSupport::TestCase
     assert_equal 1, @survey.send(:ab3207)
   end
 
-  test "ab3207 includes trusts since trusts are a subtype of legal entity" do
+  test "ab3207 excludes trusts (counted separately in Q175)" do
     Client.create!(organization: @org, name: "LE SARL", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL", became_client_at: Date.new(2025, 3, 1))
     Client.create!(organization: @org, name: "LE Trust", client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST", became_client_at: Date.new(2025, 3, 1))
 
-    assert_equal 2, @survey.send(:ab3207)
+    assert_equal 1, @survey.send(:ab3207)
   end
 
   test "ab3207 excludes clients from other years" do
