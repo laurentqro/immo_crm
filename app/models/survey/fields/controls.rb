@@ -125,11 +125,9 @@ class Survey
         setting_value("parent_company_country")
       end
 
+      # Q198: Has entity had significant changes (management, shareholders, statutes) during period?
       def a3307
-        clients_kept
-          .legal_entities
-          .where(due_diligence_level: "REINFORCED")
-          .exists? ? "Oui" : "Non"
+        setting_value("a3307") || "Non"
       end
 
       def a3308
@@ -244,13 +242,9 @@ class Survey
 
       # === SAR (Suspicious Activity Reports) ===
 
+      # C1: Total number of employees (including non-salaried partners/owners)
       def ac1102a
-        year_start = Date.new(year, 1, 1)
-        year_end = Date.new(year, 12, 31)
-
-        organization.str_reports.kept
-          .where(report_date: year_start..year_end)
-          .count
+        setting_value("total_employees")&.to_i || 0
       end
 
       # Total FTE employees plus non-salaried partners/owners

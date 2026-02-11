@@ -25,10 +25,10 @@ class SurveyToHashTest < ActiveSupport::TestCase
   end
 
   test "to_hash includes calculated values" do
-    # a1101 is total clients - should be calculated from organization.clients.count
+    # a1101 is total active (non-discarded) clients
     result = @survey.to_hash
 
-    expected_count = @organization.clients.count
+    expected_count = @organization.clients.kept.count
     assert_equal expected_count, result["a1101"]
   end
 end

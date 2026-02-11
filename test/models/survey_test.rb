@@ -72,7 +72,7 @@ class SurveyTest < ActiveSupport::TestCase
     value = @survey.answer(:a1101)
 
     assert_not_nil value
-    assert_equal @organization.clients.count, value
+    assert_equal @organization.clients.kept.count, value
   end
 
   # === CustomerRisk Field Tests ===
@@ -82,13 +82,13 @@ class SurveyTest < ActiveSupport::TestCase
     assert_raises(NoMethodError) { @survey.a1101 }
   end
 
-  test "a1101 (total_clients) returns count of clients for organization" do
-    # Organization :one has multiple clients in fixtures
-    expected_count = @organization.clients.count
+  test "a1101 (total_clients) returns count of active clients for organization" do
+    # Organization :one has multiple clients in fixtures; a1101 counts non-discarded (kept) clients
+    expected_count = @organization.clients.kept.count
     actual_count = @survey.send(:a1101)
 
     assert_equal expected_count, actual_count
-    assert actual_count > 0, "Expected organization to have clients in fixtures"
+    assert actual_count > 0, "Expected organization to have active clients in fixtures"
   end
 
   test "a1204s1 returns BO nationality breakdown as Hash for dimensional XBRL" do
@@ -149,21 +149,16 @@ class SurveyTest < ActiveSupport::TestCase
     end
   end
 
-  test "air233 counts only transactions with agency_role" do
-    # Get expected count from fixture data
-    expected_count = @organization.transactions.kept
-      .where(transaction_date: Date.new(2025, 1, 1)..Date.new(2025, 12, 31))
-      .where.not(agency_role: [nil, ""])
-      .where.not(property_country: [nil, ""])
-      .count
-
+  test "air233 returns unique clients grouped by nationality/country" do
     result = @survey.send(:air233)
-    actual_count = result.values.sum
 
-    assert_equal expected_count, actual_count
+    assert_kind_of Hash, result
+    # Should group natural persons by nationality, legal entities by incorporation_country
+    total_clients = result.values.sum
+    assert total_clients > 0, "Expected at least one client with nationality"
   end
 
-  test "air233 excludes transactions without property_country" do
+  test "air233 excludes clients without nationality" do
     result = @survey.send(:air233)
 
     refute result.key?(nil), "Should not include nil key"

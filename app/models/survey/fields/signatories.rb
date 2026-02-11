@@ -85,9 +85,9 @@ class Survey
         setting_value("annual_revenue")&.to_i || 0
       end
 
-      # Total unique clients (repeat of a1101)
+      # C51: Total unique clients (repeat of a1101 — uses clients_kept scope)
       def ac1611
-        organization.clients.count
+        clients_kept.count
       end
 
       # High-risk clients count
