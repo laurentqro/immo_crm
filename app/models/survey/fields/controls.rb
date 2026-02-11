@@ -124,7 +124,10 @@ class Survey
       # Parent company country (if entity is a branch/subsidiary of foreign entity)
       # Returns a country from the XBRL enumeration, or nil if not applicable
       def a3305
-        setting_value("parent_company_country")
+        code = setting_value("parent_company_country")
+        return nil if code.blank?
+
+        AmsfConstants::AMSF_COUNTRIES[code] || code
       end
 
       # Q198: Has entity had significant changes (management, shareholders, statutes) during period?
