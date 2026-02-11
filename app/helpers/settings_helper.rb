@@ -22,7 +22,12 @@ module SettingsHelper
     questionnaire = AmsfSurvey.questionnaire(industry: :real_estate, year: 2025)
     countries = questionnaire.question(:a3305).valid_values
 
-    options = [["Select country...", ""]] + countries.map { |c| [c, c] }
+    options = [["Select country...", ""]]
+    countries.each do |label|
+      if label =~ /\(([A-Z]{2}),\s/
+        options << [label, Regexp.last_match(1)]
+      end
+    end
     options_for_select(options, selected)
   end
 end
