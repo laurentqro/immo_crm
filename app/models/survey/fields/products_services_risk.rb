@@ -96,9 +96,10 @@ class Survey
         year_transactions.with_client.with_cash.sum(:cash_amount)
       end
 
+      # Q130: Total value of cash payments in non-EUR currencies WITH clients
+      # Requires cash_currency field on transactions — returns 0 until schema supports it
       def ag24010w
-        # Total transaction value by property location
-        year_transactions.where.not(property_country: [nil, ""]).sum(:transaction_value)
+        0
       end
 
       def a2110w
@@ -151,9 +152,10 @@ class Survey
         year_transactions.by_client.with_cash.sum(:cash_amount)
       end
 
+      # Q139: Total value of cash payments in non-EUR currencies BY clients
+      # Requires cash_currency field on transactions — returns 0 until schema supports it
       def ag24010b
-        # Value of transactions by client property location
-        year_transactions.by_client.where.not(property_country: [nil, ""]).sum(:transaction_value)
+        0
       end
 
       def a2110b
@@ -277,23 +279,19 @@ class Survey
         year_transactions.rentals.count
       end
 
+      # Q164: Unique rental properties with monthly rent ≥ €10,000
       def air2313
-        # Unique rental properties with monthly rent > 10,000
-        year_transactions
-          .rentals
-          .where("rental_annual_value > ?", 120000)  # > 10k/month = > 120k/year
-          .select(:client_id)
-          .distinct
+        organization.managed_properties
+          .active_in_year(year)
+          .where("monthly_rent >= ?", 10_000)
           .count
       end
 
+      # Q165: Unique rental properties with monthly rent < €10,000
       def air2316
-        # Unique rental properties with monthly rent <= 10,000
-        year_transactions
-          .rentals
-          .where("rental_annual_value <= ? OR rental_annual_value IS NULL", 120000)
-          .select(:client_id)
-          .distinct
+        organization.managed_properties
+          .active_in_year(year)
+          .where("monthly_rent < ? OR monthly_rent IS NULL", 10_000)
           .count
       end
 
@@ -309,13 +307,23 @@ class Survey
 
       # === Additional Transaction Dimensional Fields ===
 
+      # Q149: Total unique clients, grouped by nationality
+      # Natural persons: grouped by nationality
+      # Legal entities: grouped by incorporation_country
       def air233
-        # Total transactions where agency acted as agent, grouped by property country
-        year_transactions
-          .where.not(agency_role: [nil, ""])
-          .where.not(property_country: [nil, ""])
-          .group(:property_country)
+        natural = clients_kept
+          .natural_persons
+          .where.not(nationality: [nil, ""])
+          .group(:nationality)
           .count
+
+        legal = clients_kept
+          .legal_entities
+          .where.not(incorporation_country: [nil, ""])
+          .group(:incorporation_country)
+          .count
+
+        natural.merge(legal) { |_k, v1, v2| v1 + v2 }
       end
 
       # Purchase/sale transactions by clients, grouped by client country
