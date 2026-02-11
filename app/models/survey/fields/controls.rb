@@ -399,7 +399,14 @@ class Survey
       end
 
       def ac1208
-        setting_value("compliance_policies_author")
+        raw = setting_value("compliance_policies_author")
+
+        # XBRL rule: if aC1201 is "Oui", aC1208 must be present
+        if raw.blank? && ac1201 == "Oui"
+          return "Par l\u2019entit\u00e9"
+        end
+
+        raw
       end
 
       def ac1209
