@@ -247,12 +247,43 @@ class Survey
 
       # === High-Risk CDD Frequency ===
 
+      # XBRL valid enumeration values for CDD frequency fields
+      # "> Annuel" = interval > 1 year (less frequent than annual)
+      # "< Annuel" = interval < 1 year (more frequent than annual, i.e. at least annual)
+      # "< Mensuel" = more frequent than monthly
+      # "< Hebdomadaire" = more frequent than weekly
+      CDD_FREQUENCY_MAPPING = {
+        "Annuellement" => "< Annuel",
+        "Tous les 6 mois" => "< Annuel",
+        "Semestriel" => "< Annuel",
+        "Trimestriel" => "< Mensuel",
+        "Tous les 3 mois" => "< Mensuel",
+        "Mensuel" => "< Mensuel",
+        "Hebdomadaire" => "< Hebdomadaire",
+        "Jamais" => "> Annuel",
+        "Tous les 2 ans" => "> Annuel",
+        "Tous les 3 ans" => "> Annuel"
+      }.freeze
+
+      CDD_FREQUENCY_VALID = [
+        "> Annuel", "< Annuel", "< Mensuel",
+        "< Hebdomadaire", "Événement déclencheur"
+      ].freeze
+
       def ac1616b
-        setting_value("high_risk_cdd_frequency")
+        raw = setting_value("high_risk_cdd_frequency")
+        return nil if raw.blank?
+        return raw if CDD_FREQUENCY_VALID.include?(raw)
+
+        CDD_FREQUENCY_MAPPING[raw] || "< Annuel"
       end
 
       def ac1616a
-        setting_value("standard_cdd_frequency")
+        raw = setting_value("standard_cdd_frequency")
+        return nil if raw.blank?
+        return raw if CDD_FREQUENCY_VALID.include?(raw)
+
+        CDD_FREQUENCY_MAPPING[raw] || "< Annuel"
       end
 
       def ac1618
