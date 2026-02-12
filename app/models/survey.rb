@@ -83,6 +83,12 @@ class Survey
     @questionnaire ||= AmsfSurvey.questionnaire(industry: :real_estate, year: year)
   end
 
+  # Returns the parts from the gem questionnaire.
+  # Each part has a name and contains sections.
+  def parts
+    questionnaire.parts
+  end
+
   # Returns the sections from the gem questionnaire.
   # Each section has a title and contains subsections.
   def sections
