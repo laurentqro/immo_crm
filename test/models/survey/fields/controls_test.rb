@@ -22,9 +22,9 @@ class Survey::Fields::ControlsTest < ActiveSupport::TestCase
 
   # === a3301: Total employees (headcount) ===
 
-  test "a3301 returns employee headcount from settings" do
+  test "a3301 reuses total_employees setting" do
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
-    org.settings.create!(key: "total_employee_headcount", value: "12", category: "entity_info")
+    org.settings.create!(key: "total_employees", value: "12", category: "entity_info")
 
     survey = Survey.new(organization: org, year: 2025)
 

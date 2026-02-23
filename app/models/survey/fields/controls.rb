@@ -77,8 +77,9 @@ class Survey
       end
 
       # Q189: Total employees (headcount) at end of reporting period
+      # Reuses "total_employees" setting (same as ac1102/ac1102a)
       def a3301
-        setting_value("total_employee_headcount")&.to_i
+        setting_value("total_employees")&.to_i
       end
 
       # Q188: Is the professional card holder a legal entity?

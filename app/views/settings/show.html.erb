@@ -80,13 +80,6 @@
                   class: "mt-1 form-control", min: 0 %>
             </div>
             <div>
-              <%= label_tag :total_employee_headcount, "Employee Headcount (end of period)", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-              <%= number_field_tag "settings[total_employee_headcount]", get_setting_value("total_employee_headcount"),
-                  id: "total_employee_headcount", name: "settings[total_employee_headcount]",
-                  class: "mt-1 form-control", min: 0 %>
-              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Q189: Total employees at end of reporting period</p>
-            </div>
-            <div>
               <%= label_tag :card_holder_is_legal_entity, "Is the professional card holder a legal entity?", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
               <%= select_tag "settings[card_holder_is_legal_entity]",
                   options_for_select([["Select...", ""], ["Oui", "Oui"], ["Non", "Non"]], get_setting_value("card_holder_is_legal_entity")),
