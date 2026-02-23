@@ -43,21 +43,9 @@ class Survey
 
       private
 
-      # === Training ===
-
-      # NOTE: These were previously misnamed as ab3206/ab3207 (which are Q173/Q174 new client counts).
-      # aC1102A = total staff headcount (reuses Q188)
-      # aC1102 = FTE count
-      def ac1102a
-        organization.trainings.for_year(year).sum(:staff_count)
-      end
-
-      def ac1102
-        setting_value("ac1102")&.to_i || 1
-      end
-
+      # C70: Does entity apply AML/CFT risk ratings to clients?
       def ab1801b
-        organization.trainings.for_year(year).exists? ? "Oui" : "Non"
+        setting_value("applies_aml_risk_ratings")
       end
 
       # === Compliance Function ===
@@ -88,27 +76,25 @@ class Survey
         LEGAL_FORMS[code] || LEGAL_FORMS["INCONNU"]
       end
 
-      # Simplified due diligence
+      # Q189: Total employees (headcount) at end of reporting period
       def a3301
-        clients_kept.where(due_diligence_level: "SIMPLIFIED").count
+        setting_value("total_employee_headcount")&.to_i
       end
 
+      # Q188: Is the professional card holder a legal entity?
       def air328
-        a3301.positive? ? "Oui" : "Non"
+        setting_value("card_holder_is_legal_entity")
       end
 
+      # Q190: Does entity have branches, subsidiaries, or agencies?
       def a3302
-        a3301.positive? ? "Oui" : "Non"
+        organization.branches.exists? ? "Oui" : "Non"
       end
 
-      # New clients with simplified DD in the year, grouped by nationality
+      # Q191: Total branches, subsidiaries, and agencies by country
       def a3303
-        clients_kept
-          .where(due_diligence_level: "SIMPLIFIED")
-          .where(became_client_at: Date.new(year, 1, 1)..Date.new(year, 12, 31))
-          .where.not(nationality: [nil, ""])
-          .group(:nationality)
-          .count
+        counts = organization.branches.group(:country).count
+        counts.presence
       end
 
       # Is entity a branch/subsidiary of a foreign entity?
@@ -146,23 +132,16 @@ class Survey
         {}
       end
 
-      # Clients with enhanced DD, grouped by residence country
+      # Q197: Entity's own beneficial owners (25%+ or controlling) by nationality
       def a3306b
-        clients_kept
-          .where(due_diligence_level: "REINFORCED")
-          .where.not(residence_country: [nil, ""])
-          .group(:residence_country)
-          .count
+        counts = organization.entity_beneficial_owners.group(:nationality).count
+        counts.presence
       end
 
-      # Natural persons with enhanced DD, grouped by nationality
+      # Q195: Total foreign branches and subsidiaries (outside Monaco)
       def a3306
-        clients_kept
-          .natural_persons
-          .where(due_diligence_level: "REINFORCED")
-          .where.not(nationality: [nil, ""])
-          .group(:nationality)
-          .count
+        count = organization.branches.foreign.count
+        count.zero? ? nil : count
       end
 
       # CDD refresh
@@ -270,7 +249,7 @@ class Survey
 
       # C1: Total number of employees (including non-salaried partners/owners)
       def ac1102a
-        setting_value("total_employees")&.to_i || 0
+        setting_value("total_employees")&.to_i
       end
 
       # Total FTE employees plus non-salaried partners/owners
@@ -450,7 +429,7 @@ class Survey
 
       # C105: Controls section comment text
       def ac11601
-        nil
+        setting_value("ac11601")
       end
 
       # === Audit ===

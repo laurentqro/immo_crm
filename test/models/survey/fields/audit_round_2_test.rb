@@ -206,8 +206,8 @@ class Survey::Fields::AuditRound2Test < ActiveSupport::TestCase
 
   # === ac1102a — employee count from setting ===
 
-  test "ac1102a returns employee count from setting" do
-    assert_equal 0, @survey.send(:ac1102a)
+  test "ac1102a returns nil when no total_employees setting" do
+    assert_nil @survey.send(:ac1102a)
   end
 
   # === a3307 — setting value ===

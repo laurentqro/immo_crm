@@ -46,6 +46,10 @@ authenticate :user do
   # Singular resource: one settings page per organization (GET/PATCH /settings)
   resource :settings, only: [:show, :update], controller: "settings"
 
+  # Entity structure: the reporting entity's own beneficial owners and branches
+  resources :entity_beneficial_owners, only: [:index, :create, :destroy]
+  resources :branches, only: [:index, :create, :destroy]
+
   # Annual submission (US5) - Phase 4
   resources :submissions do
     member do

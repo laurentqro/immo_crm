@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_07_231000) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_24_004151) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -165,6 +165,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_231000) do
     t.index ["is_pep"], name: "index_beneficial_owners_on_is_pep"
   end
 
+  create_table "branches", force: :cascade do |t|
+    t.string "country", limit: 2, null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_branches_on_organization_id"
+  end
+
   create_table "clients", force: :cascade do |t|
     t.datetime "became_client_at"
     t.string "business_sector"
@@ -234,6 +243,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_231000) do
     t.string "uid"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["owner_id", "owner_type"], name: "index_connected_accounts_on_owner_id_and_owner_type"
+  end
+
+  create_table "entity_beneficial_owners", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "nationality", limit: 2, null: false
+    t.bigint "organization_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_entity_beneficial_owners_on_organization_id"
   end
 
   create_table "inbound_webhooks", force: :cascade do |t|
@@ -612,7 +630,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_231000) do
   add_foreign_key "audit_logs", "organizations", on_delete: :nullify
   add_foreign_key "audit_logs", "users", on_delete: :nullify
   add_foreign_key "beneficial_owners", "clients"
+  add_foreign_key "branches", "organizations"
   add_foreign_key "clients", "organizations"
+  add_foreign_key "entity_beneficial_owners", "organizations"
   add_foreign_key "managed_properties", "clients"
   add_foreign_key "managed_properties", "organizations"
   add_foreign_key "organizations", "accounts"

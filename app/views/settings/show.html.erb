@@ -80,6 +80,21 @@
                   class: "mt-1 form-control", min: 0 %>
             </div>
             <div>
+              <%= label_tag :total_employee_headcount, "Employee Headcount (end of period)", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= number_field_tag "settings[total_employee_headcount]", get_setting_value("total_employee_headcount"),
+                  id: "total_employee_headcount", name: "settings[total_employee_headcount]",
+                  class: "mt-1 form-control", min: 0 %>
+              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Q189: Total employees at end of reporting period</p>
+            </div>
+            <div>
+              <%= label_tag :card_holder_is_legal_entity, "Is the professional card holder a legal entity?", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= select_tag "settings[card_holder_is_legal_entity]",
+                  options_for_select([["Select...", ""], ["Oui", "Oui"], ["Non", "Non"]], get_setting_value("card_holder_is_legal_entity")),
+                  id: "card_holder_is_legal_entity", name: "settings[card_holder_is_legal_entity]",
+                  class: "mt-1 form-control" %>
+              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Q188: Is the professional card holder a legal entity?</p>
+            </div>
+            <div>
               <%= label_tag :annual_revenue, "Annual Revenue", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
               <%= number_field_tag "settings[annual_revenue]", get_setting_value("annual_revenue"),
                   id: "annual_revenue", name: "settings[annual_revenue]",
@@ -134,6 +149,30 @@
               </div>
             </div>
           </div>
+
+          <%# Entity Structure Section %>
+          <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-4">Entity Structure</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Manage your entity's branches and beneficial owners for AMSF reporting.
+            </p>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                <h4 class="text-sm font-medium text-gray-900 dark:text-white">Branches & Subsidiaries</h4>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Q190-Q195: Your entity's branches, subsidiaries, and agencies</p>
+                <div class="mt-3">
+                  <%= link_to "Manage Branches", branches_path, class: "text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400" %>
+                </div>
+              </div>
+              <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                <h4 class="text-sm font-medium text-gray-900 dark:text-white">Entity Beneficial Owners</h4>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Q197: Persons who own 25%+ or control your entity</p>
+                <div class="mt-3">
+                  <%= link_to "Manage Beneficial Owners", entity_beneficial_owners_path, class: "text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400" %>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <%# KYC Procedures Panel %>
@@ -143,6 +182,14 @@
             Enhanced Due Diligence (EDD) and Simplified Due Diligence (SDD) settings.
           </p>
           <div class="space-y-4">
+            <div>
+              <%= label_tag :applies_aml_risk_ratings, "Does entity apply AML/CFT risk ratings to clients?", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= select_tag "settings[applies_aml_risk_ratings]",
+                  options_for_select([["Select...", ""], ["Oui", "Oui"], ["Non", "Non"]], get_setting_value("applies_aml_risk_ratings")),
+                  id: "applies_aml_risk_ratings", name: "settings[applies_aml_risk_ratings]",
+                  class: "mt-1 form-control max-w-xs" %>
+              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">C70: AML/CFT risk rating application</p>
+            </div>
             <div class="flex items-start">
               <%= hidden_field_tag "settings[edd_for_peps]", "false" %>
               <%= check_box_tag "settings[edd_for_peps]", "true", get_setting_value("edd_for_peps") == "true",
