@@ -68,6 +68,7 @@ class Client < ApplicationRecord
   validates :simplified_dd_reason, presence: true, if: -> { due_diligence_level == "SIMPLIFIED" }
   validates :relationship_end_reason, inclusion: {in: RELATIONSHIP_END_REASONS}, allow_blank: true
   validates :professional_category, inclusion: {in: PROFESSIONAL_CATEGORIES}, allow_blank: true
+  validates :business_sector, inclusion: {in: BUSINESS_SECTORS}, allow_blank: true
 
   # === Callbacks ===
   before_save :clear_legal_entity_type_other_if_not_needed

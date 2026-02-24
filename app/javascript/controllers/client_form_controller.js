@@ -6,7 +6,6 @@ export default class extends Controller {
   static targets = [
     "clientType",
     "legalEntityType",
-    "businessSector",
     "trusteeSection",
     "trusteesContainer",
     "trusteeEntry",
@@ -49,9 +48,6 @@ export default class extends Controller {
     // Show/hide legal entity specific fields
     if (this.hasLegalEntityTypeTarget) {
       this.legalEntityTypeTarget.classList.toggle("hidden", !isLegalEntity)
-    }
-    if (this.hasBusinessSectorTarget) {
-      this.businessSectorTarget.classList.toggle("hidden", !isLegalEntity)
     }
     // Show/hide incorporation country for legal entities
     if (this.hasIncorporationCountryTarget) {

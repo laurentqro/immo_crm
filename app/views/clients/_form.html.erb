@@ -251,12 +251,13 @@
       <p class="form-hint">Reason for ending the business relationship (if applicable).</p>
     </div>
 
-    <%# Business Sector (only for Legal Entity) %>
-    <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="businessSector">
-      <%= form.label :business_sector %>
-      <%= form.text_field :business_sector,
-          class: "form-control",
-          placeholder: "e.g., Finance, Real Estate, Consulting" %>
+    <%# Business Sector (AMSF high-risk sector classification, all client types) %>
+    <div class="form-group">
+      <%= form.label :business_sector, "Business sector" %>
+      <%= form.select :business_sector,
+          options_for_select(AmsfConstants::BUSINESS_SECTOR_LABELS.map { |k, v| [v, k] }, client.business_sector),
+          { include_blank: "Select business sector..." } %>
+      <p class="form-hint">AMSF high-risk business sector classification (if applicable).</p>
     </div>
 
     <%# Business Introducer Section %>

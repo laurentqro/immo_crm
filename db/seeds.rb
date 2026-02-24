@@ -70,19 +70,8 @@ puts "Organization: #{organization.name}"
 NATIONALITIES = %w[MC FR IT CH GB US RU CN AE SA].freeze
 COUNTRIES = %w[MC FR IT CH GB US AE].freeze
 
-# Business sectors for legal entities
-BUSINESS_SECTORS = [
-  "Real Estate Investment",
-  "Private Banking",
-  "Asset Management",
-  "Family Office",
-  "Holding Company",
-  "International Trade",
-  "Consulting",
-  "Technology",
-  "Hospitality",
-  "Luxury Goods"
-].freeze
+# Business sectors use AMSF-defined constants for survey compatibility
+BUSINESS_SECTORS = AmsfConstants::BUSINESS_SECTORS
 
 # Introducer countries for clients brought in by third parties
 INTRODUCER_COUNTRIES = %w[FR CH GB IT US].freeze
