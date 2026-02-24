@@ -22,7 +22,7 @@ legal_entity:
   residence_country: "MC"
   is_pep: false
   risk_level: "MEDIUM"
-  business_sector: "Finance"
+  business_sector: "FUND_MANAGEMENT"
   became_client_at: <%= 6.months.ago %>
 
 # Second legal entity in organization :one (for testing owner not belonging to client)
@@ -82,7 +82,7 @@ high_risk_client:
   residence_country: "RU"
   is_pep: false
   risk_level: "HIGH"
-  business_sector: "Consulting"
+  business_sector: "TCSP"
   became_client_at: <%= 5.months.ago %>
 
 # Client with ended relationship (for active scope test)
@@ -156,7 +156,7 @@ vasp_client:
   is_vasp: true
   vasp_type: "EXCHANGE"
   risk_level: "HIGH"
-  business_sector: "Cryptocurrency"
+  business_sector: "CASH_INTENSIVE"
   became_client_at: <%= 2.months.ago %>
 
 # =============================================================================
@@ -278,7 +278,7 @@ calc_legal_1:
   residence_country: "MC"
   is_pep: false
   risk_level: "LOW"
-  business_sector: "Real Estate"
+  business_sector: "REAL_ESTATE"
   became_client_at: <%= 6.months.ago %>
 
 calc_legal_2:
@@ -290,7 +290,7 @@ calc_legal_2:
   residence_country: "MC"
   is_pep: false
   risk_level: "MEDIUM"
-  business_sector: "Finance"
+  business_sector: "FUND_MANAGEMENT"
   became_client_at: <%= 6.months.ago %>
 
 calc_legal_3:
@@ -302,7 +302,7 @@ calc_legal_3:
   residence_country: "MC"
   is_pep: false
   risk_level: "LOW"
-  business_sector: "Real Estate"
+  business_sector: "REAL_ESTATE"
   became_client_at: <%= 6.months.ago %>
 
 calc_legal_4:
@@ -314,7 +314,7 @@ calc_legal_4:
   residence_country: "MC"
   is_pep: false
   risk_level: "LOW"
-  business_sector: "Commerce"
+  business_sector: "IMPORT_EXPORT"
   became_client_at: <%= 6.months.ago %>
 
 calc_legal_5:
@@ -326,7 +326,7 @@ calc_legal_5:
   residence_country: "MC"
   is_pep: false
   risk_level: "LOW"
-  business_sector: "Consulting"
+  business_sector: "LEGAL_SERVICES"
   became_client_at: <%= 6.months.ago %>
 
 # T012: PEP clients (calc_pep_1 and calc_pep_2)
@@ -419,7 +419,7 @@ introduced_from_france_last_year:
   residence_country: "MC"
   is_pep: false
   risk_level: "LOW"
-  business_sector: "Consulting"
+  business_sector: "TCSP"
   became_client_at: <%= Date.new(Date.current.year - 1, 2, 1) %>
   introduced_by_third_party: true
   introducer_country: "FR"
@@ -478,7 +478,7 @@ foreign_third_party_cdd_swiss:
   residence_country: "MC"
   is_pep: false
   risk_level: "LOW"
-  business_sector: "Finance"
+  business_sector: "FUND_MANAGEMENT"
   became_client_at: <%= 1.month.ago %>
   third_party_cdd: true
   third_party_cdd_type: "FOREIGN"
@@ -502,7 +502,7 @@ vasp_exchange_fr:
   is_vasp: true
   vasp_type: "EXCHANGE"
   risk_level: "HIGH"
-  business_sector: "Cryptocurrency"
+  business_sector: "CASH_INTENSIVE"
   became_client_at: <%= 3.months.ago %>
 
 # VASP Custodian client incorporated in Luxembourg
@@ -518,7 +518,7 @@ vasp_custodian_lu:
   is_vasp: true
   vasp_type: "CUSTODIAN"
   risk_level: "HIGH"
-  business_sector: "Digital Assets"
+  business_sector: "CASH_INTENSIVE"
   became_client_at: <%= 2.months.ago %>
 
 # VASP ICO client incorporated in Switzerland
@@ -534,7 +534,7 @@ vasp_ico_ch:
   is_vasp: true
   vasp_type: "ICO"
   risk_level: "HIGH"
-  business_sector: "Blockchain"
+  business_sector: "CASH_INTENSIVE"
   became_client_at: <%= 1.month.ago %>
 
 # VASP DeFi client incorporated in Monaco (maps to AMSF "other" bucket)
@@ -550,7 +550,7 @@ vasp_other_mc:
   is_vasp: true
   vasp_type: "DEFI"
   risk_level: "HIGH"
-  business_sector: "DeFi"
+  business_sector: "CASH_INTENSIVE"
   became_client_at: <%= 1.month.ago %>
 
 # VASP Other client with free-text description, incorporated in Germany
@@ -568,7 +568,7 @@ vasp_other_freetext_de:
   vasp_other_service_type: "Crypto ATM operator"
   legal_entity_type_other: "GmbH"
   risk_level: "HIGH"
-  business_sector: "Cryptocurrency"
+  business_sector: "CASH_INTENSIVE"
   became_client_at: <%= 1.month.ago %>
 
 # =============================================================================
@@ -586,7 +586,7 @@ foundation_client:
   residence_country: "MC"
   is_pep: false
   risk_level: "LOW"
-  business_sector: "Heritage"
+  business_sector: "ART_ANTIQUITIES"
   became_client_at: <%= 2.months.ago %>
 
 # Legal entity with OTHER type + free-text (for a11006 free-text testing)
@@ -600,5 +600,5 @@ other_legal_freetext:
   residence_country: "MC"
   is_pep: false
   risk_level: "LOW"
-  business_sector: "Fiduciary"
+  business_sector: "TCSP"
   became_client_at: <%= 1.month.ago %>

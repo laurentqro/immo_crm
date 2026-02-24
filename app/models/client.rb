@@ -147,6 +147,10 @@ class Client < ApplicationRecord
     client_type.humanize
   end
 
+  def business_sector_label
+    BUSINESS_SECTOR_LABELS[business_sector]
+  end
+
   def risk_badge_class
     case risk_level
     when "HIGH" then "bg-red-100 text-red-800"

@@ -6,7 +6,7 @@
           <%= link_to client.name, client, class: "hover:text-blue-600 dark:hover:text-blue-400" %>
         </div>
         <% if client.business_sector.present? %>
-          <div class="text-gray-500 dark:text-gray-400"><%= client.business_sector %></div>
+          <div class="text-gray-500 dark:text-gray-400"><%= client.business_sector_label %></div>
         <% end %>
       </div>
     </div>
