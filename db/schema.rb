@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_24_004151) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_24_011300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -252,6 +252,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_004151) do
     t.bigint "organization_id", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_entity_beneficial_owners_on_organization_id"
+  end
+
+  create_table "entity_shareholders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "nationality", limit: 2, null: false
+    t.bigint "organization_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_entity_shareholders_on_organization_id"
   end
 
   create_table "inbound_webhooks", force: :cascade do |t|
@@ -633,6 +642,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_24_004151) do
   add_foreign_key "branches", "organizations"
   add_foreign_key "clients", "organizations"
   add_foreign_key "entity_beneficial_owners", "organizations"
+  add_foreign_key "entity_shareholders", "organizations"
   add_foreign_key "managed_properties", "clients"
   add_foreign_key "managed_properties", "organizations"
   add_foreign_key "organizations", "accounts"

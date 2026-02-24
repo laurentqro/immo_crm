@@ -48,6 +48,7 @@ authenticate :user do
 
   # Entity structure: the reporting entity's own beneficial owners and branches
   resources :entity_beneficial_owners, only: [:index, :create, :destroy]
+  resources :entity_shareholders, only: [:index, :create, :destroy]
   resources :branches, only: [:index, :create, :destroy]
 
   # Annual submission (US5) - Phase 4

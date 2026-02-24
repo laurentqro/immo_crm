@@ -150,6 +150,27 @@ class Survey::Fields::ControlsTest < ActiveSupport::TestCase
     assert_nil survey.send(:a3306b)
   end
 
+  # === a3306a: Entity shareholders (25%+) by nationality (computed from EntityShareholder model) ===
+
+  test "a3306a returns shareholders grouped by nationality" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+    org.entity_shareholders.create!(name: "Jean Dupont", nationality: "FR")
+    org.entity_shareholders.create!(name: "SCI Monaco", nationality: "MC")
+    org.entity_shareholders.create!(name: "Pierre Martin", nationality: "MC")
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_equal({"FR" => 1, "MC" => 2}, survey.send(:a3306a))
+  end
+
+  test "a3306a returns nil when no entity shareholders exist" do
+    org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    assert_nil survey.send(:a3306a)
+  end
+
   # === ab1801b: Does entity apply AML risk ratings? ===
 
   test "ab1801b returns setting value" do

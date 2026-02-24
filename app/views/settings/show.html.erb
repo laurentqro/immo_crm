@@ -157,12 +157,19 @@
             <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
               Manage your entity's branches and beneficial owners for AMSF reporting.
             </p>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
                 <h4 class="text-sm font-medium text-gray-900 dark:text-white">Branches & Subsidiaries</h4>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Q190-Q195: Your entity's branches, subsidiaries, and agencies</p>
                 <div class="mt-3">
                   <%= link_to "Manage Branches", branches_path, class: "text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400" %>
+                </div>
+              </div>
+              <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                <h4 class="text-sm font-medium text-gray-900 dark:text-white">Entity Shareholders</h4>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Q196: Shareholders holding 25%+ of your entity</p>
+                <div class="mt-3">
+                  <%= link_to "Manage Shareholders", entity_shareholders_path, class: "text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400" %>
                 </div>
               </div>
               <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4">

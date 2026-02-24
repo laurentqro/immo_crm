@@ -27,6 +27,7 @@ class Organization < ApplicationRecord
   has_many :managed_properties, dependent: :destroy
   has_many :trainings, dependent: :destroy
   has_many :entity_beneficial_owners, dependent: :destroy
+  has_many :entity_shareholders, dependent: :destroy
   has_many :branches, dependent: :destroy
 
   has_many :submissions, dependent: :destroy

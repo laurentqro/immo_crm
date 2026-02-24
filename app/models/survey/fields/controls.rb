@@ -127,9 +127,9 @@ class Survey
       end
 
       # Q196: Shareholders with 25%+ ownership, grouped by nationality/country
-      # Not yet implemented — needs a shareholder model or settings-based approach
       def a3306a
-        nil
+        counts = organization.entity_shareholders.group(:nationality).count
+        counts.presence
       end
 
       # Q197: Entity's own beneficial owners (25%+ or controlling) by nationality
