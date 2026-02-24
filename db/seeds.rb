@@ -17,17 +17,19 @@ unless Rails.env.development?
   exit
 end
 
-# Clean up existing data (be careful in production!)
-puts "Cleaning existing data..."
-Setting.destroy_all
-Training.destroy_all
-ManagedProperty.destroy_all
-StrReport.destroy_all
-Transaction.destroy_all
-BeneficialOwner.destroy_all
-Trustee.destroy_all
-Client.destroy_all
-Organization.destroy_all
+# Clean up existing data (development/test only)
+if Rails.env.development? || Rails.env.test?
+  puts "Cleaning existing data..."
+  Setting.destroy_all
+  Training.destroy_all
+  ManagedProperty.destroy_all
+  StrReport.destroy_all
+  Transaction.destroy_all
+  BeneficialOwner.destroy_all
+  Trustee.destroy_all
+  Client.destroy_all
+  Organization.destroy_all
+end
 
 # Create test user if not exists
 test_email = "test@example.com"

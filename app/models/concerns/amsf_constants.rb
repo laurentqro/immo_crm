@@ -64,6 +64,30 @@ module AmsfConstants
     UNKNOWN
   ].freeze
 
+  # Mapping from app legal_entity_type to XBRL dimension member suffix.
+  # The gem prefixes these with "sdl" to produce members like sdlSAM, sdlLA1, etc.
+  # Members defined in CountryTableaLE in the _def.xml taxonomy.
+  LEGAL_ENTITY_TYPE_TO_XBRL = {
+    "SAM" => "SAM",
+    "SARL" => "SARL",
+    "SCI" => "SCI",
+    "SCP" => "SCP",
+    "SNC" => "SNC",
+    "SCS" => "SCS",
+    "SCA" => "SCA",
+    "SA" => "SAM",
+    "EI" => "SP",
+    "GIE" => "GIE",
+    "ASSOCIATION" => "MAENTITÉS",
+    "FOUNDATION" => "MFENTITÉS",
+    "TRUST" => "LA1",
+    "OTHER_CIVIL" => "SCAUTRE",
+    "OTHER_COMMERCIAL" => "SCAUTRE",
+    "STATE_DOMAIN" => "DP",
+    "OTHER" => "LA2",
+    "UNKNOWN" => "UNKNOWNLE"
+  }.freeze
+
   # Human-readable labels for legal entity types
   LEGAL_ENTITY_TYPE_LABELS = {
     "SCI" => "Property Investment Partnership (SCI)",

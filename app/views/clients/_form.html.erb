@@ -64,7 +64,7 @@
     <div class="form-group <%= 'hidden' unless client.legal_entity? %>" data-client-form-target="incorporationCountry">
       <%= form.label :incorporation_country, client.trust? ? "Country of creation" : "Country of incorporation" %>
       <%= form.select :incorporation_country,
-          options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.incorporation_country),
+          options_for_select(country_options, client.incorporation_country),
           { include_blank: "Select country..." },
           { class: "form-control", data: { client_form_target: "countryOptions" } } %>
       <p class="form-hint">Country where the entity is legally registered or has its head office (pays du siège ou de l'immatriculation).</p>
@@ -275,7 +275,7 @@
       <div class="form-group mt-4 ml-7 <%= 'hidden' unless client.introduced_by_third_party? %>" data-client-form-target="introducerCountry">
         <%= form.label :introducer_country, "Introducer country" %>
         <%= form.select :introducer_country,
-            options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.introducer_country),
+            options_for_select(country_options, client.introducer_country),
             { include_blank: "Select country..." },
             { class: "form-control" } %>
         <p class="form-hint">Country of residence of the introducing party.</p>
@@ -313,7 +313,7 @@
       <div class="form-group mt-4 ml-7 <%= 'hidden' unless client.third_party_cdd? && client.third_party_cdd_type == 'FOREIGN' %>" data-client-form-target="thirdPartyCddCountry">
         <%= form.label :third_party_cdd_country, "Third-party provider country" %>
         <%= form.select :third_party_cdd_country,
-            options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, client.third_party_cdd_country),
+            options_for_select(country_options, client.third_party_cdd_country),
             { include_blank: "Select country..." },
             { class: "form-control" } %>
         <p class="form-hint">Country of residence of the foreign CDD provider.</p>
