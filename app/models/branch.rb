@@ -11,4 +11,8 @@ class Branch < ApplicationRecord
   before_validation { self.country = country&.upcase }
 
   scope :foreign, -> { where.not(country: "MC") }
+
+  def domestic?
+    country == "MC"
+  end
 end

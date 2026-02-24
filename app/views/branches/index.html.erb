@@ -24,7 +24,7 @@
       <div class="w-64">
         <%= f.label :country, "Country", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
         <%= f.select :country,
-            options_for_select(ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort, @branch.country),
+            options_for_select(country_options, @branch.country),
             { include_blank: "Select country..." },
             { class: "mt-1 form-control", required: true } %>
       </div>
@@ -59,7 +59,7 @@
               <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-0"><%= branch.name %></td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400"><%= ISO3166::Country[branch.country]&.iso_short_name || branch.country %></td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
-                <% if branch.country == "MC" %>
+                <% if branch.domestic? %>
                   <span class="text-gray-400">Domestic</span>
                 <% else %>
                   <span class="text-amber-600 dark:text-amber-400">Foreign</span>

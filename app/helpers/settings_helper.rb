@@ -15,6 +15,12 @@ module SettingsHelper
     @settings_hash[key]&.value || default
   end
 
+  # Returns ISO 3166 country options for select_tag (alpha-2 codes).
+  # Sorted alphabetically by country name.
+  def country_options
+    ISO3166::Country.all.map { |c| [c.iso_short_name, c.alpha2] }.sort
+  end
+
   # Returns XBRL-compliant country options for select_tag.
   # Values are pulled from the amsf_survey gem to ensure they match the schema.
   def xbrl_country_options(selected = nil)
