@@ -98,17 +98,18 @@ class Survey::Fields::ControlsTest < ActiveSupport::TestCase
     assert_nil survey.send(:a3303)
   end
 
-  # === a3306: Total foreign branches (computed from Branch model) ===
+  # === a3306: Foreign branches by country (computed from Branch model) ===
 
-  test "a3306 returns count of foreign branches" do
+  test "a3306 returns foreign branches grouped by country" do
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
     org.branches.create!(name: "Paris Office", country: "FR")
+    org.branches.create!(name: "Lyon Office", country: "FR")
     org.branches.create!(name: "Rome Office", country: "IT")
     org.branches.create!(name: "Monaco Branch", country: "MC")
 
     survey = Survey.new(organization: org, year: 2025)
 
-    assert_equal 2, survey.send(:a3306)
+    assert_equal({"FR" => 2, "IT" => 1}, survey.send(:a3306))
   end
 
   test "a3306 returns nil when no foreign branches exist" do
@@ -119,7 +120,7 @@ class Survey::Fields::ControlsTest < ActiveSupport::TestCase
     assert_nil survey.send(:a3306)
   end
 
-  test "a3306 returns nil when only domestic branches exist" do
+  test "a3306 excludes domestic branches" do
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
     org.branches.create!(name: "Monaco Branch", country: "MC")
 
