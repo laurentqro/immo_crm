@@ -8,4 +8,6 @@ class EntityBeneficialOwner < ApplicationRecord
 
   validates :name, presence: true
   validates :nationality, presence: true, length: {is: 2}
+
+  before_validation { self.nationality = nationality&.upcase }
 end

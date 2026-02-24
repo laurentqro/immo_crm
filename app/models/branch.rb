@@ -8,5 +8,7 @@ class Branch < ApplicationRecord
   validates :name, presence: true
   validates :country, presence: true, length: {is: 2}
 
+  before_validation { self.country = country&.upcase }
+
   scope :foreign, -> { where.not(country: "MC") }
 end

@@ -175,7 +175,7 @@ class Survey::Fields::ControlsTest < ActiveSupport::TestCase
 
   test "ab1801b returns setting value" do
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
-    org.settings.create!(key: "applies_aml_risk_ratings", value: "Oui", category: "entity_info")
+    org.settings.create!(key: "applies_aml_risk_ratings", value: "Oui", category: "kyc_procedures")
 
     survey = Survey.new(organization: org, year: 2025)
 

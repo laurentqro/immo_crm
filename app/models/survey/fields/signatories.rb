@@ -219,7 +219,8 @@ class Survey
           .count
 
         raw_counts.each_with_object({}) do |(type, count), result|
-          xbrl_key = LEGAL_ENTITY_TYPE_TO_XBRL.fetch(type)
+          xbrl_key = LEGAL_ENTITY_TYPE_TO_XBRL[type]
+          next unless xbrl_key
           result[xbrl_key] = (result[xbrl_key] || 0) + count
         end
       end
