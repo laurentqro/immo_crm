@@ -126,11 +126,10 @@ class Survey
         setting_value("a3308")
       end
 
-      # Shareholders with 25%+ ownership, grouped by nationality/country
+      # Q196: Shareholders with 25%+ ownership, grouped by nationality/country
+      # Not yet implemented — needs a shareholder model or settings-based approach
       def a3306a
-        # This refers to the organization's own shareholders, not clients
-        # Would need tracking of organization shareholders - return empty hash for now
-        {}
+        nil
       end
 
       # Q197: Entity's own beneficial owners (25%+ or controlling) by nationality
