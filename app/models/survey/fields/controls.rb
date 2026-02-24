@@ -139,10 +139,10 @@ class Survey
         counts.presence
       end
 
-      # Q195: Total foreign branches and subsidiaries (outside Monaco)
+      # Q195: Foreign branches and subsidiaries (outside Monaco) by country
       def a3306
-        count = organization.branches.foreign.count
-        count.zero? ? nil : count
+        counts = organization.branches.foreign.group(:country).count
+        counts.presence
       end
 
       # CDD refresh
