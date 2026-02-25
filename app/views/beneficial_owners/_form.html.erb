@@ -1,7 +1,8 @@
 <%# Use shallow route: POST to /clients/:id/beneficial_owners for new, PATCH to /beneficial_owners/:id for existing %>
 <%= form_with model: beneficial_owner,
               url: beneficial_owner.persisted? ? beneficial_owner_path(beneficial_owner) : client_beneficial_owners_path(client),
-              local: true do |form| %>
+              local: true,
+              data: { controller: "beneficial-owner-form" } do |form| %>
   <%= render "application/error_messages", resource: beneficial_owner %>
 
   <div class="space-y-4">
@@ -24,6 +25,32 @@
               step: 0.1,
               class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
               placeholder: "e.g., 25.0" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :control_type, "Control type", class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.select :control_type,
+              options_for_select([
+                ["Direct", "DIRECT"],
+                ["Indirect", "INDIRECT"],
+                ["Representative", "REPRESENTATIVE"]
+              ], beneficial_owner.control_type),
+              { include_blank: "Select control type..." },
+              { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :incorporation_country, "Incorporation country", class: "block text-sm font-medium leading-6 text-gray-900" %>
+        <div class="mt-2">
+          <%= form.select :incorporation_country,
+              options_for_select(country_options, beneficial_owner.incorporation_country),
+              { include_blank: "Select country..." },
+              { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
         </div>
       </div>
     </div>
@@ -64,15 +91,55 @@
       </p>
     </div>
 
+    <%# Verification Section %>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="flex items-start">
+        <div class="flex h-6 items-center">
+          <%= form.check_box :identification_verified,
+              class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600" %>
+        </div>
+        <div class="ml-3">
+          <%= form.label :identification_verified, "Identity verified", class: "text-sm font-medium leading-6 text-gray-900" %>
+          <p class="text-sm text-gray-500">Identity documents have been checked and verified.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start">
+        <div class="flex h-6 items-center">
+          <%= form.check_box :source_of_wealth_verified,
+              class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600" %>
+        </div>
+        <div class="ml-3">
+          <%= form.label :source_of_wealth_verified, "Source of wealth verified", class: "text-sm font-medium leading-6 text-gray-900" %>
+          <p class="text-sm text-gray-500">Source of wealth has been documented and verified.</p>
+        </div>
+      </div>
+    </div>
+
     <%# PEP Section %>
     <div class="flex items-start">
       <div class="flex h-6 items-center">
         <%= form.check_box :is_pep,
-            class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600" %>
+            class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600",
+            data: { beneficial_owner_form_target: "isPep", action: "change->beneficial-owner-form#togglePepType" } %>
       </div>
       <div class="ml-3">
         <%= form.label :is_pep, "Politically Exposed Person", class: "text-sm font-medium leading-6 text-gray-900" %>
         <p class="text-sm text-gray-500">This beneficial owner is a PEP or related to a PEP.</p>
+      </div>
+    </div>
+
+    <div class="ml-7 <%= 'hidden' unless beneficial_owner.is_pep? %>" data-beneficial-owner-form-target="pepType">
+      <%= form.label :pep_type, "PEP type", class: "block text-sm font-medium leading-6 text-gray-900" %>
+      <div class="mt-2">
+        <%= form.select :pep_type,
+            options_for_select([
+              ["Domestic PEP", "DOMESTIC"],
+              ["Foreign PEP", "FOREIGN"],
+              ["International Organization", "INTL_ORG"]
+            ], beneficial_owner.pep_type),
+            { include_blank: "Select PEP type..." },
+            { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" } %>
       </div>
     </div>
   </div>

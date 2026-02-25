@@ -330,6 +330,113 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.media_type, "turbo-stream"
   end
 
+  # === AMSF Data Capture Fields ===
+
+  test "creates transaction with property_type" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "PURCHASE",
+        property_type: "COMMERCIAL"
+      }
+    }
+
+    assert_equal "COMMERCIAL", Transaction.last.property_type
+  end
+
+  test "creates transaction with counterparty_country" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "SALE",
+        counterparty_country: "FR"
+      }
+    }
+
+    assert_equal "FR", Transaction.last.counterparty_country
+  end
+
+  test "creates transaction with counterparty_is_pep" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "PURCHASE",
+        counterparty_is_pep: true
+      }
+    }
+
+    assert Transaction.last.counterparty_is_pep
+  end
+
+  test "creates transaction with is_new_construction" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "PURCHASE",
+        is_new_construction: true
+      }
+    }
+
+    assert Transaction.last.is_new_construction
+  end
+
+  test "creates rental with rental_duration_years" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "RENTAL",
+        rental_duration_years: 3
+      }
+    }
+
+    assert_equal 3, Transaction.last.rental_duration_years
+  end
+
+  test "creates rental with rental_annual_value" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "RENTAL",
+        rental_annual_value: 36000
+      }
+    }
+
+    assert_equal 36000, Transaction.last.rental_annual_value
+  end
+
+  test "creates rental with rental_tenant_type" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "RENTAL",
+        rental_tenant_type: "NATURAL_PERSON"
+      }
+    }
+
+    assert_equal "NATURAL_PERSON", Transaction.last.rental_tenant_type
+  end
+
   # === Flash Messages ===
 
   test "shows success message after creating transaction" do

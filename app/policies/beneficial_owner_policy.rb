@@ -46,6 +46,9 @@ class BeneficialOwnerPolicy < ApplicationPolicy
       :control_type,
       :is_pep,
       :pep_type,
+      :identification_verified,
+      :source_of_wealth_verified,
+      :incorporation_country,
       :net_worth_eur
     ]
   end

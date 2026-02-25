@@ -433,6 +433,58 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  # === AMSF Data Capture Fields (Issue #113) ===
+
+  test "creates natural person with residence_status" do
+    sign_in @user
+
+    post clients_path, params: {
+      client: {
+        name: "Resident Client",
+        client_type: "NATURAL_PERSON",
+        residence_status: "RESIDENT"
+      }
+    }
+
+    assert_equal "RESIDENT", Client.last.residence_status
+  end
+
+  test "creates client with is_pep_related" do
+    sign_in @user
+
+    post clients_path, params: {
+      client: {
+        name: "PEP Related Client",
+        client_type: "NATURAL_PERSON",
+        is_pep_related: true
+      }
+    }
+
+    assert Client.last.is_pep_related
+  end
+
+  test "creates client with is_pep_associated" do
+    sign_in @user
+
+    post clients_path, params: {
+      client: {
+        name: "PEP Associated Client",
+        client_type: "NATURAL_PERSON",
+        is_pep_associated: true
+      }
+    }
+
+    assert Client.last.is_pep_associated
+  end
+
+  test "new form has rejection_reason select" do
+    sign_in @user
+
+    get new_client_path
+    assert_response :success
+    assert_select "select[name='client[rejection_reason]']"
+  end
+
   # === Policy Authorization ===
 
   test "admin can manage all clients in organization" do

@@ -99,7 +99,7 @@ class Survey
           .merge(Client.natural_persons)
           .rentals
           .where(transaction_value: 10_000..)
-          .sum(:rental_duration_months)
+          .sum("rental_duration_years * 12")
       end
 
       # === Legal Entity Statistics ===
@@ -402,7 +402,7 @@ class Survey
         rental_months = year_transactions.by_client
           .rentals
           .where(transaction_value: 10_000..)
-          .sum(:rental_duration_months)
+          .sum("rental_duration_years * 12")
 
         purchases_and_sales + rental_months
       end
@@ -424,7 +424,7 @@ class Survey
         rental_months = year_transactions.with_client
           .rentals
           .where(transaction_value: 10_000..)
-          .sum(:rental_duration_months)
+          .sum("rental_duration_years * 12")
 
         purchases_and_sales + rental_months
       end

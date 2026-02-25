@@ -51,6 +51,13 @@ class TransactionPolicy < ApplicationPolicy
       :cash_amount,
       :agency_role,
       :purchase_purpose,
+      :property_type,
+      :counterparty_country,
+      :counterparty_is_pep,
+      :is_new_construction,
+      :rental_duration_years,
+      :rental_annual_value,
+      :rental_tenant_type,
       :notes
     ]
   end
