@@ -62,6 +62,14 @@ class Survey
 
         purchase_sale_count + rental_count
       end
+
+      # Q6 — a1106B: Total value of funds transferred for purchase and sale of real estate
+      # Type: xbrli:monetaryItemType
+      def a1106b
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE])
+          .sum(:transaction_value)
+      end
     end
   end
 end

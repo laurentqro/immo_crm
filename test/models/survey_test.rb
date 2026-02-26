@@ -187,4 +187,41 @@ class SurveyTest < ActiveSupport::TestCase
     # Each transaction counted individually (not deduplicated by client)
     assert_equal 7, @survey.a1105b
   end
+
+  # Q6 — a1106B: Total value of funds transferred for purchase and sale of real estate
+  # Type: xbrli:monetaryItemType
+  test "a1106b sums transaction_value for purchase and sale transactions in the year" do
+    # Org :one purchase/sale fixtures in current year:
+    # purchase: 1,500,000 + sale: 2,100,000 + cash_payment: 500,000 +
+    # high_value: 5,000,000 + pep_transaction: 3,500,000 +
+    # crypto_payment: 800,000 + check_payment: 750,000 = 14,150,000
+    assert_equal BigDecimal("14150000"), @survey.a1106b
+  end
+
+  test "a1106b returns 0 when organization has no transactions" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal 0, survey.a1106b
+  end
+
+  test "a1106b excludes rental transactions" do
+    rental_value = @organization.transactions.kept.for_year(@year)
+      .where(transaction_type: "RENTAL").sum(:transaction_value)
+    assert rental_value > 0, "Precondition: there should be rental transactions with value"
+    # Rental value should not be included
+    assert_equal BigDecimal("14150000"), @survey.a1106b
+  end
+
+  test "a1106b excludes soft-deleted transactions" do
+    assert @organization.transactions.discarded.exists?,
+      "Precondition: there should be discarded transactions"
+    assert_equal BigDecimal("14150000"), @survey.a1106b
+  end
+
+  test "a1106b excludes transactions from other years" do
+    assert @organization.transactions.kept
+      .where.not(transaction_date: Date.new(@year)..Date.new(@year).end_of_year)
+      .where(transaction_type: %w[PURCHASE SALE]).exists?,
+      "Precondition: there should be transactions from other years"
+    assert_equal BigDecimal("14150000"), @survey.a1106b
+  end
 end
