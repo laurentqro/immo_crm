@@ -79,6 +79,68 @@ internal_controls:
   value: "true"
   category: "compliance_policies"
 
+# === Signatories Setting Keys ===
+
+records_other_le_data:
+  organization: one
+  key: "records_other_le_data"
+  value: "Oui"
+  category: "entity_info"
+
+other_le_data_details:
+  organization: one
+  key: "other_le_data_details"
+  value: "Numéro RCI, date de constitution, siège social, liste des dirigeants"
+  category: "entity_info"
+
+cdd_tools_description:
+  organization: one
+  key: "cdd_tools_description"
+  value: "Logiciel de gestion immobilière, base de données cadastrale Monaco"
+  category: "entity_info"
+
+risk_assessment_includes_all_factors:
+  organization: one
+  key: "risk_assessment_includes_all_factors"
+  value: "Oui"
+  category: "entity_info"
+
+risk_factors_not_considered:
+  organization: one
+  key: "risk_factors_not_considered"
+  value: "Transactions immobilières effectuées hors de Monaco"
+  category: "entity_info"
+
+has_differentiated_cdd_policies:
+  organization: one
+  key: "has_differentiated_cdd_policies"
+  value: "Oui"
+  category: "entity_info"
+
+uses_sensitive_activities_list:
+  organization: one
+  key: "uses_sensitive_activities_list"
+  value: "Oui"
+  category: "entity_info"
+
+high_risk_client_activities:
+  organization: one
+  key: "high_risk_client_activities"
+  value: "Investissement locatif de luxe, achat-revente rapide, transactions avec des structures offshore"
+  category: "entity_info"
+
+separates_ml_and_tf_risks:
+  organization: one
+  key: "separates_ml_and_tf_risks"
+  value: "Oui"
+  category: "entity_info"
+
+uses_sensitive_countries_list:
+  organization: one
+  key: "uses_sensitive_countries_list"
+  value: "Oui"
+  category: "entity_info"
+
 # === Organization Two (for cross-tenant tests) ===
 
 other_org_entity_name:

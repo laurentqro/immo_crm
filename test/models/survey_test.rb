@@ -635,6 +635,68 @@ class SurveyTest < ActiveSupport::TestCase
     assert_includes result, "Crypto ATM operator"
   end
 
+  # === Signatories Setting Key Tests ===
+
+  test "ac1636 reads from records_other_le_data setting" do
+    result = @survey.send(:ac1636)
+
+    assert_equal "Oui", result
+  end
+
+  test "ac1637 reads from other_le_data_details setting" do
+    result = @survey.send(:ac1637)
+
+    assert_equal "Numéro RCI, date de constitution, siège social, liste des dirigeants", result
+  end
+
+  test "ac1640a reads from cdd_tools_description setting" do
+    result = @survey.send(:ac1640a)
+
+    assert_equal "Logiciel de gestion immobilière, base de données cadastrale Monaco", result
+  end
+
+  test "ac1806 reads from risk_assessment_includes_all_factors setting" do
+    result = @survey.send(:ac1806)
+
+    assert_equal "Oui", result
+  end
+
+  test "ac1807 reads from risk_factors_not_considered setting" do
+    result = @survey.send(:ac1807)
+
+    assert_equal "Transactions immobilières effectuées hors de Monaco", result
+  end
+
+  test "ac1610 reads from has_differentiated_cdd_policies setting" do
+    result = @survey.send(:ac1610)
+
+    assert_equal "Oui", result
+  end
+
+  test "ac1812 reads from uses_sensitive_activities_list setting" do
+    result = @survey.send(:ac1812)
+
+    assert_equal "Oui", result
+  end
+
+  test "ac1813 reads from high_risk_client_activities setting" do
+    result = @survey.send(:ac1813)
+
+    assert_equal "Investissement locatif de luxe, achat-revente rapide, transactions avec des structures offshore", result
+  end
+
+  test "ac1814w reads from separates_ml_and_tf_risks setting" do
+    result = @survey.send(:ac1814w)
+
+    assert_equal "Oui", result
+  end
+
+  test "ac1811 reads from uses_sensitive_countries_list setting" do
+    result = @survey.send(:ac1811)
+
+    assert_equal "Oui", result
+  end
+
   # === Signatories DB-Computable Field Tests ===
 
   test "ac1801 returns count of risk levels from system constants" do

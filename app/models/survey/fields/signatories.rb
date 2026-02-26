@@ -4,11 +4,13 @@
 # Field methods for signatory information and entity details
 #
 # Fields cover:
-# - Entity information (legal form, registration)
-# - Business profile (services, revenue)
-# - Office locations
-# - Employee information
+# - Enhanced due diligence statistics
+# - Client due diligence (LE data recording, CDD tools, CDD policies)
+# - Risk classification (risk levels, high-risk clients)
+# - Risk assessment (factors, sensitive lists, ML/TF separation)
+# - Simplified due diligence
 # - Submission status
+# - Legal entity status
 #
 class Survey
   module Fields
@@ -47,18 +49,26 @@ class Survey
         (reinforced.to_f / total * 100).round(2)
       end
 
-      # === Business Profile ===
+      # === Client Due Diligence ===
 
+      # Records other LE/trust data?
       def ac1636
-        setting_value("property_management") || "Non"
+        setting_value("records_other_le_data")
       end
 
+      # Specify other LE data recorded
       def ac1637
-        setting_value("ancillary_services")
+        setting_value("other_le_data_details")
       end
 
+      # Which CDD tools used?
       def ac1640a
-        setting_value("legal_services")
+        setting_value("cdd_tools_description")
+      end
+
+      # Has differentiated CDD policies for different levels?
+      def ac1610
+        setting_value("has_differentiated_cdd_policies")
       end
 
       # === Risk Classification ===
@@ -79,14 +89,6 @@ class Survey
         clients_kept.where(risk_level: "high").count
       end
 
-      def ac1806
-        setting_value("operating_expenses") || "Non"
-      end
-
-      def ac1610
-        setting_value("annual_transaction_volume") || "Non"
-      end
-
       # === Simplified Due Diligence ===
 
       # C52a: Applied simplified DD in period?
@@ -99,28 +101,36 @@ class Survey
         clients_kept.where(due_diligence_level: "SIMPLIFIED").count
       end
 
-      # === Office Information ===
+      # === Risk Assessment ===
 
-      def ac1812
-        setting_value("offices_count") || "Non"
+      # Risk assignment includes all required factors?
+      def ac1806
+        setting_value("risk_assessment_includes_all_factors")
       end
 
-      def ac1813
-        setting_value("monaco_offices")
-      end
-
-      def ac1814w
-        setting_value("overseas_offices") || "Non"
-      end
-
-      # === Employee Information ===
-
+      # Which risk factors are not considered?
       def ac1807
-        setting_value("employee_count")
+        setting_value("risk_factors_not_considered")
       end
 
+      # Uses sensitive countries list for AML/CFT risk assessment?
       def ac1811
-        setting_value("licensed_agents") || "Non"
+        setting_value("uses_sensitive_countries_list")
+      end
+
+      # Uses sensitive activities list for AML/CFT risk assessment?
+      def ac1812
+        setting_value("uses_sensitive_activities_list")
+      end
+
+      # Which client activities are associated with high risk?
+      def ac1813
+        setting_value("high_risk_client_activities")
+      end
+
+      # Examines ML and TF risks separately?
+      def ac1814w
+        setting_value("separates_ml_and_tf_risks")
       end
 
       def ac1904

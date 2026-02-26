@@ -650,17 +650,19 @@ end
 create_setting(organization, key: "legal_form", value: "SAM", category: "entity_info")
 create_setting(organization, key: "registration_date", value: "2018-03-15", category: "entity_info")
 create_setting(organization, key: "total_employees", value: "12", category: "entity_info")
-# ac1807: "Quels éléments ne sont pas pris en compte ?" (key will be renamed in task #2)
-create_setting(organization, key: "employee_count", value: "Transactions immobilières effectuées hors de Monaco", category: "entity_info")
-# ac1813: "Quelles activités client associez-vous aux clients à haut risque ?" (key will be renamed in task #2)
-create_setting(organization, key: "monaco_offices", value: "Investissement locatif de luxe, achat-revente rapide, transactions avec des structures offshore", category: "entity_info")
+create_setting(organization, key: "risk_factors_not_considered", value: "Transactions immobilières effectuées hors de Monaco", category: "entity_info")
+create_setting(organization, key: "high_risk_client_activities", value: "Investissement locatif de luxe, achat-revente rapide, transactions avec des structures offshore", category: "entity_info")
 create_setting(organization, key: "is_foreign_subsidiary", value: "false", category: "entity_info")
 create_setting(organization, key: "parent_company_country", value: "FR", category: "entity_info")
 create_setting(organization, key: "last_external_audit", value: "Entre un et deux ans", category: "entity_info")
-# ac1637: "Veuillez préciser les autres données des personnes morales enregistrées" (key will be renamed in task #2)
-create_setting(organization, key: "ancillary_services", value: "Numéro RCI, date de constitution, siège social, liste des dirigeants", category: "entity_info")
-# ac1640a: "Quels outils ?" (key will be renamed in task #2)
-create_setting(organization, key: "legal_services", value: "Logiciel de gestion immobilière, base de données cadastrale Monaco", category: "entity_info")
+create_setting(organization, key: "records_other_le_data", value: "Oui", category: "entity_info")
+create_setting(organization, key: "other_le_data_details", value: "Numéro RCI, date de constitution, siège social, liste des dirigeants", category: "entity_info")
+create_setting(organization, key: "cdd_tools_description", value: "Logiciel de gestion immobilière, base de données cadastrale Monaco", category: "entity_info")
+create_setting(organization, key: "has_differentiated_cdd_policies", value: "Oui", category: "entity_info")
+create_setting(organization, key: "risk_assessment_includes_all_factors", value: "Oui", category: "entity_info")
+create_setting(organization, key: "uses_sensitive_activities_list", value: "Oui", category: "entity_info")
+create_setting(organization, key: "uses_sensitive_countries_list", value: "Oui", category: "entity_info")
+create_setting(organization, key: "separates_ml_and_tf_risks", value: "Oui", category: "entity_info")
 
 # --- Signatories ---
 create_setting(organization, key: "status_1", value: "Jean-Pierre Duval, Directeur Général", category: "entity_info")
@@ -681,8 +683,7 @@ create_setting(organization, key: "ac1630", value: "Profil de risque, historique
 create_setting(organization, key: "ac11302", value: "Consultation des listes officielles (GAFI, UE, ONU), vérification via World-Check", category: "kyc_procedures")
 create_setting(organization, key: "ac11303", value: "Approbation de la direction pour l'entrée en relation, revue semestrielle du dossier", category: "kyc_procedures")
 create_setting(organization, key: "ac11403", value: "Vérification systématique de l'origine des fonds pour tout paiement en espèces, déclaration SICCFIN au-delà de 30 000 EUR", category: "kyc_procedures")
-create_setting(organization, key: "ac1807", value: "Transactions immobilières effectuées hors de Monaco", category: "kyc_procedures")
-create_setting(organization, key: "ac1813", value: "Investissement locatif de luxe, achat-revente rapide, transactions avec des structures offshore", category: "kyc_procedures")
+# risk_factors_not_considered and high_risk_client_activities already seeded in entity_info above
 create_setting(organization, key: "a3308", value: "Renforcement des procédures de vigilance pour les structures complexes multi-juridictionnelles", category: "kyc_procedures")
 
 # --- Non-Face-to-Face ---
