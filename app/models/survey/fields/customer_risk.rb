@@ -70,6 +70,14 @@ class Survey
           .where(transaction_type: %w[PURCHASE SALE])
           .sum(:transaction_value)
       end
+
+      # Q7 — a1106BRENTALS: Total value of funds transferred for rental of real estate
+      # Type: xbrli:monetaryItemType
+      def a1106brentals
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: "RENTAL")
+          .sum(:transaction_value)
+      end
     end
   end
 end

@@ -224,4 +224,29 @@ class SurveyTest < ActiveSupport::TestCase
       "Precondition: there should be transactions from other years"
     assert_equal BigDecimal("14150000"), @survey.a1106b
   end
+
+  # Q7 — a1106BRENTALS: Total value of funds transferred for rental of real estate
+  # Type: xbrli:monetaryItemType
+  test "a1106brentals sums transaction_value for rental transactions in the year" do
+    # Org :one rental fixture in current year: rental: 36,000
+    assert_equal BigDecimal("36000"), @survey.a1106brentals
+  end
+
+  test "a1106brentals returns 0 when organization has no transactions" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal 0, survey.a1106brentals
+  end
+
+  test "a1106brentals excludes purchase and sale transactions" do
+    ps_value = @organization.transactions.kept.for_year(@year)
+      .where(transaction_type: %w[PURCHASE SALE]).sum(:transaction_value)
+    assert ps_value > 0, "Precondition: there should be purchase/sale transactions with value"
+    assert_equal BigDecimal("36000"), @survey.a1106brentals
+  end
+
+  test "a1106brentals excludes soft-deleted transactions" do
+    assert @organization.transactions.discarded.exists?,
+      "Precondition: there should be discarded transactions"
+    assert_equal BigDecimal("36000"), @survey.a1106brentals
+  end
 end
