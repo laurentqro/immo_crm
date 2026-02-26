@@ -79,6 +79,24 @@ class Survey
           .sum(:transaction_value)
       end
 
+      # Q9 — a1106W: Total value of funds transferred with clients during reporting period
+      # for purchase, sale, and rental (monthly rent >= 10,000 EUR) of real estate
+      # Type: xbrli:monetaryItemType
+      def a1106w
+        txns = organization.transactions.kept.for_year(year)
+
+        ps_value = txns
+          .where(transaction_type: %w[PURCHASE SALE])
+          .sum(:transaction_value)
+
+        rental_value = txns
+          .where(transaction_type: "RENTAL")
+          .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
+          .sum(:transaction_value)
+
+        ps_value + rental_value
+      end
+
       # Q8 — a1105W: Total number of transactions with clients during reporting period
       # for purchase, sale, and rental (monthly rent >= 10,000 EUR) of real estate
       # Type: xbrli:integerItemType

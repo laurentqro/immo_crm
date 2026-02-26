@@ -294,4 +294,51 @@ class SurveyTest < ActiveSupport::TestCase
       "Precondition: there should be discarded transactions"
     assert_equal 7, @survey.a1105w
   end
+
+  # Q9 — a1106W: Total value of funds transferred with clients during reporting period
+  # for purchase, sale, and rental (>= 10k/month) of real estate
+  # Type: xbrli:monetaryItemType
+  test "a1106w sums transaction_value for purchase, sale, and qualifying rental transactions" do
+    # Org :one has 14,150,000 in purchase/sale + 0 qualifying rentals = 14,150,000
+    assert_equal BigDecimal("14150000"), @survey.a1106w
+  end
+
+  test "a1106w returns 0 when organization has no transactions" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal 0, survey.a1106w
+  end
+
+  test "a1106w includes qualifying rental transaction values" do
+    Transaction.create!(
+      organization: @organization,
+      client: clients(:legal_entity),
+      reference: "RENTAL-HIGH-Q9",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "RENTAL",
+      transaction_value: 240_000,
+      rental_annual_value: 120_000
+    )
+    # 14,150,000 purchase/sale + 240,000 qualifying rental = 14,390,000
+    assert_equal BigDecimal("14390000"), @survey.a1106w
+  end
+
+  test "a1106w excludes rental transactions below 10000 monthly threshold" do
+    Transaction.create!(
+      organization: @organization,
+      client: clients(:legal_entity),
+      reference: "RENTAL-LOW-Q9",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "RENTAL",
+      transaction_value: 60_000,
+      rental_annual_value: 60_000
+    )
+    # Still 14,150,000 — low-value rental excluded
+    assert_equal BigDecimal("14150000"), @survey.a1106w
+  end
+
+  test "a1106w excludes soft-deleted transactions" do
+    assert @organization.transactions.discarded.exists?,
+      "Precondition: there should be discarded transactions"
+    assert_equal BigDecimal("14150000"), @survey.a1106w
+  end
 end
