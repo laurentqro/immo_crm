@@ -162,7 +162,7 @@ class Survey
 
         BeneficialOwner
           .joins(:client)
-          .where(clients: { organization_id: organization.id })
+          .where(clients: {organization_id: organization.id})
           .with_significant_control
           .where.not(nationality: nil)
           .group(:nationality)
