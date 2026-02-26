@@ -302,6 +302,20 @@ class Survey
         (purchase_sale_client_ids + rental_client_ids).uniq.count
       end
 
+      # Q26 — a1401: Total unique natural person clients by primary nationality
+      # for purchase and sale of real estate
+      # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+      def a1401
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .where(clients: {client_type: "NATURAL_PERSON"})
+          .where.not(clients: {nationality: nil})
+          .distinct
+          .group("clients.nationality")
+          .count("clients.id")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

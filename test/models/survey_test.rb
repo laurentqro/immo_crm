@@ -1254,6 +1254,101 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 0, @survey.a1104
   end
 
+  # Q26 — a1401: Total unique natural person clients by primary nationality
+  # for purchase and sale of real estate (NOT rentals)
+  # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+  test "a1401 returns hash of unique natural person clients grouped by nationality for purchase/sale" do
+    # Existing fixtures in org :one:
+    # - natural_person (FR) has PURCHASE + SALE transactions
+    # - pep_client (MC) has PURCHASE transaction
+    # Legal entities should be excluded
+    result = @survey.a1401
+
+    assert_instance_of Hash, result
+    assert_equal 1, result["FR"]
+    assert_equal 1, result["MC"]
+  end
+
+  test "a1401 excludes legal entities" do
+    # legal_entity (MC) has PURCHASE + SALE transactions but is LEGAL_ENTITY
+    result = @survey.a1401
+    le = clients(:legal_entity)
+    assert_equal "LEGAL_ENTITY", le.client_type
+    assert_equal "MC", le.nationality
+    # MC count should only be from pep_client, not legal_entity
+    assert_equal 1, result["MC"]
+  end
+
+  test "a1401 excludes rental transactions" do
+    # Create a natural person with only a rental transaction
+    rental_only = Client.create!(
+      organization: @organization,
+      name: "Rental Only NP",
+      client_type: "NATURAL_PERSON",
+      nationality: "IT",
+      residence_country: "IT",
+      became_client_at: 3.months.ago
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: rental_only,
+      reference: "A1401-RENT",
+      transaction_date: Date.current - 10.days,
+      transaction_type: "RENTAL",
+      transaction_value: 240_000,
+      rental_annual_value: 240_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    result = @survey.a1401
+    assert_nil result["IT"], "Rental-only clients should not appear in a1401"
+  end
+
+  test "a1401 counts each client only once per nationality even with multiple transactions" do
+    # natural_person (FR) already has 3 purchase/sale transactions
+    result = @survey.a1401
+    assert_equal 1, result["FR"]
+  end
+
+  test "a1401 groups multiple clients with same nationality" do
+    second_fr = Client.create!(
+      organization: @organization,
+      name: "Another FR Client",
+      client_type: "NATURAL_PERSON",
+      nationality: "FR",
+      residence_country: "FR",
+      became_client_at: 3.months.ago
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: second_fr,
+      reference: "A1401-FR2",
+      transaction_date: Date.current - 10.days,
+      transaction_type: "SALE",
+      transaction_value: 800_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    result = @survey.a1401
+    assert_equal 2, result["FR"]
+  end
+
+  test "a1401 excludes clients from other organizations" do
+    # other_org_client (FR) in org :two has a PURCHASE transaction
+    result = @survey.a1401
+    # FR count should only be 1 (natural_person), not include other_org_client
+    assert_equal 1, result["FR"]
+  end
+
+  test "a1401 excludes soft-deleted transactions" do
+    # discarded_transaction belongs to natural_person (FR) but is soft-deleted
+    # natural_person still has other kept transactions, so FR: 1
+    result = @survey.a1401
+    assert_equal 1, result["FR"]
+  end
+
   test "a1210o excludes BOs from other organizations" do
     Setting.create!(
       organization: @organization,
