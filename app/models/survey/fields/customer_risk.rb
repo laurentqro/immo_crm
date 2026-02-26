@@ -169,6 +169,12 @@ class Survey
           .count
       end
 
+      # Q16 — a1203D: Does entity record residence for BOs holding 25% or more?
+      # Type: enum (Oui/Non) — settings-based
+      def a1203d
+        setting_value_for("records_bo_residence_25pct_or_more")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

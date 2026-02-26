@@ -580,4 +580,20 @@ class SurveyTest < ActiveSupport::TestCase
     # Total count should be 10 (only org:one BOs with >= 25%)
     assert_equal 10, result.values.sum
   end
+
+  # Q16 — a1203D: Does entity record residence for BOs holding 25% or more?
+  # Type: enum (Oui/Non), settings-based
+  test "a1203d returns the setting value when set" do
+    Setting.create!(
+      organization: @organization,
+      key: "records_bo_residence_25pct_or_more",
+      category: "entity_info",
+      value: "Oui"
+    )
+    assert_equal "Oui", @survey.a1203d
+  end
+
+  test "a1203d returns nil when setting is not set" do
+    assert_nil @survey.a1203d
+  end
 end
