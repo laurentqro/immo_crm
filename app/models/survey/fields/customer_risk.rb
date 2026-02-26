@@ -114,10 +114,29 @@ class Survey
 
         purchase_sale_count + rental_count
       end
+
       # Q10 — a1204S: Can your entity distinguish the nationality of the beneficial owner of clients?
       # Type: enum "Oui" / "Non" (settings-based)
       def a1204s
         setting_value_for("can_distinguish_bo_nationality")
+      end
+
+      # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
+      # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
+      # Includes all BOs (all ownership levels, direct/indirect control, representatives)
+      def a1204s1
+        return nil if a1204s == "Non"
+
+        bos = BeneficialOwner
+          .joins(:client)
+          .where(clients: {organization_id: organization.id})
+          .where.not(nationality: nil)
+
+        total = bos.count
+        return {} if total == 0
+
+        counts = bos.group(:nationality).count
+        counts.transform_values { |count| (BigDecimal(count) / total * 100).round(2) }
       end
     end
   end

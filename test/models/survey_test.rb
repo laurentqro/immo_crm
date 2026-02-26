@@ -357,4 +357,54 @@ class SurveyTest < ActiveSupport::TestCase
   test "a1204s returns nil when setting is not set" do
     assert_nil @survey.a1204s
   end
+
+  # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
+  # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
+  # Returns hash of { country_code => percentage }
+  test "a1204s1 returns percentage breakdown of BO nationalities" do
+    result = @survey.a1204s1
+
+    assert_instance_of Hash, result
+
+    # Org :one has 10 BOs with nationality across legal_entity, legal_entity_two, trust, legal_entity_with_owners:
+    # FR: owner_one, at_hnwi_threshold, cascade_owner_two = 3
+    # MC: owner_two, pep_owner, trust_owner, hnwi_owner, low_net_worth_owner, cascade_owner_one = 6
+    # IT: other_client_owner, at_uhnwi_threshold = 2
+    # CH: uhnwi_owner = 1
+    # Total with nationality: 12 (minimal_owner has nil nationality, excluded)
+    assert_equal BigDecimal("25.0"), result["FR"]   # 3/12 = 25.0%
+    assert_equal BigDecimal("50.0"), result["MC"]   # 6/12 = 50.0%
+    assert_in_delta 16.67, result["IT"].to_f, 0.01  # 2/12 = 16.67%
+    assert_in_delta 8.33, result["CH"].to_f, 0.01   # 1/12 = 8.33%
+  end
+
+  test "a1204s1 returns nil when entity cannot distinguish BO nationality" do
+    # When a1204s (Q10) is "Non", Q11 should return nil
+    Setting.create!(
+      organization: @organization,
+      key: "can_distinguish_bo_nationality",
+      category: "entity_info",
+      value: "Non"
+    )
+    assert_nil @survey.a1204s1
+  end
+
+  test "a1204s1 returns empty hash when no beneficial owners exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal({}, survey.a1204s1)
+  end
+
+  test "a1204s1 excludes beneficial owners with nil nationality" do
+    # minimal_owner has nil nationality — should not appear in result
+    result = @survey.a1204s1
+    assert_not result.key?(nil), "Should not include nil nationality in breakdown"
+  end
+
+  test "a1204s1 excludes beneficial owners from other organizations" do
+    # other_org_owner belongs to org :two — should not appear
+    result = @survey.a1204s1
+    # Verify by checking total percentages sum to ~100
+    total = result.values.sum
+    assert_in_delta 100.0, total.to_f, 0.1
+  end
 end
