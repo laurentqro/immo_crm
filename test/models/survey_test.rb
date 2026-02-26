@@ -493,4 +493,20 @@ class SurveyTest < ActiveSupport::TestCase
     # other_org_owner (FR, org:two) should not appear
     assert_equal 1, result.values.sum
   end
+
+  # Q14 — a1204O: Can entity distinguish BOs that hold 25% or more?
+  # Type: enum (Oui/Non), settings-based
+  test "a1204o returns the setting value when set" do
+    Setting.create!(
+      organization: @organization,
+      key: "can_distinguish_bo_25pct_or_more",
+      category: "entity_info",
+      value: "Oui"
+    )
+    assert_equal "Oui", @survey.a1204o
+  end
+
+  test "a1204o returns nil when setting is not set" do
+    assert_nil @survey.a1204o
+  end
 end

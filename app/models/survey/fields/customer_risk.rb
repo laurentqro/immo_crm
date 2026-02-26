@@ -147,6 +147,12 @@ class Survey
         bos.group(:nationality).count
       end
 
+      # Q14 — a1204O: Can entity distinguish beneficial owners that hold 25% or more?
+      # Type: enum (Oui/Non) — settings-based
+      def a1204o
+        setting_value_for("can_distinguish_bo_25pct_or_more")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)
