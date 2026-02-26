@@ -433,6 +433,53 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  # === AMSF Data Capture Fields (Issue #113) ===
+
+  test "creates client with is_pep_related" do
+    sign_in @user
+
+    post clients_path, params: {
+      client: {
+        name: "PEP Related Client",
+        client_type: "NATURAL_PERSON",
+        is_pep_related: true
+      }
+    }
+
+    assert_response :redirect
+    assert Client.last.is_pep_related
+  end
+
+  test "creates client with is_pep_associated" do
+    sign_in @user
+
+    post clients_path, params: {
+      client: {
+        name: "PEP Associated Client",
+        client_type: "NATURAL_PERSON",
+        is_pep_associated: true
+      }
+    }
+
+    assert_response :redirect
+    assert Client.last.is_pep_associated
+  end
+
+  test "creates client with rejection_reason" do
+    sign_in @user
+
+    post clients_path, params: {
+      client: {
+        name: "Rejected Prospect",
+        client_type: "NATURAL_PERSON",
+        rejection_reason: "AML_CFT"
+      }
+    }
+
+    assert_response :redirect
+    assert_equal "AML_CFT", Client.last.rejection_reason
+  end
+
   # === Policy Authorization ===
 
   test "admin can manage all clients in organization" do

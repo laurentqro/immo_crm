@@ -48,6 +48,8 @@ class ClientPolicy < ApplicationPolicy
       :introduced_by_third_party,
       :introducer_country,
       :is_pep,
+      :is_pep_related,
+      :is_pep_associated,
       :is_vasp,
       :legal_entity_type,
       :legal_entity_type_other,

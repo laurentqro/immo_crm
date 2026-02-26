@@ -118,9 +118,6 @@ module AmsfConstants
   # Purchase purpose
   PURCHASE_PURPOSES = %w[RESIDENCE INVESTMENT].freeze
 
-  # Client residence status
-  RESIDENCE_STATUSES = %w[RESIDENT NON_RESIDENT].freeze
-
   # Transaction payment direction (who handles the funds)
   # BY_CLIENT: Client pays directly (e.g., buyer wires funds to seller's account)
   # WITH_CLIENT: Funds flow through the agency (e.g., client pays agency, agency disburses)

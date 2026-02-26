@@ -43,11 +43,11 @@
             { include_blank: "Select type..." },
             {
               required: true,
-              data: { transaction_form_target: "transactionType", action: "change->transaction-form#togglePurchasePurpose" }
+              data: { transaction_form_target: "transactionType", action: "change->transaction-form#togglePurchasePurpose change->transaction-form#toggleRentalFields" }
             } %>
       </div>
 
-      <div class="form-group" data-transaction-form-target="purchasePurpose" <%= 'hidden' unless transaction.purchase? %>>
+      <div class="form-group <%= 'hidden' unless transaction.purchase? %>" data-transaction-form-target="purchasePurpose">
         <%= form.label :purchase_purpose, "Purchase Purpose" %>
         <%= form.select :purchase_purpose,
             options_for_select([
@@ -100,6 +100,83 @@
       </div>
     </div>
 
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :property_type, "Property Type" %>
+        <%= form.select :property_type,
+            options_for_select([
+              ["Residential", "RESIDENTIAL"],
+              ["Commercial", "COMMERCIAL"],
+              ["Land", "LAND"],
+              ["Mixed", "MIXED"]
+            ], transaction.property_type),
+            { include_blank: "Select type..." } %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :counterparty_country, "Counterparty Country" %>
+        <%= form.select :counterparty_country,
+            options_for_select(country_options, transaction.counterparty_country),
+            { include_blank: "Select country..." } %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-picker-group">
+        <%= form.check_box :counterparty_is_pep %>
+        <div>
+          <%= form.label :counterparty_is_pep, "Counterparty is PEP" %>
+          <p class="form-hint">The buyer/seller on the other side of this transaction is a Politically Exposed Person.</p>
+        </div>
+      </div>
+
+      <div class="form-picker-group">
+        <%= form.check_box :is_new_construction %>
+        <div>
+          <%= form.label :is_new_construction, "New construction (VEFA)" %>
+          <p class="form-hint">This transaction involves a property sold off-plan or under construction.</p>
+        </div>
+      </div>
+    </div>
+
+    <%# Rental-specific fields %>
+    <div data-transaction-form-target="rentalFields" class="<%= 'hidden' unless transaction.rental? %>">
+      <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
+        <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-4">Rental Details</h4>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div class="form-group">
+            <%= form.label :rental_duration_years, "Rental Duration (years)" %>
+            <%= form.number_field :rental_duration_years,
+                class: "form-control",
+                min: "1",
+                max: "99",
+                step: "1",
+                placeholder: "e.g., 3" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :rental_annual_value, "Annual Rent (€)" %>
+            <%= form.number_field :rental_annual_value,
+                class: "form-control",
+                step: "0.01",
+                min: "0",
+                placeholder: "e.g., 36000" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :rental_tenant_type, "Tenant Type" %>
+            <%= form.select :rental_tenant_type,
+                options_for_select([
+                  ["Natural Person", "NATURAL_PERSON"],
+                  ["Legal Entity", "LEGAL_ENTITY"]
+                ], transaction.rental_tenant_type),
+                { include_blank: "Select tenant type..." } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <%# Payment Section %>
     <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
       <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-4">Payment Information</h4>
@@ -121,7 +198,7 @@
               } %>
         </div>
 
-        <div class="form-group" data-transaction-form-target="cashAmount" <%= 'hidden' unless transaction.has_cash? %>>
+        <div class="form-group <%= 'hidden' unless transaction.has_cash? %>" data-transaction-form-target="cashAmount">
           <%= form.label :cash_amount, "Cash Amount (€)" %>
           <%= form.number_field :cash_amount,
               class: "form-control",

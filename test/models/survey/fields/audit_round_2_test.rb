@@ -29,15 +29,15 @@ class Survey::Fields::AuditRound2Test < ActiveSupport::TestCase
   end
 
   test "a1103 counts only natural person foreign residents" do
-    Client.create!(organization: @org, name: "NP FR Res", client_type: "NATURAL_PERSON", nationality: "FR", residence_status: "RESIDENT")
-    Client.create!(organization: @org, name: "LE FR Res", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL", nationality: "FR", residence_status: "RESIDENT")
+    Client.create!(organization: @org, name: "NP FR Res", client_type: "NATURAL_PERSON", nationality: "FR", residence_country: "MC")
+    Client.create!(organization: @org, name: "LE FR Res", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL", nationality: "FR", residence_country: "MC")
 
     assert_equal 1, @survey.send(:a1103)
   end
 
   test "a1104 counts only natural person non-residents" do
-    Client.create!(organization: @org, name: "NP NonRes", client_type: "NATURAL_PERSON", residence_status: "NON_RESIDENT")
-    Client.create!(organization: @org, name: "LE NonRes", client_type: "LEGAL_ENTITY", legal_entity_type: "SAM", residence_status: "NON_RESIDENT")
+    Client.create!(organization: @org, name: "NP NonRes", client_type: "NATURAL_PERSON", residence_country: "FR")
+    Client.create!(organization: @org, name: "LE NonRes", client_type: "LEGAL_ENTITY", legal_entity_type: "SAM", residence_country: "FR")
 
     assert_equal 1, @survey.send(:a1104)
   end
@@ -57,15 +57,15 @@ class Survey::Fields::AuditRound2Test < ActiveSupport::TestCase
   test "a1105w counts rental months for qualifying rentals" do
     client = Client.create!(organization: @org, name: "Client", client_type: "NATURAL_PERSON")
     Transaction.create!(organization: @org, client: client, transaction_type: "PURCHASE", direction: "WITH_CLIENT", transaction_date: Date.new(2025, 3, 1), transaction_value: 500_000)
-    Transaction.create!(organization: @org, client: client, transaction_type: "RENTAL", direction: "WITH_CLIENT", transaction_date: Date.new(2025, 4, 1), transaction_value: 12_000, rental_duration_months: 6)
+    Transaction.create!(organization: @org, client: client, transaction_type: "RENTAL", direction: "WITH_CLIENT", transaction_date: Date.new(2025, 4, 1), transaction_value: 12_000, rental_duration_years: 1)
 
-    # 1 purchase + 6 rental months = 7
-    assert_equal 7, @survey.send(:a1105w)
+    # 1 purchase + 12 rental months (1 year × 12) = 13
+    assert_equal 13, @survey.send(:a1105w)
   end
 
   test "a1105w excludes rental months under 10k" do
     client = Client.create!(organization: @org, name: "Client", client_type: "NATURAL_PERSON")
-    Transaction.create!(organization: @org, client: client, transaction_type: "RENTAL", direction: "WITH_CLIENT", transaction_date: Date.new(2025, 4, 1), transaction_value: 8_000, rental_duration_months: 12)
+    Transaction.create!(organization: @org, client: client, transaction_type: "RENTAL", direction: "WITH_CLIENT", transaction_date: Date.new(2025, 4, 1), transaction_value: 8_000, rental_duration_years: 1)
 
     assert_equal 0, @survey.send(:a1105w)
   end
@@ -85,7 +85,7 @@ class Survey::Fields::AuditRound2Test < ActiveSupport::TestCase
   test "a1502b counts only purchase/sale for legal entities" do
     le = Client.create!(organization: @org, name: "SARL", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL")
     Transaction.create!(organization: @org, client: le, transaction_type: "PURCHASE", direction: "BY_CLIENT", transaction_date: Date.new(2025, 3, 1), transaction_value: 500_000)
-    Transaction.create!(organization: @org, client: le, transaction_type: "RENTAL", direction: "BY_CLIENT", transaction_date: Date.new(2025, 5, 1), transaction_value: 15_000, rental_duration_months: 12)
+    Transaction.create!(organization: @org, client: le, transaction_type: "RENTAL", direction: "BY_CLIENT", transaction_date: Date.new(2025, 5, 1), transaction_value: 15_000, rental_duration_years: 1)
 
     assert_equal 1, @survey.send(:a1502b)
   end

@@ -257,6 +257,66 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.media_type, "turbo-stream"
   end
 
+  # === AMSF Data Capture Fields (Issue #113) ===
+
+  test "new form has control_type select" do
+    sign_in @user
+
+    get new_client_beneficial_owner_path(@legal_entity)
+    assert_response :success
+    assert_select "select[name='beneficial_owner[control_type]']"
+  end
+
+  test "new form has pep_type select" do
+    sign_in @user
+
+    get new_client_beneficial_owner_path(@legal_entity)
+    assert_response :success
+    assert_select "select[name='beneficial_owner[pep_type]']"
+  end
+
+  test "creates beneficial owner with identification_verified" do
+    sign_in @user
+
+    post client_beneficial_owners_path(@legal_entity), params: {
+      beneficial_owner: {
+        name: "Verified Owner",
+        identification_verified: true
+      }
+    }
+
+    assert_response :redirect
+    assert BeneficialOwner.last.identification_verified
+  end
+
+  test "creates beneficial owner with source_of_wealth_verified" do
+    sign_in @user
+
+    post client_beneficial_owners_path(@legal_entity), params: {
+      beneficial_owner: {
+        name: "Wealth Verified Owner",
+        source_of_wealth_verified: true
+      }
+    }
+
+    assert_response :redirect
+    assert BeneficialOwner.last.source_of_wealth_verified
+  end
+
+  test "creates beneficial owner with incorporation_country" do
+    sign_in @user
+
+    post client_beneficial_owners_path(@legal_entity), params: {
+      beneficial_owner: {
+        name: "Foreign Entity Owner",
+        incorporation_country: "LU"
+      }
+    }
+
+    assert_response :redirect
+    assert_equal "LU", BeneficialOwner.last.incorporation_country
+  end
+
   # === Flash Messages ===
 
   test "shows success message after creating owner" do

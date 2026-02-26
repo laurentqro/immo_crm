@@ -234,7 +234,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
       direction: "BY_CLIENT"
     )
 
-    # 12-month rental at €15,000/month = 12 transactions for AMSF
+    # 1-year rental at €15,000/month = 12 transactions for AMSF (1 year × 12)
     Transaction.create!(
       organization: org,
       client: client,
@@ -242,7 +242,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
       transaction_date: Date.new(2025, 1, 1),
       transaction_value: 15_000,
       direction: "BY_CLIENT",
-      rental_duration_months: 12
+      rental_duration_years: 1
     )
 
     survey = Survey.new(organization: org, year: 2025)
@@ -254,7 +254,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
     org = Organization.create!(account: accounts(:invited), name: "Test Agency", rci_number: "TEST001")
     client = Client.create!(organization: org, name: "Client 1", client_type: "NATURAL_PERSON")
 
-    # 12-month rental at €9,000/month = 0 transactions (below threshold)
+    # 1-year rental at €9,000/month = 0 transactions (below threshold)
     Transaction.create!(
       organization: org,
       client: client,
@@ -262,7 +262,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
       transaction_date: Date.new(2025, 1, 1),
       transaction_value: 9_000,
       direction: "BY_CLIENT",
-      rental_duration_months: 12
+      rental_duration_years: 1
     )
 
     survey = Survey.new(organization: org, year: 2025)
@@ -295,7 +295,7 @@ class Survey::Fields::CustomerRiskTest < ActiveSupport::TestCase
       transaction_date: Date.new(2025, 1, 1),
       transaction_value: 15_000,
       direction: "BY_CLIENT",
-      rental_duration_months: 6
+      rental_duration_years: 1
     )
 
     # Legal entity sale (a1502b)

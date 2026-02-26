@@ -71,19 +71,22 @@
     </div>
 
     <%# Nationality and Residence (only for Natural Person and Trust, not Legal Entity) %>
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 <%= 'hidden' if client.legal_entity? %>" data-client-form-target="naturalPersonFields">
-      <div class="form-group">
-        <%= form.label :nationality %>
-        <%= form.select :nationality,
-            options_for_select(country_options, client.nationality),
-            { include_blank: "Select country..." } %>
-      </div>
+    <div class="<%= 'hidden' if client.legal_entity? %>" data-client-form-target="naturalPersonFields">
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div class="form-group">
+          <%= form.label :nationality %>
+          <%= form.select :nationality,
+              options_for_select(country_options, client.nationality),
+              { include_blank: "Select country..." } %>
+        </div>
 
-      <div class="form-group">
-        <%= form.label :residence_country, "Residence country" %>
-        <%= form.select :residence_country,
-            options_for_select(country_options, client.residence_country),
-            { include_blank: "Select country..." } %>
+        <div class="form-group">
+          <%= form.label :residence_country, "Residence country" %>
+          <%= form.select :residence_country,
+              options_for_select(country_options, client.residence_country),
+              { include_blank: "Select country..." } %>
+        </div>
+
       </div>
     </div>
 
@@ -107,6 +110,24 @@
               ["International Organization", "INTL_ORG"]
             ], client.pep_type),
             { include_blank: "Select PEP type..." } %>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4">
+        <div class="form-picker-group">
+          <%= form.check_box :is_pep_related %>
+          <div>
+            <%= form.label :is_pep_related, "Related to a PEP" %>
+            <p class="form-hint">Client is a family member of a PEP.</p>
+          </div>
+        </div>
+
+        <div class="form-picker-group">
+          <%= form.check_box :is_pep_associated %>
+          <div>
+            <%= form.label :is_pep_associated, "Associated with a PEP" %>
+            <p class="form-hint">Client has a close business relationship with a PEP.</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -219,18 +240,31 @@
     </div>
 
     <%# Relationship End Section %>
-    <div class="form-group">
-      <%= form.label :relationship_end_reason, "Relationship end reason" %>
-      <%= form.select :relationship_end_reason,
-          options_for_select([
-            ["Client request", "CLIENT_REQUEST"],
-            ["AML/CFT concern", "AML_CONCERN"],
-            ["Inactivity", "INACTIVITY"],
-            ["Business decision", "BUSINESS_DECISION"],
-            ["Other", "OTHER"]
-          ], client.relationship_end_reason),
-          { include_blank: "Still active client..." } %>
-      <p class="form-hint">Reason for ending the business relationship (if applicable).</p>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="form-group">
+        <%= form.label :relationship_end_reason, "Relationship end reason" %>
+        <%= form.select :relationship_end_reason,
+            options_for_select([
+              ["Client request", "CLIENT_REQUEST"],
+              ["AML/CFT concern", "AML_CONCERN"],
+              ["Inactivity", "INACTIVITY"],
+              ["Business decision", "BUSINESS_DECISION"],
+              ["Other", "OTHER"]
+            ], client.relationship_end_reason),
+            { include_blank: "Still active client..." } %>
+        <p class="form-hint">Reason for ending the business relationship (if applicable).</p>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :rejection_reason, "Rejection reason" %>
+        <%= form.select :rejection_reason,
+            options_for_select([
+              ["AML/CFT concern", "AML_CFT"],
+              ["Other", "OTHER"]
+            ], client.rejection_reason),
+            { include_blank: "Not rejected..." } %>
+        <p class="form-hint">If the prospect was rejected during onboarding.</p>
+      </div>
     </div>
 
     <%# Business Sector (AMSF high-risk sector classification, all client types) %>

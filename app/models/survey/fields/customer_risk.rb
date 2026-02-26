@@ -48,14 +48,14 @@ class Survey
         clients_kept.natural_persons.where(nationality: "MC").count
       end
 
-      # Q24: Natural person clients who are foreign residents
+      # Q24: Natural person clients who are foreign residents (live in Monaco but not Monegasque)
       def a1103
-        clients_kept.natural_persons.where(residence_status: "RESIDENT").where.not(nationality: "MC").count
+        clients_kept.natural_persons.where(residence_country: "MC").where.not(nationality: "MC").count
       end
 
-      # Q25: Natural person clients who are non-residents
+      # Q25: Natural person clients who are non-residents (don't live in Monaco)
       def a1104
-        clients_kept.natural_persons.where(residence_status: "NON_RESIDENT").count
+        clients_kept.natural_persons.where.not(residence_country: ["MC", nil, ""]).count
       end
 
       # === Natural Person Statistics ===
@@ -99,7 +99,7 @@ class Survey
           .merge(Client.natural_persons)
           .rentals
           .where(transaction_value: 10_000..)
-          .sum(:rental_duration_months)
+          .sum("rental_duration_years * 12")
       end
 
       # === Legal Entity Statistics ===
@@ -402,7 +402,7 @@ class Survey
         rental_months = year_transactions.by_client
           .rentals
           .where(transaction_value: 10_000..)
-          .sum(:rental_duration_months)
+          .sum("rental_duration_years * 12")
 
         purchases_and_sales + rental_months
       end
@@ -424,7 +424,7 @@ class Survey
         rental_months = year_transactions.with_client
           .rentals
           .where(transaction_value: 10_000..)
-          .sum(:rental_duration_months)
+          .sum("rental_duration_years * 12")
 
         purchases_and_sales + rental_months
       end
