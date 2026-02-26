@@ -22,4 +22,18 @@ class SurveyTest < ActiveSupport::TestCase
       "Precondition: organization :company should have no transactions in the current year"
     assert_equal "Non", survey.aactive
   end
+
+  # Q2 — aACTIVEPS: Active for purchases/sales in reporting period
+  test "aactiveps returns Oui when organization has purchase or sale transactions in the year" do
+    assert @organization.transactions.kept.for_year(@year).where(transaction_type: %w[PURCHASE SALE]).exists?,
+      "Precondition: organization :one should have purchase/sale transactions in the current year"
+    assert_equal "Oui", @survey.aactiveps
+  end
+
+  test "aactiveps returns Non when organization has no purchase or sale transactions in the year" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_not organizations(:company).transactions.kept.for_year(@year).where(transaction_type: %w[PURCHASE SALE]).exists?,
+      "Precondition: organization :company should have no purchase/sale transactions"
+    assert_equal "Non", survey.aactiveps
+  end
 end

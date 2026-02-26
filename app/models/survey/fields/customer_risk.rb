@@ -9,6 +9,13 @@ class Survey
       def aactive
         organization.transactions.kept.for_year(year).exists? ? "Oui" : "Non"
       end
+
+      # Q2 — aACTIVEPS: Active for purchases/sales during the reporting period?
+      # Type: enum "Oui" / "Non"
+      def aactiveps
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE]).exists? ? "Oui" : "Non"
+      end
     end
   end
 end
