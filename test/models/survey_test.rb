@@ -1393,6 +1393,35 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 0, survey.a1403b
   end
 
+  # Q28 — a1404B: Total value of funds transferred by natural person clients for purchase/sale
+  # Type: xbrli:monetaryItemType
+
+  test "a1404b sums transaction_value for purchase/sale transactions with natural person clients" do
+    # NP purchase/sale transactions for org :one in current year:
+    # purchase: 1,500,000 + sale: 2,100,000 + cash_payment: 500,000 + pep_transaction: 3,500,000
+    # Excluded: high_value (LE), crypto_payment (LE), check_payment (LE), rental (RENTAL), discarded
+    assert_equal BigDecimal("7600000"), @survey.a1404b
+  end
+
+  test "a1404b excludes legal entity client transactions" do
+    le_value = @organization.transactions.kept.for_year(@year)
+      .where(transaction_type: %w[PURCHASE SALE])
+      .joins(:client)
+      .where(clients: {client_type: "LEGAL_ENTITY"})
+      .sum(:transaction_value)
+    assert le_value > 0, "Precondition: org should have legal entity transactions with value"
+    assert_equal BigDecimal("7600000"), @survey.a1404b
+  end
+
+  test "a1404b excludes rental transactions" do
+    assert_equal BigDecimal("7600000"), @survey.a1404b
+  end
+
+  test "a1404b returns 0 when no qualifying transactions exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal 0, survey.a1404b
+  end
+
   test "a1210o excludes BOs from other organizations" do
     Setting.create!(
       organization: @organization,

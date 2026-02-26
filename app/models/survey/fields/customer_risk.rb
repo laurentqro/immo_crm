@@ -326,6 +326,16 @@ class Survey
           .count
       end
 
+      # Q28 — a1404B: Total value of funds transferred by NP clients for purchase/sale
+      # Type: xbrli:monetaryItemType (EUR)
+      def a1404b
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .where(clients: {client_type: "NATURAL_PERSON"})
+          .sum(:transaction_value)
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)
