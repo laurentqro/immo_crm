@@ -121,6 +121,19 @@ class Survey
         setting_value_for("can_distinguish_bo_nationality")
       end
 
+      # Q12 — a1202O: Total number of BOs exercising direct or indirect control
+      # over legal persons, trusts and other legal arrangements, by primary nationality
+      # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+      def a1202o
+        bos = BeneficialOwner
+          .joins(:client)
+          .where(clients: {organization_id: organization.id})
+          .where(control_type: %w[DIRECT INDIRECT])
+          .where.not(nationality: nil)
+
+        bos.group(:nationality).count
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

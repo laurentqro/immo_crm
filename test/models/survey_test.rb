@@ -407,4 +407,53 @@ class SurveyTest < ActiveSupport::TestCase
     total = result.values.sum
     assert_in_delta 100.0, total.to_f, 0.1
   end
+
+  # Q12 — a1202O: Total number of BOs with direct or indirect control,
+  # broken down by primary nationality (dimensional, integer counts)
+  test "a1202o returns count of BOs with direct or indirect control grouped by nationality" do
+    result = @survey.a1202o
+
+    assert_instance_of Hash, result
+
+    # Org :one BOs with DIRECT or INDIRECT control_type:
+    # FR: owner_one (DIRECT), cascade_owner_two (INDIRECT), at_hnwi_threshold (DIRECT) = 3
+    # MC: owner_two, cascade_owner_one, trust_owner, hnwi_owner, low_net_worth_owner = 5
+    # IT: other_client_owner, at_uhnwi_threshold = 2
+    # CH: uhnwi_owner = 1
+    assert_equal 3, result["FR"]
+    assert_equal 5, result["MC"]
+    assert_equal 2, result["IT"]
+    assert_equal 1, result["CH"]
+  end
+
+  test "a1202o excludes BOs with REPRESENTATIVE control type" do
+    result = @survey.a1202o
+
+    # pep_owner has control_type: REPRESENTATIVE, nationality: MC
+    # MC count should be 5, not 6 (pep_owner excluded)
+    assert_equal 5, result["MC"]
+  end
+
+  test "a1202o excludes BOs with nil control type" do
+    result = @survey.a1202o
+
+    # minimal_owner has nil control_type and nil nationality — excluded
+    # Total should be 11 (not 12 or 13)
+    total = result.values.sum
+    assert_equal 11, total
+  end
+
+  test "a1202o returns empty hash when no BOs exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal({}, survey.a1202o)
+  end
+
+  test "a1202o excludes BOs from other organizations" do
+    result = @survey.a1202o
+
+    # other_org_owner (FR, org:two) should not appear
+    # Total should be 11
+    total = result.values.sum
+    assert_equal 11, total
+  end
 end
