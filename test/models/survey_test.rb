@@ -692,4 +692,126 @@ class SurveyTest < ActiveSupport::TestCase
     survey = Survey.new(organization: organizations(:company), year: @year)
     assert_equal({}, survey.a1207o)
   end
+
+  # Q18 — a1210O: Total number of BOs who are non-residents (no residence recorded),
+  # holding 25% or more, broken down by primary nationality
+  # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+  # Conditional on a1203d == "Oui"
+  test "a1210o returns nil when a1203d is not Oui" do
+    assert_nil @survey.a1210o
+  end
+
+  test "a1210o returns count of non-resident BOs with 25%+ ownership grouped by nationality" do
+    Setting.create!(
+      organization: @organization,
+      key: "records_bo_residence_25pct_or_more",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    # Create a non-resident BO (residence_country nil) with 25%+ ownership
+    BeneficialOwner.create!(
+      client: clients(:legal_entity),
+      name: "Non-Resident Owner",
+      nationality: "GB",
+      residence_country: nil,
+      ownership_percentage: 30.0,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+
+    result = @survey.a1210o
+
+    assert_instance_of Hash, result
+    assert_equal 1, result["GB"]
+  end
+
+  test "a1210o excludes BOs who have a residence country recorded" do
+    Setting.create!(
+      organization: @organization,
+      key: "records_bo_residence_25pct_or_more",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    result = @survey.a1210o
+
+    # at_hnwi_threshold has FR residence, at_uhnwi_threshold has IT residence,
+    # other_client_owner has IT residence — all have residence_country set, so excluded
+    assert_nil result&.dig("FR")
+    assert_nil result&.dig("IT")
+  end
+
+  test "a1210o excludes BOs with less than 25% ownership" do
+    Setting.create!(
+      organization: @organization,
+      key: "records_bo_residence_25pct_or_more",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    BeneficialOwner.create!(
+      client: clients(:legal_entity),
+      name: "Low Ownership Non-Resident",
+      nationality: "DE",
+      residence_country: nil,
+      ownership_percentage: 20.0,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+
+    result = @survey.a1210o
+
+    assert_nil result["DE"]
+  end
+
+  test "a1210o excludes BOs with nil nationality" do
+    Setting.create!(
+      organization: @organization,
+      key: "records_bo_residence_25pct_or_more",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    result = @survey.a1210o
+
+    # minimal_owner has nil nationality and nil residence_country — excluded
+    assert_nil result&.dig(nil)
+  end
+
+  test "a1210o excludes BOs from other organizations" do
+    Setting.create!(
+      organization: @organization,
+      key: "records_bo_residence_25pct_or_more",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    # Create a non-resident BO in another org
+    BeneficialOwner.create!(
+      client: clients(:other_org_legal_entity),
+      name: "Other Org Non-Resident",
+      nationality: "ES",
+      residence_country: nil,
+      ownership_percentage: 50.0,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+
+    # Create one in our org so the result isn't empty
+    BeneficialOwner.create!(
+      client: clients(:legal_entity),
+      name: "Our Non-Resident",
+      nationality: "GB",
+      residence_country: nil,
+      ownership_percentage: 30.0,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+
+    result = @survey.a1210o
+
+    assert_nil result["ES"]
+    assert_equal 1, result["GB"]
+  end
 end
