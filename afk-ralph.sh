@@ -25,7 +25,7 @@ for ((i=1; i<=MAX_ITERATIONS; i++)); do
   echo "=== Iteration $i / $MAX_ITERATIONS ==="
   echo ""
 
-  docker sandbox run --credentials host claude \
+  docker sandbox run claude -- \
     --verbose \
     --print \
     --output-format stream-json \
