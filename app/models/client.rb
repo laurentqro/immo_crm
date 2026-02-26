@@ -42,7 +42,6 @@ class Client < ApplicationRecord
 
   validates :risk_level, inclusion: {in: RISK_LEVELS}, allow_blank: true
   validates :rejection_reason, inclusion: {in: REJECTION_REASONS}, allow_blank: true
-  validates :residence_status, inclusion: {in: RESIDENCE_STATUSES}, allow_blank: true
   validates :incorporation_country,
     format: {with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format"},
     allow_blank: true
@@ -89,10 +88,6 @@ class Client < ApplicationRecord
   scope :pep_associated, -> { where(is_pep_associated: true) }
   scope :high_risk, -> { where(risk_level: "HIGH") }
   scope :vasps, -> { where(is_vasp: true) }
-
-  # Residence scopes
-  scope :residents, -> { where(residence_status: "RESIDENT") }
-  scope :non_residents, -> { where(residence_status: "NON_RESIDENT") }
 
   # Relationship status scopes
   scope :active, -> { where(relationship_ended_at: nil) }

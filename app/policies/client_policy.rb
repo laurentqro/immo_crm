@@ -62,7 +62,6 @@ class ClientPolicy < ApplicationPolicy
       :relationship_end_reason,
       :relationship_ended_at,
       :residence_country,
-      :residence_status,
       :risk_level,
       :simplified_dd_reason,
       :source_of_funds_verified,

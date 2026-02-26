@@ -285,6 +285,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert BeneficialOwner.last.identification_verified
   end
 
@@ -298,6 +299,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert BeneficialOwner.last.source_of_wealth_verified
   end
 
@@ -311,6 +313,7 @@ class BeneficialOwnersControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert_equal "LU", BeneficialOwner.last.incorporation_country
   end
 

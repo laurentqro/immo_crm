@@ -29,15 +29,15 @@ class Survey::Fields::AuditRound2Test < ActiveSupport::TestCase
   end
 
   test "a1103 counts only natural person foreign residents" do
-    Client.create!(organization: @org, name: "NP FR Res", client_type: "NATURAL_PERSON", nationality: "FR", residence_status: "RESIDENT")
-    Client.create!(organization: @org, name: "LE FR Res", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL", nationality: "FR", residence_status: "RESIDENT")
+    Client.create!(organization: @org, name: "NP FR Res", client_type: "NATURAL_PERSON", nationality: "FR", residence_country: "MC")
+    Client.create!(organization: @org, name: "LE FR Res", client_type: "LEGAL_ENTITY", legal_entity_type: "SARL", nationality: "FR", residence_country: "MC")
 
     assert_equal 1, @survey.send(:a1103)
   end
 
   test "a1104 counts only natural person non-residents" do
-    Client.create!(organization: @org, name: "NP NonRes", client_type: "NATURAL_PERSON", residence_status: "NON_RESIDENT")
-    Client.create!(organization: @org, name: "LE NonRes", client_type: "LEGAL_ENTITY", legal_entity_type: "SAM", residence_status: "NON_RESIDENT")
+    Client.create!(organization: @org, name: "NP NonRes", client_type: "NATURAL_PERSON", residence_country: "FR")
+    Client.create!(organization: @org, name: "LE NonRes", client_type: "LEGAL_ENTITY", legal_entity_type: "SAM", residence_country: "FR")
 
     assert_equal 1, @survey.send(:a1104)
   end

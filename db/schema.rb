@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_203705) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_26_121700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -200,7 +200,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_203705) do
     t.string "relationship_end_reason"
     t.datetime "relationship_ended_at"
     t.string "residence_country"
-    t.string "residence_status"
     t.string "risk_level"
     t.text "simplified_dd_reason"
     t.boolean "source_of_funds_verified", default: false
@@ -225,7 +224,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_203705) do
     t.index ["organization_id", "risk_level"], name: "index_clients_on_org_and_risk"
     t.index ["organization_id"], name: "index_clients_on_organization_id"
     t.index ["professional_category"], name: "index_clients_on_professional_category"
-    t.index ["residence_status"], name: "index_clients_on_residence_status"
     t.index ["risk_level"], name: "index_clients_on_risk_level"
     t.index ["third_party_cdd"], name: "index_clients_on_third_party_cdd"
   end

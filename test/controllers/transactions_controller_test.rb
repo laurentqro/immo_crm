@@ -344,6 +344,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert_equal "COMMERCIAL", Transaction.last.property_type
   end
 
@@ -359,6 +360,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert_equal "FR", Transaction.last.counterparty_country
   end
 
@@ -374,6 +376,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert Transaction.last.counterparty_is_pep
   end
 
@@ -389,6 +392,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert Transaction.last.is_new_construction
   end
 
@@ -404,6 +408,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert_equal 3, Transaction.last.rental_duration_years
   end
 
@@ -419,6 +424,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert_equal 36000, Transaction.last.rental_annual_value
   end
 
@@ -434,6 +440,7 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert_equal "NATURAL_PERSON", Transaction.last.rental_tenant_type
   end
 

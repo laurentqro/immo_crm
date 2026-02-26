@@ -435,20 +435,6 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
 
   # === AMSF Data Capture Fields (Issue #113) ===
 
-  test "creates natural person with residence_status" do
-    sign_in @user
-
-    post clients_path, params: {
-      client: {
-        name: "Resident Client",
-        client_type: "NATURAL_PERSON",
-        residence_status: "RESIDENT"
-      }
-    }
-
-    assert_equal "RESIDENT", Client.last.residence_status
-  end
-
   test "creates client with is_pep_related" do
     sign_in @user
 
@@ -460,6 +446,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert Client.last.is_pep_related
   end
 
@@ -474,6 +461,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert Client.last.is_pep_associated
   end
 
@@ -488,6 +476,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
+    assert_response :redirect
     assert_equal "AML_CFT", Client.last.rejection_reason
   end
 
