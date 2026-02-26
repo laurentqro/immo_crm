@@ -1,55 +1,49 @@
 #!/bin/bash
-# Ralph AFK (Away From Keyboard) with streaming output
-# Loops autonomously inside a Docker sandbox, one task per iteration.
-# Streams Claude's output in real-time so you can watch progress.
-# Stops when PRD is complete or iteration cap is reached.
-# Usage: ./afk-ralph.sh [max_iterations]
-
+# AFK Ralph Loop for ImmoCRM AMSF Survey
+# Usage: ./afk-ralph.sh <iterations>
 set -e
 
-MAX_ITERATIONS=${1:-10}
+if [ -z "$1" ]; then
+  echo "Usage: $0 <iterations>"
+  echo "Example: $0 33"
+  exit 1
+fi
 
-# jq filter: extract streaming text from assistant messages
-stream_text='select(.type == "assistant").message.content[]? | select(.type == "text").text // empty | gsub("\n"; "\r\n") | . + "\r\n\n"'
+echo "🔄 Starting AMSF Survey Ralph Loop for $1 iterations..."
+echo ""
 
-# jq filter: extract final result to check for completion
-final_result='select(.type == "result").result // empty'
+for ((i=1; i<=$1; i++)); do
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "🔄 Iteration $i of $1"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-echo "Starting AFK Ralph (max $MAX_ITERATIONS iterations)..."
+  result=$(claude --dangerously-skip-permissions -p \
+    "@CLAUDE.md @progress.txt @amsf_questions.csv \
+    1. Read CLAUDE.md for project context and conventions. \
+    2. Read progress.txt to see what's completed. \
+    3. Find the next incomplete task (one single AMSF question). \
+    4. Find that question in amsf_questions.csv for context and instructions. \
+    5. Look up the field_id in questionnaire_structure.yml and check the XSD for expected type. \
+    6. Find the existing method in app/models/survey/fields/. \
+    7. Fix the method to compute real data instead of hardcoded/stubbed values. \
+    8. Write a test for this specific field. \
+    9. Run the test suite to verify everything passes. \
+    10. If Arelle is available, generate XBRL and validate this field. \
+    11. Commit with message format: [AMSF Qnum] Short description. \
+    12. Update progress.txt: mark the task as complete with today's date. \
+    ONLY WORK ON A SINGLE QUESTION. \
+    If all tasks in progress.txt are complete, output <promise>COMPLETE</promise>.")
 
-for ((i=1; i<=MAX_ITERATIONS; i++)); do
-  tmpfile=$(mktemp)
-  trap "rm -f $tmpfile" EXIT
-
+  echo "$result"
   echo ""
-  echo "=== Iteration $i / $MAX_ITERATIONS ==="
-  echo ""
-
-  docker sandbox run claude -- \
-    --verbose \
-    --print \
-    --output-format stream-json \
-    -p "@PRD.md @progress.txt \
-1. Read the PRD and progress file. \
-2. Find the next incomplete task and implement it. \
-3. Run the test suite to verify your changes pass. \
-4. Commit your changes with a descriptive message. \
-5. Update progress.txt with what you did. \
-6. If ALL tasks in the PRD are complete, output exactly: <promise>COMPLETE</promise> \
-ONLY DO ONE TASK AT A TIME." \
-  | grep --line-buffered '^{' \
-  | tee "$tmpfile" \
-  | jq --unbuffered -rj "$stream_text"
-
-  # Check if all tasks are done
-  result=$(jq -r "$final_result" "$tmpfile")
 
   if [[ "$result" == *"<promise>COMPLETE</promise>"* ]]; then
-    echo ""
-    echo "=== All PRD tasks complete after $i iterations! ==="
+    echo "🎉 All 33 sections complete after $i iterations!"
     exit 0
   fi
+
+  echo "✅ Iteration $i done. Sleeping 5s before next..."
+  sleep 5
 done
 
-echo ""
-echo "=== Reached iteration cap ($MAX_ITERATIONS). Review progress.txt for status. ==="
+echo "🏁 Completed $1 iterations."

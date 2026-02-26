@@ -13,7 +13,6 @@
 #   survey.valid?   # => true/false
 #
 class Survey
-  include Survey::CrmCapabilities
   include Survey::Fields::CustomerRisk
   include Survey::Fields::ProductsServicesRisk
   include Survey::Fields::DistributionRisk

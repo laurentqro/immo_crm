@@ -1,22 +1,18 @@
 #!/bin/bash
-# Ralph HITL (Human-in-the-Loop) with streaming output
-# Runs one task from PRD.md, commits, updates progress.txt, then stops for review.
-# Usage: ./ralph-once.sh
-
-set -e
-
-# jq filter: extract streaming text from assistant messages
-stream_text='select(.type == "assistant").message.content[]? | select(.type == "text").text // empty | gsub("\n"; "\r\n") | . + "\r\n\n"'
+# Human-in-the-loop: run one section, review, run again.
 
 claude --permission-mode acceptEdits \
-  --print \
-  --output-format stream-json \
-  -p "@PRD.md @progress.txt \
-1. Read the PRD and progress file. \
-2. Find the next incomplete task and implement it. \
-3. Run the test suite to verify your changes pass. \
-4. Commit your changes with a descriptive message. \
-5. Update progress.txt with what you did. \
-ONLY DO ONE TASK AT A TIME." \
-| grep --line-buffered '^{' \
-| jq --unbuffered -rj "$stream_text"
+  "@CLAUDE.md @progress.txt @amsf_questions.csv \
+  1. Read CLAUDE.md for project context and conventions. \
+  2. Read progress.txt to see what's completed. \
+  3. Find the next incomplete task (one single AMSF question). \
+  4. Find that question in amsf_questions.csv for context and instructions. \
+  5. Look up the field_id in questionnaire_structure.yml and check the XSD for expected type. \
+  6. Find the existing method in app/models/survey/fields/. \
+  7. Fix the method to compute real data instead of hardcoded/stubbed values. \
+  8. Write a test for this specific field. \
+  9. Run the test suite to verify everything passes. \
+  10. If Arelle is available, generate XBRL and validate this field. \
+  11. Commit with message format: [AMSF Qnum] Short description. \
+  12. Update progress.txt: mark the task as complete with today's date. \
+  ONLY WORK ON A SINGLE QUESTION."
