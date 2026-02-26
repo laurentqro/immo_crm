@@ -33,13 +33,8 @@ class Survey
         (a3101 == "Oui" || a3103 == "Oui") ? "Oui" : "Non"
       end
 
-      def ac1622a
-        setting_value("ac1622a") || "Non"
-      end
-
-      def ac1622b
-        setting_value("ac1622b")
-      end
+      # NOTE: ac1622a and ac1622b are defined in Controls module (included later, takes precedence)
+      # These dead duplicates have been removed.
 
       # Clients where local third parties performed CDD, grouped by client nationality
       def a3102
@@ -143,7 +138,7 @@ class Survey
       # === Non-Face-to-Face Relationships ===
 
       def a3209
-        setting_value("a3209") || "Non"
+        setting_value("conducts_non_face_to_face_relationships")
       end
 
       def a3210c
@@ -158,22 +153,22 @@ class Survey
         0
       end
 
-      # Non-face-to-face for legal entities
+      # Part of international business network?
       def a3210b
-        setting_value("a3210b") || "Non"
+        setting_value("part_of_international_business_network")
       end
 
       def a3211b
-        setting_value("a3211b")
+        setting_value("international_business_network_details")
       end
 
-      # Non-face-to-face by nationality
+      # Member of professional association?
       def a3210
-        setting_value("a3210") || "Non"
+        setting_value("member_of_professional_association")
       end
 
       def a3211
-        setting_value("a3211")
+        setting_value("professional_association_details")
       end
 
       # === Risk Assessment ===
@@ -188,17 +183,8 @@ class Survey
         "Oui"
       end
 
-      # === Acquisition and Marketing Channels ===
-
-      def ac1630
-        setting_value("ac1630")
-      end
-
-      # === Geographic Scope ===
-
-      def ac1602
-        setting_value("ac1602")
-      end
+      # NOTE: ac1630 and ac1602 are defined in Controls module (included later, takes precedence)
+      # These dead duplicates have been removed.
     end
   end
 end

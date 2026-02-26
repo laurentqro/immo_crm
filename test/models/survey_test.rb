@@ -773,4 +773,98 @@ class SurveyTest < ActiveSupport::TestCase
     refute_includes result, "Property Investment Partnership (SCI)"
   end
 
+  # === No Fallback Values Tests (Issue #133) ===
+  # Setting-based fields must return nil when the setting is not configured.
+  # They must NEVER fall back to "Oui", "Non", or 0.
+
+  test "setting-based fields return nil when setting is not configured" do
+    # Use org :two which has minimal settings — none of the survey-specific ones
+    org = organizations(:two)
+    survey = Survey.new(organization: org, year: 2025)
+
+    # CustomerRisk fields
+    assert_nil survey.send(:a13601a), "a13601a should return nil without setting"
+    assert_nil survey.send(:a13601b), "a13601b should return nil without setting"
+    assert_nil survey.send(:a13601c), "a13601c should return nil without setting"
+    assert_nil survey.send(:a13601c2), "a13601c2 should return nil without setting"
+    assert_nil survey.send(:a13601), "a13601 should return nil without setting"
+    assert_nil survey.send(:a1203), "a1203 should return nil without setting"
+    assert_nil survey.send(:air129), "air129 should return nil without setting"
+    assert_nil survey.send(:air1210), "air1210 should return nil without setting"
+
+    # ProductsServicesRisk fields
+    assert_nil survey.send(:a2101w), "a2101w should return nil without setting"
+    assert_nil survey.send(:a2101wrp), "a2101wrp should return nil without setting"
+    assert_nil survey.send(:a2104w), "a2104w should return nil without setting"
+    assert_nil survey.send(:a2104wrp), "a2104wrp should return nil without setting"
+    assert_nil survey.send(:a2107w), "a2107w should return nil without setting"
+    assert_nil survey.send(:a2107wrp), "a2107wrp should return nil without setting"
+    assert_nil survey.send(:a2201a), "a2201a should return nil without setting"
+    assert_nil survey.send(:a2201d), "a2201d should return nil without setting"
+    assert_nil survey.send(:air2391), "air2391 should return nil without setting"
+    assert_nil survey.send(:air2392), "air2392 should return nil without setting"
+    assert_nil survey.send(:air2393), "air2393 should return nil without setting"
+
+    # DistributionRisk fields
+    assert_nil survey.send(:a3209), "a3209 should return nil without setting"
+    assert_nil survey.send(:a3210b), "a3210b should return nil without setting"
+    assert_nil survey.send(:a3210), "a3210 should return nil without setting"
+  end
+
+  test "setting-based fields return configured values when setting exists" do
+    org = organizations(:one)
+    # Add settings for the fields we're testing
+    Setting.create!(organization: org, key: "distinguishes_vasp_custodians", value: "Oui", category: "entity_info")
+    Setting.create!(organization: org, key: "distinguishes_vasp_exchanges", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "distinguishes_vasp_ico", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "distinguishes_vasp_other_services", value: "Oui", category: "entity_info")
+    Setting.create!(organization: org, key: "records_other_vasp_services", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "records_beneficial_owner_residence", value: "Oui", category: "entity_info")
+    Setting.create!(organization: org, key: "has_purchases_for_monaco_residence", value: "Oui", category: "entity_info")
+    Setting.create!(organization: org, key: "purchases_for_monaco_residence_count", value: "3", category: "entity_info")
+    Setting.create!(organization: org, key: "accepts_check_payments_with_clients", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "accepted_check_payments_in_period", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "accepts_wire_transfers_with_clients", value: "Oui", category: "entity_info")
+    Setting.create!(organization: org, key: "accepted_wire_transfers_in_period", value: "Oui", category: "entity_info")
+    Setting.create!(organization: org, key: "accepts_cash_payments_with_clients", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "accepted_cash_payments_in_period", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "accepts_cryptocurrency_payments", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "plans_cryptocurrency_next_year", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "has_preemption_activity", value: "Oui", category: "entity_info")
+    Setting.create!(organization: org, key: "preemption_count", value: "2", category: "entity_info")
+    Setting.create!(organization: org, key: "preempted_properties_value", value: "1500000", category: "entity_info")
+    Setting.create!(organization: org, key: "conducts_non_face_to_face_relationships", value: "Oui", category: "entity_info")
+    Setting.create!(organization: org, key: "part_of_international_business_network", value: "Non", category: "entity_info")
+    Setting.create!(organization: org, key: "member_of_professional_association", value: "Oui", category: "entity_info")
+
+    survey = Survey.new(organization: org, year: 2025)
+
+    # CustomerRisk
+    assert_equal "Oui", survey.send(:a13601a)
+    assert_equal "Non", survey.send(:a13601b)
+    assert_equal "Non", survey.send(:a13601c)
+    assert_equal "Oui", survey.send(:a13601c2)
+    assert_equal "Non", survey.send(:a13601)
+    assert_equal "Oui", survey.send(:a1203)
+    assert_equal "Oui", survey.send(:air129)
+    assert_equal 3, survey.send(:air1210)
+
+    # ProductsServicesRisk
+    assert_equal "Non", survey.send(:a2101w)
+    assert_equal "Non", survey.send(:a2101wrp)
+    assert_equal "Oui", survey.send(:a2104w)
+    assert_equal "Oui", survey.send(:a2104wrp)
+    assert_equal "Non", survey.send(:a2107w)
+    assert_equal "Non", survey.send(:a2107wrp)
+    assert_equal "Non", survey.send(:a2201a)
+    assert_equal "Non", survey.send(:a2201d)
+    assert_equal "Oui", survey.send(:air2391)
+    assert_equal 2, survey.send(:air2392)
+    assert_equal BigDecimal("1500000"), survey.send(:air2393)
+
+    # DistributionRisk
+    assert_equal "Oui", survey.send(:a3209)
+    assert_equal "Non", survey.send(:a3210b)
+    assert_equal "Oui", survey.send(:a3210)
+  end
 end

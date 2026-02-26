@@ -244,7 +244,7 @@ class Survey
       # === VASP Custodian Statistics ===
 
       def a13601a
-        setting_value("a13601a") || "Non"
+        setting_value("distinguishes_vasp_custodians")
       end
 
       def a13601cw
@@ -262,7 +262,7 @@ class Survey
       # === VASP Exchange Statistics ===
 
       def a13601b
-        setting_value("a13601b") || "Non"
+        setting_value("distinguishes_vasp_exchanges")
       end
 
       def a13601ep
@@ -280,7 +280,7 @@ class Survey
       # === VASP ICO Statistics ===
 
       def a13601c
-        setting_value("a13601c") || "Non"
+        setting_value("distinguishes_vasp_ico")
       end
 
       def a13601ico
@@ -298,7 +298,7 @@ class Survey
       # === VASP Other Statistics ===
 
       def a13601c2
-        setting_value("a13601c2") || "Non"
+        setting_value("distinguishes_vasp_other_services")
       end
 
       def a13601other
@@ -318,7 +318,7 @@ class Survey
 
       # Does entity provide other VASP services
       def a13601
-        setting_value("a13601") || "Non"
+        setting_value("records_other_vasp_services")
       end
 
       # Description of "other" VASP services — derived from client data.
@@ -348,7 +348,7 @@ class Survey
 
       # Records dual nationality
       def a1203
-        setting_value("a1203") || "Non"
+        setting_value("records_beneficial_owner_residence")
       end
 
       # Q80: Have you had Monegasque clients (purchases and sales) during the reporting period?
@@ -548,14 +548,14 @@ class Survey
 
       # === French-labeled fields (ir_*) ===
 
-      # air129 - specific regulatory question
+      # Were any purchases made to establish Monaco residence?
       def air129
-        setting_value("air129") || "Non"
+        setting_value("has_purchases_for_monaco_residence")
       end
 
-      # Purchases made with specific intent
+      # Count of purchases made to establish Monaco residence
       def air1210
-        setting_value("air1210")&.to_i || 0
+        setting_value("purchases_for_monaco_residence_count")&.to_i
       end
 
       # === Dimensional Breakdowns (by nationality/country) ===

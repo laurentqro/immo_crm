@@ -687,14 +687,14 @@ create_setting(organization, key: "cash_controls_description", value: "Vérifica
 create_setting(organization, key: "significant_changes_details", value: "Renforcement des procédures de vigilance pour les structures complexes multi-juridictionnelles", category: "kyc_procedures")
 
 # --- Non-Face-to-Face ---
-create_setting(organization, key: "a3211", value: "Visioconférence sécurisée avec vérification d'identité en temps réel", category: "kyc_procedures")
-create_setting(organization, key: "a3211b", value: "Visioconférence sécurisée avec vérification d'identité en temps réel", category: "kyc_procedures")
+create_setting(organization, key: "professional_association_details", value: "Visioconférence sécurisée avec vérification d'identité en temps réel", category: "kyc_procedures")
+create_setting(organization, key: "international_business_network_details", value: "Visioconférence sécurisée avec vérification d'identité en temps réel", category: "kyc_procedures")
 
 # --- Compliance Policies ---
 create_setting(organization, key: "aml_violation_details", value: "Aucune violation constatée au cours de la période de déclaration", category: "compliance_policies")
 
 # --- Crypto ---
-create_setting(organization, key: "a2203", value: "Aucune plateforme d'actifs virtuels utilisée directement", category: "compliance_policies")
+create_setting(organization, key: "cryptocurrency_platform_details", value: "Aucune plateforme d'actifs virtuels utilisée directement", category: "compliance_policies")
 
 puts "  Created #{Setting.count} organization settings"
 

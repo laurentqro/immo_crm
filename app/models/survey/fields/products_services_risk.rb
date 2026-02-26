@@ -21,11 +21,11 @@ class Survey
       # === Check Payment Statistics ===
 
       def a2101w
-        setting_value("a2101w") || "Non"
+        setting_value("accepts_check_payments_with_clients")
       end
 
       def a2101wrp
-        setting_value("a2101wrp") || "Non"
+        setting_value("accepted_check_payments_in_period")
       end
 
       def a2102w
@@ -51,11 +51,11 @@ class Survey
       # === Transfer Payment Statistics ===
 
       def a2104w
-        setting_value("a2104w") || "Oui"
+        setting_value("accepts_wire_transfers_with_clients")
       end
 
       def a2104wrp
-        setting_value("a2104wrp") || "Oui"
+        setting_value("accepted_wire_transfers_in_period")
       end
 
       def a2105w
@@ -81,11 +81,11 @@ class Survey
       # === Cash Payment Statistics ===
 
       def a2107w
-        setting_value("a2107w") || "Non"
+        setting_value("accepts_cash_payments_with_clients")
       end
 
       def a2107wrp
-        setting_value("a2107wrp") || "Non"
+        setting_value("accepted_cash_payments_in_period")
       end
 
       def a2108w
@@ -191,11 +191,11 @@ class Survey
       # === Cryptocurrency Statistics ===
 
       def a2201a
-        setting_value("a2201a") || "Non"
+        setting_value("accepts_cryptocurrency_payments")
       end
 
       def a2201d
-        setting_value("a2201d") || "Non"
+        setting_value("plans_cryptocurrency_next_year")
       end
 
       def a2202
@@ -203,16 +203,15 @@ class Survey
       end
 
       def a2203
-        setting_value("a2203")
+        setting_value("cryptocurrency_platform_details")
       end
 
       def ac1616c
         year_transactions.where(payment_method: "CRYPTO").exists? ? "Oui" : "Non"
       end
 
-      def ac1621
-        setting_value("ac1621")
-      end
+      # NOTE: ac1621 is defined in Controls module (included later, takes precedence)
+      # This dead duplicate has been removed.
 
       # === French-labeled transaction fields (ir_*) ===
 
@@ -254,18 +253,15 @@ class Survey
       end
 
       def air2391
-        # Was there preemption activity?
-        setting_value("air2391") || "Non"
+        setting_value("has_preemption_activity")
       end
 
       def air2392
-        # Number of preemptions
-        setting_value("air2392")&.to_i || 0
+        setting_value("preemption_count")&.to_i
       end
 
       def air2393
-        # Value of preempted properties
-        setting_value("air2393")&.to_d || 0
+        setting_value("preempted_properties_value")&.to_d
       end
 
       # Q162: Total unique rental properties during the reporting period
