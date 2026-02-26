@@ -38,7 +38,7 @@
 - [x] Task 22: Q22 — a13601 — has PSAV clients providing other services (settings-based) (2026-02-27)
 
 ### Section 1.5
-- [ ] Task 23: Q23 — Veuillez fournir le nombre total de clients uniques qui sont des personnes physiques qui sont des nationaux, pour les ac
+- [x] Task 23: Q23 — a1102 — total unique natural person clients who are MC nationals (purchase/sale + rentals >= 10k/month) (2026-02-27)
 - [ ] Task 24: Q24 — Veuillez fournir le nombre total de clients uniques qui sont des personnes physiques qui sont des résidents étrangers, p
 - [ ] Task 25: Q25 — Veuillez fournir le nombre total de clients uniques qui sont des personnes physiques qui ne sont pas des résidents, pour
 - [ ] Task 26: Q26 — Veuillez indiquer le nombre total de clients uniques qui sont des personnes physiques (individus), classés selon la nati

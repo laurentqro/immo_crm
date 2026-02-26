@@ -843,6 +843,98 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a13601
   end
 
+  # Q23 — a1102: Total unique natural person clients who are nationals (MC nationality)
+  # for purchases, sales, and rentals of real estate
+  # Type: xbrli:integerItemType
+  test "a1102 returns count of unique natural person clients with MC nationality" do
+    # Org :one natural person clients with current-year transactions:
+    # natural_person: FR nationality (not MC) → excluded
+    # pep_client: MC nationality → counted
+    # legal_entity, vasp_client: not natural persons → excluded
+    assert_equal 1, @survey.a1102
+  end
+
+  test "a1102 returns 0 when organization has no transactions" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal 0, survey.a1102
+  end
+
+  test "a1102 counts each client only once even with multiple transactions" do
+    # Add another purchase for pep_client
+    Transaction.create!(
+      organization: @organization,
+      client: clients(:pep_client),
+      reference: "PEP-EXTRA",
+      transaction_date: Date.current - 2.days,
+      transaction_type: "SALE",
+      transaction_value: 2_000_000
+    )
+    # pep_client still only counted once
+    assert_equal 1, @survey.a1102
+  end
+
+  test "a1102 includes MC nationals with qualifying rental transactions" do
+    Transaction.create!(
+      organization: @organization,
+      client: clients(:pep_client),
+      reference: "MC-RENTAL-HIGH",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "RENTAL",
+      transaction_value: 240_000,
+      rental_annual_value: 120_000
+    )
+    # pep_client already counted via purchase, so still 1
+    assert_equal 1, @survey.a1102
+  end
+
+  test "a1102 excludes rental clients below 10000 monthly threshold" do
+    # Create a new MC national with only a low-value rental
+    mc_national = Client.create!(
+      organization: @organization,
+      name: "Low Rent MC National",
+      client_type: "NATURAL_PERSON",
+      nationality: "MC",
+      residence_country: "MC",
+      became_client_at: 3.months.ago
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: mc_national,
+      reference: "LOW-RENT-MC",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "RENTAL",
+      rental_annual_value: 60_000 # 5,000/month — below threshold
+    )
+    # Still only pep_client counted (low-rent MC national excluded)
+    assert_equal 1, @survey.a1102
+  end
+
+  test "a1102 excludes non-MC nationals" do
+    # natural_person has FR nationality and purchase/sale transactions
+    # but should not be counted
+    np = clients(:natural_person)
+    assert_equal "NATURAL_PERSON", np.client_type
+    assert_not_equal "MC", np.nationality
+    assert @organization.transactions.kept.for_year(@year)
+      .where(client: np, transaction_type: %w[PURCHASE SALE]).exists?
+    assert_equal 1, @survey.a1102
+  end
+
+  test "a1102 excludes legal entities even with MC nationality" do
+    # legal_entity has MC nationality but is a LEGAL_ENTITY, not NATURAL_PERSON
+    le = clients(:legal_entity)
+    assert_equal "MC", le.nationality
+    assert_equal "LEGAL_ENTITY", le.client_type
+    assert @organization.transactions.kept.for_year(@year).where(client: le).exists?
+    assert_equal 1, @survey.a1102
+  end
+
+  test "a1102 excludes soft-deleted transactions" do
+    assert @organization.transactions.where(client: clients(:natural_person)).discarded.exists?,
+      "Precondition: there should be a discarded transaction"
+    assert_equal 1, @survey.a1102
+  end
+
   test "a1210o excludes BOs from other organizations" do
     Setting.create!(
       organization: @organization,
