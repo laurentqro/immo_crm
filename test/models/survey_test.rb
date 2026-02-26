@@ -131,4 +131,60 @@ class SurveyTest < ActiveSupport::TestCase
     # Count should not change due to soft-deleted transactions
     assert_equal 4, @survey.a1101
   end
+
+  # Q5 — a1105B: Total number of transactions during reporting period
+  # for purchase, sale, and rental (>= 10k/month) of real estate
+  test "a1105b counts all qualifying transactions in the year" do
+    # Org :one has 7 current-year kept purchase/sale transactions:
+    # purchase, sale, cash_payment, high_value, pep_transaction, crypto_payment, check_payment
+    # The rental fixture doesn't qualify (no rental_annual_value >= 120,000)
+    assert_equal 7, @survey.a1105b
+  end
+
+  test "a1105b returns 0 when organization has no transactions" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal 0, survey.a1105b
+  end
+
+  test "a1105b includes qualifying rental transactions" do
+    Transaction.create!(
+      organization: @organization,
+      client: clients(:legal_entity),
+      reference: "RENTAL-HIGH-Q5",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "RENTAL",
+      rental_annual_value: 120_000
+    )
+    # 7 purchase/sale + 1 qualifying rental = 8
+    assert_equal 8, @survey.a1105b
+  end
+
+  test "a1105b excludes rental transactions below 10000 monthly threshold" do
+    Transaction.create!(
+      organization: @organization,
+      client: clients(:legal_entity),
+      reference: "RENTAL-LOW-Q5",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "RENTAL",
+      rental_annual_value: 60_000
+    )
+    # Still 7 — low-value rental excluded
+    assert_equal 7, @survey.a1105b
+  end
+
+  test "a1105b excludes soft-deleted transactions" do
+    assert @organization.transactions.discarded.exists?,
+      "Precondition: there should be discarded transactions"
+    # discarded_transaction should not be counted
+    assert_equal 7, @survey.a1105b
+  end
+
+  test "a1105b counts multiple transactions per client separately" do
+    # natural_person has purchase, sale, cash_payment = 3 transactions
+    np_count = @organization.transactions.kept.for_year(@year)
+      .where(client: clients(:natural_person), transaction_type: %w[PURCHASE SALE]).count
+    assert np_count > 1, "Precondition: natural_person should have multiple transactions"
+    # Each transaction counted individually (not deduplicated by client)
+    assert_equal 7, @survey.a1105b
+  end
 end

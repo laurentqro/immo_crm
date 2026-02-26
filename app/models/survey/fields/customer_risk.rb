@@ -44,6 +44,24 @@ class Survey
 
         (purchase_sale_client_ids + rental_client_ids).uniq.count
       end
+
+      # Q5 — a1105B: Total number of transactions during reporting period
+      # for purchase, sale, and rental (monthly rent >= 10,000 EUR) of real estate
+      # Type: xbrli:integerItemType
+      def a1105b
+        txns = organization.transactions.kept.for_year(year)
+
+        purchase_sale_count = txns
+          .where(transaction_type: %w[PURCHASE SALE])
+          .count
+
+        rental_count = txns
+          .where(transaction_type: "RENTAL")
+          .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
+          .count
+
+        purchase_sale_count + rental_count
+      end
     end
   end
 end
