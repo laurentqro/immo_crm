@@ -16,6 +16,15 @@ class Survey
         organization.transactions.kept.for_year(year)
           .where(transaction_type: %w[PURCHASE SALE]).exists? ? "Oui" : "Non"
       end
+
+      # Q3 — aACTIVERENTALS: Active for rentals (monthly rent >= 10,000 EUR) during reporting period?
+      # Type: enum "Oui" / "Non"
+      def aactiverentals
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: "RENTAL")
+          .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
+          .exists? ? "Oui" : "Non"
+      end
     end
   end
 end

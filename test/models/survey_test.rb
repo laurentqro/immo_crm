@@ -36,4 +36,34 @@ class SurveyTest < ActiveSupport::TestCase
       "Precondition: organization :company should have no purchase/sale transactions"
     assert_equal "Non", survey.aactiveps
   end
+
+  # Q3 — aACTIVERENTALS: Active for rentals (monthly rent >= 10,000 EUR) during reporting period
+  test "aactiverentals returns Oui when organization has rental transactions with monthly rent >= 10000" do
+    # Create a rental transaction with annual value >= 120,000 (i.e., monthly >= 10,000)
+    Transaction.create!(
+      organization: @organization,
+      client: clients(:legal_entity),
+      reference: "RENTAL-HIGH",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "RENTAL",
+      rental_annual_value: 120_000
+    )
+    assert_equal "Oui", @survey.aactiverentals
+  end
+
+  test "aactiverentals returns Non when organization has no qualifying rental transactions" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_not organizations(:company).transactions.kept.for_year(@year)
+      .where(transaction_type: "RENTAL")
+      .where(Transaction.arel_table[:rental_annual_value].gteq(120_000)).exists?,
+      "Precondition: organization :company should have no qualifying rental transactions"
+    assert_equal "Non", survey.aactiverentals
+  end
+
+  test "aactiverentals returns Non when rentals exist but below 10000 monthly threshold" do
+    # The existing rental fixture has transaction_value: 36000 but no rental_annual_value >= 120,000
+    assert @organization.transactions.kept.for_year(@year).where(transaction_type: "RENTAL").exists?,
+      "Precondition: organization :one should have rental transactions"
+    assert_equal "Non", @survey.aactiverentals
+  end
 end
