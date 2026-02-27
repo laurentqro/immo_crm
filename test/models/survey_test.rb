@@ -5451,4 +5451,12 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal baseline + 1, @survey.a3208tola
   end
+
+  # Q176 — a3209: Does entity onboard clients without face-to-face?
+  test "a3209 returns setting value for non_face_to_face_onboarding" do
+    assert_nil @survey.a3209
+
+    Setting.create!(organization: @organization, key: "non_face_to_face_onboarding", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a3209
+  end
 end

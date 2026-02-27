@@ -92,6 +92,12 @@ class Survey
           .where(became_client_at: year_range)
           .count
       end
+
+      # Q176 — a3209: Does entity onboard clients without face-to-face?
+      # Type: enum (Oui/Non) — settings-based
+      def a3209
+        setting_value_for("non_face_to_face_onboarding")
+      end
     end
   end
 end
