@@ -5263,4 +5263,12 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal baseline + 1, @survey.air2316
   end
+
+  # Q166 — a2501A: Does entity have comments on products/services section?
+  test "a2501a returns setting value for has_products_services_comments" do
+    assert_nil @survey.a2501a
+
+    Setting.create!(organization: @organization, key: "has_products_services_comments", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2501a
+  end
 end

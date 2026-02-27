@@ -533,6 +533,12 @@ class Survey
           .where("monthly_rent < ?", 10_000)
           .count
       end
+
+      # Q166 — a2501A: Does entity have comments on products/services section?
+      # Type: enum (Oui/Non) — settings-based
+      def a2501a
+        setting_value_for("has_products_services_comments")
+      end
     end
   end
 end
