@@ -418,6 +418,15 @@ class Survey
           .where(agency_role: "BUYER_AGENT")
           .count
       end
+
+      # Q154 — aIR235S: For how many purchases/sales did you represent the seller?
+      # Type: xbrli:integerItemType — computed
+      def air235s
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE])
+          .where(agency_role: "SELLER_AGENT")
+          .count
+      end
     end
   end
 end

@@ -5054,4 +5054,18 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal baseline + 1, @survey.air235b_2  # only BUYER_AGENT counts
   end
+
+  # Q154 — aIR235S: For how many purchases/sales did you represent the seller?
+  test "air235s returns count of transactions where agency represented seller" do
+    baseline = @survey.air235s || 0
+
+    client = Client.create!(organization: @organization, name: "Client", client_type: "NATURAL_PERSON", nationality: "FR")
+
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 1, 1), transaction_value: 100_000, payment_method: "WIRE", agency_role: "SELLER_AGENT")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 2, 1), transaction_value: 200_000, payment_method: "WIRE", agency_role: "BUYER_AGENT")
+
+    assert_equal baseline + 1, @survey.air235s
+  end
 end
