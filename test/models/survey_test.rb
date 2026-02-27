@@ -4331,4 +4331,89 @@ class SurveyTest < ActiveSupport::TestCase
   test "a14001 returns nil when a14801 is not Oui" do
     assert_nil @survey.a14001
   end
+
+  # === Section 2.1: Cheque Operations ===
+
+  test "a2101w returns setting value for accepting cheque operations" do
+    Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2101w
+  end
+
+  test "a2101w returns nil when setting is not set" do
+    assert_nil @survey.a2101w
+  end
+
+  test "a2101wrp returns setting value when a2101w is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_cheque_operations_in_period", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2101wrp
+  end
+
+  test "a2101wrp returns nil when a2101w is not Oui" do
+    assert_nil @survey.a2101wrp
+  end
+
+  test "a2102w returns count of cheque transactions when a2101wrp is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_cheque_operations_in_period", category: "entity_info", value: "Oui")
+
+    baseline = @survey.a2102w || 0
+
+    client = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Cheque Client",
+      nationality: "FR"
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1),
+      transaction_value: 300_000,
+      payment_method: "CHECK"
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 7, 1),
+      transaction_value: 400_000,
+      payment_method: "CHECK"
+    )
+
+    assert_equal baseline + 2, @survey.a2102w
+  end
+
+  test "a2102w returns nil when a2101wrp is not Oui" do
+    assert_nil @survey.a2102w
+  end
+
+  test "a2102bw returns total value of cheque transactions when a2101wrp is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_cheque_operations_in_period", category: "entity_info", value: "Oui")
+
+    baseline = @survey.a2102bw || 0
+
+    client = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Cheque Client",
+      nationality: "FR"
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1),
+      transaction_value: 300_000,
+      payment_method: "CHECK"
+    )
+
+    assert_equal baseline + 300_000, @survey.a2102bw
+  end
+
+  test "a2102bw returns nil when a2101wrp is not Oui" do
+    assert_nil @survey.a2102bw
+  end
 end
