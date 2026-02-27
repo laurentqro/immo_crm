@@ -1009,6 +1009,23 @@ class Survey
           .count("clients.id")
       end
 
+      # Q76 — a13602D: Unique other-services PSAV clients
+      # by country of establishment, for purchase, sale, and rental
+      # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+      # Conditional: only when a13601other == "Oui"
+      def a13602d
+        return nil unless a13601other == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .joins(:client)
+          .where(clients: {is_vasp: true, vasp_type: "OTHER"})
+          .where.not(clients: {incorporation_country: nil})
+          .distinct
+          .group("clients.incorporation_country")
+          .count("clients.id")
+      end
+
       # Q64 — a13604AB: Total value of funds transferred by virtual currency exchange provider
       # PSAV clients for purchase, sale, and rental of real estate
       # Type: xbrli:monetaryItemType

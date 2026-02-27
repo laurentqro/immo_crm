@@ -4081,4 +4081,38 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal({"SG" => 1}, @survey.a13602c)
   end
+
+  # Q76 — a13602D: Unique other-services PSAV clients
+  # by country of establishment, for purchase, sale, and rental
+  # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+  # Conditional: only when a13601other == "Oui"
+
+  test "a13602d returns nil when a13601other is not Oui" do
+    assert_nil @survey.a13602d
+  end
+
+  test "a13602d returns unique other-services VASP clients by incorporation country" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_other_vasp_services", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_other_vasp_service_clients", category: "entity_info", value: "Oui")
+
+    vasp = Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "DeFi Provider JP",
+      incorporation_country: "JP",
+      is_vasp: true,
+      vasp_type: "OTHER",
+      vasp_other_service_type: "DeFi Lending"
+    )
+
+    Transaction.create!(
+      organization: @organization, client: vasp,
+      reference: "OTH-JP-1", transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 8, 5), transaction_value: 400_000
+    )
+
+    assert_equal({"JP" => 1}, @survey.a13602d)
+  end
 end
