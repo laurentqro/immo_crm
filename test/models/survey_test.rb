@@ -5816,4 +5816,12 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "revenue_reporting_period", category: "entity_info", value: "1500000.00")
     assert_equal "1500000.00", @survey.a381
   end
+
+  # Q205 — a3802: Revenue in Monaco (monetaryItemType)
+  test "a3802 returns setting value for revenue in Monaco" do
+    assert_nil @survey.a3802
+
+    Setting.create!(organization: @organization, key: "revenue_in_monaco", category: "entity_info", value: "1200000.00")
+    assert_equal "1200000.00", @survey.a3802
+  end
 end

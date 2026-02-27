@@ -329,6 +329,12 @@ class Survey
       def a381
         setting_value_for("revenue_reporting_period")
       end
+
+      # Q205 — a3802: Revenue in Monaco
+      # Type: xbrli:monetaryItemType (iso4217:EUR) — settings-based
+      def a3802
+        setting_value_for("revenue_in_monaco")
+      end
     end
   end
 end
