@@ -4013,4 +4013,39 @@ class SurveyTest < ActiveSupport::TestCase
     result = @survey.a13602b
     assert_equal({"MC" => 1, "FR" => 1}, result)
   end
+
+  # Q74 — a13602A: Unique exchange provider PSAV clients
+  # by country of establishment, for purchase, sale, and rental
+  # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+  # Conditional: only when a13601ep == "Oui"
+
+  test "a13602a returns nil when a13601ep is not Oui" do
+    assert_nil @survey.a13602a
+  end
+
+  test "a13602a returns unique exchange VASP clients by incorporation country" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_exchange_providers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_exchange_provider_clients", category: "entity_info", value: "Oui")
+
+    vasp = Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "CH Exchange",
+      incorporation_country: "CH",
+      is_vasp: true,
+      vasp_type: "EXCHANGE"
+    )
+
+    Transaction.create!(
+      organization: @organization, client: vasp,
+      reference: "EX-1", transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 4, 10), transaction_value: 600_000
+    )
+
+    result = @survey.a13602a
+    assert_equal 1, result["CH"]
+    assert_equal 1, result["MC"] # from vasp_client fixture
+  end
 end
