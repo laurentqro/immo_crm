@@ -174,6 +174,18 @@ class Survey
           .where(payment_method: %w[CASH MIXED])
           .sum(:foreign_currency_cash_amount)
       end
+
+      # Q131 — a2110W: Cash operations >= 10,000 EUR with clients
+      # Type: xbrli:integerItemType — computed, conditional on a2107wrp
+      def a2110w
+        return nil unless a2107wrp == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .where("cash_amount >= ?", 10_000)
+          .count
+      end
     end
   end
 end

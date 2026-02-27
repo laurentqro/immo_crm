@@ -4652,4 +4652,25 @@ class SurveyTest < ActiveSupport::TestCase
   test "ag24010w returns nil when a2107wrp is not Oui" do
     assert_nil @survey.ag24010w
   end
+
+  # Q131 — a2110W: Cash operations >= 10,000 EUR with clients
+  test "a2110w returns count of cash operations >= 10000 when a2107wrp is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_cash_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_cash_operations_in_period", category: "entity_info", value: "Oui")
+    baseline = @survey.a2110w || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Cash Client", nationality: "FR")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 50_000, payment_method: "CASH", cash_amount: 10_000)
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 100_000, payment_method: "CASH", cash_amount: 9_999)
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 7, 1), transaction_value: 200_000, payment_method: "MIXED", cash_amount: 15_000)
+
+    assert_equal baseline + 2, @survey.a2110w
+  end
+
+  test "a2110w returns nil when a2107wrp is not Oui" do
+    assert_nil @survey.a2110w
+  end
 end
