@@ -4631,4 +4631,25 @@ class SurveyTest < ActiveSupport::TestCase
   test "a2109w returns nil when a2107wrp is not Oui" do
     assert_nil @survey.a2109w
   end
+
+  # Q130 — aG24010W: Total value of cash in foreign currencies with clients
+  test "ag24010w returns total foreign currency cash amount when a2107wrp is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_cash_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_cash_operations_in_period", category: "entity_info", value: "Oui")
+    baseline = @survey.ag24010w || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "FX Cash Client", nationality: "US")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 50_000, payment_method: "CASH",
+      cash_amount: 50_000, foreign_currency_cash_amount: 30_000)
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 100_000, payment_method: "MIXED",
+      cash_amount: 20_000, foreign_currency_cash_amount: 15_000)
+
+    assert_equal baseline + 45_000, @survey.ag24010w
+  end
+
+  test "ag24010w returns nil when a2107wrp is not Oui" do
+    assert_nil @survey.ag24010w
+  end
 end

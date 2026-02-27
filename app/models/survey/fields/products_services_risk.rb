@@ -163,6 +163,17 @@ class Survey
           .where(payment_method: %w[CASH MIXED])
           .sum(:cash_amount)
       end
+
+      # Q130 — aG24010W: Total value of cash in foreign currencies with clients
+      # Type: xbrli:monetaryItemType — computed, conditional on a2107wrp
+      def ag24010w
+        return nil unless a2107wrp == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .sum(:foreign_currency_cash_amount)
+      end
     end
   end
 end

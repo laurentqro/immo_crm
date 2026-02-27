@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_27_033514) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_27_035813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -555,6 +555,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_27_033514) do
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.string "direction"
+    t.decimal "foreign_currency_cash_amount", precision: 15, scale: 2
     t.boolean "is_new_construction", default: false
     t.text "notes"
     t.bigint "organization_id", null: false
