@@ -467,6 +467,30 @@ class Survey
           .count
       end
 
+      # Q39 — a112012B: Total unique UHNWI beneficial owners of legal entity clients,
+      # broken down by primary nationality of the UHNWI
+      # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+      # Scope: Purchase/Sale only, legal entity clients (excl. trusts)
+      # Conditional: only when a11201bcdu == "Oui"
+      def a112012b
+        return nil unless a11201bcdu == "Oui"
+
+        legal_entity_client_ids = organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .where(clients: {client_type: "LEGAL_ENTITY"})
+          .where.not(clients: {legal_entity_type: "TRUST"})
+          .select("clients.id")
+          .distinct
+
+        BeneficialOwner
+          .where(client_id: legal_entity_client_ids)
+          .merge(BeneficialOwner.uhnwis)
+          .where.not(nationality: nil)
+          .group(:nationality)
+          .count
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

@@ -56,7 +56,7 @@
 - [x] Task 36: Q36 — a155 — entity distinguishes Monegasque legal entity types (settings-based) (2026-02-27)
 - [x] Task 37: Q37 — aMLES — Monegasque legal entity clients by type (dimensional, conditional on a155) (2026-02-27)
 - [x] Task 38: Q38 — a11206B — total unique HNWI BOs of legal entity clients by nationality (dimensional, conditional on a11201bcd) (2026-02-27)
-- [ ] Task 39: Q39 — Veuillez indiquer le nombre total de clients bénéficiaires effectifs uniques de personnes morales et qui sont des partic
+- [x] Task 39: Q39 — a112012B — unique UHNWI BOs of legal entity clients by nationality (dimensional, conditional on a11201bcdu) (2026-02-27)
 
 ### Section 1.7
 - [ ] Task 40: Q40 — Votre entité distingue-t-elle si les clients sont des trusts ou d'autres constructions juridiques ?

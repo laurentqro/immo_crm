@@ -2403,4 +2403,147 @@ class SurveyTest < ActiveSupport::TestCase
     result = @survey.a11206b
     assert_equal 1, result["NL"]
   end
+
+  # Q39 — a112012B: UHNWI beneficial owners of legal entity clients by nationality
+
+  test "a112012b returns nil when a11201bcdu is not Oui" do
+    result = @survey.a112012b
+    assert_nil result
+  end
+
+  test "a112012b returns hash of UHNWI BOs grouped by nationality" do
+    Setting.create!(
+      organization: @organization,
+      key: "identifies_records_uhnwi_clients",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    le_client = Client.create!(
+      organization: @organization,
+      name: "UHNWI LE Corp",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      became_client_at: 3.months.ago
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: le_client,
+      reference: "A112012B-1",
+      transaction_date: Date.current - 1.month,
+      transaction_type: "PURCHASE",
+      transaction_value: 5_000_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    # UHNWI BO (>50M) — should be counted
+    BeneficialOwner.create!(
+      client: le_client,
+      name: "UHNWI FR",
+      nationality: "FR",
+      net_worth_eur: 60_000_000,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+    # UHNWI BO (>50M) — different nationality
+    BeneficialOwner.create!(
+      client: le_client,
+      name: "UHNWI GB",
+      nationality: "GB",
+      net_worth_eur: 80_000_000,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+    # HNWI but NOT UHNWI (>5M but <=50M) — should NOT be counted
+    BeneficialOwner.create!(
+      client: le_client,
+      name: "HNWI Only DE",
+      nationality: "DE",
+      net_worth_eur: 12_000_000,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+
+    result = @survey.a112012b
+    assert_equal 1, result["FR"]
+    assert_equal 1, result["GB"]
+    assert_nil result["DE"]
+  end
+
+  test "a112012b excludes BOs of trust clients" do
+    Setting.create!(
+      organization: @organization,
+      key: "identifies_records_uhnwi_clients",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    trust_client = Client.create!(
+      organization: @organization,
+      name: "Trust Client",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "TRUST",
+      became_client_at: 3.months.ago
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: trust_client,
+      reference: "A112012B-TRUST",
+      transaction_date: Date.current - 1.month,
+      transaction_type: "SALE",
+      transaction_value: 3_000_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+    BeneficialOwner.create!(
+      client: trust_client,
+      name: "Trust UHNWI",
+      nationality: "JP",
+      net_worth_eur: 100_000_000,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+
+    result = @survey.a112012b
+    assert_nil result["JP"]
+  end
+
+  test "a112012b excludes BOs of clients with only rental transactions" do
+    Setting.create!(
+      organization: @organization,
+      key: "identifies_records_uhnwi_clients",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    le_client = Client.create!(
+      organization: @organization,
+      name: "Rental Only LE",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SCI",
+      became_client_at: 3.months.ago
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: le_client,
+      reference: "A112012B-RENTAL",
+      transaction_date: Date.current - 1.month,
+      transaction_type: "RENTAL",
+      transaction_value: 200_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+    BeneficialOwner.create!(
+      client: le_client,
+      name: "Rental UHNWI",
+      nationality: "KR",
+      net_worth_eur: 75_000_000,
+      control_type: "DIRECT",
+      is_pep: false
+    )
+
+    result = @survey.a112012b
+    assert_nil result["KR"]
+  end
 end
