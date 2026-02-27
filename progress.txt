@@ -52,7 +52,7 @@
 ### Section 1.6
 - [x] Task 33: Q33 — a1501 — total unique legal entity clients (excl. trusts) by incorporation country for purchase/sale (2026-02-27)
 - [x] Task 34: Q34 — a1502B — total transactions by legal entity clients (excl. trusts) for purchase/sale (2026-02-27)
-- [ ] Task 35: Q35 — Veuillez indiquer la valeur totale des fonds transférés par les clients qui sont des personnes morales pour l'achat et l
+- [x] Task 35: Q35 — a1503B — total value of funds transferred by legal entity clients (excl. trusts) for purchase/sale (2026-02-27)
 - [ ] Task 36: Q36 — Votre entité distingue-t-elle si les clients sont des personnes morales monégasques et le type de personne morale ?
 - [ ] Task 37: Q37 — Veuillez indiquer le nombre de clients qui sont des personnes morales monégasques, ventilé par type.
 - [ ] Task 38: Q38 — Veuillez indiquer le nombre total de clients bénéficiaires effectifs uniques de personnes morales qui sont des particuli
