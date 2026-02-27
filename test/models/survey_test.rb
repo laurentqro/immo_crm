@@ -4713,4 +4713,34 @@ class SurveyTest < ActiveSupport::TestCase
   test "a2113aw returns nil when a2113w is not Oui" do
     assert_nil @survey.a2113aw
   end
+
+  # Q134 — a2114A: Cash ops with Monegasque legal entities > 100,000 EUR
+  test "a2114a returns count of MC LE cash ops > 100000 when a2113w is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_cash_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_cash_operations_in_period", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "can_distinguish_cash_over_100k", category: "entity_info", value: "Oui")
+    baseline = @survey.a2114a || 0
+
+    mc_le = Client.create!(organization: @organization, client_type: "LEGAL_ENTITY", name: "MC LE",
+      nationality: "MC", legal_entity_type: "SCI", incorporation_country: "MC")
+    fr_le = Client.create!(organization: @organization, client_type: "LEGAL_ENTITY", name: "FR LE",
+      nationality: "FR", legal_entity_type: "SARL", incorporation_country: "FR")
+    np = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "NP", nationality: "MC")
+
+    # MC LE cash > 100k — should count
+    Transaction.create!(organization: @organization, client: mc_le, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 200_000, payment_method: "CASH", cash_amount: 150_000)
+    # FR LE cash > 100k — should NOT count (foreign)
+    Transaction.create!(organization: @organization, client: fr_le, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 200_000, payment_method: "CASH", cash_amount: 150_000)
+    # NP cash > 100k — should NOT count (not LE)
+    Transaction.create!(organization: @organization, client: np, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 7, 1), transaction_value: 200_000, payment_method: "CASH", cash_amount: 150_000)
+
+    assert_equal baseline + 1, @survey.a2114a
+  end
+
+  test "a2114a returns nil when a2113w is not Oui" do
+    assert_nil @survey.a2114a
+  end
 end
