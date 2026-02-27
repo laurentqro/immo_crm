@@ -887,6 +887,20 @@ class Survey
         setting_value_for("has_ico_provider_clients")
       end
 
+      # Q67 — a13603CACB: Total transactions by ICO service provider PSAV clients
+      # for purchase, sale, and rental of real estate
+      # Type: xbrli:integerItemType
+      # Conditional: only when a13601ico == "Oui"
+      def a13603cacb
+        return nil unless a13601ico == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .joins(:client)
+          .where(clients: {is_vasp: true, vasp_type: "ICO"})
+          .count
+      end
+
       # Q64 — a13604AB: Total value of funds transferred by virtual currency exchange provider
       # PSAV clients for purchase, sale, and rental of real estate
       # Type: xbrli:monetaryItemType
