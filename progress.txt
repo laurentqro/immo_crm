@@ -209,14 +209,14 @@
 - [x] Task 161: Q161 — aIR2393 — pre-empted property value (settings-based, conditional on aIR2391) (2026-02-27)
 
 ### Section 2.9
-- [ ] Task 162: Q162 — Veuillez indiquer le nombre total de biens uniques loués au cours de la période de déclaration.
-- [ ] Task 163: Q163 — Veuillez indiquer le nombre total d'opérations de location au cours de la période de déclaration.
-- [ ] Task 164: Q164 — Veuillez indiquer le nombre total de biens locatifs uniques, >= 10.000 € par mois, qui ont été loués à un moment donné a
-- [ ] Task 165: Q165 — Veuillez indiquer le nombre total de biens locatifs uniques, < 10.000 € par mois, qui ont été loués à un moment donné au
+- [x] Task 162: Q162 — aIR234 — total unique properties rented in reporting period (computed) (2026-02-27)
+- [x] Task 163: Q163 — aIR236 — total rental operations in reporting period (computed) (2026-02-27)
+- [x] Task 164: Q164 — aIR2313 — unique rental properties >= 10,000 EUR/month (computed) (2026-02-27)
+- [x] Task 165: Q165 — aIR2316 — unique rental properties < 10,000 EUR/month (computed) (2026-02-27)
 
 ### Section 2.10
-- [ ] Task 166: Q166 — Avez-vous des commentaires sur l'une des questions de cette section ?
-- [ ] Task 167: Q167 — Prière de partager vos retours et vos commentaires au sujet de cette section.
+- [x] Task 166: Q166 — a2501A — has comments on products/services section (settings-based, enum) (2026-02-27)
+- [x] Task 167: Q167 — a2501 — products/services section comments text (settings-based, conditional on a2501A) (2026-02-27)
 
 ### Section 3.1
 - [ ] Task 168: Q168 — Votre entité a-t-elle recours à des tiers locaux pour appliquer certaines/ toutes les mesures de vigilance relatives à l
