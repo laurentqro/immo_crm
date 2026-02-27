@@ -4942,4 +4942,15 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "has_virtual_asset_platform_relations", category: "entity_info", value: "Oui")
     assert_equal "Oui", @survey.a2202
   end
+
+  # Q148 — a2203: Name the virtual asset platforms
+  test "a2203 returns setting value when a2202 is Oui" do
+    Setting.create!(organization: @organization, key: "has_virtual_asset_platform_relations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "virtual_asset_platform_names", category: "entity_info", value: "Binance, Coinbase")
+    assert_equal "Binance, Coinbase", @survey.a2203
+  end
+
+  test "a2203 returns nil when a2202 is not Oui" do
+    assert_nil @survey.a2203
+  end
 end

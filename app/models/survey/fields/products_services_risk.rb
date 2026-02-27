@@ -355,6 +355,13 @@ class Survey
       def a2202
         setting_value_for("has_virtual_asset_platform_relations")
       end
+
+      # Q148 — a2203: Name the virtual asset platforms
+      # Type: xbrli:stringItemType — settings-based, conditional on a2202
+      def a2203
+        return nil unless a2202 == "Oui"
+        setting_value_for("virtual_asset_platform_names")
+      end
     end
   end
 end
