@@ -226,20 +226,20 @@
 - [x] Task 172: Q172 — a3105 — foreign third-party CDD client count by third-party country (computed dimensional, conditional on a3103) (2026-02-27)
 
 ### Section 3.2
-- [ ] Task 173: Q173 — Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des personnes physiques, dont l'entrée en relation est
-- [ ] Task 174: Q174 — Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des personnes morales, dont l'entrée en relation est i
-- [ ] Task 175: Q175 — Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des trusts et d'autres constructions juridiques, dont 
-- [ ] Task 176: Q176 — Votre entité entre-t-elle en relation avec des clients sans qu'il y ait de rencontre face à face, soit sur une base non 
-- [ ] Task 177: Q177 — Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des personnes physiques, dont l'entrée en relation s'e
-- [ ] Task 178: Q178 — Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des personnes morales, dont l'entrée en relation s'est
-- [ ] Task 179: Q179 — Prière d'indiquer le nombre de clients uniques nouveaux, qui sont des trusts et d'autres constructions juridiques, dont 
-- [ ] Task 180: Q180 — Votre entité accepte-t-elle des clients à travers des apporteurs d'affaires ?
-- [ ] Task 181: Q181 — L'entité peut-elle fournir des informations sur la nationalité des clients démarchés par l'apporteur d'affaire ?
-- [ ] Task 182: Q182 — Prière d'indiquer le nombre total de clients démarchés à travers des tiers, en les ventilant selon la nationalité princi
-- [ ] Task 183: Q183 — Prière d'indiquer le nombre total de clients démarchés à travers des tiers, au cours de la période de déclaration, en le
-- [ ] Task 184: Q184 — L'entité peut-elle fournir des informations sur la résidence des apporteurs d'affaire ?
-- [ ] Task 185: Q185 — Prière d'indiquer le nombre total d'entrées en relation à travers des tiers, en les ventilant selon le lieu de résidence
-- [ ] Task 186: Q186 — Prière d'indiquer le nombre total d'entrées en relation à travers des tiers, au cours de la période de déclaration, en l
+- [x] Task 173: Q173 — aB3206 — NP clients onboarded in reporting period (computed) (2026-02-27)
+- [x] Task 174: Q174 — aB3207 — LE clients (excl. trusts) onboarded in reporting period (computed) (2026-02-27)
+- [x] Task 175: Q175 — a3208TOLA — trust clients onboarded in reporting period (computed, conditional on a1802btola) (2026-02-27)
+- [x] Task 176: Q176 — a3209 — entity onboards clients without face-to-face (settings-based) (2026-02-27)
+- [x] Task 177: Q177 — a3210C — NP clients onboarded without face-to-face (settings-based, conditional on a3209) (2026-02-27)
+- [x] Task 178: Q178 — a3211C — LP clients onboarded without face-to-face (settings-based, conditional on a3209) (2026-02-27)
+- [x] Task 179: Q179 — a3212CTOLA — trust clients onboarded without face-to-face (settings-based, conditional on a3209 AND a1802btola) (2026-02-27)
+- [x] Task 180: Q180 — a3201 — entity accepts clients through introducers (settings-based) (2026-02-27)
+- [x] Task 181: Q181 — a3501B — can provide introducer client nationality (settings-based, conditional on a3201) (2026-02-27)
+- [x] Task 182: Q182 — a3202 — introduced clients by primary nationality (computed dimensional, conditional on a3501B) (2026-02-27)
+- [x] Task 183: Q183 — a3204 — introduced clients in reporting period by primary nationality (computed dimensional, conditional on a3501B) (2026-02-27)
+- [x] Task 184: Q184 — a3501C — can provide introducer residence info (settings-based, conditional on a3201) (2026-02-27)
+- [x] Task 185: Q185 — a3203 — introduced clients by introducer residence (computed dimensional, conditional on a3501C) (2026-02-27)
+- [x] Task 186: Q186 — a3205 — introduced clients in reporting period by introducer residence (computed dimensional, conditional on a3501C) (2026-02-27)
 
 ### Section 3.3
 - [ ] Task 187: Q187 — Quelle est la forme juridique de votre entité ?
