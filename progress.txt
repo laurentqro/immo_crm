@@ -364,60 +364,61 @@
 - [x] Task 284: C69 — aC1703 — percentage of EDD clients (settings-based, conditional on aC1609, pureItemType) (2026-02-27)
 
 ### Section 1.8
-- [ ] Task 285: C70 — Votre entité applique-t-elle à ses clients des notations de risque en matière de LBC/FT ?
-- [ ] Task 286: C71 — Combien de niveaux de risque LBC/FT votre entité a-t-elle pour ses clients ?
-- [ ] Task 287: C72 — Prière d'indiquer le nombre de clients uniques classés comme présentant un risque élevé de LBC/FT.
-- [ ] Task 288: C73 — Les considérations relatives à l'affectation de haut risque de votre entité incluent-elles TOUTES les informations suiva
-- [ ] Task 289: C74 — Prière de préciser quels éléments ne sont pas pris en compte ?
-- [ ] Task 290: C75 — Votre entité utilise-t-elle une liste de pays sensibles pour l'évaluation des risques de LBC/FT ?
-- [ ] Task 291: C76 — Votre entité utilise-t-elle une liste d'activités sensibles pour l'évaluation des risques de LBC/FT ?
-- [ ] Task 292: C77 — Quelles activités client votre entité associe-t-elle aux clients à haut risque ?
-- [ ] Task 293: C78 — Votre entité examine-t-elle séparément les risques de BC et de FT ?
+- [x] Task 285: C70 — aB1801B — applies risk ratings to clients (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 286: C71 — aC1801 — number of risk levels (settings-based, conditional on aB1801B, integerItemType) (2026-02-27)
+- [x] Task 287: C72 — aC1802 — total high-risk clients (settings-based, conditional on aB1801B, integerItemType) (2026-02-27)
+- [x] Task 288: C73 — aC1806 — risk considerations include all factors (settings-based, conditional on aB1801B) (2026-02-27)
+- [x] Task 289: C74 — aC1807 — specify missing risk factors (settings-based, conditional on aC1806=="Non") (2026-02-27)
+- [x] Task 290: C75 — aC1811 — uses sensitive countries list (settings-based, conditional on aB1801B) (2026-02-27)
+- [x] Task 291: C76 — aC1812 — uses sensitive activities list (settings-based, conditional on aB1801B) (2026-02-27)
+- [x] Task 292: C77 — aC1813 — high-risk client activities (settings-based, conditional on aC1812) (2026-02-27)
+- [x] Task 293: C78 — aC1814W — examines ML/TF risks separately (settings-based, conditional on aB1801B) (2026-02-27)
 
 ### Section 1.9
-- [ ] Task 294: C79 — Quand a eu lieu le dernier audit effectué par le SICCFIN/AMSF pour votre entité ?
+- [x] Task 294: C79 — aC1904 — last AMSF audit recency (settings-based, 7-value enum) (2026-02-27)
 
 ### Section 1.10
-- [ ] Task 295: C80 — Votre entité conserve-t-elle les informations relatives aux opérations pendant au moins 5 ans ?
-- [ ] Task 296: C81 — Votre entité conserve-t-elle toutes les correspondances relatives aux CDD et les correspondances commerciales pendant au
-- [ ] Task 297: C82 — Votre entité conserve-t-elle ces informations et documents dans un endroit sûr et sécurisé ?
-- [ ] Task 298: C83 — Ces informations et documents sont-ils rapidement mis à la disposition des autorités compétentes sur demande ?
-- [ ] Task 299: C84 — Votre entité dispose-t-elle de sauvegardes des informations relatives aux CDD et aux correspondances commerciales avec u
+- [x] Task 295: C80 — aC11101 — retains transaction info 5+ years (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 296: C81 — aC11102 — retains CDD correspondence 5+ years (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 297: C82 — aC11103 — info stored securely (settings-based, conditional on aC11101) (2026-02-27)
+- [x] Task 298: C83 — aC11104 — info available to authorities (settings-based, conditional on aC11101) (2026-02-27)
+- [x] Task 299: C84 — aC11105 — has data backup/recovery plan (settings-based, conditional on aC11101) (2026-02-27)
 
 ### Section 1.11
-- [ ] Task 300: C85 — Les politiques et procédures de l'entité couvrent-elles de manière adéquate le filtrage et les alertes des sanctions fin
-- [ ] Task 301: C86 — Votre entité consulte-t-elle la Liste Nationale des gel d'Avoirs lors de l'intégration de nouveaux clients ou lors de la
-- [ ] Task 302: C87 — Votre entité a-t-elle identifié une personne/des opérations liées au financement du terrorisme ou à la prolifération des
-- [ ] Task 303: C88 — Prière d'indiquer le nombre total de déclarations faites à la Direction du Budget et du Trésor (DBT) concernant le finan
-- [ ] Task 304: C89 — Prière d'indiquer le nombre total de déclarations faites à la DBT concernant le financement de la prolifération des arme
+- [x] Task 300: C85 — aC11201 — policies cover TFS screening (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 301: C86 — aC1125A — consults national asset freeze list (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 302: C87 — aC12333 — identified TF/WMD financing (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 303: C88 — aC12236 — TF declarations to DBT count (settings-based, conditional on aC12333) (2026-02-27)
+- [x] Task 304: C89 — aC12237 — WMD proliferation declarations count (settings-based, conditional on aC12333) (2026-02-27)
 
 ### Section 1.12
-- [ ] Task 305: C90 — Votre entité prend-elle des mesures pour déterminer si les clients et les bénéficiaires effectifs sont des personnes pol
-- [ ] Task 306: C91 — Quelles mesures votre entité applique-t-elle pour déterminer si les clients et les bénéficiaires effectifs sont des PPE 
-- [ ] Task 307: C92 — Quelles procédures supplémentaires de LBC/FT sont appliquées pour les PPE (par rapport à un client à risque standard) ?
-- [ ] Task 308: C93 — Un filtrage des PPE est-il effectué dans le cadre du processus de CDD pour les nouveaux clients ?
-- [ ] Task 309: C94 — Le filtrage des PPE a-t-il lieu de façon continue ?
-- [ ] Task 310: C95 — Les PPE font-elles l'objet d'une surveillance accrue ?
-- [ ] Task 311: C96 — Votre entité considère-t-elle toutes les relations PPE comme à haut risque de LBC/FT ?
+- [x] Task 305: C90 — aC11301 — takes measures to determine PEP status (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 306: C91 — aC11302 — PEP determination measures (settings-based, conditional on aC11301) (2026-02-27)
+- [x] Task 307: C92 — aC11303 — additional PEP procedures (settings-based, conditional on aC11301) (2026-02-27)
+- [x] Task 308: C93 — aC11304 — PEP screening for new clients (settings-based, conditional on aC11301) (2026-02-27)
+- [x] Task 309: C94 — aC11305 — continuous PEP screening (settings-based, conditional on aC11301) (2026-02-27)
+- [x] Task 310: C95 — aC11306 — enhanced PEP surveillance (settings-based, conditional on aC11301) (2026-02-27)
+- [x] Task 311: C96 — aC11307 — all PEP relationships high-risk (settings-based, conditional on aC11301) (2026-02-27)
 
 ### Section 1.13
-- [ ] Task 312: C97 — Votre entité effectue-t-elle des opérations en espèces avec des clients ?
-- [ ] Task 313: C98 — Votre entité applique-t-elle des contrôles et des procédures spécifiques de LBC/FT pour les opérations en espèces ?
-- [ ] Task 314: C99 — Prière de décrire les contrôles et procédures spécifiques aux opérations en espèces que votre entité applique.
+- [x] Task 312: C97 — aC11401 — performs cash operations (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 313: C98 — aC11402 — applies AML controls for cash (settings-based, conditional on aC11401) (2026-02-27)
+- [x] Task 314: C99 — aC11403 — cash AML controls description (settings-based, conditional on aC11402) (2026-02-27)
 
 ### Section 1.14
-- [ ] Task 315: C100 — Votre entité a-t-elle déposé des DOS/DAS auprès de la CRF au cours de la période de déclaration ?
-- [ ] Task 316: C101 — Prière d'indiquer le nombre total de DOS/DAS liées au financement du terrorisme que votre entité a déclaré à la CRF au c
-- [ ] Task 317: C102 — Prière d'indiquer le nombre total de DOS/DAS liées au blanchiment de capitaux que votre entité a déclaré à la CRF au cou
-- [ ] Task 318: C103 — Votre entité a-t-elle pris des mesures pour renforcer les contrôles internes en matière de LBC/FT, amender les politique
+- [x] Task 315: C100 — aC11501B — filed STRs with FIU (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 316: C101 — aC11502 — TF-related STRs count (settings-based, conditional on aC11501B) (2026-02-27)
+- [x] Task 317: C102 — aC11504 — ML-related STRs count (settings-based, conditional on aC11501B) (2026-02-27)
+- [x] Task 318: C103 — aC11508 — strengthened internal AML controls (settings-based, enum Oui/Non) (2026-02-27)
 
 ### Section 1.15
-- [ ] Task 319: C104 — Avez-vous des commentaires sur l'une des questions de cette section ?
-- [ ] Task 320: C105 — Prière de partager vos retours et vos commentaires au sujet de cette section.
+- [x] Task 319: C104 — aC116A — has controls section comments (settings-based, enum Oui/Non) (2026-02-27)
+- [x] Task 320: C105 — aC11601 — controls section comments (settings-based, conditional on aC116A) (2026-02-27)
 
 ### Section Attestation
-- [ ] Task 321: S1 — La ou les personnes dont le nom et le titre sont ajoutés ici attestent qu'elles ont fourni des réponses exactes aux ques
-- [ ] Task 322: S2 — Le nom et le titre de la personne ajoutée ici attestent qu'elle est dûment autorisée à représenter l'entité déclarante e
-- [ ] Task 323: S3 — Avez-vous besoin de rendre ce questionnaire sous forme incomplète ?
+- [x] Task 321: S1 — aS1 — signatory attestation (settings-based, stringItemType) (2026-02-27)
+- [x] Task 322: S2 — aS2 — authorized representative attestation (settings-based, stringItemType) (2026-02-27)
+- [x] Task 323: S3 — aINCOMPLETE — incomplete submission reason (settings-based, stringItemType) (2026-02-27)
 
 ## Completed
+ALL 323 QUESTIONS IMPLEMENTED (2026-02-27)

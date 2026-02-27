@@ -462,6 +462,278 @@ class Survey
         return nil unless ac1609 == "Oui"
         setting_value_for("edd_clients_percentage")
       end
+
+      # ============================================================
+      # Section 1.8 — Risk Assessments (C70–C78)
+      # ============================================================
+
+      # C70 — aB1801B: Applies risk ratings to clients?
+      # Type: enum (Oui/Non) — settings-based
+      def ab1801b
+        setting_value_for("applies_risk_ratings_to_clients")
+      end
+
+      # C71 — aC1801: How many risk levels?
+      # Type: xbrli:integerItemType — settings-based, conditional on aB1801B
+      def ac1801
+        return nil unless ab1801b == "Oui"
+        setting_value_for("number_of_risk_levels")
+      end
+
+      # C72 — aC1802: Total high-risk clients
+      # Type: xbrli:integerItemType — settings-based, conditional on aB1801B
+      def ac1802
+        return nil unless ab1801b == "Oui"
+        setting_value_for("high_risk_clients_count")
+      end
+
+      # C73 — aC1806: High-risk considerations include all required factors?
+      # Type: enum (Oui/Non) — settings-based, conditional on aB1801B
+      def ac1806
+        return nil unless ab1801b == "Oui"
+        setting_value_for("risk_assessment_includes_all_factors")
+      end
+
+      # C74 — aC1807: Specify which elements not considered
+      # Type: xbrli:stringItemType — settings-based, conditional on aC1806 == "Non"
+      def ac1807
+        return nil unless ac1806 == "Non"
+        setting_value_for("risk_factors_not_considered")
+      end
+
+      # C75 — aC1811: Uses sensitive countries list?
+      # Type: enum (Oui/Non) — settings-based, conditional on aB1801B
+      def ac1811
+        return nil unless ab1801b == "Oui"
+        setting_value_for("uses_sensitive_countries_list")
+      end
+
+      # C76 — aC1812: Uses sensitive activities list?
+      # Type: enum (Oui/Non) — settings-based, conditional on aB1801B
+      def ac1812
+        return nil unless ab1801b == "Oui"
+        setting_value_for("uses_sensitive_activities_list")
+      end
+
+      # C77 — aC1813: Which high-risk client activities?
+      # Type: xbrli:stringItemType — settings-based, conditional on aC1812
+      def ac1813
+        return nil unless ac1812 == "Oui"
+        setting_value_for("high_risk_client_activities")
+      end
+
+      # C78 — aC1814W: Examines ML and TF risks separately?
+      # Type: enum (Oui/Non) — settings-based, conditional on aB1801B
+      def ac1814w
+        return nil unless ab1801b == "Oui"
+        setting_value_for("separates_ml_and_tf_risks")
+      end
+
+      # ============================================================
+      # Section 1.9 — Audit (C79)
+      # ============================================================
+
+      # C79 — aC1904: Last AMSF/SICCFIN audit date
+      # Type: enum (7 values) — settings-based
+      def ac1904
+        setting_value_for("last_amsf_audit_recency")
+      end
+
+      # ============================================================
+      # Section 1.10 — Record Keeping (C80–C84)
+      # ============================================================
+
+      # C80 — aC11101: Retains transaction info for 5+ years?
+      # Type: enum (Oui/Non) — settings-based
+      def ac11101
+        setting_value_for("retains_transaction_info_5_years")
+      end
+
+      # C81 — aC11102: Retains CDD correspondence for 5+ years?
+      # Type: enum (Oui/Non) — settings-based
+      def ac11102
+        setting_value_for("retains_cdd_correspondence_5_years")
+      end
+
+      # C82 — aC11103: Info stored securely?
+      # Type: enum (Oui/Non) — settings-based, conditional on aC11101
+      def ac11103
+        return nil unless ac11101 == "Oui"
+        setting_value_for("info_stored_securely")
+      end
+
+      # C83 — aC11104: Info available to authorities on request?
+      # Type: enum (Oui/Non) — settings-based, conditional on aC11101
+      def ac11104
+        return nil unless ac11101 == "Oui"
+        setting_value_for("info_available_to_authorities")
+      end
+
+      # C84 — aC11105: Has data backup and recovery plan?
+      # Type: enum (Oui/Non) — settings-based, conditional on aC11101
+      def ac11105
+        return nil unless ac11101 == "Oui"
+        setting_value_for("has_data_backup_recovery_plan")
+      end
+
+      # ============================================================
+      # Section 1.11 — TFS (C85–C89)
+      # ============================================================
+
+      # C85 — aC11201: Policies cover TFS screening?
+      # Type: enum (Oui/Non) — settings-based
+      def ac11201
+        setting_value_for("policies_cover_tfs_screening")
+      end
+
+      # C86 — aC1125A: Consults national asset freeze list?
+      # Type: enum (Oui/Non) — settings-based
+      def ac1125a
+        setting_value_for("consults_national_asset_freeze_list")
+      end
+
+      # C87 — aC12333: Identified TF/WMD proliferation financing?
+      # Type: enum (Oui/Non) — settings-based
+      def ac12333
+        setting_value_for("identified_tf_or_wmd_financing")
+      end
+
+      # C88 — aC12236: Total TF declarations to DBT
+      # Type: xbrli:integerItemType — settings-based, conditional on aC12333
+      def ac12236
+        return nil unless ac12333 == "Oui"
+        setting_value_for("tf_declarations_to_dbt_count")
+      end
+
+      # C89 — aC12237: Total WMD proliferation declarations to DBT
+      # Type: xbrli:integerItemType — settings-based, conditional on aC12333
+      def ac12237
+        return nil unless ac12333 == "Oui"
+        setting_value_for("wmd_proliferation_declarations_to_dbt_count")
+      end
+
+      # ============================================================
+      # Section 1.12 — PEPs (C90–C96)
+      # ============================================================
+
+      # C90 — aC11301: Takes measures to determine PEP status?
+      # Type: enum (Oui/Non) — settings-based
+      def ac11301
+        setting_value_for("takes_measures_to_determine_pep_status")
+      end
+
+      # C91 — aC11302: Which measures for PEP determination?
+      # Type: xbrli:stringItemType — settings-based, conditional on aC11301
+      def ac11302
+        return nil unless ac11301 == "Oui"
+        setting_value_for("pep_determination_measures")
+      end
+
+      # C92 — aC11303: Additional PEP procedures?
+      # Type: xbrli:stringItemType — settings-based, conditional on aC11301
+      def ac11303
+        return nil unless ac11301 == "Oui"
+        setting_value_for("additional_pep_procedures")
+      end
+
+      # C93 — aC11304: PEP screening for new clients?
+      # Type: enum (Oui/Non) — settings-based, conditional on aC11301
+      def ac11304
+        return nil unless ac11301 == "Oui"
+        setting_value_for("pep_screening_for_new_clients")
+      end
+
+      # C94 — aC11305: Continuous PEP screening?
+      # Type: enum (Oui/Non) — settings-based, conditional on aC11301
+      def ac11305
+        return nil unless ac11301 == "Oui"
+        setting_value_for("continuous_pep_screening")
+      end
+
+      # C95 — aC11306: Enhanced PEP surveillance?
+      # Type: enum (Oui/Non) — settings-based, conditional on aC11301
+      def ac11306
+        return nil unless ac11301 == "Oui"
+        setting_value_for("enhanced_pep_surveillance")
+      end
+
+      # C96 — aC11307: All PEP relationships high-risk?
+      # Type: enum (Oui/Non) — settings-based, conditional on aC11301
+      def ac11307
+        return nil unless ac11301 == "Oui"
+        setting_value_for("all_pep_relationships_high_risk")
+      end
+
+      # ============================================================
+      # Section 1.13 — Cash Transactions (C97–C99)
+      # ============================================================
+
+      # C97 — aC11401: Entity performs cash operations?
+      # Type: enum (Oui/Non) — settings-based
+      def ac11401
+        setting_value_for("performs_cash_operations_with_clients")
+      end
+
+      # C98 — aC11402: Applies specific AML controls for cash?
+      # Type: enum (Oui/Non) — settings-based, conditional on aC11401
+      def ac11402
+        return nil unless ac11401 == "Oui"
+        setting_value_for("applies_aml_controls_for_cash")
+      end
+
+      # C99 — aC11403: Describe cash-specific AML controls
+      # Type: xbrli:stringItemType — settings-based, conditional on aC11402
+      def ac11403
+        return nil unless ac11402 == "Oui"
+        setting_value_for("cash_aml_controls_description")
+      end
+
+      # ============================================================
+      # Section 1.14 — STR (C100–C103)
+      # ============================================================
+
+      # C100 — aC11501B: Filed STRs/SARs with FIU?
+      # Type: enum (Oui/Non) — settings-based
+      def ac11501b
+        setting_value_for("filed_strs_with_fiu")
+      end
+
+      # C101 — aC11502: Total TF-related STRs
+      # Type: xbrli:integerItemType — settings-based, conditional on aC11501B
+      def ac11502
+        return nil unless ac11501b == "Oui"
+        setting_value_for("tf_related_strs_count")
+      end
+
+      # C102 — aC11504: Total ML-related STRs
+      # Type: xbrli:integerItemType — settings-based, conditional on aC11501B
+      def ac11504
+        return nil unless ac11501b == "Oui"
+        setting_value_for("ml_related_strs_count")
+      end
+
+      # C103 — aC11508: Taken measures to strengthen internal AML controls?
+      # Type: enum (Oui/Non) — settings-based
+      def ac11508
+        setting_value_for("strengthened_internal_aml_controls")
+      end
+
+      # ============================================================
+      # Section 1.15 — Comments & Feedback (C104–C105)
+      # ============================================================
+
+      # C104 — aC116A: Has comments on controls section?
+      # Type: enum (Oui/Non) — settings-based
+      def ac116a
+        setting_value_for("has_controls_section_comments")
+      end
+
+      # C105 — aC11601: Controls section comments
+      # Type: xbrli:stringItemType — settings-based, conditional on aC116A
+      def ac11601
+        return nil unless ac116a == "Oui"
+        setting_value_for("controls_section_comments")
+      end
     end
   end
 end

@@ -6642,4 +6642,464 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "edd_clients_percentage", category: "controls", value: "15.5")
     assert_equal "15.5", @survey.ac1703
   end
+
+  # ============================================================
+  # Section 1.8 — Risk Assessments (C70–C78)
+  # ============================================================
+
+  # C70 — aB1801B: Applies risk ratings to clients? (enum Oui/Non)
+  test "ab1801b returns nil when no setting exists" do
+    assert_nil @survey.ab1801b
+  end
+
+  test "ab1801b returns setting value" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ab1801b
+  end
+
+  # C71 — aC1801: How many risk levels? (integerItemType, conditional on aB1801B)
+  test "ac1801 returns nil when ab1801b is not Oui" do
+    assert_nil @survey.ac1801
+  end
+
+  test "ac1801 returns setting value when ab1801b is Oui" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "number_of_risk_levels", category: "controls", value: "3")
+    assert_equal "3", @survey.ac1801
+  end
+
+  # C72 — aC1802: Total high-risk clients (integerItemType, conditional on aB1801B)
+  test "ac1802 returns nil when ab1801b is not Oui" do
+    assert_nil @survey.ac1802
+  end
+
+  test "ac1802 returns setting value when ab1801b is Oui" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "high_risk_clients_count", category: "controls", value: "7")
+    assert_equal "7", @survey.ac1802
+  end
+
+  # C73 — aC1806: High-risk considerations include all required factors? (conditional on aB1801B)
+  # Fixture has risk_assessment_includes_all_factors: "Oui" for org :one
+  test "ac1806 returns nil when ab1801b is not Oui" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.ac1806
+  end
+
+  test "ac1806 returns setting value when ab1801b is Oui" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac1806
+  end
+
+  # C74 — aC1807: Specify which elements not considered (conditional on aC1806 == "Non")
+  # Fixture has risk_factors_not_considered for org :one, but aC1806 fixture is "Oui" so it returns nil
+  test "ac1807 returns nil when ac1806 is not Non" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    # aC1806 fixture = "Oui", so ac1807 should be nil
+    assert_nil @survey.ac1807
+  end
+
+  test "ac1807 returns setting value when ac1806 is Non" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    Setting.find_by(organization: @organization, key: "risk_assessment_includes_all_factors").update!(value: "Non")
+    assert_match(/immobilières/, @survey.ac1807)
+  end
+
+  # C75 — aC1811: Uses sensitive countries list? (conditional on aB1801B)
+  # Fixture has uses_sensitive_countries_list: "Oui" for org :one
+  test "ac1811 returns nil when ab1801b is not Oui" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.ac1811
+  end
+
+  test "ac1811 returns setting value when ab1801b is Oui" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac1811
+  end
+
+  # C76 — aC1812: Uses sensitive activities list? (conditional on aB1801B)
+  # Fixture has uses_sensitive_activities_list: "Oui" for org :one
+  test "ac1812 returns nil when ab1801b is not Oui" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.ac1812
+  end
+
+  test "ac1812 returns setting value when ab1801b is Oui" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac1812
+  end
+
+  # C77 — aC1813: Which high-risk client activities? (free text, conditional on aC1812)
+  # Fixture has high_risk_client_activities for org :one, and uses_sensitive_activities_list: "Oui"
+  test "ac1813 returns nil when ac1812 is not Oui" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.ac1813
+  end
+
+  test "ac1813 returns setting value when ac1812 is Oui" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    # Fixture: uses_sensitive_activities_list = "Oui", high_risk_client_activities = "Investissement locatif..."
+    assert_match(/Investissement/, @survey.ac1813)
+  end
+
+  # C78 — aC1814W: Examines ML and TF risks separately? (conditional on aB1801B)
+  # Fixture has separates_ml_and_tf_risks: "Oui" for org :one
+  test "ac1814w returns nil when ab1801b is not Oui" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.ac1814w
+  end
+
+  test "ac1814w returns setting value when ab1801b is Oui" do
+    Setting.create!(organization: @organization, key: "applies_risk_ratings_to_clients", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac1814w
+  end
+
+  # ============================================================
+  # Section 1.9 — Audit (C79)
+  # ============================================================
+
+  # C79 — aC1904: Last AMSF/SICCFIN audit date (7-value enum)
+  test "ac1904 returns nil when no setting exists" do
+    assert_nil @survey.ac1904
+  end
+
+  test "ac1904 returns setting value" do
+    Setting.create!(organization: @organization, key: "last_amsf_audit_recency", category: "controls", value: "Entre un et deux ans")
+    assert_equal "Entre un et deux ans", @survey.ac1904
+  end
+
+  # ============================================================
+  # Section 1.10 — Record Keeping (C80–C84)
+  # ============================================================
+
+  # C80 — aC11101: Retains transaction info for 5+ years? (enum Oui/Non)
+  test "ac11101 returns nil when no setting exists" do
+    assert_nil @survey.ac11101
+  end
+
+  test "ac11101 returns setting value" do
+    Setting.create!(organization: @organization, key: "retains_transaction_info_5_years", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11101
+  end
+
+  # C81 — aC11102: Retains CDD correspondence for 5+ years? (enum Oui/Non)
+  test "ac11102 returns nil when no setting exists" do
+    assert_nil @survey.ac11102
+  end
+
+  test "ac11102 returns setting value" do
+    Setting.create!(organization: @organization, key: "retains_cdd_correspondence_5_years", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11102
+  end
+
+  # C82 — aC11103: Info stored securely? (conditional on aC11101)
+  test "ac11103 returns nil when ac11101 is not Oui" do
+    assert_nil @survey.ac11103
+  end
+
+  test "ac11103 returns setting value when ac11101 is Oui" do
+    Setting.create!(organization: @organization, key: "retains_transaction_info_5_years", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "info_stored_securely", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11103
+  end
+
+  # C83 — aC11104: Info available to authorities on request? (conditional on aC11101)
+  test "ac11104 returns nil when ac11101 is not Oui" do
+    assert_nil @survey.ac11104
+  end
+
+  test "ac11104 returns setting value when ac11101 is Oui" do
+    Setting.create!(organization: @organization, key: "retains_transaction_info_5_years", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "info_available_to_authorities", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11104
+  end
+
+  # C84 — aC11105: Has data backup and recovery plan? (conditional on aC11101)
+  test "ac11105 returns nil when ac11101 is not Oui" do
+    assert_nil @survey.ac11105
+  end
+
+  test "ac11105 returns setting value when ac11101 is Oui" do
+    Setting.create!(organization: @organization, key: "retains_transaction_info_5_years", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_data_backup_recovery_plan", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11105
+  end
+
+  # ============================================================
+  # Section 1.11 — TFS (C85–C89)
+  # ============================================================
+
+  # C85 — aC11201: Policies cover TFS screening? (enum Oui/Non)
+  test "ac11201 returns nil when no setting exists" do
+    assert_nil @survey.ac11201
+  end
+
+  test "ac11201 returns setting value" do
+    Setting.create!(organization: @organization, key: "policies_cover_tfs_screening", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11201
+  end
+
+  # C86 — aC1125A: Consults national asset freeze list? (enum Oui/Non)
+  test "ac1125a returns nil when no setting exists" do
+    assert_nil @survey.ac1125a
+  end
+
+  test "ac1125a returns setting value" do
+    Setting.create!(organization: @organization, key: "consults_national_asset_freeze_list", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac1125a
+  end
+
+  # C87 — aC12333: Identified TF/WMD proliferation financing? (enum Oui/Non)
+  test "ac12333 returns nil when no setting exists" do
+    assert_nil @survey.ac12333
+  end
+
+  test "ac12333 returns setting value" do
+    Setting.create!(organization: @organization, key: "identified_tf_or_wmd_financing", category: "controls", value: "Non")
+    assert_equal "Non", @survey.ac12333
+  end
+
+  # C88 — aC12236: Total TF declarations to DBT (integerItemType, conditional on aC12333)
+  test "ac12236 returns nil when ac12333 is not Oui" do
+    assert_nil @survey.ac12236
+  end
+
+  test "ac12236 returns setting value when ac12333 is Oui" do
+    Setting.create!(organization: @organization, key: "identified_tf_or_wmd_financing", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "tf_declarations_to_dbt_count", category: "controls", value: "0")
+    assert_equal "0", @survey.ac12236
+  end
+
+  # C89 — aC12237: Total WMD proliferation declarations to DBT (integerItemType, conditional on aC12333)
+  test "ac12237 returns nil when ac12333 is not Oui" do
+    assert_nil @survey.ac12237
+  end
+
+  test "ac12237 returns setting value when ac12333 is Oui" do
+    Setting.create!(organization: @organization, key: "identified_tf_or_wmd_financing", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "wmd_proliferation_declarations_to_dbt_count", category: "controls", value: "0")
+    assert_equal "0", @survey.ac12237
+  end
+
+  # ============================================================
+  # Section 1.12 — PEPs (C90–C96)
+  # ============================================================
+
+  # C90 — aC11301: Takes measures to determine PEP status? (enum Oui/Non)
+  test "ac11301 returns nil when no setting exists" do
+    assert_nil @survey.ac11301
+  end
+
+  test "ac11301 returns setting value" do
+    Setting.create!(organization: @organization, key: "takes_measures_to_determine_pep_status", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11301
+  end
+
+  # C91 — aC11302: Which measures for PEP determination? (free text, conditional on aC11301)
+  test "ac11302 returns nil when ac11301 is not Oui" do
+    assert_nil @survey.ac11302
+  end
+
+  test "ac11302 returns setting value when ac11301 is Oui" do
+    Setting.create!(organization: @organization, key: "takes_measures_to_determine_pep_status", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "pep_determination_measures", category: "controls", value: "Database screening")
+    assert_equal "Database screening", @survey.ac11302
+  end
+
+  # C92 — aC11303: Additional PEP procedures? (free text, conditional on aC11301)
+  test "ac11303 returns nil when ac11301 is not Oui" do
+    assert_nil @survey.ac11303
+  end
+
+  test "ac11303 returns setting value when ac11301 is Oui" do
+    Setting.create!(organization: @organization, key: "takes_measures_to_determine_pep_status", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "additional_pep_procedures", category: "controls", value: "Enhanced monitoring and senior approval")
+    assert_equal "Enhanced monitoring and senior approval", @survey.ac11303
+  end
+
+  # C93 — aC11304: PEP screening for new clients? (conditional on aC11301)
+  test "ac11304 returns nil when ac11301 is not Oui" do
+    assert_nil @survey.ac11304
+  end
+
+  test "ac11304 returns setting value when ac11301 is Oui" do
+    Setting.create!(organization: @organization, key: "takes_measures_to_determine_pep_status", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "pep_screening_for_new_clients", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11304
+  end
+
+  # C94 — aC11305: Continuous PEP screening? (conditional on aC11301)
+  test "ac11305 returns nil when ac11301 is not Oui" do
+    assert_nil @survey.ac11305
+  end
+
+  test "ac11305 returns setting value when ac11301 is Oui" do
+    Setting.create!(organization: @organization, key: "takes_measures_to_determine_pep_status", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "continuous_pep_screening", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11305
+  end
+
+  # C95 — aC11306: Enhanced PEP surveillance? (conditional on aC11301)
+  test "ac11306 returns nil when ac11301 is not Oui" do
+    assert_nil @survey.ac11306
+  end
+
+  test "ac11306 returns setting value when ac11301 is Oui" do
+    Setting.create!(organization: @organization, key: "takes_measures_to_determine_pep_status", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "enhanced_pep_surveillance", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11306
+  end
+
+  # C96 — aC11307: All PEP relationships high-risk? (conditional on aC11301)
+  test "ac11307 returns nil when ac11301 is not Oui" do
+    assert_nil @survey.ac11307
+  end
+
+  test "ac11307 returns setting value when ac11301 is Oui" do
+    Setting.create!(organization: @organization, key: "takes_measures_to_determine_pep_status", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "all_pep_relationships_high_risk", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11307
+  end
+
+  # ============================================================
+  # Section 1.13 — Cash Transactions (C97–C99)
+  # ============================================================
+
+  # C97 — aC11401: Entity performs cash operations? (enum Oui/Non)
+  test "ac11401 returns nil when no setting exists" do
+    assert_nil @survey.ac11401
+  end
+
+  test "ac11401 returns setting value" do
+    Setting.create!(organization: @organization, key: "performs_cash_operations_with_clients", category: "controls", value: "Non")
+    assert_equal "Non", @survey.ac11401
+  end
+
+  # C98 — aC11402: Applies specific AML controls for cash? (conditional on aC11401)
+  test "ac11402 returns nil when ac11401 is not Oui" do
+    assert_nil @survey.ac11402
+  end
+
+  test "ac11402 returns setting value when ac11401 is Oui" do
+    Setting.create!(organization: @organization, key: "performs_cash_operations_with_clients", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "applies_aml_controls_for_cash", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11402
+  end
+
+  # C99 — aC11403: Describe cash-specific AML controls (free text, conditional on aC11402)
+  test "ac11403 returns nil when ac11402 is not Oui" do
+    assert_nil @survey.ac11403
+  end
+
+  test "ac11403 returns setting value when ac11402 is Oui" do
+    Setting.create!(organization: @organization, key: "performs_cash_operations_with_clients", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "applies_aml_controls_for_cash", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "cash_aml_controls_description", category: "controls", value: "Cash register, receipts, reporting above 10k EUR")
+    assert_equal "Cash register, receipts, reporting above 10k EUR", @survey.ac11403
+  end
+
+  # ============================================================
+  # Section 1.14 — STR (C100–C103)
+  # ============================================================
+
+  # C100 — aC11501B: Filed STRs/SARs with FIU? (enum Oui/Non)
+  test "ac11501b returns nil when no setting exists" do
+    assert_nil @survey.ac11501b
+  end
+
+  test "ac11501b returns setting value" do
+    Setting.create!(organization: @organization, key: "filed_strs_with_fiu", category: "controls", value: "Non")
+    assert_equal "Non", @survey.ac11501b
+  end
+
+  # C101 — aC11502: Total TF-related STRs (integerItemType, conditional on aC11501B)
+  test "ac11502 returns nil when ac11501b is not Oui" do
+    assert_nil @survey.ac11502
+  end
+
+  test "ac11502 returns setting value when ac11501b is Oui" do
+    Setting.create!(organization: @organization, key: "filed_strs_with_fiu", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "tf_related_strs_count", category: "controls", value: "0")
+    assert_equal "0", @survey.ac11502
+  end
+
+  # C102 — aC11504: Total ML-related STRs (integerItemType, conditional on aC11501B)
+  test "ac11504 returns nil when ac11501b is not Oui" do
+    assert_nil @survey.ac11504
+  end
+
+  test "ac11504 returns setting value when ac11501b is Oui" do
+    Setting.create!(organization: @organization, key: "filed_strs_with_fiu", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "ml_related_strs_count", category: "controls", value: "2")
+    assert_equal "2", @survey.ac11504
+  end
+
+  # C103 — aC11508: Taken measures to strengthen internal AML controls? (enum Oui/Non)
+  test "ac11508 returns nil when no setting exists" do
+    assert_nil @survey.ac11508
+  end
+
+  test "ac11508 returns setting value" do
+    Setting.create!(organization: @organization, key: "strengthened_internal_aml_controls", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac11508
+  end
+
+  # ============================================================
+  # Section 1.15 — Comments & Feedback (C104–C105)
+  # ============================================================
+
+  # C104 — aC116A: Has comments on controls section? (enum Oui/Non)
+  test "ac116a returns nil when no setting exists" do
+    assert_nil @survey.ac116a
+  end
+
+  test "ac116a returns setting value" do
+    Setting.create!(organization: @organization, key: "has_controls_section_comments", category: "controls", value: "Oui")
+    assert_equal "Oui", @survey.ac116a
+  end
+
+  # C105 — aC11601: Controls section comments (free text, conditional on aC116A)
+  test "ac11601 returns nil when ac116a is not Oui" do
+    assert_nil @survey.ac11601
+  end
+
+  test "ac11601 returns setting value when ac116a is Oui" do
+    Setting.create!(organization: @organization, key: "has_controls_section_comments", category: "controls", value: "Oui")
+    Setting.create!(organization: @organization, key: "controls_section_comments", category: "controls", value: "No additional comments")
+    assert_equal "No additional comments", @survey.ac11601
+  end
+
+  # ============================================================
+  # Signatories (S1–S3)
+  # ============================================================
+
+  # S1 — aS1: Signatory attestation
+  test "as1 returns nil when no setting exists" do
+    assert_nil @survey.as1
+  end
+
+  test "as1 returns setting value" do
+    Setting.create!(organization: @organization, key: "signatory_attestation", category: "entity_info", value: "Jean Dupont, Directeur Général")
+    assert_equal "Jean Dupont, Directeur Général", @survey.as1
+  end
+
+  # S2 — aS2: Authorized representative attestation
+  test "as2 returns nil when no setting exists" do
+    assert_nil @survey.as2
+  end
+
+  test "as2 returns setting value" do
+    Setting.create!(organization: @organization, key: "authorized_representative_attestation", category: "entity_info", value: "Marie Martin, Responsable Conformité")
+    assert_equal "Marie Martin, Responsable Conformité", @survey.as2
+  end
+
+  # S3 — aINCOMPLETE: Incomplete submission reason
+  test "aincomplete returns nil when no setting exists" do
+    assert_nil @survey.aincomplete
+  end
+
+  test "aincomplete returns setting value" do
+    Setting.create!(organization: @organization, key: "incomplete_submission_reason", category: "entity_info", value: "Complet")
+    assert_equal "Complet", @survey.aincomplete
+  end
 end
