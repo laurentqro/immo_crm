@@ -668,6 +668,40 @@ class Survey
         has_transactions ? "Oui" : "Non"
       end
 
+      # Q50 — a11302RES: Total unique PEP clients by residence country
+      # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+      # Scope: Purchases, sales, and rentals
+      # Conditional: only when a11301 == "Oui"
+      def a11302res
+        return nil unless a11301 == "Oui"
+
+        pep_client_ids = organization.clients.kept.peps.pluck(:id)
+
+        txn_scope = organization.transactions.kept.for_year(year)
+          .where(client_id: pep_client_ids)
+
+        purchase_sale_clients = txn_scope
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .select("clients.id, clients.residence_country")
+
+        rental_clients = txn_scope
+          .where(transaction_type: "RENTAL")
+          .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
+          .joins(:client)
+          .select("clients.id, clients.residence_country")
+
+        all_rows = purchase_sale_clients + rental_clients
+        grouped = all_rows
+          .map { |r| [r.id, r.residence_country] }
+          .uniq
+          .group_by(&:last)
+          .transform_values(&:count)
+
+        grouped.delete(nil)
+        grouped
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

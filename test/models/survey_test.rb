@@ -3309,4 +3309,19 @@ class SurveyTest < ActiveSupport::TestCase
     survey = Survey.new(organization: organizations(:company), year: @year)
     assert_equal "Non", survey.a11301
   end
+
+  # Q50 — a11302RES: Total unique PEP clients by residence country
+  # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+  # Conditional: only when a11301 == "Oui"
+  test "a11302res returns nil when a11301 is Non (no PEP clients)" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a11302res
+  end
+
+  test "a11302res returns PEP clients grouped by residence country" do
+    # Fixture pep_client: is_pep true, residence_country "MC", has pep_transaction (PURCHASE) in current year
+    result = @survey.a11302res
+    assert_instance_of Hash, result
+    assert_equal({"MC" => 1}, result)
+  end
 end
