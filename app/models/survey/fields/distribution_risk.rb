@@ -273,6 +273,17 @@ class Survey
 
         JSON.parse(json)
       end
+
+      # Q197 — a3306B: BOs with 25%+ by nationality (dimensional)
+      # Type: xbrli:integerItemType — settings-based dimensional, conditional on aIR328
+      def a3306b
+        return nil unless air328 == "Oui"
+
+        json = setting_value_for("bos_25pct_by_nationality")
+        return nil if json.nil?
+
+        JSON.parse(json)
+      end
     end
   end
 end
