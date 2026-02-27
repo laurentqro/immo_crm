@@ -166,6 +166,13 @@ class Survey
           .group(Arel.sql(country_sql))
           .count
       end
+
+      # Q184 — a3501C: Can entity provide residence info for introducers?
+      # Type: enum (Oui/Non) — settings-based, conditional on a3201
+      def a3501c
+        return nil unless a3201 == "Oui"
+        setting_value_for("can_provide_introducer_residence")
+      end
     end
   end
 end

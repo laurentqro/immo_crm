@@ -5578,4 +5578,17 @@ class SurveyTest < ActiveSupport::TestCase
     result = @survey.a3204
     assert_equal (baseline["IT"] || 0) + 1, result["IT"]
   end
+
+  # Q184 — a3501C: Can entity provide residence info for introducers?
+  test "a3501c returns nil when a3201 is not Oui" do
+    assert_nil @survey.a3501c
+  end
+
+  test "a3501c returns setting value when a3201 is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_clients_through_introducers", category: "entity_info", value: "Oui")
+    assert_nil @survey.a3501c
+
+    Setting.create!(organization: @organization, key: "can_provide_introducer_residence", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a3501c
+  end
 end
