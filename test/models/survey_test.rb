@@ -3339,4 +3339,17 @@ class SurveyTest < ActiveSupport::TestCase
     assert_instance_of Hash, result
     assert_equal({"MC" => 1}, result)
   end
+
+  # Q52 — a11304B: Total transactions by PEP clients for purchase/sale
+  # Type: xbrli:integerItemType
+  # Conditional: only when a11301 == "Oui"
+  test "a11304b returns nil when a11301 is Non (no PEP clients)" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a11304b
+  end
+
+  test "a11304b returns count of purchase/sale transactions by PEP clients" do
+    # Fixture pep_client has 1 PURCHASE transaction (pep_transaction)
+    assert_equal 1, @survey.a11304b
+  end
 end
