@@ -5088,4 +5088,24 @@ class SurveyTest < ActiveSupport::TestCase
     result = @survey.air237b
     assert_equal (baseline["FR"] || 0) + 2, result["FR"]  # 2 within 5-year window
   end
+
+  # Q156 — aIR238B: Total value of funds transferred by client country for purchase/sale (dimensional, monetary)
+  test "air238b returns total transaction values by country for current year" do
+    baseline = @survey.air238b
+
+    np_fr = Client.create!(organization: @organization, name: "NP FR", client_type: "NATURAL_PERSON", nationality: "FR")
+    le_it = Client.create!(organization: @organization, name: "LE IT", client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SCI", incorporation_country: "IT")
+
+    Transaction.create!(organization: @organization, client: np_fr, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 500_000, payment_method: "WIRE")
+    Transaction.create!(organization: @organization, client: np_fr, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 300_000, payment_method: "WIRE")
+    Transaction.create!(organization: @organization, client: le_it, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 9, 1), transaction_value: 1_200_000, payment_method: "WIRE")
+
+    result = @survey.air238b
+    assert_equal (baseline["FR"] || 0) + 800_000, result["FR"]
+    assert_equal (baseline["IT"] || 0) + 1_200_000, result["IT"]
+  end
 end
