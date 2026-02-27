@@ -44,6 +44,18 @@ class Survey
           .group(Arel.sql(country_sql))
           .count
       end
+
+      # Q172 — a3105: Clients with foreign third-party CDD, by third-party country (dimensional)
+      # Type: xbrli:integerItemType — dimensional by country, conditional on a3103
+      def a3105
+        return nil unless a3103 == "Oui"
+
+        organization.clients.kept
+          .where(third_party_cdd: true, third_party_cdd_type: "FOREIGN")
+          .where.not(third_party_cdd_country: nil)
+          .group(:third_party_cdd_country)
+          .count
+      end
     end
   end
 end
