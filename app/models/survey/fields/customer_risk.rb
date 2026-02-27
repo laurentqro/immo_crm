@@ -497,6 +497,30 @@ class Survey
         setting_value_for("can_distinguish_trust_clients")
       end
 
+      # Q41 — a1802TOLA: Total unique trust/legal construction clients
+      # for purchases, sales, and rentals of real estate
+      # Type: xbrli:integerItemType (scalar — NoCountryDimension)
+      # Conditional: only when a1802btola == "Oui"
+      def a1802tola
+        return nil unless a1802btola == "Oui"
+
+        txns = organization.transactions.kept.for_year(year)
+
+        purchase_sale_client_ids = txns
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .where(clients: {client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST"})
+          .pluck(:client_id)
+
+        rental_client_ids = txns
+          .where(transaction_type: "RENTAL")
+          .joins(:client)
+          .where(clients: {client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST"})
+          .pluck(:client_id)
+
+        (purchase_sale_client_ids + rental_client_ids).uniq.count
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

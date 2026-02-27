@@ -60,7 +60,7 @@
 
 ### Section 1.7
 - [x] Task 40: Q40 — a1802BTOLA — entity distinguishes trust/legal construction clients (settings-based) (2026-02-27)
-- [ ] Task 41: Q41 — Veuillez indiquer le nombre total de clients uniques qui sont des trusts et d'autres constructions juridiques pour l'ach
+- [x] Task 41: Q41 — a1802TOLA — total unique trust/legal construction clients for purchase/sale/rental (conditional on a1802btola) (2026-02-27)
 - [ ] Task 42: Q42 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des trusts et autres constructions juridiques 
 - [ ] Task 43: Q43 — Veuillez indiquer le nombre total de personnes physiques qui sont des trustees à titre professionnel, ventilé par nation
 - [ ] Task 44: Q44 — Veuillez indiquer le nombre total de personnes physiques qui sont des trustees à titre professionnel, ventilé par pays d

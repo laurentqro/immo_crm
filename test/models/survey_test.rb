@@ -2562,4 +2562,157 @@ class SurveyTest < ActiveSupport::TestCase
   test "a1802btola returns nil when setting is not set" do
     assert_nil @survey.a1802btola
   end
+
+  # Q41 — a1802TOLA: Total unique trust/legal construction clients
+  # for purchases, sales, and rentals of real estate
+  # Type: xbrli:integerItemType (scalar — NoCountryDimension)
+  # Conditional: only when a1802btola == "Oui"
+  test "a1802tola returns nil when a1802btola is not Oui" do
+    assert_nil @survey.a1802tola
+  end
+
+  test "a1802tola counts unique trust clients for purchase/sale and rental" do
+    Setting.create!(
+      organization: @organization,
+      key: "can_distinguish_trust_clients",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    trust_client = Client.create!(
+      organization: @organization,
+      name: "Trust Alpha",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "TRUST",
+      incorporation_country: "MC",
+      became_client_at: 6.months.ago
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: trust_client,
+      reference: "A1802TOLA-PS",
+      transaction_date: Date.current - 1.month,
+      transaction_type: "PURCHASE",
+      transaction_value: 1_000_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    trust_client_2 = Client.create!(
+      organization: @organization,
+      name: "Trust Beta",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "TRUST",
+      incorporation_country: "FR",
+      became_client_at: 3.months.ago
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: trust_client_2,
+      reference: "A1802TOLA-RENTAL",
+      transaction_date: Date.current - 1.week,
+      transaction_type: "RENTAL",
+      transaction_value: 180_000,
+      rental_annual_value: 180_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    assert_equal 2, @survey.a1802tola
+  end
+
+  test "a1802tola excludes non-trust legal entity clients" do
+    Setting.create!(
+      organization: @organization,
+      key: "can_distinguish_trust_clients",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    trust_client = Client.create!(
+      organization: @organization,
+      name: "Trust Gamma",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "TRUST",
+      incorporation_country: "MC",
+      became_client_at: 6.months.ago
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: trust_client,
+      reference: "A1802TOLA-TRUST",
+      transaction_date: Date.current - 1.month,
+      transaction_type: "SALE",
+      transaction_value: 500_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    non_trust_le = Client.create!(
+      organization: @organization,
+      name: "SCI Delta",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SCI",
+      incorporation_country: "MC",
+      became_client_at: 3.months.ago
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: non_trust_le,
+      reference: "A1802TOLA-SCI",
+      transaction_date: Date.current - 2.months,
+      transaction_type: "PURCHASE",
+      transaction_value: 800_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    assert_equal 1, @survey.a1802tola
+  end
+
+  test "a1802tola counts each unique trust client only once even with multiple transactions" do
+    Setting.create!(
+      organization: @organization,
+      key: "can_distinguish_trust_clients",
+      category: "entity_info",
+      value: "Oui"
+    )
+
+    trust_client = Client.create!(
+      organization: @organization,
+      name: "Trust Epsilon",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "TRUST",
+      incorporation_country: "LU",
+      became_client_at: 6.months.ago
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: trust_client,
+      reference: "A1802TOLA-T1",
+      transaction_date: Date.current - 1.month,
+      transaction_type: "PURCHASE",
+      transaction_value: 1_000_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: trust_client,
+      reference: "A1802TOLA-T2",
+      transaction_date: Date.current - 2.months,
+      transaction_type: "SALE",
+      transaction_value: 2_000_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    assert_equal 1, @survey.a1802tola
+  end
 end
