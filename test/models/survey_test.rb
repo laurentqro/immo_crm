@@ -5913,4 +5913,54 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "distribution_risk_comments", category: "entity_info", value: "No additional comments.")
     assert_equal "No additional comments.", @survey.a3701
   end
+
+  # === PART 2: CONTROLS ===
+
+  # C1 — aC1102A: Total employees (reuses a3301)
+  test "ac1102a returns setting value for total_employee_headcount" do
+    assert_nil @survey.ac1102a
+
+    Setting.create!(organization: @organization, key: "total_employee_headcount", category: "entity_info", value: "12")
+    assert_equal "12", @survey.ac1102a
+  end
+
+  # C2 — aC1102: FTE employees
+  test "ac1102 returns setting value for fte_employees" do
+    assert_nil @survey.ac1102
+
+    Setting.create!(organization: @organization, key: "fte_employees", category: "entity_info", value: "10.5")
+    assert_equal "10.5", @survey.ac1102
+  end
+
+  # C3 — aC1101Z: Hours on AML/CFT compliance per month
+  test "ac1101z returns setting value for aml_compliance_hours_per_month" do
+    assert_nil @survey.ac1101z
+
+    Setting.create!(organization: @organization, key: "aml_compliance_hours_per_month", category: "compliance_policies", value: "40.0")
+    assert_equal "40.0", @survey.ac1101z
+  end
+
+  # C4 — aC114: Has board/senior management?
+  test "ac114 returns setting value for has_board_or_senior_management" do
+    assert_nil @survey.ac114
+
+    Setting.create!(organization: @organization, key: "has_board_or_senior_management", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.ac114
+  end
+
+  # C5 — aC1106: Has compliance department?
+  test "ac1106 returns setting value for has_compliance_department" do
+    assert_nil @survey.ac1106
+
+    Setting.create!(organization: @organization, key: "has_compliance_department", category: "compliance_policies", value: "Oui")
+    assert_equal "Oui", @survey.ac1106
+  end
+
+  # C6 — aC1518A: Entity is part of a group?
+  test "ac1518a returns setting value for entity_is_part_of_group" do
+    assert_nil @survey.ac1518a
+
+    Setting.create!(organization: @organization, key: "entity_is_part_of_group", category: "entity_info", value: "Non")
+    assert_equal "Non", @survey.ac1518a
+  end
 end
