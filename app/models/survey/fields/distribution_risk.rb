@@ -29,6 +29,21 @@ class Survey
       def a3103
         setting_value_for("uses_foreign_third_party_cdd")
       end
+
+      # Q171 — a3104: Clients with foreign third-party CDD, by primary nationality (dimensional)
+      # Type: xbrli:integerItemType — dimensional by country, conditional on a3103
+      def a3104
+        return nil unless a3103 == "Oui"
+
+        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
+          "THEN clients.nationality ELSE clients.incorporation_country END"
+
+        organization.clients.kept
+          .where(third_party_cdd: true, third_party_cdd_type: "FOREIGN")
+          .where("#{country_sql} IS NOT NULL")
+          .group(Arel.sql(country_sql))
+          .count
+      end
     end
   end
 end
