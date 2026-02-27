@@ -4202,4 +4202,29 @@ class SurveyTest < ActiveSupport::TestCase
   test "a1402 returns nil when a1203 is not Oui" do
     assert_nil @survey.a1402
   end
+
+  # === Section 1.11: Monegasque Client Types (Purchases and Sales) ===
+
+  test "ac171 returns Oui when Monegasque clients had purchase/sale transactions" do
+    client = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Monaco Client",
+      nationality: "MC"
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 15),
+      transaction_value: 1_000_000
+    )
+
+    assert_equal "Oui", @survey.ac171
+  end
+
+  test "ac171 returns Non when no Monegasque clients had purchase/sale transactions" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal "Non", survey.ac171
+  end
 end

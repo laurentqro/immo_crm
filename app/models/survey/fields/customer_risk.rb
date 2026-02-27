@@ -1112,6 +1112,17 @@ class Survey
         counts = bos.group(:nationality).count
         counts.transform_values { |count| (BigDecimal(count) / total * 100).round(2) }
       end
+
+      # Q80 — aC171: Did entity have Monegasque clients (purchases and sales)
+      # during the reporting period?
+      # Type: enum (Oui/Non) — computed
+      def ac171
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .where(clients: {nationality: "MC"})
+          .exists? ? "Oui" : "Non"
+      end
     end
   end
 end
