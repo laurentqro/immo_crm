@@ -3382,4 +3382,19 @@ class SurveyTest < ActiveSupport::TestCase
     assert_instance_of Hash, result
     assert_equal 1, result["MC"]
   end
+
+  # Q55 — a11309B: Total transactions by PEP BOs of legal entities/trusts
+  # Type: xbrli:integerItemType
+  # Conditional: only when a11301 == "Oui"
+  test "a11309b returns nil when a11301 is Non (no PEP clients)" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a11309b
+  end
+
+  test "a11309b returns count of purchase/sale transactions for LE/trust clients with PEP BOs" do
+    # Fixture legal_entity has pep_owner (PEP BO)
+    # legal_entity has high_value (PURCHASE) and check_payment (SALE) transactions in current year
+    # rental transaction should NOT be counted (B suffix = purchase/sale only)
+    assert_equal 2, @survey.a11309b
+  end
 end

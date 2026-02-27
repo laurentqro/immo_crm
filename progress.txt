@@ -76,7 +76,7 @@
 - [x] Task 52: Q52 — a11304B — total transactions by PEP clients for purchase/sale (computed, conditional on a11301) (2026-02-27)
 - [x] Task 53: Q53 — a11305B — total value of funds transferred by PEP clients for purchase/sale (computed, conditional on a11301) (2026-02-27)
 - [x] Task 54: Q54 — a11307 — total unique PEP BOs of legal entities/trusts by primary nationality (dimensional, conditional on a11301) (2026-02-27)
-- [ ] Task 55: Q55 — Veuillez indiquer le nombre total d'opérations (entrantes et sortantes) effectuées par des bénéficiaires effectifs de pe
+- [x] Task 55: Q55 — a11309B — total transactions by PEP BOs of legal entities/trusts for purchase/sale (computed, conditional on a11301) (2026-02-27)
 
 ### Section 1.9
 - [ ] Task 56: Q56 — Votre entité a-t-elle des clients qui sont des PSAV ?

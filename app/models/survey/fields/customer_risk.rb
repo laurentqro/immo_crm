@@ -787,6 +787,25 @@ class Survey
           .count
       end
 
+      # Q55 — a11309B: Total transactions (purchase/sale) by legal entities/trusts
+      # whose beneficial owners are PEPs
+      # Type: xbrli:integerItemType
+      # Conditional: only when a11301 == "Oui"
+      def a11309b
+        return nil unless a11301 == "Oui"
+
+        le_trust_client_ids_with_pep_bos = BeneficialOwner.peps
+          .joins(:client)
+          .where(clients: {organization_id: organization.id, client_type: "LEGAL_ENTITY"})
+          .select(:client_id)
+          .distinct
+
+        organization.transactions.kept.for_year(year)
+          .where(client_id: le_trust_client_ids_with_pep_bos)
+          .where(transaction_type: %w[PURCHASE SALE])
+          .count
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)
