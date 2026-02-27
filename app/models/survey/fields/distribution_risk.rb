@@ -212,6 +212,12 @@ class Survey
       def air328
         setting_value_for("card_holder_is_legal_entity")
       end
+
+      # Q189 — a3301: Total employee headcount at end of reporting period
+      # Type: xbrli:integerItemType — settings-based
+      def a3301
+        setting_value_for("total_employee_headcount")
+      end
     end
   end
 end

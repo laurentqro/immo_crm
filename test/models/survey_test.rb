@@ -5658,4 +5658,12 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "card_holder_is_legal_entity", category: "entity_info", value: "Oui")
     assert_equal "Oui", @survey.air328
   end
+
+  # Q189 — a3301: Total employee headcount
+  test "a3301 returns setting value for total_employee_headcount" do
+    assert_nil @survey.a3301
+
+    Setting.create!(organization: @organization, key: "total_employee_headcount", category: "entity_info", value: "15")
+    assert_equal "15", @survey.a3301
+  end
 end
