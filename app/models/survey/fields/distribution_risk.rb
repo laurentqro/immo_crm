@@ -323,6 +323,12 @@ class Survey
         return nil unless a3210 == "Oui"
         setting_value_for("professional_association_name")
       end
+
+      # Q204 — a381: Revenue for reporting period
+      # Type: xbrli:monetaryItemType (iso4217:EUR) — settings-based
+      def a381
+        setting_value_for("revenue_reporting_period")
+      end
     end
   end
 end

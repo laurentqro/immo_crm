@@ -5808,4 +5808,12 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "professional_association_name", category: "entity_info", value: "Chambre Immobilière Monégasque")
     assert_equal "Chambre Immobilière Monégasque", @survey.a3211
   end
+
+  # Q204 — a381: Revenue for reporting period (monetaryItemType)
+  test "a381 returns setting value for revenue" do
+    assert_nil @survey.a381
+
+    Setting.create!(organization: @organization, key: "revenue_reporting_period", category: "entity_info", value: "1500000.00")
+    assert_equal "1500000.00", @survey.a381
+  end
 end
