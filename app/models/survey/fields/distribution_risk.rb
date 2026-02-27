@@ -112,6 +112,14 @@ class Survey
         return nil unless a3209 == "Oui"
         setting_value_for("non_face_to_face_lp_onboarded_count")
       end
+
+      # Q179 — a3212CTOLA: Trust clients onboarded without face-to-face during reporting period
+      # Type: xbrli:integerItemType — settings-based, conditional on a3209 AND a1802btola
+      def a3212ctola
+        return nil unless a3209 == "Oui"
+        return nil unless a1802btola == "Oui"
+        setting_value_for("non_face_to_face_trust_onboarded_count")
+      end
     end
   end
 end

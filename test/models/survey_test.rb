@@ -5485,4 +5485,24 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "non_face_to_face_lp_onboarded_count", category: "entity_info", value: "3")
     assert_equal "3", @survey.a3211c
   end
+
+  # Q179 — a3212CTOLA: Trust clients onboarded without face-to-face
+  test "a3212ctola returns nil when a3209 is not Oui" do
+    Setting.create!(organization: @organization, key: "can_distinguish_trust_clients", category: "entity_info", value: "Oui")
+    assert_nil @survey.a3212ctola
+  end
+
+  test "a3212ctola returns nil when a1802btola is not Oui" do
+    Setting.create!(organization: @organization, key: "non_face_to_face_onboarding", category: "entity_info", value: "Oui")
+    assert_nil @survey.a3212ctola
+  end
+
+  test "a3212ctola returns setting value when both conditions met" do
+    Setting.create!(organization: @organization, key: "non_face_to_face_onboarding", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "can_distinguish_trust_clients", category: "entity_info", value: "Oui")
+    assert_nil @survey.a3212ctola
+
+    Setting.create!(organization: @organization, key: "non_face_to_face_trust_onboarded_count", category: "entity_info", value: "2")
+    assert_equal "2", @survey.a3212ctola
+  end
 end
