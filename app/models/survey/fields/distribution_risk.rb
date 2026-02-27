@@ -218,6 +218,12 @@ class Survey
       def a3301
         setting_value_for("total_employee_headcount")
       end
+
+      # Q190 — a3302: Does entity have branches, subsidiaries, or agencies?
+      # Type: enum (Oui/Non) — settings-based
+      def a3302
+        setting_value_for("has_branches")
+      end
     end
   end
 end

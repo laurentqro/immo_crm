@@ -5666,4 +5666,12 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "total_employee_headcount", category: "entity_info", value: "15")
     assert_equal "15", @survey.a3301
   end
+
+  # Q190 — a3302: Does entity have branches, subsidiaries, or agencies?
+  test "a3302 returns setting value for has_branches" do
+    assert_nil @survey.a3302
+
+    Setting.create!(organization: @organization, key: "has_branches", category: "entity_info", value: "Non")
+    assert_equal "Non", @survey.a3302
+  end
 end
