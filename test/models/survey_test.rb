@@ -5017,4 +5017,25 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal baseline + 1, @survey.air233s  # only 1 unique seller (buyer excluded)
   end
+
+  # Q152 — aIR235B_1: Total transactions by country for purchase/sale (dimensional)
+  test "air235b_1 returns transaction counts grouped by client country" do
+    baseline = @survey.air235b_1
+
+    np_fr = Client.create!(organization: @organization, name: "NP FR", client_type: "NATURAL_PERSON", nationality: "FR")
+    le_ch = Client.create!(organization: @organization, name: "LE CH", client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SCI", incorporation_country: "CH")
+
+    Transaction.create!(organization: @organization, client: np_fr, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 1, 1), transaction_value: 100_000, payment_method: "WIRE")
+    Transaction.create!(organization: @organization, client: np_fr, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 2, 1), transaction_value: 200_000, payment_method: "WIRE")
+    Transaction.create!(organization: @organization, client: le_ch, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 300_000, payment_method: "WIRE")
+
+    result = @survey.air235b_1
+    assert_instance_of Hash, result
+    assert_equal (baseline["FR"] || 0) + 2, result["FR"]
+    assert_equal (baseline["CH"] || 0) + 1, result["CH"]
+  end
 end

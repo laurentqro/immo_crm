@@ -395,6 +395,20 @@ class Survey
           .distinct
           .count(:client_id)
       end
+
+      # Q152 — aIR235B_1: Total transactions by country for purchase/sale (dimensional)
+      # Type: xbrli:integerItemType — dimensional by country
+      def air235b_1
+        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
+          "THEN clients.nationality ELSE clients.incorporation_country END"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .where("#{country_sql} IS NOT NULL")
+          .group(Arel.sql(country_sql))
+          .count
+      end
     end
   end
 end
