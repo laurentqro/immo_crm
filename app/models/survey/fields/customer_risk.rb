@@ -565,6 +565,29 @@ class Survey
           .count
       end
 
+      # Q44 — a1809: Professional trustees (natural persons),
+      # broken down by country in which the trust was created,
+      # for purchase, sale and rental
+      # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+      # Conditional: only when a1802btola == "Oui"
+      def a1809
+        return nil unless a1802btola == "Oui"
+
+        trust_client_ids = organization.transactions.kept.for_year(year)
+          .joins(:client)
+          .where(clients: {client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST"})
+          .select(:client_id)
+          .distinct
+
+        Trustee
+          .joins(:client)
+          .where(client_id: trust_client_ids)
+          .where(is_professional: true)
+          .where.not(clients: {incorporation_country: nil})
+          .group("clients.incorporation_country")
+          .count
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)
