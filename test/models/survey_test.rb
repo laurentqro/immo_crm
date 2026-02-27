@@ -4772,4 +4772,148 @@ class SurveyTest < ActiveSupport::TestCase
   test "a2115aw returns nil when a2113w is not Oui" do
     assert_nil @survey.a2115aw
   end
+
+  # === Section 2.6: Cash operations BY clients ===
+
+  # Q136 — a2107B: Did clients perform cash operations?
+  test "a2107b returns setting value for clients_performed_cash_operations" do
+    assert_nil @survey.a2107b
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2107b
+  end
+
+  # Q137 — a2108B: Total cash operations count by clients
+  test "a2108b returns count of cash operations when a2107b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    baseline = @survey.a2108b || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Cash By Client", nationality: "FR")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 50_000, payment_method: "CASH", cash_amount: 50_000)
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 100_000, payment_method: "MIXED", cash_amount: 20_000)
+
+    assert_equal baseline + 2, @survey.a2108b
+  end
+
+  test "a2108b returns nil when a2107b is not Oui" do
+    assert_nil @survey.a2108b
+  end
+
+  # Q138 — a2109B: Total value of cash operations by clients
+  test "a2109b returns total cash amount when a2107b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    baseline = @survey.a2109b || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Cash By Client", nationality: "FR")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 50_000, payment_method: "CASH", cash_amount: 50_000)
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 100_000, payment_method: "MIXED", cash_amount: 20_000)
+
+    assert_equal baseline + 70_000, @survey.a2109b
+  end
+
+  test "a2109b returns nil when a2107b is not Oui" do
+    assert_nil @survey.a2109b
+  end
+
+  # Q139 — aG24010B: Total value of cash in foreign currencies by clients
+  test "ag24010b returns total foreign currency cash amount when a2107b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    baseline = @survey.ag24010b || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "FX Cash By Client", nationality: "US")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 50_000, payment_method: "CASH",
+      cash_amount: 50_000, foreign_currency_cash_amount: 30_000)
+
+    assert_equal baseline + 30_000, @survey.ag24010b
+  end
+
+  test "ag24010b returns nil when a2107b is not Oui" do
+    assert_nil @survey.ag24010b
+  end
+
+  # Q140 — a2110B: Cash operations >= 10,000 EUR by clients
+  test "a2110b returns count of cash operations >= 10000 when a2107b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    baseline = @survey.a2110b || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Cash By Client", nationality: "FR")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 50_000, payment_method: "CASH", cash_amount: 10_000)
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 100_000, payment_method: "CASH", cash_amount: 9_999)
+
+    assert_equal baseline + 1, @survey.a2110b
+  end
+
+  test "a2110b returns nil when a2107b is not Oui" do
+    assert_nil @survey.a2110b
+  end
+
+  # Q141 — a2113B: Can entity distinguish cash ops > 100,000 EUR by clients?
+  test "a2113b returns setting value when a2107b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "can_distinguish_client_cash_over_100k", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2113b
+  end
+
+  test "a2113b returns nil when a2107b is not Oui" do
+    assert_nil @survey.a2113b
+  end
+
+  # Q142 — a2113AB: Cash ops by NP > 100,000 EUR
+  test "a2113ab returns count of NP cash ops > 100000 when a2113b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "can_distinguish_client_cash_over_100k", category: "entity_info", value: "Oui")
+    baseline = @survey.a2113ab || 0
+
+    np = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "NP Cash", nationality: "FR")
+    Transaction.create!(organization: @organization, client: np, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 200_000, payment_method: "CASH", cash_amount: 150_000)
+
+    assert_equal baseline + 1, @survey.a2113ab
+  end
+
+  test "a2113ab returns nil when a2113b is not Oui" do
+    assert_nil @survey.a2113ab
+  end
+
+  # Q143 — a2114AB: Cash ops by MC LE > 100,000 EUR
+  test "a2114ab returns count of MC LE cash ops > 100000 when a2113b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "can_distinguish_client_cash_over_100k", category: "entity_info", value: "Oui")
+    baseline = @survey.a2114ab || 0
+
+    mc_le = Client.create!(organization: @organization, client_type: "LEGAL_ENTITY", name: "MC LE Cash",
+      nationality: "MC", legal_entity_type: "SCI", incorporation_country: "MC")
+    Transaction.create!(organization: @organization, client: mc_le, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 200_000, payment_method: "CASH", cash_amount: 150_000)
+
+    assert_equal baseline + 1, @survey.a2114ab
+  end
+
+  test "a2114ab returns nil when a2113b is not Oui" do
+    assert_nil @survey.a2114ab
+  end
+
+  # Q144 — a2115AB: Cash ops by foreign LE > 100,000 EUR
+  test "a2115ab returns count of foreign LE cash ops > 100000 when a2113b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "can_distinguish_client_cash_over_100k", category: "entity_info", value: "Oui")
+    baseline = @survey.a2115ab || 0
+
+    fr_le = Client.create!(organization: @organization, client_type: "LEGAL_ENTITY", name: "FR LE Cash",
+      nationality: "FR", legal_entity_type: "SARL", incorporation_country: "FR")
+    Transaction.create!(organization: @organization, client: fr_le, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 200_000, payment_method: "CASH", cash_amount: 150_000)
+
+    assert_equal baseline + 1, @survey.a2115ab
+  end
+
+  test "a2115ab returns nil when a2113b is not Oui" do
+    assert_nil @survey.a2115ab
+  end
 end

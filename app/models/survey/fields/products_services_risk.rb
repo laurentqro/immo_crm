@@ -236,6 +236,107 @@ class Survey
           .where.not(clients: {incorporation_country: "MC"})
           .count
       end
+
+      # Q136 — a2107B: Did clients perform cash operations?
+      # Type: enum (Oui/Non) — settings-based
+      def a2107b
+        setting_value_for("clients_performed_cash_operations")
+      end
+
+      # Q137 — a2108B: Total cash operations count by clients
+      # Type: xbrli:integerItemType — computed, conditional on a2107b
+      def a2108b
+        return nil unless a2107b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .count
+      end
+
+      # Q138 — a2109B: Total value of cash operations by clients
+      # Type: xbrli:monetaryItemType — computed, conditional on a2107b
+      def a2109b
+        return nil unless a2107b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .sum(:cash_amount)
+      end
+
+      # Q139 — aG24010B: Total value of cash in foreign currencies by clients
+      # Type: xbrli:monetaryItemType — computed, conditional on a2107b
+      def ag24010b
+        return nil unless a2107b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .sum(:foreign_currency_cash_amount)
+      end
+
+      # Q140 — a2110B: Cash operations >= 10,000 EUR by clients
+      # Type: xbrli:integerItemType — computed, conditional on a2107b
+      def a2110b
+        return nil unless a2107b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .where("cash_amount >= ?", 10_000)
+          .count
+      end
+
+      # Q141 — a2113B: Can entity distinguish cash ops > 100,000 EUR by clients?
+      # Type: enum (Oui/Non) — settings-based, conditional on a2107b
+      def a2113b
+        return nil unless a2107b == "Oui"
+        setting_value_for("can_distinguish_client_cash_over_100k")
+      end
+
+      # Q142 — a2113AB: Cash ops by natural persons > 100,000 EUR
+      # Type: xbrli:integerItemType — computed, conditional on a2113b
+      def a2113ab
+        return nil unless a2113b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .where("cash_amount > ?", 100_000)
+          .joins(:client)
+          .where(clients: {client_type: "NATURAL_PERSON"})
+          .count
+      end
+
+      # Q143 — a2114AB: Cash ops by Monegasque legal entities > 100,000 EUR
+      # Type: xbrli:integerItemType — computed, conditional on a2113b
+      def a2114ab
+        return nil unless a2113b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .where("cash_amount > ?", 100_000)
+          .joins(:client)
+          .where(clients: {client_type: "LEGAL_ENTITY", incorporation_country: "MC"})
+          .count
+      end
+
+      # Q144 — a2115AB: Cash ops by foreign legal entities > 100,000 EUR
+      # Type: xbrli:integerItemType — computed, conditional on a2113b
+      def a2115ab
+        return nil unless a2113b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: %w[CASH MIXED])
+          .where("cash_amount > ?", 100_000)
+          .joins(:client)
+          .where(clients: {client_type: "LEGAL_ENTITY"})
+          .where.not(clients: {incorporation_country: "MC"})
+          .count
+      end
     end
   end
 end
