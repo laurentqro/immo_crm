@@ -3295,4 +3295,18 @@ class SurveyTest < ActiveSupport::TestCase
     refute_includes result, "Trust"
     refute_includes result, "SARL"
   end
+
+  # === Section 1.8: PEPs ===
+
+  # Q49 — a11301: Does entity have PEP clients?
+  # Type: enum "Oui" / "Non" (computed from client data)
+  test "a11301 returns Oui when organization has PEP clients with transactions in the year" do
+    # Fixture pep_client (is_pep: true) has pep_transaction in current year
+    assert_equal "Oui", @survey.a11301
+  end
+
+  test "a11301 returns Non when organization has no PEP clients with transactions in the year" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal "Non", survey.a11301
+  end
 end

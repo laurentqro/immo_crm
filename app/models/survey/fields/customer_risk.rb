@@ -652,6 +652,22 @@ class Survey
         labels.uniq.sort.join(", ")
       end
 
+      # === Section 1.8: PEPs ===
+
+      # Q49 — a11301: Does entity have PEP clients?
+      # Type: enum "Oui" / "Non" (computed)
+      # Checks if any PEP client had transactions during the reporting year
+      def a11301
+        pep_client_ids = organization.clients.kept.peps.pluck(:id)
+        return "Non" if pep_client_ids.empty?
+
+        has_transactions = organization.transactions.kept.for_year(year)
+          .where(client_id: pep_client_ids)
+          .exists?
+
+        has_transactions ? "Oui" : "Non"
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)
