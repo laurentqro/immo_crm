@@ -1587,6 +1587,24 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 0, survey.a1403r
   end
 
+  # Q31 — aIR129: Were some real estate purchases during the reporting period
+  # intended to establish a residence in Monaco?
+  # Type: enum "Oui" / "Non" (settings-based)
+
+  test "air129 returns the setting value when set" do
+    Setting.create!(
+      organization: @organization,
+      key: "purchases_intended_for_residence_establishment",
+      category: "entity_info",
+      value: "Oui"
+    )
+    assert_equal "Oui", @survey.air129
+  end
+
+  test "air129 returns nil when setting is not set" do
+    assert_nil @survey.air129
+  end
+
   test "a1210o excludes BOs from other organizations" do
     Setting.create!(
       organization: @organization,

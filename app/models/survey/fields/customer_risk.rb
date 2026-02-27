@@ -361,6 +361,13 @@ class Survey
           .sum(:transaction_value)
       end
 
+      # Q31 — aIR129: Were some real estate purchases during the reporting period
+      # intended to establish a residence in Monaco?
+      # Type: enum "Oui" / "Non" (settings-based)
+      def air129
+        setting_value_for("purchases_intended_for_residence_establishment")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)
