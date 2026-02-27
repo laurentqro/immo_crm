@@ -418,6 +418,13 @@ class Survey
           .sum(:transaction_value)
       end
 
+      # Q36 — a155: Does your entity distinguish if clients are Monegasque legal entities
+      # and the type of legal entity?
+      # Type: stringItemType with enum restriction ("Oui" / "Non") — settings-based
+      def a155
+        setting_value_for("can_distinguish_monegasque_legal_entity_type")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

@@ -1971,6 +1971,22 @@ class SurveyTest < ActiveSupport::TestCase
     result.each_value { |v| assert v > 0 }
   end
 
+  # Q36 — a155: Does your entity distinguish if clients are Monegasque legal entities and the type?
+  # Type: stringItemType with enum restriction ("Oui" / "Non") — settings-based
+  test "a155 returns the setting value when set" do
+    Setting.create!(
+      organization: @organization,
+      key: "can_distinguish_monegasque_legal_entity_type",
+      category: "entity_info",
+      value: "Oui"
+    )
+    assert_equal "Oui", @survey.a155
+  end
+
+  test "a155 returns nil when setting is not set" do
+    assert_nil @survey.a155
+  end
+
   test "a1210o excludes BOs from other organizations" do
     Setting.create!(
       organization: @organization,
