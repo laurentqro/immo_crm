@@ -5650,4 +5650,12 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "entity_legal_form", category: "entity_info", value: "13. Sociétés à responsabilité limitée")
     assert_equal "13. Sociétés à responsabilité limitée", @survey.air33lf
   end
+
+  # Q188 — aIR328: Is professional card holder a legal entity?
+  test "air328 returns setting value for card_holder_is_legal_entity" do
+    assert_nil @survey.air328
+
+    Setting.create!(organization: @organization, key: "card_holder_is_legal_entity", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.air328
+  end
 end

@@ -206,6 +206,12 @@ class Survey
       def air33lf
         setting_value_for("entity_legal_form")
       end
+
+      # Q188 — aIR328: Is professional card holder a legal entity?
+      # Type: enum (Oui/Non) — settings-based
+      def air328
+        setting_value_for("card_holder_is_legal_entity")
+      end
     end
   end
 end
