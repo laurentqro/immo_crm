@@ -3963,4 +3963,54 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal 1_250_000, @survey.a13604db
   end
+
+  # Q73 — a13602B: Unique custodian wallet provider PSAV clients
+  # by country of establishment, for purchase, sale, and rental
+  # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+  # Conditional: only when a13601cw == "Oui"
+
+  test "a13602b returns nil when a13601cw is not Oui" do
+    assert_nil @survey.a13602b
+  end
+
+  test "a13602b returns unique custodian VASP clients by incorporation country" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_custodian_wallet_provider_clients", category: "entity_info", value: "Oui")
+
+    vasp_mc = Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "MC Custodian",
+      incorporation_country: "MC",
+      is_vasp: true,
+      vasp_type: "CUSTODIAN"
+    )
+
+    vasp_fr = Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "FR Custodian",
+      incorporation_country: "FR",
+      is_vasp: true,
+      vasp_type: "CUSTODIAN"
+    )
+
+    Transaction.create!(
+      organization: @organization, client: vasp_mc,
+      reference: "CW-MC-1", transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 15), transaction_value: 500_000
+    )
+
+    Transaction.create!(
+      organization: @organization, client: vasp_fr,
+      reference: "CW-FR-1", transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 10), transaction_value: 300_000
+    )
+
+    result = @survey.a13602b
+    assert_equal({"MC" => 1, "FR" => 1}, result)
+  end
 end

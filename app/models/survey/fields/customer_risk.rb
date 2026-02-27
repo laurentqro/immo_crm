@@ -958,6 +958,23 @@ class Survey
           .sum(:transaction_value)
       end
 
+      # Q73 — a13602B: Unique custodian wallet provider PSAV clients
+      # by country of establishment, for purchase, sale, and rental
+      # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+      # Conditional: only when a13601cw == "Oui"
+      def a13602b
+        return nil unless a13601cw == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .joins(:client)
+          .where(clients: {is_vasp: true, vasp_type: "CUSTODIAN"})
+          .where.not(clients: {incorporation_country: nil})
+          .distinct
+          .group("clients.incorporation_country")
+          .count("clients.id")
+      end
+
       # Q64 — a13604AB: Total value of funds transferred by virtual currency exchange provider
       # PSAV clients for purchase, sale, and rental of real estate
       # Type: xbrli:monetaryItemType
