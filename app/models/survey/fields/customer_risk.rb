@@ -843,6 +843,20 @@ class Survey
           .count("clients.id")
       end
 
+      # Q60 — a13604BB: Total value of funds transferred by custodian wallet provider
+      # PSAV clients for purchase, sale, and rental of real estate
+      # Type: xbrli:monetaryItemType
+      # Conditional: only when a13601cw == "Oui"
+      def a13604bb
+        return nil unless a13601cw == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .joins(:client)
+          .where(clients: {is_vasp: true, vasp_type: "CUSTODIAN"})
+          .sum(:transaction_value)
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

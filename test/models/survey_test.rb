@@ -3511,4 +3511,73 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal 0, @survey.a13603bb
   end
+
+  # Q60 — a13604BB: Total value of funds transferred by custodian wallet provider
+  # PSAV clients for purchase, sale, and rental of real estate
+  # Type: xbrli:monetaryItemType
+  # Conditional: only when a13601cw == "Oui"
+
+  test "a13604bb returns nil when a13601cw is not Oui" do
+    assert_nil @survey.a13604bb
+  end
+
+  test "a13604bb returns total value of transactions by custodian VASP clients" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_custodian_wallet_provider_clients", category: "entity_info", value: "Oui")
+
+    custodian_client = Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "Custodian VASP Corp",
+      is_vasp: true,
+      vasp_type: "CUSTODIAN",
+      incorporation_country: "LU"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: custodian_client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 10),
+      transaction_value: 500_000
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: custodian_client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 7, 20),
+      transaction_value: 300_000
+    )
+
+    assert_equal 800_000, @survey.a13604bb
+  end
+
+  test "a13604bb excludes non-custodian VASP client transactions" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_custodian_wallet_provider_clients", category: "entity_info", value: "Oui")
+
+    exchange_client = Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "Exchange VASP Corp",
+      is_vasp: true,
+      vasp_type: "EXCHANGE",
+      incorporation_country: "LU"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: exchange_client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 6, 15),
+      transaction_value: 400_000
+    )
+
+    assert_equal 0, @survey.a13604bb
+  end
 end
