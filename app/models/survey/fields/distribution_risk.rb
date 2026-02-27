@@ -14,10 +14,9 @@ class Survey
       def a3102
         return nil unless a3101 == "Oui"
 
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
-        organization.clients.kept
+        clients_kept
           .where(third_party_cdd: true, third_party_cdd_type: "LOCAL")
           .where("#{country_sql} IS NOT NULL")
           .group(Arel.sql(country_sql))
@@ -35,10 +34,9 @@ class Survey
       def a3104
         return nil unless a3103 == "Oui"
 
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
-        organization.clients.kept
+        clients_kept
           .where(third_party_cdd: true, third_party_cdd_type: "FOREIGN")
           .where("#{country_sql} IS NOT NULL")
           .group(Arel.sql(country_sql))
@@ -50,7 +48,7 @@ class Survey
       def a3105
         return nil unless a3103 == "Oui"
 
-        organization.clients.kept
+        clients_kept
           .where(third_party_cdd: true, third_party_cdd_type: "FOREIGN")
           .where.not(third_party_cdd_country: nil)
           .group(:third_party_cdd_country)
@@ -62,7 +60,7 @@ class Survey
       def ab3206
         year_range = Date.new(year, 1, 1)..Date.new(year, 12, 31)
 
-        organization.clients.kept
+        clients_kept
           .where(client_type: "NATURAL_PERSON")
           .where(became_client_at: year_range)
           .count
@@ -73,7 +71,7 @@ class Survey
       def ab3207
         year_range = Date.new(year, 1, 1)..Date.new(year, 12, 31)
 
-        organization.clients.kept
+        clients_kept
           .where(client_type: "LEGAL_ENTITY")
           .where.not(legal_entity_type: "TRUST")
           .where(became_client_at: year_range)
@@ -87,7 +85,7 @@ class Survey
 
         year_range = Date.new(year, 1, 1)..Date.new(year, 12, 31)
 
-        organization.clients.kept
+        clients_kept
           .where(client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST")
           .where(became_client_at: year_range)
           .count
@@ -139,10 +137,9 @@ class Survey
       def a3202
         return nil unless a3501b == "Oui"
 
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
-        organization.clients.kept
+        clients_kept
           .where(introduced_by_third_party: true)
           .where("#{country_sql} IS NOT NULL")
           .group(Arel.sql(country_sql))
@@ -154,12 +151,11 @@ class Survey
       def a3204
         return nil unless a3501b == "Oui"
 
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
         year_range = Date.new(year, 1, 1)..Date.new(year, 12, 31)
 
-        organization.clients.kept
+        clients_kept
           .where(introduced_by_third_party: true)
           .where(became_client_at: year_range)
           .where("#{country_sql} IS NOT NULL")
@@ -179,7 +175,7 @@ class Survey
       def a3203
         return nil unless a3501c == "Oui"
 
-        organization.clients.kept
+        clients_kept
           .where(introduced_by_third_party: true)
           .where.not(introducer_country: nil)
           .group(:introducer_country)
@@ -193,7 +189,7 @@ class Survey
 
         year_range = Date.new(year, 1, 1)..Date.new(year, 12, 31)
 
-        organization.clients.kept
+        clients_kept
           .where(introduced_by_third_party: true)
           .where(became_client_at: year_range)
           .where.not(introducer_country: nil)

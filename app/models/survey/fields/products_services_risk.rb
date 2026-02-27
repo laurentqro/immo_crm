@@ -21,7 +21,7 @@ class Survey
       def a2102w
         return nil unless a2101wrp == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: "CHECK")
           .count
@@ -32,7 +32,7 @@ class Survey
       def a2102bw
         return nil unless a2101wrp == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: "CHECK")
           .sum(:transaction_value)
@@ -49,7 +49,7 @@ class Survey
       def a2102b
         return nil unless a2101b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: "CHECK")
           .count
@@ -60,7 +60,7 @@ class Survey
       def a2102bb
         return nil unless a2101b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: "CHECK")
           .sum(:transaction_value)
@@ -84,7 +84,7 @@ class Survey
       def a2105w
         return nil unless a2104wrp == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: "WIRE")
           .count
@@ -95,7 +95,7 @@ class Survey
       def a2105bw
         return nil unless a2104wrp == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: "WIRE")
           .sum(:transaction_value)
@@ -112,7 +112,7 @@ class Survey
       def a2105b
         return nil unless a2104b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: "WIRE")
           .count
@@ -123,7 +123,7 @@ class Survey
       def a2105bb
         return nil unless a2104b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: "WIRE")
           .sum(:transaction_value)
@@ -147,7 +147,7 @@ class Survey
       def a2108w
         return nil unless a2107wrp == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .count
@@ -158,7 +158,7 @@ class Survey
       def a2109w
         return nil unless a2107wrp == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .sum(:cash_amount)
@@ -169,7 +169,7 @@ class Survey
       def ag24010w
         return nil unless a2107wrp == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .sum(:foreign_currency_cash_amount)
@@ -180,7 +180,7 @@ class Survey
       def a2110w
         return nil unless a2107wrp == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .where("cash_amount >= ?", 10_000)
@@ -199,7 +199,7 @@ class Survey
       def a2113aw
         return nil unless a2113w == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .where("cash_amount > ?", 100_000)
@@ -213,7 +213,7 @@ class Survey
       def a2114a
         return nil unless a2113w == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .where("cash_amount > ?", 100_000)
@@ -227,7 +227,7 @@ class Survey
       def a2115aw
         return nil unless a2113w == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .where("cash_amount > ?", 100_000)
@@ -248,7 +248,7 @@ class Survey
       def a2108b
         return nil unless a2107b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .count
@@ -259,7 +259,7 @@ class Survey
       def a2109b
         return nil unless a2107b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .sum(:cash_amount)
@@ -270,7 +270,7 @@ class Survey
       def ag24010b
         return nil unless a2107b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .sum(:foreign_currency_cash_amount)
@@ -281,7 +281,7 @@ class Survey
       def a2110b
         return nil unless a2107b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .where("cash_amount >= ?", 10_000)
@@ -300,7 +300,7 @@ class Survey
       def a2113ab
         return nil unless a2113b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .where("cash_amount > ?", 100_000)
@@ -314,7 +314,7 @@ class Survey
       def a2114ab
         return nil unless a2113b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .where("cash_amount > ?", 100_000)
@@ -328,7 +328,7 @@ class Survey
       def a2115ab
         return nil unless a2113b == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .where(payment_method: %w[CASH MIXED])
           .where("cash_amount > ?", 100_000)
@@ -366,10 +366,9 @@ class Survey
       # Q149 — aIR233: Total unique clients by country for purchase/sale (dimensional)
       # Type: xbrli:integerItemType — dimensional by country
       def air233
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where("#{country_sql} IS NOT NULL")
@@ -381,7 +380,7 @@ class Survey
       # Q150 — aIR233B: How many unique clients were buyers?
       # Type: xbrli:integerItemType — computed
       def air233b
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: "PURCHASE")
           .distinct
           .count(:client_id)
@@ -390,7 +389,7 @@ class Survey
       # Q151 — aIR233S: How many unique clients were sellers?
       # Type: xbrli:integerItemType — computed
       def air233s
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: "SALE")
           .distinct
           .count(:client_id)
@@ -399,10 +398,9 @@ class Survey
       # Q152 — aIR235B_1: Total transactions by country for purchase/sale (dimensional)
       # Type: xbrli:integerItemType — dimensional by country
       def air235b_1
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where("#{country_sql} IS NOT NULL")
@@ -413,7 +411,7 @@ class Survey
       # Q153 — aIR235B_2: For how many purchases/sales did you represent the buyer?
       # Type: xbrli:integerItemType — computed
       def air235b_2
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .where(agency_role: "BUYER_AGENT")
           .count
@@ -422,7 +420,7 @@ class Survey
       # Q154 — aIR235S: For how many purchases/sales did you represent the seller?
       # Type: xbrli:integerItemType — computed
       def air235s
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .where(agency_role: "SELLER_AGENT")
           .count
@@ -431,10 +429,9 @@ class Survey
       # Q156 — aIR238B: Total value of funds transferred by client country for purchase/sale (dimensional)
       # Type: xbrli:monetaryItemType — dimensional by country
       def air238b
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where("#{country_sql} IS NOT NULL")
@@ -465,7 +462,7 @@ class Survey
       # Q158 — aIR117: How many purchases/sales were for investment purposes?
       # Type: xbrli:integerItemType — computed
       def air117
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(purchase_purpose: "INVESTMENT")
           .count
       end
@@ -473,13 +470,9 @@ class Survey
       # Q157 — aIR239B: Total value of funds transferred by client country, 5-year lookback (dimensional)
       # Type: xbrli:monetaryItemType — dimensional by country
       def air239b
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
-        five_year_range = Date.new(year - 4, 1, 1)..Date.new(year, 12, 31)
-
-        organization.transactions.kept
-          .where(transaction_date: five_year_range)
+        five_year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where("#{country_sql} IS NOT NULL")
@@ -490,13 +483,9 @@ class Survey
       # Q155 — aIR237B: Total transactions by country for purchase/sale (5-year lookback, dimensional)
       # Type: xbrli:integerItemType — dimensional by country
       def air237b
-        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
-          "THEN clients.nationality ELSE clients.incorporation_country END"
+        country_sql = client_country_sql
 
-        five_year_range = Date.new(year - 4, 1, 1)..Date.new(year, 12, 31)
-
-        organization.transactions.kept
-          .where(transaction_date: five_year_range)
+        five_year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where("#{country_sql} IS NOT NULL")
@@ -513,7 +502,7 @@ class Survey
       # Q163 — aIR236: Total rental operations in the reporting period
       # Type: xbrli:integerItemType — computed
       def air236
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: "RENTAL")
           .count
       end

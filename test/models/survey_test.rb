@@ -4580,6 +4580,7 @@ class SurveyTest < ActiveSupport::TestCase
   test "a2107w returns setting value for accepts_cash_operations" do
     assert_nil @survey.a2107w
     Setting.create!(organization: @organization, key: "accepts_cash_operations", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a2107w
   end
 
@@ -4779,6 +4780,7 @@ class SurveyTest < ActiveSupport::TestCase
   test "a2107b returns setting value for clients_performed_cash_operations" do
     assert_nil @survey.a2107b
     Setting.create!(organization: @organization, key: "clients_performed_cash_operations", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a2107b
   end
 
@@ -4924,6 +4926,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a2201a
 
     Setting.create!(organization: @organization, key: "accepts_cryptocurrency_operations", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a2201a
   end
 
@@ -4932,6 +4935,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a2201d
 
     Setting.create!(organization: @organization, key: "plans_to_accept_virtual_currencies", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a2201d
   end
 
@@ -4940,6 +4944,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a2202
 
     Setting.create!(organization: @organization, key: "has_virtual_asset_platform_relations", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a2202
   end
 
@@ -5153,6 +5158,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.air2391
 
     Setting.create!(organization: @organization, key: "monaco_preempted_properties", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.air2391
   end
 
@@ -5269,6 +5275,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a2501a
 
     Setting.create!(organization: @organization, key: "has_products_services_comments", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a2501a
   end
 
@@ -5288,6 +5295,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3101
 
     Setting.create!(organization: @organization, key: "uses_local_third_party_cdd", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3101
   end
 
@@ -5327,6 +5335,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3103
 
     Setting.create!(organization: @organization, key: "uses_foreign_third_party_cdd", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3103
   end
 
@@ -5457,6 +5466,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3209
 
     Setting.create!(organization: @organization, key: "non_face_to_face_onboarding", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3209
   end
 
@@ -5470,6 +5480,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3210c
 
     Setting.create!(organization: @organization, key: "non_face_to_face_np_onboarded_count", category: "entity_info", value: "5")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "5", @survey.a3210c
   end
 
@@ -5483,6 +5494,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3211c
 
     Setting.create!(organization: @organization, key: "non_face_to_face_lp_onboarded_count", category: "entity_info", value: "3")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "3", @survey.a3211c
   end
 
@@ -5503,6 +5515,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3212ctola
 
     Setting.create!(organization: @organization, key: "non_face_to_face_trust_onboarded_count", category: "entity_info", value: "2")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "2", @survey.a3212ctola
   end
 
@@ -5511,6 +5524,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3201
 
     Setting.create!(organization: @organization, key: "accepts_clients_through_introducers", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3201
   end
 
@@ -5524,6 +5538,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3501b
 
     Setting.create!(organization: @organization, key: "can_provide_introducer_client_nationality", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3501b
   end
 
@@ -5589,6 +5604,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3501c
 
     Setting.create!(organization: @organization, key: "can_provide_introducer_residence", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3501c
   end
 
@@ -5648,6 +5664,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.air33lf
 
     Setting.create!(organization: @organization, key: "entity_legal_form", category: "entity_info", value: "13. Sociétés à responsabilité limitée")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "13. Sociétés à responsabilité limitée", @survey.air33lf
   end
 
@@ -5656,6 +5673,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.air328
 
     Setting.create!(organization: @organization, key: "card_holder_is_legal_entity", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.air328
   end
 
@@ -5664,6 +5682,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3301
 
     Setting.create!(organization: @organization, key: "total_employee_headcount", category: "entity_info", value: "15")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "15", @survey.a3301
   end
 
@@ -5672,6 +5691,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3302
 
     Setting.create!(organization: @organization, key: "has_branches", category: "entity_info", value: "Non")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Non", @survey.a3302
   end
 
@@ -5692,6 +5712,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3304c
 
     Setting.create!(organization: @organization, key: "is_branch_of_another_entity", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3304c
   end
 
@@ -5757,6 +5778,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3307
 
     Setting.create!(organization: @organization, key: "structural_changes_during_period", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3307
   end
 
@@ -5776,6 +5798,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3210b
 
     Setting.create!(organization: @organization, key: "part_of_international_network", category: "entity_info", value: "Non")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Non", @survey.a3210b
   end
 
@@ -5795,6 +5818,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3210
 
     Setting.create!(organization: @organization, key: "member_of_professional_association", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3210
   end
 
@@ -5814,6 +5838,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a381
 
     Setting.create!(organization: @organization, key: "revenue_reporting_period", category: "entity_info", value: "1500000.00")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "1500000.00", @survey.a381
   end
 
@@ -5822,6 +5847,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3802
 
     Setting.create!(organization: @organization, key: "revenue_in_monaco", category: "entity_info", value: "1200000.00")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "1200000.00", @survey.a3802
   end
 
@@ -5830,6 +5856,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3803
 
     Setting.create!(organization: @organization, key: "revenue_outside_monaco", category: "entity_info", value: "300000.00")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "300000.00", @survey.a3803
   end
 
@@ -5838,6 +5865,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3804
 
     Setting.create!(organization: @organization, key: "annual_vat_declaration_amount", category: "entity_info", value: "75000.00")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "75000.00", @survey.a3804
   end
 
@@ -5846,6 +5874,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3401
 
     Setting.create!(organization: @organization, key: "rejected_prospects_count", category: "entity_info", value: "3")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "3", @survey.a3401
   end
 
@@ -5854,6 +5883,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3402
 
     Setting.create!(organization: @organization, key: "can_distinguish_rejection_reasons", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3402
   end
 
@@ -5873,6 +5903,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3414
 
     Setting.create!(organization: @organization, key: "terminated_relationships_count", category: "entity_info", value: "1")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "1", @survey.a3414
   end
 
@@ -5881,6 +5912,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3415
 
     Setting.create!(organization: @organization, key: "can_distinguish_termination_reasons", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3415
   end
 
@@ -5900,6 +5932,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a3701a
 
     Setting.create!(organization: @organization, key: "has_distribution_risk_comments", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.a3701a
   end
 
@@ -5921,6 +5954,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac1102a
 
     Setting.create!(organization: @organization, key: "total_employee_headcount", category: "entity_info", value: "12")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "12", @survey.ac1102a
   end
 
@@ -5929,6 +5963,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac1102
 
     Setting.create!(organization: @organization, key: "fte_employees", category: "entity_info", value: "10.5")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "10.5", @survey.ac1102
   end
 
@@ -5937,6 +5972,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac1101z
 
     Setting.create!(organization: @organization, key: "aml_compliance_hours_per_month", category: "compliance_policies", value: "40.0")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "40.0", @survey.ac1101z
   end
 
@@ -5945,6 +5981,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac114
 
     Setting.create!(organization: @organization, key: "has_board_or_senior_management", category: "entity_info", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.ac114
   end
 
@@ -5953,6 +5990,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac1106
 
     Setting.create!(organization: @organization, key: "has_compliance_department", category: "compliance_policies", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.ac1106
   end
 
@@ -5961,6 +5999,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac1518a
 
     Setting.create!(organization: @organization, key: "entity_is_part_of_group", category: "entity_info", value: "Non")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Non", @survey.ac1518a
   end
 
@@ -5969,6 +6008,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac1201
 
     Setting.create!(organization: @organization, key: "has_written_aml_policies", category: "compliance_policies", value: "Oui")
+    @survey = Survey.new(organization: @organization, year: @year)
     assert_equal "Oui", @survey.ac1201
   end
 

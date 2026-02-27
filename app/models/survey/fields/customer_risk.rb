@@ -7,20 +7,20 @@ class Survey
       # or rentals during the reporting period?
       # Type: enum "Oui" / "Non"
       def aactive
-        organization.transactions.kept.for_year(year).exists? ? "Oui" : "Non"
+        year_transactions.exists? ? "Oui" : "Non"
       end
 
       # Q2 — aACTIVEPS: Active for purchases/sales during the reporting period?
       # Type: enum "Oui" / "Non"
       def aactiveps
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE]).exists? ? "Oui" : "Non"
       end
 
       # Q3 — aACTIVERENTALS: Active for rentals (monthly rent >= 10,000 EUR) during reporting period?
       # Type: enum "Oui" / "Non"
       def aactiverentals
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: "RENTAL")
           .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
           .exists? ? "Oui" : "Non"
@@ -31,7 +31,7 @@ class Survey
       # rental transactions with monthly rent >= 10,000 EUR (annual >= 120,000)
       # Type: xbrli:integerItemType
       def a1101
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         purchase_sale_client_ids = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -49,7 +49,7 @@ class Survey
       # for purchase, sale, and rental (monthly rent >= 10,000 EUR) of real estate
       # Type: xbrli:integerItemType
       def a1105b
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         purchase_sale_count = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -66,7 +66,7 @@ class Survey
       # Q6 — a1106B: Total value of funds transferred for purchase and sale of real estate
       # Type: xbrli:monetaryItemType
       def a1106b
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .sum(:transaction_value)
       end
@@ -74,7 +74,7 @@ class Survey
       # Q7 — a1106BRENTALS: Total value of funds transferred for rental of real estate
       # Type: xbrli:monetaryItemType
       def a1106brentals
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: "RENTAL")
           .sum(:transaction_value)
       end
@@ -83,7 +83,7 @@ class Survey
       # for purchase, sale, and rental (monthly rent >= 10,000 EUR) of real estate
       # Type: xbrli:monetaryItemType
       def a1106w
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         ps_value = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -101,7 +101,7 @@ class Survey
       # for purchase, sale, and rental (monthly rent >= 10,000 EUR) of real estate
       # Type: xbrli:integerItemType
       def a1105w
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         purchase_sale_count = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -125,9 +125,7 @@ class Survey
       # over legal persons, trusts and other legal arrangements, by primary nationality
       # Type: xbrli:integerItemType — dimensional by country (hash of counts)
       def a1202o
-        bos = BeneficialOwner
-          .joins(:client)
-          .where(clients: {organization_id: organization.id})
+        bos = beneficial_owners_base
           .where(control_type: %w[DIRECT INDIRECT])
           .where.not(nationality: nil)
 
@@ -138,9 +136,7 @@ class Survey
       # broken down by primary nationality
       # Type: xbrli:integerItemType — dimensional by country (hash of counts)
       def a1202ob
-        bos = BeneficialOwner
-          .joins(:client)
-          .where(clients: {organization_id: organization.id})
+        bos = beneficial_owners_base
           .where(control_type: "REPRESENTATIVE")
           .where.not(nationality: nil)
 
@@ -160,9 +156,7 @@ class Survey
       def a120425o
         return nil unless a1204o == "Oui"
 
-        BeneficialOwner
-          .joins(:client)
-          .where(clients: {organization_id: organization.id})
+        beneficial_owners_base
           .with_significant_control
           .where.not(nationality: nil)
           .group(:nationality)
@@ -183,7 +177,7 @@ class Survey
       def a1402
         return nil unless a1203 == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(client: :client_nationalities)
           .where(clients: {client_type: "NATURAL_PERSON"})
@@ -205,9 +199,7 @@ class Survey
       def a1207o
         return nil unless a1203d == "Oui"
 
-        BeneficialOwner
-          .joins(:client)
-          .where(clients: {organization_id: organization.id})
+        beneficial_owners_base
           .with_significant_control
           .where.not(residence_country: "MC")
           .where.not(residence_country: nil)
@@ -223,9 +215,7 @@ class Survey
       def a1210o
         return nil unless a1203d == "Oui"
 
-        BeneficialOwner
-          .joins(:client)
-          .where(clients: {organization_id: organization.id})
+        beneficial_owners_base
           .with_significant_control
           .where(residence_country: nil)
           .where.not(nationality: nil)
@@ -261,7 +251,7 @@ class Survey
       # for purchases, sales, and rentals (>= 10k/month) of real estate
       # Type: xbrli:integerItemType
       def a1102
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         purchase_sale_client_ids = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -283,7 +273,7 @@ class Survey
       # for purchases, sales, and rentals (>= 10k/month) of real estate
       # Type: xbrli:integerItemType
       def a1103
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         purchase_sale_client_ids = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -307,7 +297,7 @@ class Survey
       # (nil residence_country) for purchases, sales, and rentals (>= 10k/month) of real estate
       # Type: xbrli:integerItemType
       def a1104
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         purchase_sale_client_ids = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -329,7 +319,7 @@ class Survey
       # for purchase and sale of real estate
       # Type: xbrli:integerItemType — dimensional by country (hash of counts)
       def a1401
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "NATURAL_PERSON"})
@@ -343,7 +333,7 @@ class Survey
       # for rental of real estate (monthly rent >= 10,000 EUR)
       # Type: xbrli:integerItemType (scalar — NoCountryDimension)
       def a1401r
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: "RENTAL")
           .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
           .joins(:client)
@@ -356,7 +346,7 @@ class Survey
       # for rental of real estate (monthly rent >= 10,000 EUR)
       # Type: xbrli:integerItemType (scalar — NoCountryDimension)
       def a1403r
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: "RENTAL")
           .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
           .joins(:client)
@@ -367,7 +357,7 @@ class Survey
       # Q27 — a1403B: Total transactions by natural person clients for purchase/sale
       # Type: xbrli:integerItemType — scalar integer (no country dimension)
       def a1403b
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "NATURAL_PERSON"})
@@ -377,7 +367,7 @@ class Survey
       # Q28 — a1404B: Total value of funds transferred by NP clients for purchase/sale
       # Type: xbrli:monetaryItemType (EUR)
       def a1404b
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "NATURAL_PERSON"})
@@ -397,7 +387,7 @@ class Survey
       def air1210
         return nil unless air129 == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: "PURCHASE", purchase_purpose: "RESIDENCE")
           .count
       end
@@ -406,7 +396,7 @@ class Survey
       # by incorporation country, for purchase and sale of real estate
       # Type: xbrli:integerItemType — dimensional by country (hash of counts)
       def a1501
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY"})
@@ -421,7 +411,7 @@ class Survey
       # for purchase and sale of real estate
       # Type: xbrli:integerItemType
       def a1502b
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY"})
@@ -433,7 +423,7 @@ class Survey
       # (excl. trusts) for purchase and sale of real estate
       # Type: xbrli:monetaryItemType (EUR)
       def a1503b
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY"})
@@ -455,7 +445,7 @@ class Survey
       def amles
         return nil unless a155 == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY", incorporation_country: "MC"})
@@ -474,7 +464,7 @@ class Survey
       def a11206b
         return nil unless a11201bcd == "Oui"
 
-        legal_entity_client_ids = organization.transactions.kept.for_year(year)
+        legal_entity_client_ids = year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY"})
@@ -498,7 +488,7 @@ class Survey
       def a112012b
         return nil unless a11201bcdu == "Oui"
 
-        legal_entity_client_ids = organization.transactions.kept.for_year(year)
+        legal_entity_client_ids = year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY"})
@@ -527,7 +517,7 @@ class Survey
       def a1802tola
         return nil unless a1802btola == "Oui"
 
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         purchase_sale_client_ids = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -550,7 +540,7 @@ class Survey
       def a1807atola
         return nil unless a1802btola == "Oui"
 
-        txns = organization.transactions.kept.for_year(year)
+        txns = year_transactions
 
         purchase_sale_client_ids = txns
           .where(transaction_type: %w[PURCHASE SALE])
@@ -574,7 +564,7 @@ class Survey
       def a1808
         return nil unless a1802btola == "Oui"
 
-        trust_client_ids = organization.transactions.kept.for_year(year)
+        trust_client_ids = year_transactions
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST"})
           .select(:client_id)
@@ -596,7 +586,7 @@ class Survey
       def a1809
         return nil unless a1802btola == "Oui"
 
-        trust_client_ids = organization.transactions.kept.for_year(year)
+        trust_client_ids = year_transactions
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST"})
           .select(:client_id)
@@ -627,7 +617,7 @@ class Survey
       def a1806tola
         return nil unless a11001btola == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST"})
@@ -641,7 +631,7 @@ class Survey
       def a1807tola
         return nil unless a11001btola == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY", legal_entity_type: "TRUST"})
@@ -656,7 +646,7 @@ class Survey
       def a11006
         return nil unless a1802btola == "Oui"
 
-        other_clients = organization.clients.kept
+        other_clients = clients_kept
           .where(client_type: "LEGAL_ENTITY")
           .where.not(legal_entity_type: AmsfConstants::AMSF_STANDARD_LEGAL_FORMS)
           .where.not(legal_entity_type: nil)
@@ -681,10 +671,10 @@ class Survey
       # Type: enum "Oui" / "Non" (computed)
       # Checks if any PEP client had transactions during the reporting year
       def a11301
-        pep_client_ids = organization.clients.kept.peps.pluck(:id)
+        pep_client_ids = clients_kept.peps.pluck(:id)
         return "Non" if pep_client_ids.empty?
 
-        has_transactions = organization.transactions.kept.for_year(year)
+        has_transactions = year_transactions
           .where(client_id: pep_client_ids)
           .exists?
 
@@ -698,9 +688,9 @@ class Survey
       def a11302res
         return nil unless a11301 == "Oui"
 
-        pep_client_ids = organization.clients.kept.peps.pluck(:id)
+        pep_client_ids = clients_kept.peps.pluck(:id)
 
-        txn_scope = organization.transactions.kept.for_year(year)
+        txn_scope = year_transactions
           .where(client_id: pep_client_ids)
 
         purchase_sale_clients = txn_scope
@@ -732,9 +722,9 @@ class Survey
       def a11302
         return nil unless a11301 == "Oui"
 
-        pep_client_ids = organization.clients.kept.peps.pluck(:id)
+        pep_client_ids = clients_kept.peps.pluck(:id)
 
-        txn_scope = organization.transactions.kept.for_year(year)
+        txn_scope = year_transactions
           .where(client_id: pep_client_ids)
 
         purchase_sale_clients = txn_scope
@@ -766,9 +756,9 @@ class Survey
       def a11304b
         return nil unless a11301 == "Oui"
 
-        pep_client_ids = organization.clients.kept.peps.pluck(:id)
+        pep_client_ids = clients_kept.peps.pluck(:id)
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(client_id: pep_client_ids)
           .where(transaction_type: %w[PURCHASE SALE])
           .count
@@ -781,9 +771,9 @@ class Survey
       def a11305b
         return nil unless a11301 == "Oui"
 
-        pep_client_ids = organization.clients.kept.peps.pluck(:id)
+        pep_client_ids = clients_kept.peps.pluck(:id)
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(client_id: pep_client_ids)
           .where(transaction_type: %w[PURCHASE SALE])
           .sum(:transaction_value)
@@ -796,7 +786,7 @@ class Survey
       def a11307
         return nil unless a11301 == "Oui"
 
-        le_trust_client_ids = organization.transactions.kept.for_year(year)
+        le_trust_client_ids = year_transactions
           .joins(:client)
           .where(clients: {client_type: "LEGAL_ENTITY"})
           .select(:client_id)
@@ -817,13 +807,12 @@ class Survey
       def a11309b
         return nil unless a11301 == "Oui"
 
-        le_trust_client_ids_with_pep_bos = BeneficialOwner.peps
-          .joins(:client)
-          .where(clients: {organization_id: organization.id, client_type: "LEGAL_ENTITY"})
+        le_trust_client_ids_with_pep_bos = beneficial_owners_base.peps
+          .where(clients: {client_type: "LEGAL_ENTITY"})
           .select(:client_id)
           .distinct
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(client_id: le_trust_client_ids_with_pep_bos)
           .where(transaction_type: %w[PURCHASE SALE])
           .count
@@ -858,7 +847,7 @@ class Survey
       def a13603bb
         return nil unless a13601cw == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "CUSTODIAN"})
@@ -873,7 +862,7 @@ class Survey
       def a13604bb
         return nil unless a13601cw == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "CUSTODIAN"})
@@ -917,7 +906,7 @@ class Survey
       def a13603cacb
         return nil unless a13601ico == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "ICO"})
@@ -931,7 +920,7 @@ class Survey
       def a13604cb
         return nil unless a13601ico == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "ICO"})
@@ -960,7 +949,7 @@ class Survey
       def a13603db
         return nil unless a13601other == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "OTHER"})
@@ -974,7 +963,7 @@ class Survey
       def a13604db
         return nil unless a13601other == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "OTHER"})
@@ -988,7 +977,7 @@ class Survey
       def a13602b
         return nil unless a13601cw == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "CUSTODIAN"})
@@ -1005,7 +994,7 @@ class Survey
       def a13602a
         return nil unless a13601ep == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "EXCHANGE"})
@@ -1022,7 +1011,7 @@ class Survey
       def a13602c
         return nil unless a13601ico == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "ICO"})
@@ -1039,7 +1028,7 @@ class Survey
       def a13602d
         return nil unless a13601other == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "OTHER"})
@@ -1056,7 +1045,7 @@ class Survey
       def a13604e
         return nil unless a13601other == "Oui"
 
-        types = organization.clients.kept
+        types = clients_kept
           .where(is_vasp: true, vasp_type: "OTHER")
           .where.not(vasp_other_service_type: [nil, ""])
           .distinct
@@ -1074,7 +1063,7 @@ class Survey
       def a13604ab
         return nil unless a13601ep == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "EXCHANGE"})
@@ -1088,7 +1077,7 @@ class Survey
       def a13603ab
         return nil unless a13601ep == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE RENTAL])
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "EXCHANGE"})
@@ -1101,9 +1090,7 @@ class Survey
       def a1204s1
         return nil if a1204s == "Non"
 
-        bos = BeneficialOwner
-          .joins(:client)
-          .where(clients: {organization_id: organization.id})
+        bos = beneficial_owners_base
           .where.not(nationality: nil)
 
         total = bos.count
@@ -1117,7 +1104,7 @@ class Survey
       # during the reporting period?
       # Type: enum (Oui/Non) — computed
       def ac171
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {nationality: "MC"})
@@ -1230,7 +1217,7 @@ class Survey
       def mc_clients_by_sector(sector)
         return nil unless ac171 == "Oui"
 
-        organization.transactions.kept.for_year(year)
+        year_transactions
           .where(transaction_type: %w[PURCHASE SALE])
           .joins(:client)
           .where(clients: {nationality: "MC", business_sector: sector})
