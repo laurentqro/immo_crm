@@ -1863,6 +1863,57 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 1, result["DE"]
   end
 
+  # Q34 — a1502B: Total transactions by legal entity clients (excl. trusts)
+  # for purchase and sale of real estate
+  # Type: xbrli:integerItemType
+
+  test "a1502b counts purchase and sale transactions where client is legal entity excluding trusts" do
+    # Org :one has these current-year purchase/sale transactions with LE clients (excl. trusts):
+    # high_value (legal_entity, PURCHASE), check_payment (legal_entity, SALE),
+    # crypto_payment (vasp_client, PURCHASE)
+    # Excluded: rental (RENTAL type), trust clients, NP clients, soft-deleted, other orgs
+    assert_equal 3, @survey.a1502b
+  end
+
+  test "a1502b excludes trust client transactions" do
+    trust = clients(:trust)
+    Transaction.create!(
+      organization: @organization,
+      client: trust,
+      reference: "A1502B-TRUST",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "PURCHASE",
+      transaction_value: 2_000_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+    # Trust transaction should not be counted
+    assert_equal 3, @survey.a1502b
+  end
+
+  test "a1502b excludes natural person client transactions" do
+    np_count = @organization.transactions.kept.for_year(@year)
+      .where(transaction_type: %w[PURCHASE SALE])
+      .joins(:client)
+      .where(clients: { client_type: "NATURAL_PERSON" })
+      .count
+    assert np_count > 0, "Precondition: org should have NP transactions"
+    assert_equal 3, @survey.a1502b
+  end
+
+  test "a1502b excludes rental transactions" do
+    assert_equal 3, @survey.a1502b
+  end
+
+  test "a1502b excludes soft-deleted transactions" do
+    assert_equal 3, @survey.a1502b
+  end
+
+  test "a1502b returns 0 when no qualifying transactions exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal 0, survey.a1502b
+  end
+
   test "a1501 excludes clients with nil incorporation_country" do
     # legal_entity fixture has no incorporation_country set
     le = clients(:legal_entity)
