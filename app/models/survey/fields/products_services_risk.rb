@@ -448,6 +448,13 @@ class Survey
         setting_value_for("monaco_preempted_properties")
       end
 
+      # Q160 — aIR2392: How many properties were pre-empted by Monaco?
+      # Type: xbrli:integerItemType — settings-based, conditional on aIR2391
+      def air2392
+        return nil unless air2391 == "Oui"
+        setting_value_for("monaco_preempted_property_count")
+      end
+
       # Q158 — aIR117: How many purchases/sales were for investment purposes?
       # Type: xbrli:integerItemType — computed
       def air117

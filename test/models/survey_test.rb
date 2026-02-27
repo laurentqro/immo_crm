@@ -5155,4 +5155,16 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "monaco_preempted_properties", category: "entity_info", value: "Oui")
     assert_equal "Oui", @survey.air2391
   end
+
+  # Q160 — aIR2392: How many properties were pre-empted by Monaco?
+  test "air2392 returns nil when air2391 is not Oui" do
+    assert_nil @survey.air2392
+  end
+
+  test "air2392 returns setting value when air2391 is Oui" do
+    Setting.create!(organization: @organization, key: "monaco_preempted_properties", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "monaco_preempted_property_count", category: "entity_info", value: "3")
+
+    assert_equal "3", @survey.air2392
+  end
 end
