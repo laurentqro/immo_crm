@@ -3365,4 +3365,21 @@ class SurveyTest < ActiveSupport::TestCase
     # Fixture pep_client has 1 PURCHASE transaction (pep_transaction) with transaction_value 3500000.00
     assert_equal 3_500_000.00, @survey.a11305b
   end
+
+  # Q54 — a11307: Total unique PEP beneficial owners of legal entities/trusts,
+  # broken down by primary nationality of the PEP
+  # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+  # Conditional: only when a11301 == "Oui"
+  test "a11307 returns nil when a11301 is Non (no PEP clients)" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a11307
+  end
+
+  test "a11307 returns PEP beneficial owners by nationality" do
+    # Fixture pep_owner is a PEP BO (nationality: "MC") on legal_entity client
+    # legal_entity has a high_value PURCHASE transaction in the current year
+    result = @survey.a11307
+    assert_instance_of Hash, result
+    assert_equal 1, result["MC"]
+  end
 end

@@ -766,6 +766,27 @@ class Survey
           .sum(:transaction_value)
       end
 
+      # Q54 — a11307: Total unique PEP beneficial owners of legal entities/trusts
+      # and other legal constructions, broken down by PEP's primary nationality
+      # Type: xbrli:integerItemType — dimensional by country (hash of counts)
+      # Conditional: only when a11301 == "Oui"
+      def a11307
+        return nil unless a11301 == "Oui"
+
+        le_trust_client_ids = organization.transactions.kept.for_year(year)
+          .joins(:client)
+          .where(clients: {client_type: "LEGAL_ENTITY"})
+          .select(:client_id)
+          .distinct
+
+        BeneficialOwner
+          .where(client_id: le_trust_client_ids)
+          .peps
+          .where.not(nationality: nil)
+          .group(:nationality)
+          .count
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

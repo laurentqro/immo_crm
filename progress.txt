@@ -74,8 +74,8 @@
 - [x] Task 50: Q50 — a11302RES — total unique PEP clients by residence country (dimensional, conditional on a11301) (2026-02-27)
 - [x] Task 51: Q51 — a11302 — PEP clients by primary nationality (dimensional, conditional on a11301) (2026-02-27)
 - [x] Task 52: Q52 — a11304B — total transactions by PEP clients for purchase/sale (computed, conditional on a11301) (2026-02-27)
-- [ ] Task 53: Q53 — Veuillez indiquer la valeur totale en euros des fonds transférés par des clients qui sont des PPE, pour l'achat et la ve
-- [ ] Task 54: Q54 — Veuillez indiquer le nombre total de clients qui sont les bénéficiaires effectifs uniques de personnes morales/trusts et
+- [x] Task 53: Q53 — a11305B — total value of funds transferred by PEP clients for purchase/sale (computed, conditional on a11301) (2026-02-27)
+- [x] Task 54: Q54 — a11307 — total unique PEP BOs of legal entities/trusts by primary nationality (dimensional, conditional on a11301) (2026-02-27)
 - [ ] Task 55: Q55 — Veuillez indiquer le nombre total d'opérations (entrantes et sortantes) effectuées par des bénéficiaires effectifs de pe
 
 ### Section 1.9
