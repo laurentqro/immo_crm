@@ -86,95 +86,95 @@
 - [x] Task 60: Q60 — a13604BB — total value of funds transferred by custodian wallet provider PSAV clients (computed, conditional on a13601CW) (2026-02-27)
 - [x] Task 61: Q61 — a13601B — entity distinguishes virtual currency exchange provider PSAV clients (settings-based, conditional on a13501B) (2026-02-27)
 - [x] Task 62: Q62 — a13601EP — entity has virtual currency exchange provider PSAV clients (settings-based, conditional on a13601B) (2026-02-27)
-- [ ] Task 63: Q63 — Votre entité a-t-elle des clients PSAV qui sont des fournisseurs d'échange de monnaie virtuelle ?
-- [ ] Task 64: Q64 — Veuillez indiquer le nombre total de clients uniques PSAV qui sont des fournisseurs d'échange de monnaie virtuelle, vent
-- [ ] Task 65: Q65 — Veuillez indiquer le nombre total d'opérations effectuées avec et par les clients PSAV qui sont des fournisseurs d'échan
-- [ ] Task 66: Q66 — Veuillez indiquer la valeur totale des fonds transférés avec et par les clients PSAV qui sont des fournisseurs d'échange
-- [ ] Task 67: Q67 — Votre entité distingue-t-elle si des clients PSAV sont des prestataires de services liés aux ICO (offre au public de jet
-- [ ] Task 68: Q68 — Votre entité a-t-elle des clients PSAV qui sont des services liés aux ICO (offre au public de jetons) ?
-- [ ] Task 69: Q69 — Veuillez fournir le nombre total de clients uniques PSAV qui sont des services liés aux ICO (offre au public de jetons),
-- [ ] Task 70: Q70 — Veuillez indiquer le nombre total d'opérations effectuées par les clients PSAV qui sont des prestataires de services lié
-- [ ] Task 71: Q71 — Veuillez indiquer la valeur totale des fonds transférés par les clients PSAV qui sont des prestataires de services liés 
-- [ ] Task 72: Q72 — Votre entité distingue-t-elle si des clients PSAV fournissent d'autres services non mentionnés ci-dessus ?
-- [ ] Task 73: Q73 — Votre entité a-t-elle des clients PSAV qui fournissent d'autres services ?
-- [ ] Task 74: Q74 — Veuillez indiquer le nombre total de clients uniques PSAV qui fournissent d'autres services, ventilé par pays d'établiss
-- [ ] Task 75: Q75 — Veuillez indiquer le nombre total d'opérations effectuées par les clients PSAV qui fournissent d'autres services non men
-- [ ] Task 76: Q76 — Veuillez indiquer la valeur totale des fonds transférés par les clients PSAV qui fournissent d'autres services, pour l'a
-- [ ] Task 77: Q77 — Veuillez préciser quels sont les autres services fournis par les clients PSAV qui ne sont pas mentionnés ci-dessus.
+- [x] Task 63: Q63 — a13603AB — total transactions by exchange provider PSAV clients (computed, conditional on a13601EP) (2026-02-27)
+- [x] Task 64: Q64 — a13604AB — total value of funds transferred by exchange provider PSAV clients (computed, conditional on a13601EP) (2026-02-27)
+- [x] Task 65: Q65 — a13601C — entity distinguishes ICO service provider PSAV clients (settings-based, conditional on a13501B) (2026-02-27)
+- [x] Task 66: Q66 — a13601ICO — entity has ICO service provider PSAV clients (settings-based, conditional on a13601C) (2026-02-27)
+- [x] Task 67: Q67 — a13603CACB — total transactions by ICO service provider PSAV clients (computed, conditional on a13601ICO) (2026-02-27)
+- [x] Task 68: Q68 — a13604CB — total value of funds transferred by ICO service provider PSAV clients (computed, conditional on a13601ICO) (2026-02-27)
+- [x] Task 69: Q69 — a13601C2 — entity distinguishes other-services PSAV clients (settings-based, conditional on a13501B) (2026-02-27)
+- [x] Task 70: Q70 — a13601OTHER — entity has other-services PSAV clients (settings-based, conditional on a13601C2) (2026-02-27)
+- [x] Task 71: Q71 — a13603DB — total transactions by other-services PSAV clients (computed, conditional on a13601OTHER) (2026-02-27)
+- [x] Task 72: Q72 — a13604DB — total value of funds transferred by other-services PSAV clients (computed, conditional on a13601OTHER) (2026-02-27)
+- [x] Task 73: Q73 — a13602B — unique custodian wallet provider PSAV clients by country (dimensional, conditional on a13601CW) (2026-02-27)
+- [x] Task 74: Q74 — a13602A — unique exchange provider PSAV clients by country (dimensional, conditional on a13601EP) (2026-02-27)
+- [x] Task 75: Q75 — a13602C — unique ICO service provider PSAV clients by country (dimensional, conditional on a13601ICO) (2026-02-27)
+- [x] Task 76: Q76 — a13602D — unique other-services PSAV clients by country (dimensional, conditional on a13601OTHER) (2026-02-27)
+- [x] Task 77: Q77 — a13604E — specify other PSAV services provided by clients (computed string, conditional on a13601OTHER) (2026-02-27)
 
 ### Section 1.10
-- [ ] Task 78: Q78 — Pour les clients ayant deux ou plusieurs nationalités, votre entité enregistre-t-elle toutes les nationalités du client 
-- [ ] Task 79: Q79 — Veuillez fournir le nombre total de nationalités secondaires des clients uniques qui sont des personnes physiques (indiv
+- [x] Task 78: Q78 — a1203 — entity records all nationalities for multi-nationality clients (settings-based) (2026-02-27)
+- [x] Task 79: Q79 — a1402 — secondary nationalities of NP clients by country (dimensional, conditional on a1203) (2026-02-27)
 
 ### Section 1.11
-- [ ] Task 80: Q80 — Avez-vous eu des clients monégasques (achats et ventes) au cours de la période de déclaration ?
-- [ ] Task 81: Q81 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des avocats ou qui exercent d'autres professio
-- [ ] Task 82: Q82 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des auditeurs/comptables.
-- [ ] Task 83: Q83 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des actionnaires/administrateurs agissant pour
-- [ ] Task 84: Q84 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont émetteurs utilisateurs ou fournisseurs d'actio
-- [ ] Task 85: Q85 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des agents immobiliers.
-- [ ] Task 86: Q86 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des NMPPP.
-- [ ] Task 87: Q87 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des prestataires de services aux trusts et aux
-- [ ] Task 88: Q88 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des Multi-Family Offices.
-- [ ] Task 89: Q89 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des Single-Family Offices.
-- [ ] Task 90: Q90 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des structures de propriété plus complexes.
-- [ ] Task 91: Q91 — Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans des sociétés caractérisées par une forte
-- [ ] Task 92: Q92 — Veuillez indiquer le nombre total de clients monégasques qui fournissent ou qui acceptent des paiements à partir de cart
-- [ ] Task 93: Q93 — Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans le marché de l'art et des antiquités.
-- [ ] Task 94: Q94 — Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans l'import-export.
-- [ ] Task 95: Q95 — Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans le commerce des biens de grande valeur.
-- [ ] Task 96: Q96 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des OBNL.
-- [ ] Task 97: Q97 — Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans un casino ou des jeux d'argent.
-- [ ] Task 98: Q98 — Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans le bâtiment ou le développement immobili
-- [ ] Task 99: Q99 — Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans les industries extractives.
-- [ ] Task 100: Q100 — Prière d'indiquer le nombre total de clients uniques monégasques impliqués dans le secteur de la défense / des armes.
-- [ ] Task 101: Q101 — Veuillez indiquer le nombre total de clients uniques monégasques qui exercent une activité liée à la navigation de plais
-- [ ] Task 102: Q102 — Prière d'indiquer le nombre total de clients uniques monégasques qui sont des agents ou des intermédiaires sportifs.
-- [ ] Task 103: Q103 — Veuillez indiquer le nombre total de clients uniques monégasques impliqués dans la gestion de fonds.
-- [ ] Task 104: Q104 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des sociétés holding.
-- [ ] Task 105: Q105 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont commissaires-priseurs.
-- [ ] Task 106: Q106 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des concessionnaires de véhicules automobiles.
-- [ ] Task 107: Q107 — Veuillez indiquer le nombre total de clients uniques monégasques qui relèvent du gouvernement et du secteur public.
-- [ ] Task 108: Q108 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont impliqués dans la vente d'avions ou l'affrètem
-- [ ] Task 109: Q109 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont impliqués dans le transport.
+- [x] Task 80: Q80 — aC171 — entity had Monegasque clients for purchase/sale (computed) (2026-02-27)
+- [x] Task 81: Q81 — a11502B — Monegasque lawyer clients count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 82: Q82 — a11602B — MC auditors/accountants count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 83: Q83 — a11702B — MC nominee shareholders/directors count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 84: Q84 — a11802B — MC bearer instruments count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 85: Q85 — a12002B — MC real estate agents count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 86: Q86 — a12102B — MC NMPPP count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 87: Q87 — a12202B — MC trust/company service providers count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 88: Q88 — a12302B — MC Multi-Family Offices count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 89: Q89 — a12302C — MC Single-Family Offices count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 90: Q90 — a12402B — MC complex ownership structures count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 91: Q91 — a12502B — MC cash-intensive businesses count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 92: Q92 — a12602B — MC prepaid/anonymous cards count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 93: Q93 — a12702B — MC art & antiquities count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 94: Q94 — a12802B — MC import/export count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 95: Q95 — a12902B — MC high-value goods count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 96: Q96 — a13002B — MC NPO count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 97: Q97 — a13202B — MC casino/gambling count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 98: Q98 — a13302B — MC construction/dev count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 99: Q99 — a13402B — MC extractive industries count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 100: Q100 — a13702B — MC defense/weapons count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 101: Q101 — a13802B — MC yachting count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 102: Q102 — a13902B — MC sports agents count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 103: Q103 — a14102B — MC fund management count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 104: Q104 — a14202B — MC holding companies count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 105: Q105 — a14302B — MC auctioneers count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 106: Q106 — a14402B — MC car dealers count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 107: Q107 — a14502B — MC government/public sector count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 108: Q108 — a14602B — MC aircraft/jets count (computed, conditional on aC171) (2026-02-27)
+- [x] Task 109: Q109 — a14702B — MC transport count (computed, conditional on aC171) (2026-02-27)
 
 ### Section 1.12
-- [ ] Task 110: Q110 — Avez-vous des commentaires sur l'une des questions de cette section ?
-- [ ] Task 111: Q111 — Prière de partager vos retours et vos commentaires au sujet de cette section.
+- [x] Task 110: Q110 — a14801 — has comments on inherent risk section (settings-based) (2026-02-27)
+- [x] Task 111: Q111 — a14001 — inherent risk section comments (settings-based, conditional on a14801) (2026-02-27)
 
 ### Section 2.1
-- [ ] Task 112: Q112 — Votre entité accepte-t-elle ou effectue-t-elle des opérations par chèque avec les clients ?
-- [ ] Task 113: Q113 — Votre entité a-t-elle accepté ou effectué des opérations par chèque avec les clients au cours de la période de déclarati
-- [ ] Task 114: Q114 — Prière d'indiquer le nombre total d'opérations effectuées par chèque (tant entrantes que sortantes) avec des clients ?
-- [ ] Task 115: Q115 — Veuillez indiquer la valeur totale des opérations par chèques effectuées avec des clients (entrantes et sortants) au cou
+- [x] Task 112: Q112 — a2101W — entity accepts cheque operations (settings-based) (2026-02-27)
+- [x] Task 113: Q113 — a2101WRP — had cheque operations in period (settings-based, conditional on a2101W) (2026-02-27)
+- [x] Task 114: Q114 — a2102W — total cheque operations count (computed, conditional on a2101WRP) (2026-02-27)
+- [x] Task 115: Q115 — a2102BW — total cheque operations value (computed, conditional on a2101WRP) (2026-02-27)
 
 ### Section 2.2
-- [ ] Task 116: Q116 — D'après votre connaissance des contrats émis pour l'achat, la vente et la location, vos clients ont-ils accepté ou effec
-- [ ] Task 117: Q117 — Prière d'indiquer le nombre total d'opérations effectuées par chèque (tant entrantes que sortantes) par des clients ?
-- [ ] Task 118: Q118 — Veuillez indiquer la valeur totale des opérations par chèques effectuées par des clients (entrantes et sortants) au cour
+- [x] Task 116: Q116 — a2101B — clients performed cheque operations (settings-based) (2026-02-27)
+- [x] Task 117: Q117 — a2102B — total cheque operations count by clients (computed, conditional on a2101B) (2026-02-27)
+- [x] Task 118: Q118 — a2102BB — total cheque operations value by clients (computed, conditional on a2101B) (2026-02-27)
 
 ### Section 2.3
-- [ ] Task 119: Q119 — Votre entité accepte-t-elle ou effectue-t-elle des transferts électroniques d'argent avec les clients ?
-- [ ] Task 120: Q120 — Votre entité a-t-elle accepté ou effectué des transferts électroniques avec les clients au cours de la période de déclar
-- [ ] Task 121: Q121 — Prière d'indiquer le nombre total d'opérations (tant entrantes que sortantes) effectuées sous forme d'ordre de paiement 
-- [ ] Task 122: Q122 — Veuillez indiquer la valeur totale des transferts électroniques effectués avec des clients (entrants et sortants) au cou
+- [x] Task 119: Q119 — a2104W — entity accepts wire transfers (settings-based) (2026-02-27)
+- [x] Task 120: Q120 — a2104WRP — had wire transfers in period (settings-based, conditional on a2104W) (2026-02-27)
+- [x] Task 121: Q121 — a2105W — total wire transfer operations count (computed, conditional on a2104WRP) (2026-02-27)
+- [x] Task 122: Q122 — a2105BW — total wire transfer operations value (computed, conditional on a2104WRP) (2026-02-27)
 
 ### Section 2.4
-- [ ] Task 123: Q123 — D'après votre connaissance des contrats émis pour l'achat, la vente et la location, vos clients ont-ils accepté ou effec
-- [ ] Task 124: Q124 — Prière d'indiquer le nombre total d'opérations (tant entrantes que sortantes) effectuées sous forme d'ordre de paiement 
-- [ ] Task 125: Q125 — Veuillez indiquer la valeur totale des transferts électroniques effectués par des clients (entrants et sortants) au cour
+- [x] Task 123: Q123 — a2104B — clients performed wire transfers (settings-based) (2026-02-27)
+- [x] Task 124: Q124 — a2105B — total wire transfer operations count by clients (computed, conditional on a2104B) (2026-02-27)
+- [x] Task 125: Q125 — a2105BB — total wire transfer operations value by clients (computed, conditional on a2104B) (2026-02-27)
 
 ### Section 2.5
-- [ ] Task 126: Q126 — Votre entité accepte-t-elle ou effectue-t-elle des opérations en espèces avec les clients ?
-- [ ] Task 127: Q127 — Votre entité a-t-elle accepté ou effectué des opérations en espèces avec les clients au cours de la période de déclarati
-- [ ] Task 128: Q128 — Veuillez fournir le nombre total d'opérations en espèces avec les clients, au cours de la période de déclaration.
-- [ ] Task 129: Q129 — Veuillez indiquer la valeur totale des fonds transférés, par paiements en espèces, pendant la période de déclaration.
-- [ ] Task 130: Q130 — Veuillez indiquer la valeur totale des fonds transférés avec des clients, par paiements en espèces dans des devises autr
-- [ ] Task 131: Q131 — Prière d'indiquer le nombre total d'opérations effectuées en espèces (tant entrantes que sortantes) pour un montant supé
-- [ ] Task 132: Q132 — Votre entité peut-elle distinguer les opérations en espèces supérieures à 100 000 euros dans votre comptabilité ?
-- [ ] Task 133: Q133 — Nombre d'opérations physiques en espèces effectuées avec des personnes physiques pour un montant supérieur à 100 000 eur
-- [ ] Task 134: Q134 — Nombre d'opérations physiques en espèces effectuées avec des personnes morales monégasques pour un montant supérieur à 1
-- [ ] Task 135: Q135 — Nombre d'opérations physiques en espèces effectuées avec des personnes morales étrangères pour un montant supérieur à 10
+- [x] Task 126: Q126 — a2107W — entity accepts cash operations (settings-based) (2026-02-27)
+- [x] Task 127: Q127 — a2107WRP — had cash operations in period (settings-based, conditional on a2107W) (2026-02-27)
+- [x] Task 128: Q128 — a2108W — total cash operations count (computed, conditional on a2107WRP) (2026-02-27)
+- [x] Task 129: Q129 — a2109W — total cash operations value (computed, conditional on a2107WRP) (2026-02-27)
+- [x] Task 130: Q130 — aG24010W — total cash in foreign currencies value (computed, conditional on a2107WRP) (2026-02-27)
+- [x] Task 131: Q131 — a2110W — cash operations >= 10,000 EUR count (computed, conditional on a2107WRP) (2026-02-27)
+- [x] Task 132: Q132 — a2113W — can distinguish cash ops > 100,000 EUR (settings-based, conditional on a2107WRP) (2026-02-27)
+- [x] Task 133: Q133 — a2113AW — cash ops with NP > 100,000 EUR count (computed, conditional on a2113W) (2026-02-27)
+- [x] Task 134: Q134 — a2114A — cash ops with MC LE > 100,000 EUR count (computed, conditional on a2113W) (2026-02-27)
+- [x] Task 135: Q135 — a2115AW — cash ops with foreign LE > 100,000 EUR count (computed, conditional on a2113W) (2026-02-27)
 
 ### Section 2.6
 - [ ] Task 136: Q136 — D'après votre connaissance des contrats émis pour l'achat, la vente et la location, vos clients ont-ils accepté ou effec
