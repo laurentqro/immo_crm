@@ -173,6 +173,18 @@ class Survey
         return nil unless a3201 == "Oui"
         setting_value_for("can_provide_introducer_residence")
       end
+
+      # Q185 — a3203: Introduced clients by introducer residence (dimensional)
+      # Type: xbrli:integerItemType — computed, dimensional by country, conditional on a3501C
+      def a3203
+        return nil unless a3501c == "Oui"
+
+        organization.clients.kept
+          .where(introduced_by_third_party: true)
+          .where.not(introducer_country: nil)
+          .group(:introducer_country)
+          .count
+      end
     end
   end
 end

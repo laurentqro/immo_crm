@@ -5591,4 +5591,31 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "can_provide_introducer_residence", category: "entity_info", value: "Oui")
     assert_equal "Oui", @survey.a3501c
   end
+
+  # Q185 — a3203: Introduced clients by introducer residence (dimensional)
+  test "a3203 returns nil when a3501c is not Oui" do
+    assert_nil @survey.a3203
+  end
+
+  test "a3203 returns introduced clients grouped by introducer country" do
+    Setting.create!(organization: @organization, key: "accepts_clients_through_introducers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "can_provide_introducer_residence", category: "entity_info", value: "Oui")
+    baseline = @survey.a3203
+
+    # Introduced by MC-based introducer (counts)
+    Client.create!(organization: @organization, name: "Intro Client 1", client_type: "NATURAL_PERSON",
+      nationality: "FR", introduced_by_third_party: true, introducer_country: "MC")
+
+    # Introduced by FR-based introducer (counts)
+    Client.create!(organization: @organization, name: "Intro Client 2", client_type: "NATURAL_PERSON",
+      nationality: "IT", introduced_by_third_party: true, introducer_country: "FR")
+
+    # Not introduced (does NOT count)
+    Client.create!(organization: @organization, name: "Direct Client", client_type: "NATURAL_PERSON",
+      nationality: "FR")
+
+    result = @survey.a3203
+    assert_equal (baseline["MC"] || 0) + 1, result["MC"]
+    assert_equal (baseline["FR"] || 0) + 1, result["FR"]
+  end
 end
