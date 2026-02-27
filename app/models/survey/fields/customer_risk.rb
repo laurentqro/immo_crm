@@ -491,6 +491,12 @@ class Survey
           .count
       end
 
+      # Q40 — a1802BTOLA: Does entity distinguish if clients are trusts or other legal constructions?
+      # Type: stringItemType with enum restriction ("Oui" / "Non") — settings-based
+      def a1802btola
+        setting_value_for("can_distinguish_trust_clients")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

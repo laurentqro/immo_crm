@@ -59,7 +59,7 @@
 - [x] Task 39: Q39 — a112012B — unique UHNWI BOs of legal entity clients by nationality (dimensional, conditional on a11201bcdu) (2026-02-27)
 
 ### Section 1.7
-- [ ] Task 40: Q40 — Votre entité distingue-t-elle si les clients sont des trusts ou d'autres constructions juridiques ?
+- [x] Task 40: Q40 — a1802BTOLA — entity distinguishes trust/legal construction clients (settings-based) (2026-02-27)
 - [ ] Task 41: Q41 — Veuillez indiquer le nombre total de clients uniques qui sont des trusts et d'autres constructions juridiques pour l'ach
 - [ ] Task 42: Q42 — Veuillez indiquer le nombre total de clients uniques monégasques qui sont des trusts et autres constructions juridiques 
 - [ ] Task 43: Q43 — Veuillez indiquer le nombre total de personnes physiques qui sont des trustees à titre professionnel, ventilé par nation

@@ -2546,4 +2546,20 @@ class SurveyTest < ActiveSupport::TestCase
     result = @survey.a112012b
     assert_nil result["KR"]
   end
+
+  # Q40 — a1802BTOLA: Does entity distinguish if clients are trusts or other legal constructions?
+  # Type: stringItemType with enum restriction ("Oui" / "Non") — settings-based
+  test "a1802btola returns the setting value when set" do
+    Setting.create!(
+      organization: @organization,
+      key: "can_distinguish_trust_clients",
+      category: "entity_info",
+      value: "Oui"
+    )
+    assert_equal "Oui", @survey.a1802btola
+  end
+
+  test "a1802btola returns nil when setting is not set" do
+    assert_nil @survey.a1802btola
+  end
 end
