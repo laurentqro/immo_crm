@@ -3853,4 +3853,24 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
     assert_nil @survey.a13601c2
   end
+
+  # Q70 — a13601OTHER: Does your entity have PSAV clients who provide other services?
+  # Type: enum "Oui" / "Non" (settings-based, conditional on a13601c2)
+
+  test "a13601other returns nil when a13601c2 is not Oui" do
+    assert_nil @survey.a13601other
+  end
+
+  test "a13601other returns setting value when a13601c2 is Oui" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_other_vasp_services", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_other_vasp_service_clients", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a13601other
+  end
+
+  test "a13601other returns nil when setting is not set but a13601c2 is Oui" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_other_vasp_services", category: "entity_info", value: "Oui")
+    assert_nil @survey.a13601other
+  end
 end

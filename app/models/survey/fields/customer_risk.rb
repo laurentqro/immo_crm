@@ -923,6 +923,13 @@ class Survey
         setting_value_for("distinguishes_other_vasp_services")
       end
 
+      # Q70 — a13601OTHER: Does your entity have PSAV clients who provide other services?
+      # Type: enum "Oui" / "Non" (settings-based, conditional on a13601c2)
+      def a13601other
+        return nil unless a13601c2 == "Oui"
+        setting_value_for("has_other_vasp_service_clients")
+      end
+
       # Q64 — a13604AB: Total value of funds transferred by virtual currency exchange provider
       # PSAV clients for purchase, sale, and rental of real estate
       # Type: xbrli:monetaryItemType
