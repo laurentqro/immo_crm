@@ -65,6 +65,69 @@ class Survey
           .where(payment_method: "CHECK")
           .sum(:transaction_value)
       end
+
+      # Q119 — a2104W: Does entity accept or make electronic wire transfers with clients?
+      # Type: enum (Oui/Non) — settings-based
+      def a2104w
+        setting_value_for("accepts_wire_transfers")
+      end
+
+      # Q120 — a2104WRP: Did entity accept or make electronic wire transfers with clients in period?
+      # Type: enum (Oui/Non) — settings-based, conditional on a2104w
+      def a2104wrp
+        return nil unless a2104w == "Oui"
+        setting_value_for("had_wire_transfers_in_period")
+      end
+
+      # Q121 — a2105W: Total electronic wire transfer operations with clients
+      # Type: xbrli:integerItemType — computed, conditional on a2104wrp
+      def a2105w
+        return nil unless a2104wrp == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: "WIRE")
+          .count
+      end
+
+      # Q122 — a2105BW: Total value of electronic wire transfers with clients
+      # Type: xbrli:monetaryItemType — computed, conditional on a2104wrp
+      def a2105bw
+        return nil unless a2104wrp == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: "WIRE")
+          .sum(:transaction_value)
+      end
+
+      # Q123 — a2104B: Did clients accept or make electronic wire transfers in period?
+      # Type: enum (Oui/Non) — settings-based
+      def a2104b
+        setting_value_for("clients_performed_wire_transfers")
+      end
+
+      # Q124 — a2105B: Total electronic wire transfer operations by clients
+      # Type: xbrli:integerItemType — computed, conditional on a2104b
+      def a2105b
+        return nil unless a2104b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: "WIRE")
+          .count
+      end
+
+      # Q125 — a2105BB: Total value of electronic wire transfers by clients
+      # Type: xbrli:monetaryItemType — computed, conditional on a2104b
+      def a2105bb
+        return nil unless a2104b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: "WIRE")
+          .sum(:transaction_value)
+      end
     end
   end
 end

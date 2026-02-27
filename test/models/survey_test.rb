@@ -4479,4 +4479,98 @@ class SurveyTest < ActiveSupport::TestCase
   test "a2102bb returns nil when a2101b is not Oui" do
     assert_nil @survey.a2102bb
   end
+
+  # === Section 2.3: Wire Transfers WITH Clients ===
+
+  test "a2104w returns setting value" do
+    Setting.create!(organization: @organization, key: "accepts_wire_transfers", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2104w
+  end
+
+  test "a2104w returns nil when not set" do
+    assert_nil @survey.a2104w
+  end
+
+  test "a2104wrp returns setting when a2104w is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_wire_transfers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_wire_transfers_in_period", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2104wrp
+  end
+
+  test "a2104wrp returns nil when a2104w is not Oui" do
+    assert_nil @survey.a2104wrp
+  end
+
+  test "a2105w returns count of wire transfer transactions when a2104wrp is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_wire_transfers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_wire_transfers_in_period", category: "entity_info", value: "Oui")
+    baseline = @survey.a2105w || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Wire Client", nationality: "FR")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 4, 1), transaction_value: 750_000, payment_method: "WIRE")
+
+    assert_equal baseline + 1, @survey.a2105w
+  end
+
+  test "a2105w returns nil when a2104wrp is not Oui" do
+    assert_nil @survey.a2105w
+  end
+
+  test "a2105bw returns total value of wire transfers when a2104wrp is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_wire_transfers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "had_wire_transfers_in_period", category: "entity_info", value: "Oui")
+    baseline = @survey.a2105bw || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Wire Client", nationality: "FR")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 4, 1), transaction_value: 750_000, payment_method: "WIRE")
+
+    assert_equal baseline + 750_000, @survey.a2105bw
+  end
+
+  test "a2105bw returns nil when a2104wrp is not Oui" do
+    assert_nil @survey.a2105bw
+  end
+
+  # === Section 2.4: Wire Transfers BY Clients ===
+
+  test "a2104b returns setting value" do
+    Setting.create!(organization: @organization, key: "clients_performed_wire_transfers", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2104b
+  end
+
+  test "a2104b returns nil when not set" do
+    assert_nil @survey.a2104b
+  end
+
+  test "a2105b returns count of wire transfer transactions by clients when a2104b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_wire_transfers", category: "entity_info", value: "Oui")
+    baseline = @survey.a2105b || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Wire By Client", nationality: "DE")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 900_000, payment_method: "WIRE")
+
+    assert_equal baseline + 1, @survey.a2105b
+  end
+
+  test "a2105b returns nil when a2104b is not Oui" do
+    assert_nil @survey.a2105b
+  end
+
+  test "a2105bb returns total value of wire transfers by clients when a2104b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_wire_transfers", category: "entity_info", value: "Oui")
+    baseline = @survey.a2105bb || 0
+
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Wire By Client", nationality: "DE")
+    Transaction.create!(organization: @organization, client: client, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1), transaction_value: 900_000, payment_method: "WIRE")
+
+    assert_equal baseline + 900_000, @survey.a2105bb
+  end
+
+  test "a2105bb returns nil when a2104b is not Oui" do
+    assert_nil @survey.a2105bb
+  end
 end
