@@ -37,6 +37,34 @@ class Survey
           .where(payment_method: "CHECK")
           .sum(:transaction_value)
       end
+
+      # Q116 — a2101B: Did clients accept or perform cheque operations during reporting period?
+      # Type: enum (Oui/Non) — settings-based
+      def a2101b
+        setting_value_for("clients_performed_cheque_operations")
+      end
+
+      # Q117 — a2102B: Total number of cheque operations (incoming and outgoing) by clients
+      # Type: xbrli:integerItemType — computed, conditional on a2101b
+      def a2102b
+        return nil unless a2101b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: "CHECK")
+          .count
+      end
+
+      # Q118 — a2102BB: Total value of cheque operations (incoming and outgoing) by clients
+      # Type: xbrli:monetaryItemType — computed, conditional on a2101b
+      def a2102bb
+        return nil unless a2101b == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: "CHECK")
+          .sum(:transaction_value)
+      end
     end
   end
 end

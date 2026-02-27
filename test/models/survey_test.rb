@@ -4416,4 +4416,67 @@ class SurveyTest < ActiveSupport::TestCase
   test "a2102bw returns nil when a2101wrp is not Oui" do
     assert_nil @survey.a2102bw
   end
+
+  # === Section 2.2: Cheque Operations BY Clients ===
+
+  test "a2101b returns setting value for clients performed cheque operations" do
+    Setting.create!(organization: @organization, key: "clients_performed_cheque_operations", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2101b
+  end
+
+  test "a2101b returns nil when setting is not set" do
+    assert_nil @survey.a2101b
+  end
+
+  test "a2102b returns count of cheque transactions by clients when a2101b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cheque_operations", category: "entity_info", value: "Oui")
+    baseline = @survey.a2102b || 0
+
+    client = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Cheque Client By",
+      nationality: "FR"
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 5, 1),
+      transaction_value: 600_000,
+      payment_method: "CHECK"
+    )
+
+    assert_equal baseline + 1, @survey.a2102b
+  end
+
+  test "a2102b returns nil when a2101b is not Oui" do
+    assert_nil @survey.a2102b
+  end
+
+  test "a2102bb returns total value of cheque transactions by clients when a2101b is Oui" do
+    Setting.create!(organization: @organization, key: "clients_performed_cheque_operations", category: "entity_info", value: "Oui")
+    baseline = @survey.a2102bb || 0
+
+    client = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Cheque Client By",
+      nationality: "FR"
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 5, 1),
+      transaction_value: 600_000,
+      payment_method: "CHECK"
+    )
+
+    assert_equal baseline + 600_000, @survey.a2102bb
+  end
+
+  test "a2102bb returns nil when a2101b is not Oui" do
+    assert_nil @survey.a2102bb
+  end
 end
