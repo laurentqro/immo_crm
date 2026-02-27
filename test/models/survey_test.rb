@@ -5000,4 +5000,21 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal baseline + 1, @survey.air233b  # only 1 unique buyer (seller excluded)
   end
+
+  # Q151 — aIR233S: How many unique clients were sellers?
+  test "air233s returns count of unique seller clients" do
+    baseline = @survey.air233s || 0
+
+    buyer = Client.create!(organization: @organization, name: "Buyer", client_type: "NATURAL_PERSON", nationality: "FR")
+    seller = Client.create!(organization: @organization, name: "Seller", client_type: "NATURAL_PERSON", nationality: "IT")
+
+    Transaction.create!(organization: @organization, client: buyer, transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 1, 1), transaction_value: 100_000, payment_method: "WIRE")
+    Transaction.create!(organization: @organization, client: seller, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 2, 1), transaction_value: 200_000, payment_method: "WIRE")
+    Transaction.create!(organization: @organization, client: seller, transaction_type: "SALE",
+      transaction_date: Date.new(@year, 3, 1), transaction_value: 300_000, payment_method: "WIRE")
+
+    assert_equal baseline + 1, @survey.air233s  # only 1 unique seller (buyer excluded)
+  end
 end

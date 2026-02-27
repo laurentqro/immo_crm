@@ -386,6 +386,15 @@ class Survey
           .distinct
           .count(:client_id)
       end
+
+      # Q151 — aIR233S: How many unique clients were sellers?
+      # Type: xbrli:integerItemType — computed
+      def air233s
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: "SALE")
+          .distinct
+          .count(:client_id)
+      end
     end
   end
 end
