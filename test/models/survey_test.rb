@@ -5694,4 +5694,15 @@ class SurveyTest < ActiveSupport::TestCase
     Setting.create!(organization: @organization, key: "is_branch_of_another_entity", category: "entity_info", value: "Oui")
     assert_equal "Oui", @survey.a3304c
   end
+
+  # Q192 — a3304: Is entity a branch or subsidiary of a foreign entity?
+  test "a3304 returns nil when a3304c is not Oui" do
+    assert_nil @survey.a3304
+  end
+
+  test "a3304 returns setting value when a3304c is Oui" do
+    Setting.create!(organization: @organization, key: "is_branch_of_another_entity", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "is_branch_of_foreign_entity", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a3304
+  end
 end

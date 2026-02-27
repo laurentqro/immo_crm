@@ -236,6 +236,13 @@ class Survey
         JSON.parse(json)
       end
 
+      # Q192 — a3304: Is entity a branch or subsidiary of a foreign entity?
+      # Type: enum (Oui/Non) — settings-based, conditional on a3304C
+      def a3304
+        return nil unless a3304c == "Oui"
+        setting_value_for("is_branch_of_foreign_entity")
+      end
+
       # Q193 — a3304C: Is entity a branch or subsidiary of another entity?
       # Type: enum (Oui/Non) — settings-based
       def a3304c
