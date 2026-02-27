@@ -133,6 +133,21 @@ class Survey
         return nil unless a3201 == "Oui"
         setting_value_for("can_provide_introducer_client_nationality")
       end
+
+      # Q182 — a3202: Introduced clients by primary nationality (dimensional)
+      # Type: xbrli:integerItemType — computed, dimensional by country, conditional on a3501B
+      def a3202
+        return nil unless a3501b == "Oui"
+
+        country_sql = "CASE WHEN clients.client_type = 'NATURAL_PERSON' " \
+          "THEN clients.nationality ELSE clients.incorporation_country END"
+
+        organization.clients.kept
+          .where(introduced_by_third_party: true)
+          .where("#{country_sql} IS NOT NULL")
+          .group(Arel.sql(country_sql))
+          .count
+      end
     end
   end
 end
