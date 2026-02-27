@@ -806,6 +806,14 @@ class Survey
           .count
       end
 
+      # === Section 1.9: Virtual Asset Service Providers (PSAV) ===
+
+      # Q56 — a13501B: Does your entity have clients that are VASPs (PSAV)?
+      # Type: enum "Oui" / "Non" (settings-based)
+      def a13501b
+        setting_value_for("has_vasp_clients")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

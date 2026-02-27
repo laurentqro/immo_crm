@@ -79,7 +79,7 @@
 - [x] Task 55: Q55 — a11309B — total transactions by PEP BOs of legal entities/trusts for purchase/sale (computed, conditional on a11301) (2026-02-27)
 
 ### Section 1.9
-- [ ] Task 56: Q56 — Votre entité a-t-elle des clients qui sont des PSAV ?
+- [x] Task 56: Q56 — a13501B — entity has VASP (PSAV) clients (settings-based) (2026-02-27)
 - [ ] Task 57: Q57 — Votre entité distingue-t-elle si des clients PSAV sont des prestataires de conservation (Custodian Wallet Providers) ?
 - [ ] Task 58: Q58 — Votre entité a-t-elle des clients PSAV qui sont des prestataires de conservation (Custodian Wallet Providers) ?
 - [ ] Task 59: Q59 — Veuillez indiquer le nombre total de clients uniques PSAV qui sont des prestataires de conservation (Custodian Wallet Pr

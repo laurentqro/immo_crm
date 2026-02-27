@@ -3397,4 +3397,20 @@ class SurveyTest < ActiveSupport::TestCase
     # rental transaction should NOT be counted (B suffix = purchase/sale only)
     assert_equal 2, @survey.a11309b
   end
+
+  # Q56 — a13501B: Does your entity have clients that are VASPs (PSAV)?
+  # Type: enum "Oui" / "Non" (settings-based)
+  test "a13501b returns the setting value when set" do
+    Setting.create!(
+      organization: @organization,
+      key: "has_vasp_clients",
+      category: "entity_info",
+      value: "Oui"
+    )
+    assert_equal "Oui", @survey.a13501b
+  end
+
+  test "a13501b returns nil when setting is not set" do
+    assert_nil @survey.a13501b
+  end
 end
