@@ -3664,4 +3664,50 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal baseline + 2, @survey.a13603ab
   end
+
+  # Q64 — a13604AB: Total value of funds transferred by virtual currency exchange provider
+  # PSAV clients for purchase, sale, and rental of real estate
+  # Type: xbrli:monetaryItemType
+  # Conditional: only when a13601ep == "Oui"
+
+  test "a13604ab returns nil when a13601ep is not Oui" do
+    assert_nil @survey.a13604ab
+  end
+
+  test "a13604ab returns total value of transactions by exchange provider VASP clients" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_exchange_providers", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_exchange_provider_clients", category: "entity_info", value: "Oui")
+
+    # Fixture vasp_client (EXCHANGE) already has a transaction
+    baseline = @survey.a13604ab
+
+    exchange_client = Client.create!(
+      organization: @organization,
+      name: "Exchange Provider Corp",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "EXCHANGE",
+      incorporation_country: "FR"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: exchange_client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 10),
+      transaction_value: 500_000
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: exchange_client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 7, 20),
+      transaction_value: 300_000
+    )
+
+    assert_equal baseline + 800_000, @survey.a13604ab
+  end
 end

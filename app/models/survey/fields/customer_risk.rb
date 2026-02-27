@@ -873,6 +873,20 @@ class Survey
         setting_value_for("has_exchange_provider_clients")
       end
 
+      # Q64 — a13604AB: Total value of funds transferred by virtual currency exchange provider
+      # PSAV clients for purchase, sale, and rental of real estate
+      # Type: xbrli:monetaryItemType
+      # Conditional: only when a13601ep == "Oui"
+      def a13604ab
+        return nil unless a13601ep == "Oui"
+
+        organization.transactions.kept.for_year(year)
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .joins(:client)
+          .where(clients: {is_vasp: true, vasp_type: "EXCHANGE"})
+          .sum(:transaction_value)
+      end
+
       # Q63 — a13603AB: Total transactions by virtual currency exchange provider PSAV clients
       # for purchase, sale, and rental of real estate
       # Type: xbrli:integerItemType
