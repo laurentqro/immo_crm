@@ -3580,4 +3580,22 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal 0, @survey.a13604bb
   end
+
+  # Q61 — a13601B: Does your entity distinguish whether PSAV clients are virtual currency exchange providers?
+  # Type: enum "Oui" / "Non" (settings-based, conditional on a13501b)
+
+  test "a13601b returns nil when a13501b is not Oui (no PSAV clients)" do
+    assert_nil @survey.a13601b
+  end
+
+  test "a13601b returns setting value when a13501b is Oui" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_exchange_providers", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a13601b
+  end
+
+  test "a13601b returns nil when setting is not set but a13501b is Oui" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    assert_nil @survey.a13601b
+  end
 end

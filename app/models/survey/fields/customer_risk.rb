@@ -857,6 +857,14 @@ class Survey
           .sum(:transaction_value)
       end
 
+      # Q61 — a13601B: Does your entity distinguish whether PSAV clients are
+      # virtual currency exchange providers?
+      # Type: enum "Oui" / "Non" (settings-based, conditional on a13501b)
+      def a13601b
+        return nil unless a13501b == "Oui"
+        setting_value_for("distinguishes_exchange_providers")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)
