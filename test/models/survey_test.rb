@@ -4115,4 +4115,50 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_equal({"JP" => 1}, @survey.a13602d)
   end
+
+  # Q77 — a13604E: Specify what other services PSAV clients provide
+  # Type: xbrli:stringItemType
+  # Conditional: only when a13601other == "Oui"
+
+  test "a13604e returns nil when a13601other is not Oui" do
+    assert_nil @survey.a13604e
+  end
+
+  test "a13604e returns distinct other VASP service types" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_other_vasp_services", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_other_vasp_service_clients", category: "entity_info", value: "Oui")
+
+    Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "DeFi Provider",
+      is_vasp: true,
+      vasp_type: "OTHER",
+      vasp_other_service_type: "DeFi Lending"
+    )
+
+    Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "NFT Marketplace",
+      is_vasp: true,
+      vasp_type: "OTHER",
+      vasp_other_service_type: "NFT Services"
+    )
+
+    result = @survey.a13604e
+    assert_includes result, "DeFi Lending"
+    assert_includes result, "NFT Services"
+  end
+
+  test "a13604e returns nil when no other-services VASP clients exist" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_other_vasp_services", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_other_vasp_service_clients", category: "entity_info", value: "Oui")
+
+    assert_nil @survey.a13604e
+  end
 end

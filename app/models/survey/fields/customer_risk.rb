@@ -1026,6 +1026,24 @@ class Survey
           .count("clients.id")
       end
 
+      # Q77 — a13604E: Specify what other services PSAV clients provide
+      # that are not mentioned above
+      # Type: xbrli:stringItemType
+      # Conditional: only when a13601other == "Oui"
+      def a13604e
+        return nil unless a13601other == "Oui"
+
+        types = organization.clients.kept
+          .where(is_vasp: true, vasp_type: "OTHER")
+          .where.not(vasp_other_service_type: [nil, ""])
+          .distinct
+          .pluck(:vasp_other_service_type)
+
+        return nil if types.empty?
+
+        types.sort.join(", ")
+      end
+
       # Q64 — a13604AB: Total value of funds transferred by virtual currency exchange provider
       # PSAV clients for purchase, sale, and rental of real estate
       # Type: xbrli:monetaryItemType
