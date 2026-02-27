@@ -865,6 +865,14 @@ class Survey
         setting_value_for("distinguishes_exchange_providers")
       end
 
+      # Q62 — a13601EP: Does your entity have PSAV clients who are
+      # virtual currency exchange providers?
+      # Type: enum "Oui" / "Non" (settings-based, conditional on a13601b)
+      def a13601ep
+        return nil unless a13601b == "Oui"
+        setting_value_for("has_exchange_provider_clients")
+      end
+
       # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
       # Type: xbrli:pureItemType (percentage, max 100) — dimensional by country
       # Includes all BOs (all ownership levels, direct/indirect control, representatives)

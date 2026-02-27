@@ -83,9 +83,9 @@
 - [x] Task 57: Q57 — a13601A — entity distinguishes custodian wallet provider PSAV clients (settings-based, conditional on a13501B) (2026-02-27)
 - [x] Task 58: Q58 — a13601CW — entity has custodian wallet provider PSAV clients (settings-based, conditional on a13601A) (2026-02-27)
 - [x] Task 59: Q59 — a13603BB — total unique custodian wallet provider PSAV clients (computed, conditional on a13601cw) (2026-02-27)
-- [ ] Task 60: Q60 — Veuillez indiquer le nombre total d'opérations effectuées par les clients PSAV qui qui sont des prestataires de conserva
-- [ ] Task 61: Q61 — Veuillez indiquer la valeur totale des fonds transférés avec et par les clients PSAV qui sont des prestataires de conser
-- [ ] Task 62: Q62 — Votre entité distingue-t-elle si des clients PSAV sont des fournisseurs d'échange de monnaie virtuelle ?
+- [x] Task 60: Q60 — a13604BB — total value of funds transferred by custodian wallet provider PSAV clients (computed, conditional on a13601CW) (2026-02-27)
+- [x] Task 61: Q61 — a13601B — entity distinguishes virtual currency exchange provider PSAV clients (settings-based, conditional on a13501B) (2026-02-27)
+- [x] Task 62: Q62 — a13601EP — entity has virtual currency exchange provider PSAV clients (settings-based, conditional on a13601B) (2026-02-27)
 - [ ] Task 63: Q63 — Votre entité a-t-elle des clients PSAV qui sont des fournisseurs d'échange de monnaie virtuelle ?
 - [ ] Task 64: Q64 — Veuillez indiquer le nombre total de clients uniques PSAV qui sont des fournisseurs d'échange de monnaie virtuelle, vent
 - [ ] Task 65: Q65 — Veuillez indiquer le nombre total d'opérations effectuées avec et par les clients PSAV qui sont des fournisseurs d'échan
