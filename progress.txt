@@ -177,36 +177,36 @@
 - [x] Task 135: Q135 — a2115AW — cash ops with foreign LE > 100,000 EUR count (computed, conditional on a2113W) (2026-02-27)
 
 ### Section 2.6
-- [ ] Task 136: Q136 — D'après votre connaissance des contrats émis pour l'achat, la vente et la location, vos clients ont-ils accepté ou effec
-- [ ] Task 137: Q137 — Veuillez fournir le nombre total d'opérations en espèces par des clients, au cours de la période de déclaration.
-- [ ] Task 138: Q138 — Veuillez indiquer la valeur totale des fonds transférés, par paiements en espèces, pendant la période de déclaration.
-- [ ] Task 139: Q139 — Veuillez indiquer la valeur totale des fonds transférés par des clients, par paiements en espèces dans des devises autre
-- [ ] Task 140: Q140 — Prière d'indiquer le nombre total d'opérations effectuées en espèces (tant entrantes que sortantes) pour un montant supé
-- [ ] Task 141: Q141 — Votre entité peut-elle distinguer les opérations en espèces supérieures à 100 000 euros dans votre comptabilité ?
-- [ ] Task 142: Q142 — Nombre d'opérations physiques en espèces effectuées par des personnes physiques pour un montant supérieur à 100 000 euro
-- [ ] Task 143: Q143 — Nombre d'opérations physiques en espèces effectuées par des personnes morales monégasques pour un montant supérieur à 10
-- [ ] Task 144: Q144 — Nombre d'opérations physiques en espèces effectuées par des personnes morales étrangères pour un montant supérieur à 100
+- [x] Task 136: Q136 — a2107B — clients performed cash operations (settings-based) (2026-02-27)
+- [x] Task 137: Q137 — a2108B — total cash operations count by clients (computed, conditional on a2107B) (2026-02-27)
+- [x] Task 138: Q138 — a2109B — total cash operations value by clients (computed, conditional on a2107B) (2026-02-27)
+- [x] Task 139: Q139 — aG24010B — total cash in foreign currencies value by clients (computed, conditional on a2107B) (2026-02-27)
+- [x] Task 140: Q140 — a2110B — cash operations >= 10,000 EUR by clients count (computed, conditional on a2107B) (2026-02-27)
+- [x] Task 141: Q141 — a2113B — can distinguish client cash ops > 100,000 EUR (settings-based, conditional on a2107B) (2026-02-27)
+- [x] Task 142: Q142 — a2113AB — cash ops by NP > 100,000 EUR count (computed, conditional on a2113B) (2026-02-27)
+- [x] Task 143: Q143 — a2114AB — cash ops by MC LE > 100,000 EUR count (computed, conditional on a2113B) (2026-02-27)
+- [x] Task 144: Q144 — a2115AB — cash ops by foreign LE > 100,000 EUR count (computed, conditional on a2113B) (2026-02-27)
 
 ### Section 2.7
-- [ ] Task 145: Q145 — Acceptez-vous ou effectuez-vous des opérations utilisant des crypto-monnaies avec des clients ?
-- [ ] Task 146: Q146 — Prévoyez-vous d'accepter des paiements, ou de proposer des produits et services immobiliers, en utilisant des monnaies v
-- [ ] Task 147: Q147 — Votre entité entretient-elle des relations d'affaires avec des plateformes ou des intermédiaires en matière d'actifs vir
-- [ ] Task 148: Q148 — Prière de nommer les plateformes ou intermédiaires en matière d'actifs virtuels avec lesquels votre entité entretient de
+- [x] Task 145: Q145 — a2201A — entity accepts cryptocurrency operations (settings-based) (2026-02-27)
+- [x] Task 146: Q146 — a2201D — entity plans to accept virtual currencies next year (settings-based) (2026-02-27)
+- [x] Task 147: Q147 — a2202 — entity has virtual asset platform relations (settings-based) (2026-02-27)
+- [x] Task 148: Q148 — a2203 — name virtual asset platforms (settings-based, conditional on a2202) (2026-02-27)
 
 ### Section 2.8
-- [ ] Task 149: Q149 — Veuillez indiquer le nombre total de clients uniques, ventilé par nationalité primaire de l'individu, ou par le pays du 
-- [ ] Task 150: Q150 — Combien de clients uniques étaient des acheteurs ?
-- [ ] Task 151: Q151 — Combien de clients uniques étaient des vendeurs ?
-- [ ] Task 152: Q152 — Veuillez indiquer le nombre total d'opérations effectuées par les clients, ventilé par nationalité primaire du client, o
-- [ ] Task 153: Q153 — Pour combien d'achats/ventes avez-vous représenté l'acheteur ?
-- [ ] Task 154: Q154 — Pour combien d'achats/ventes avez-vous représenté le vendeur ?
-- [ ] Task 155: Q155 — Veuillez indiquer le nombre total d'opérations effectuées par les clients, ventilé par nationalité primaire du client, o
-- [ ] Task 156: Q156 — Veuillez indiquer la valeur totale des fonds transférés par les clients pour l'achat et la vente de biens immobiliers (e
-- [ ] Task 157: Q157 — Veuillez indiquer la valeur totale des fonds transférés par les clients pour l'achat et la vente de biens immobiliers (e
-- [ ] Task 158: Q158 — Combien d'achats et de ventes de biens immobiliers ont-ils été effectués au cours de la période de déclaration à des fin
-- [ ] Task 159: Q159 — L'Etat de Monaco a t-il préempté des biens à la vente ?
-- [ ] Task 160: Q160 — Combien de biens ont été acquis par l'Etat de Monaco via l'exercice de son droit de préemption ?
-- [ ] Task 161: Q161 — Quelle était la valeur totale des biens préemptés ?
+- [x] Task 149: Q149 — aIR233 — unique clients by country for purchase/sale (dimensional) (2026-02-27)
+- [x] Task 150: Q150 — aIR233B — unique buyer clients (computed) (2026-02-27)
+- [x] Task 151: Q151 — aIR233S — unique seller clients (computed) (2026-02-27)
+- [x] Task 152: Q152 — aIR235B_1 — total transactions by country for purchase/sale (dimensional) (2026-02-27)
+- [x] Task 153: Q153 — aIR235B_2 — transactions where agency represented buyer (computed) (2026-02-27)
+- [x] Task 154: Q154 — aIR235S — transactions where agency represented seller (computed) (2026-02-27)
+- [x] Task 155: Q155 — aIR237B — transactions by country, 5-year lookback (dimensional) (2026-02-27)
+- [x] Task 156: Q156 — aIR238B — total value by country, current year (dimensional, monetary) (2026-02-27)
+- [x] Task 157: Q157 — aIR239B — total value by country, 5-year lookback (dimensional, monetary) (2026-02-27)
+- [x] Task 158: Q158 — aIR117 — investment purchase count (computed) (2026-02-27)
+- [x] Task 159: Q159 — aIR2391 — Monaco pre-empted properties (settings-based, enum) (2026-02-27)
+- [x] Task 160: Q160 — aIR2392 — pre-empted property count (settings-based, conditional on aIR2391) (2026-02-27)
+- [x] Task 161: Q161 — aIR2393 — pre-empted property value (settings-based, conditional on aIR2391) (2026-02-27)
 
 ### Section 2.9
 - [ ] Task 162: Q162 — Veuillez indiquer le nombre total de biens uniques loués au cours de la période de déclaration.
