@@ -4573,4 +4573,13 @@ class SurveyTest < ActiveSupport::TestCase
   test "a2105bb returns nil when a2104b is not Oui" do
     assert_nil @survey.a2105bb
   end
+
+  # === Section 2.5: Cash operations WITH clients ===
+
+  # Q126 — a2107W: Does entity accept or carry out cash operations with clients?
+  test "a2107w returns setting value for accepts_cash_operations" do
+    assert_nil @survey.a2107w
+    Setting.create!(organization: @organization, key: "accepts_cash_operations", category: "entity_info", value: "Oui")
+    assert_equal "Oui", @survey.a2107w
+  end
 end

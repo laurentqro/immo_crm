@@ -128,6 +128,12 @@ class Survey
           .where(payment_method: "WIRE")
           .sum(:transaction_value)
       end
+
+      # Q126 — a2107W: Does entity accept or carry out cash operations with clients?
+      # Type: enum (Oui/Non) — settings-based
+      def a2107w
+        setting_value_for("accepts_cash_operations")
+      end
     end
   end
 end
