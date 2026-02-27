@@ -4161,4 +4161,16 @@ class SurveyTest < ActiveSupport::TestCase
 
     assert_nil @survey.a13604e
   end
+
+  # === Section 1.10: 2nd Nationalities ===
+
+  test "a1203 returns setting value for recording all client nationalities" do
+    Setting.create!(organization: @organization, key: "records_all_client_nationalities", category: "entity_info", value: "Oui")
+
+    assert_equal "Oui", @survey.a1203
+  end
+
+  test "a1203 returns nil when setting is not set" do
+    assert_nil @survey.a1203
+  end
 end

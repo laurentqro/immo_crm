@@ -169,6 +169,13 @@ class Survey
           .count
       end
 
+      # Q78 — a1203: For clients with two or more nationalities, does entity record
+      # all nationalities of the client?
+      # Type: enum (Oui/Non) — settings-based
+      def a1203
+        setting_value_for("records_all_client_nationalities")
+      end
+
       # Q16 — a1203D: Does entity record residence for BOs holding 25% or more?
       # Type: enum (Oui/Non) — settings-based
       def a1203d
