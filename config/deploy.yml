@@ -1,6 +1,6 @@
 service: bos
 
-image: ghcr.io/laurentqro/bos
+image: laurentqro/bos
 
 servers:
   web:
