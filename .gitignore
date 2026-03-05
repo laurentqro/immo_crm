@@ -51,3 +51,11 @@ yarn-debug.log*
 
 # Ralph (ephemeral progress tracking)
 /progress.txt
+
+# Ignore key files for decrypting credentials and more.
+/config/*.key
+
+
+# Ignore key files for decrypting credentials and more.
+/config/credentials/*.key
+
