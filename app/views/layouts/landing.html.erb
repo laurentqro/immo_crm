@@ -571,7 +571,7 @@
 
     <script>
       // Minimal intersection observer for reveal animations
-      document.addEventListener("DOMContentLoaded", function() {
+      function initReveals() {
         var els = document.querySelectorAll(".reveal");
         if (!("IntersectionObserver" in window)) {
           els.forEach(function(el) { el.classList.add("visible"); });
@@ -586,7 +586,9 @@
           });
         }, { threshold: 0.15 });
         els.forEach(function(el) { io.observe(el); });
-      });
+      }
+      document.addEventListener("turbo:load", initReveals);
+      document.addEventListener("DOMContentLoaded", initReveals);
     </script>
   </body>
 </html>

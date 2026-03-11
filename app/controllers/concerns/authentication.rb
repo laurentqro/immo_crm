@@ -24,7 +24,7 @@ module Authentication
     if turbo_frame_request?
       "turbo_rails/frame"
     elsif devise_controller? && !user_signed_in?
-      "minimal"
+      "auth"
     end
   end
 

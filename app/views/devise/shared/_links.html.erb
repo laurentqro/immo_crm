@@ -1,21 +1,23 @@
 <%- if devise_mapping.omniauthable? && %w{ registrations sessions }.include?(controller_name) %>
-  <div class="flex flex-wrap justify-center -mx-2">
+  <div class="auth-oauth">
     <%- resource_class.omniauth_providers.each do |provider| %>
-      <%= button_to t("oauth.sign_in_with", provider: t("oauth.#{provider}")), omniauth_authorize_path(:user, provider), class: "btn btn-#{provider} m-1", data: { turbo: false, disable_with: t(".redirecting") } %>
+      <%= button_to t("oauth.sign_in_with", provider: t("oauth.#{provider}")), omniauth_authorize_path(:user, provider), class: "btn btn-#{provider}", data: { turbo: false, disable_with: t(".redirecting") } %>
     <% end -%>
   </div>
 
-  <hr class="my-4 border-gray-200">
+  <hr class="auth-divider">
 <% end -%>
 
-<%- if devise_mapping.recoverable? && controller_name != "passwords" && controller_name != "registrations" %>
-  <%= link_to t(".forgot_your_password"), new_password_path(resource_name), class: "block text-sm font-semibold mt-2" %>
-<% end -%>
+<div class="auth-links">
+  <%- if devise_mapping.recoverable? && controller_name != "passwords" && controller_name != "registrations" %>
+    <%= link_to t(".forgot_your_password"), new_password_path(resource_name) %>
+  <% end -%>
 
-<%- if devise_mapping.confirmable? && controller_name != "confirmations" %>
-  <%= link_to t(".didn_t_receive_confirmation_instructions"), new_confirmation_path(resource_name), class: "block text-sm font-semibold mt-2" %>
-<% end -%>
+  <%- if devise_mapping.confirmable? && controller_name != "confirmations" %>
+    <%= link_to t(".didn_t_receive_confirmation_instructions"), new_confirmation_path(resource_name) %>
+  <% end -%>
 
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != "unlocks" %>
-  <%= link_to t(".didn_t_receive_unlock_instructions"), new_unlock_path(resource_name), class: "block text-sm font-semibold mt-2" %>
-<% end -%>
+  <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != "unlocks" %>
+    <%= link_to t(".didn_t_receive_unlock_instructions"), new_unlock_path(resource_name) %>
+  <% end -%>
+</div>
