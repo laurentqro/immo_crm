@@ -3,6 +3,9 @@
 # Seeds for development/testing environment
 # Run with: bin/rails db:seed
 #
+# In production, requires SEED=true:
+#   SEED=true bin/rails db:seed
+#
 # Creates test data for the Bos application including:
 # - A test user and account
 # - An organization (Monaco real estate agency)
@@ -11,9 +14,8 @@
 
 puts "Seeding database..."
 
-# Only seed in development
-unless Rails.env.development?
-  puts "Skipping seed data - only runs in development"
+unless Rails.env.development? || ENV["SEED"] == "true"
+  puts "Skipping seed data - only runs in development (use SEED=true to force)"
   exit
 end
 
