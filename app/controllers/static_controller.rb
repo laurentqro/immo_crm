@@ -1,4 +1,6 @@
 class StaticController < ApplicationController
+  layout "landing", only: [:index]
+
   def index
   end
 

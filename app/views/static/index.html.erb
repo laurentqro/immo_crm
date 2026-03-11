@@ -1,10 +1,89 @@
-<div class="py-32 max-w-2xl m-auto text-center flex flex-col items-center justify-center">
-  <h1 class="mb-2">Welcome to Jumpstart</h1>
-  <p class="mb-6 text-gray-700 dark:text-gray-200 leading-normal text-xl">Jumpstart is the perfect starting point for your next Ruby on Rails app. Skip the boilerplate setup and build your app faster.</p>
-  <% if Rails.env.development? %>
-    <div class="flex flex-col items-center gap-4">
-      <%= link_to "Configure Jumpstart", jumpstart_path, data: { turbo: false }, class: "btn btn-primary" %>
-      <%= link_to "Read the Docs", jumpstart.docs_path, target: :_blank, data: { turbo: false }, class: "btn btn-secondary btn-outline" %>
-    </div>
-  <% end %>
-</div>
+<%# Hero %>
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-wordmark reveal">Business <span class="hero-wordmark-mono">OS</span></h1>
+    <p class="hero-tagline reveal reveal-d1">Le système d'exploitation des agences immobilières à Monaco</p>
+    <p class="hero-subtitle reveal reveal-d2">Conformité, CRM, opérations — une seule plateforme modulaire.</p>
+    <%= link_to "mailto:laurent@curau.me?subject=Business%20OS%20-%20Acc%C3%A8s%20anticip%C3%A9", class: "btn-primary reveal reveal-d3" do %>
+      Demander un accès anticipé
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    <% end %>
+  </div>
+</section>
+
+<%# Problem %>
+<section class="problem">
+  <div class="section-inner">
+    <p class="section-label reveal">Le problème</p>
+    <h2 class="section-heading reveal reveal-d1">Vos outils ne se parlent pas</h2>
+    <ul class="pain-points">
+      <li class="pain-point reveal reveal-d1">
+        <span class="pain-point-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 12h4"/><path d="M10 16h4"/></svg></span>
+        <p class="pain-point-text">Conformité AMSF sur papier ou Excel</p>
+      </li>
+      <li class="pain-point reveal reveal-d2">
+        <span class="pain-point-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/></svg></span>
+        <p class="pain-point-text">Données clients éparpillées entre 5 logiciels</p>
+      </li>
+      <li class="pain-point reveal reveal-d3">
+        <span class="pain-point-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>
+        <p class="pain-point-text">Aucune solution pensée pour Monaco</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<%# Solution %>
+<section class="solution">
+  <div class="section-inner">
+    <p class="section-label reveal">La plateforme</p>
+    <h2 class="section-heading reveal reveal-d1">Un seul système. Tous vos métiers.</h2>
+    <ul class="features">
+      <li class="feature feature--active reveal reveal-d1">
+        <span class="feature-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <p class="feature-title">Conformité AMSF</p>
+        <p class="feature-desc">Questionnaire guidé, calculs automatiques, export XBRL en un clic.</p>
+        <p class="feature-status feature-status--available">Disponible</p>
+      </li>
+      <li class="feature feature--upcoming reveal reveal-d2">
+        <span class="feature-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <p class="feature-title">CRM & Contacts</p>
+        <p class="feature-desc">Gestion clients, mandats, transactions.</p>
+        <p class="feature-status feature-status--soon">Bientôt disponible</p>
+      </li>
+      <li class="feature feature--upcoming reveal reveal-d3">
+        <span class="feature-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
+        <p class="feature-title">Opérations</p>
+        <p class="feature-desc">Documents, reporting, tableau de bord.</p>
+        <p class="feature-status feature-status--soon">Bientôt disponible</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<%# Social proof %>
+<section class="credibility">
+  <div class="section-inner">
+    <p class="credibility-headline reveal">Développé à Monaco, pour Monaco</p>
+    <p class="credibility-sub reveal reveal-d1">En collaboration avec des professionnels de l'immobilier monégasque</p>
+    <p class="credibility-tags reveal reveal-d2">Conformité AMSF · LCB/FT</p>
+  </div>
+</section>
+
+<%# CTA %>
+<section class="cta">
+  <div class="section-inner">
+    <p class="cta-heading reveal">Rejoignez les premières agences à simplifier leur conformité</p>
+    <%= link_to "mailto:laurent@curau.me?subject=Business%20OS%20-%20Acc%C3%A8s%20anticip%C3%A9", class: "btn-primary reveal reveal-d1" do %>
+      Demander un accès anticipé
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    <% end %>
+    <p class="cta-contact reveal reveal-d2">Ou contactez-nous : <a href="mailto:laurent@curau.me">laurent@curau.me</a></p>
+  </div>
+</section>
+
+<%# Footer %>
+<footer class="landing-footer">
+  <p>&copy; 2026 <a href="https://curau.me" target="_blank" rel="noopener">Laurent Curau</a></p>
+  <p>Made in Monaco 🇲🇨</p>
+</footer>
