@@ -1458,18 +1458,14 @@ class SurveyTest < ActiveSupport::TestCase
   # intended to establish a residence in Monaco?
   # Type: enum "Oui" / "Non" (settings-based)
 
-  test "air129 returns the setting value when set" do
-    Setting.create!(
-      organization: @organization,
-      key: "purchases_intended_for_residence_establishment",
-      category: "entity_info",
-      value: "Oui"
-    )
+  test "air129 returns Oui when residence purchases exist" do
+    # Fixtures for org :one already have 2 RESIDENCE purchases
     assert_equal "Oui", @survey.air129
   end
 
-  test "air129 returns nil when setting is not set" do
-    assert_nil @survey.air129
+  test "air129 returns Non when no residence purchases exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal "Non", survey.air129
   end
 
   # Q32 — aIR1210: How many purchases have been made for the purpose of
@@ -1477,17 +1473,11 @@ class SurveyTest < ActiveSupport::TestCase
   # Type: xbrli:integerItemType (computed, conditional on air129)
 
   test "air1210 returns nil when air129 is not Oui" do
-    assert_nil @survey.air1210
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.air1210
   end
 
   test "air1210 counts purchase transactions with purchase_purpose RESIDENCE" do
-    Setting.create!(
-      organization: @organization,
-      key: "purchases_intended_for_residence_establishment",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     # Fixtures already have 2 RESIDENCE purchases in org :one:
     # purchase (natural_person) and pep_transaction (pep_client)
     # Add one more to verify counting works
@@ -1505,13 +1495,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "air1210 excludes transactions with purchase_purpose INVESTMENT" do
-    Setting.create!(
-      organization: @organization,
-      key: "purchases_intended_for_residence_establishment",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     # Only INVESTMENT purchase — should not add to the 2 existing RESIDENCE fixtures
     Transaction.create!(
       organization: @organization,
@@ -1527,13 +1510,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "air1210 excludes sale and rental transactions even with RESIDENCE purpose" do
-    Setting.create!(
-      organization: @organization,
-      key: "purchases_intended_for_residence_establishment",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     # SALE with RESIDENCE purpose — should not be counted
     Transaction.create!(
       organization: @organization,
@@ -1550,13 +1526,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "air1210 excludes soft-deleted transactions" do
-    Setting.create!(
-      organization: @organization,
-      key: "purchases_intended_for_residence_establishment",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     t = Transaction.create!(
       organization: @organization,
       client: clients(:natural_person),
@@ -1573,13 +1542,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "air1210 returns existing fixture count when air129 is Oui" do
-    Setting.create!(
-      organization: @organization,
-      key: "purchases_intended_for_residence_establishment",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     # Fixtures have 2 RESIDENCE purchases: purchase + pep_transaction
     assert_equal 2, @survey.air1210
   end

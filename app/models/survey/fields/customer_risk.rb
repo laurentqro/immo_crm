@@ -381,9 +381,11 @@ class Survey
 
       # Q31 — aIR129: Were some real estate purchases during the reporting period
       # intended to establish a residence in Monaco?
-      # Type: enum "Oui" / "Non" (settings-based)
+      # Type: enum "Oui" / "Non" — computed from CRM transactions
       def air129
-        setting_value_for("purchases_intended_for_residence_establishment")
+        year_transactions
+          .where(transaction_type: "PURCHASE", purchase_purpose: "RESIDENCE")
+          .exists? ? "Oui" : "Non"
       end
 
       # Q32 — aIR1210: How many purchases have been made for the purpose of
