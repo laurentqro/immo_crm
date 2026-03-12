@@ -723,16 +723,13 @@ class Survey
       # ============================================================
 
       # C104 — aC116A: Has comments on controls section?
-      # Type: enum (Oui/Non) — settings-based
+      # Type: enum (Oui/Non)
       def ac116a
-        setting_value_for("has_controls_section_comments")
       end
 
       # C105 — aC11601: Controls section comments
-      # Type: xbrli:stringItemType — settings-based, conditional on aC116A
+      # Type: xbrli:stringItemType
       def ac11601
-        return nil unless ac116a == "Oui"
-        setting_value_for("controls_section_comments")
       end
     end
   end

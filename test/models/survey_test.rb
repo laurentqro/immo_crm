@@ -7098,25 +7098,14 @@ class SurveyTest < ActiveSupport::TestCase
   # Section 1.15 — Comments & Feedback (C104–C105)
   # ============================================================
 
-  # C104 — aC116A: Has comments on controls section? (enum Oui/Non)
-  test "ac116a returns nil when no setting exists" do
+  # C104 — aC116A: Has comments on controls section?
+  test "ac116a returns nil" do
     assert_nil @survey.ac116a
   end
 
-  test "ac116a returns setting value" do
-    Setting.create!(organization: @organization, key: "has_controls_section_comments", category: "controls", value: "Oui")
-    assert_equal "Oui", @survey.ac116a
-  end
-
-  # C105 — aC11601: Controls section comments (free text, conditional on aC116A)
-  test "ac11601 returns nil when ac116a is not Oui" do
+  # C105 — aC11601: Controls section comments
+  test "ac11601 returns nil" do
     assert_nil @survey.ac11601
-  end
-
-  test "ac11601 returns setting value when ac116a is Oui" do
-    Setting.create!(organization: @organization, key: "has_controls_section_comments", category: "controls", value: "Oui")
-    Setting.create!(organization: @organization, key: "controls_section_comments", category: "controls", value: "No additional comments")
-    assert_equal "No additional comments", @survey.ac11601
   end
 
   # ============================================================
