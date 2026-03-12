@@ -833,10 +833,9 @@ class Survey
       end
 
       # Q58 — a13601CW: Does your entity have PSAV clients who are custodian wallet providers?
-      # Type: enum "Oui" / "Non" (settings-based, conditional on a13601a)
+      # Type: enum "Oui" / "Non" — computed from clients table
       def a13601cw
-        return nil unless a13601a == "Oui"
-        setting_value_for("has_custodian_wallet_provider_clients")
+        clients_kept.where(is_vasp: true, vasp_type: "CUSTODIAN").exists? ? "Oui" : "Non"
       end
 
       # Q59 — a13603BB: Total unique PSAV clients who are custodian wallet providers

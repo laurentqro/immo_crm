@@ -2984,21 +2984,22 @@ class SurveyTest < ActiveSupport::TestCase
   # Q58 — a13601CW: Does your entity have PSAV clients who are custodian wallet providers?
   # Type: enum "Oui" / "Non" (settings-based, conditional on a13601a)
 
-  test "a13601cw returns nil when a13601a is not Oui" do
-    assert_nil @survey.a13601cw
-  end
-
-  test "a13601cw returns setting value when a13601a is Oui" do
-    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "has_custodian_wallet_provider_clients", category: "entity_info", value: "Oui")
+  # Q58 — a13601CW: Does your entity have PSAV clients who are custodian wallet providers?
+  # Computed from clients table (is_vasp + vasp_type)
+  test "a13601cw returns Oui when entity has custodian wallet provider clients" do
+    Client.create!(
+      organization: @organization,
+      name: "Custodian Wallet Co",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "CUSTODIAN"
+    )
     assert_equal "Oui", @survey.a13601cw
   end
 
-  test "a13601cw returns nil when setting is not set but a13601a is Oui" do
-    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
-    assert_nil @survey.a13601cw
+  test "a13601cw returns Non when entity has no custodian wallet provider clients" do
+    assert_equal "Non", @survey.a13601cw
   end
 
   # Q59 — a13603BB: Total unique PSAV clients who are custodian wallet providers
@@ -3011,10 +3012,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a13603bb counts unique custodian wallet provider VASP clients with transactions" do
-    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "has_custodian_wallet_provider_clients", category: "entity_info", value: "Oui")
-
     custodian_client = Client.create!(
       organization: @organization,
       name: "Test Custodian Provider",
@@ -3037,9 +3034,16 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a13603bb does not count non-custodian VASP clients" do
-    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "has_custodian_wallet_provider_clients", category: "entity_info", value: "Oui")
+    # Create a custodian client so a13601cw == "Oui"
+    Client.create!(
+      organization: @organization,
+      name: "Custodian Co",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "CUSTODIAN",
+      incorporation_country: "LU"
+    )
 
     exchange_client = Client.create!(
       organization: @organization,
@@ -3072,10 +3076,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a13604bb returns total value of transactions by custodian VASP clients" do
-    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "has_custodian_wallet_provider_clients", category: "entity_info", value: "Oui")
-
     custodian_client = Client.create!(
       organization: @organization,
       client_type: "LEGAL_ENTITY",
@@ -3106,9 +3106,16 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a13604bb excludes non-custodian VASP client transactions" do
-    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "distinguishes_custodian_wallet_providers", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "has_custodian_wallet_provider_clients", category: "entity_info", value: "Oui")
+    # Create a custodian client so a13601cw == "Oui"
+    Client.create!(
+      organization: @organization,
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      name: "Custodian Co",
+      is_vasp: true,
+      vasp_type: "CUSTODIAN",
+      incorporation_country: "LU"
+    )
 
     exchange_client = Client.create!(
       organization: @organization,
