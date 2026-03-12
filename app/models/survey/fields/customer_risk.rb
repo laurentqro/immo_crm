@@ -187,9 +187,9 @@ class Survey
       end
 
       # Q16 — a1203D: Does entity record residence for BOs holding 25% or more?
-      # Type: enum (Oui/Non) — settings-based
+      # Type: enum (Oui/Non) — crm-capabilities-based
       def a1203d
-        setting_value_for("records_bo_residence_25pct_or_more")
+        "Oui"
       end
 
       # Q17 — a1207O: Total number of BOs who are foreign residents (residence != MC),

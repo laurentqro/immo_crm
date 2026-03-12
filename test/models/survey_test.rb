@@ -547,37 +547,16 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   # Q16 — a1203D: Does entity record residence for BOs holding 25% or more?
-  # Type: enum (Oui/Non), settings-based
-  test "a1203d returns the setting value when set" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
+  # Type: enum (Oui/Non) — always Oui since the CRM tracks BO residence
+  test "a1203d always returns Oui" do
     assert_equal "Oui", @survey.a1203d
-  end
-
-  test "a1203d returns nil when setting is not set" do
-    assert_nil @survey.a1203d
   end
 
   # Q17 — a1207O: Total number of BOs who are foreign residents (residence != MC),
   # holding 25% or more, broken down by primary nationality
   # Type: xbrli:integerItemType — dimensional by country (hash of counts)
-  # Conditional on a1203d == "Oui"
-  test "a1207o returns nil when a1203d is not Oui" do
-    assert_nil @survey.a1207o
-  end
-
+  # Conditional on a1203d == "Oui" (always true since CRM tracks BO residence)
   test "a1207o returns count of foreign-resident BOs with 25%+ ownership grouped by nationality" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     result = @survey.a1207o
 
     assert_instance_of Hash, result
@@ -590,13 +569,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a1207o excludes BOs who are Monaco residents" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     result = @survey.a1207o
 
     # owner_one (FR, MC residence, 51%), owner_two (MC, MC residence, 49%),
@@ -606,13 +578,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a1207o excludes BOs with less than 25% ownership" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     result = @survey.a1207o
 
     # uhnwi_owner has CH nationality, MC residence, 20% — excluded (below 25%)
@@ -620,26 +585,12 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a1207o excludes BOs with nil nationality" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     result = @survey.a1207o
 
     assert_nil result[nil]
   end
 
   test "a1207o excludes BOs from other organizations" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     result = @survey.a1207o
 
     # other_org_owner (FR, FR residence, 100%, org:two) should not appear
@@ -648,12 +599,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a1207o returns empty hash when no foreign-resident BOs exist" do
-    Setting.create!(
-      organization: organizations(:company),
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
     survey = Survey.new(organization: organizations(:company), year: @year)
     assert_equal({}, survey.a1207o)
   end
@@ -661,19 +606,8 @@ class SurveyTest < ActiveSupport::TestCase
   # Q18 — a1210O: Total number of BOs who are non-residents (no residence recorded),
   # holding 25% or more, broken down by primary nationality
   # Type: xbrli:integerItemType — dimensional by country (hash of counts)
-  # Conditional on a1203d == "Oui"
-  test "a1210o returns nil when a1203d is not Oui" do
-    assert_nil @survey.a1210o
-  end
-
+  # Conditional on a1203d == "Oui" (always true since CRM tracks BO residence)
   test "a1210o returns count of non-resident BOs with 25%+ ownership grouped by nationality" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     # Create a non-resident BO (residence_country nil) with 25%+ ownership
     BeneficialOwner.create!(
       client: clients(:legal_entity),
@@ -692,13 +626,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a1210o excludes BOs who have a residence country recorded" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     result = @survey.a1210o
 
     # at_hnwi_threshold has FR residence, at_uhnwi_threshold has IT residence,
@@ -708,13 +635,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a1210o excludes BOs with less than 25% ownership" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     BeneficialOwner.create!(
       client: clients(:legal_entity),
       name: "Low Ownership Non-Resident",
@@ -731,13 +651,6 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a1210o excludes BOs with nil nationality" do
-    Setting.create!(
-      organization: @organization,
-      key: "records_bo_residence_25pct_or_more",
-      category: "entity_info",
-      value: "Oui"
-    )
-
     result = @survey.a1210o
 
     # minimal_owner has nil nationality and nil residence_country — excluded
