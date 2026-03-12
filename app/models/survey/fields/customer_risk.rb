@@ -1111,14 +1111,26 @@ class Survey
       def a13602d
         return nil unless a13601other == "Oui"
 
-        year_transactions
-          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+        txns = year_transactions
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "OTHER"})
           .where.not(clients: {incorporation_country: nil})
-          .distinct
-          .group("clients.incorporation_country")
-          .count("clients.id")
+
+        ps_clients = txns
+          .where(transaction_type: %w[PURCHASE SALE])
+          .select("clients.id, clients.incorporation_country")
+
+        rental_clients = txns
+          .where(transaction_type: "RENTAL")
+          .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
+          .select("clients.id, clients.incorporation_country")
+
+        all_rows = ps_clients + rental_clients
+        all_rows
+          .map { |r| [r.incorporation_country, r.id] }
+          .uniq
+          .group_by(&:first)
+          .transform_values(&:count)
       end
 
       # Q77 — a13604E: Specify what other services PSAV clients provide

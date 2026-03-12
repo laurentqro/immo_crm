@@ -4128,6 +4128,56 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal({"JP" => 1}, @survey.a13602d)
   end
 
+  test "a13602d excludes clients with only non-qualifying rental transactions" do
+    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "distinguishes_other_vasp_services", category: "entity_info", value: "Oui")
+    Setting.create!(organization: @organization, key: "has_other_vasp_service_clients", category: "entity_info", value: "Oui")
+
+    other_a = Client.create!(
+      organization: @organization,
+      name: "Other A",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "OTHER",
+      vasp_other_service_type: "DeFi Lending",
+      incorporation_country: "JP"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: other_a,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 15),
+      transaction_value: 500_000
+    )
+
+    # Client with only non-qualifying rental
+    other_b = Client.create!(
+      organization: @organization,
+      name: "Other B",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "OTHER",
+      vasp_other_service_type: "NFT Platform",
+      incorporation_country: "KR"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: other_b,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(@year, 6, 1),
+      transaction_value: 60_000,
+      rental_annual_value: 60_000
+    )
+
+    result = @survey.a13602d
+    assert_equal 1, result["JP"]
+    assert_nil result["KR"]
+  end
+
   # Q77 — a13604E: Specify what other services PSAV clients provide
   # Type: xbrli:stringItemType
   # Conditional: only when a13601other == "Oui"
