@@ -4050,6 +4050,50 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal({"SG" => 1}, @survey.a13602c)
   end
 
+  test "a13602c excludes clients with only non-qualifying rental transactions" do
+    ico_a = Client.create!(
+      organization: @organization,
+      name: "ICO A",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "ICO",
+      incorporation_country: "SG"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: ico_a,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 15),
+      transaction_value: 500_000
+    )
+
+    # Client with only non-qualifying rental
+    ico_b = Client.create!(
+      organization: @organization,
+      name: "ICO B",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "ICO",
+      incorporation_country: "KR"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: ico_b,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(@year, 6, 1),
+      transaction_value: 60_000,
+      rental_annual_value: 60_000
+    )
+
+    result = @survey.a13602c
+    assert_equal 1, result["SG"]
+    assert_nil result["KR"]
+  end
+
   # Q76 — a13602D: Unique other-services PSAV clients
   # by country of establishment, for purchase, sale, and rental
   # Type: xbrli:integerItemType — dimensional by country (hash of counts)
