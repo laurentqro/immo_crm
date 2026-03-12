@@ -524,16 +524,13 @@ class Survey
       end
 
       # Q166 — a2501A: Does entity have comments on products/services section?
-      # Type: enum (Oui/Non) — settings-based
+      # Type: enum (Oui/Non)
       def a2501a
-        setting_value_for("has_products_services_comments")
       end
 
       # Q167 — a2501: Products/services section comments text
-      # Type: xbrli:stringItemType — settings-based, conditional on a2501A
+      # Type: xbrli:stringItemType
       def a2501
-        return nil unless a2501a == "Oui"
-        setting_value_for("products_services_comments")
       end
     end
   end

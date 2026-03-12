@@ -5312,23 +5312,13 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   # Q166 — a2501A: Does entity have comments on products/services section?
-  test "a2501a returns setting value for has_products_services_comments" do
+  test "a2501a returns nil" do
     assert_nil @survey.a2501a
-
-    Setting.create!(organization: @organization, key: "has_products_services_comments", category: "entity_info", value: "Oui")
-    @survey = Survey.new(organization: @organization, year: @year)
-    assert_equal "Oui", @survey.a2501a
   end
 
   # Q167 — a2501: Products/services section comments text
-  test "a2501 returns nil when a2501a is not Oui" do
+  test "a2501 returns nil" do
     assert_nil @survey.a2501
-  end
-
-  test "a2501 returns setting value when a2501a is Oui" do
-    Setting.create!(organization: @organization, key: "has_products_services_comments", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "products_services_comments", category: "entity_info", value: "Some comments about products and services risk")
-    assert_equal "Some comments about products and services risk", @survey.a2501
   end
 
   # Q168 — a3101: Does entity use local third parties for CDD?
