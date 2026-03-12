@@ -1092,11 +1092,20 @@ class Survey
       def a13604ab
         return nil unless a13601ep == "Oui"
 
-        year_transactions
-          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+        txns = year_transactions
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "EXCHANGE"})
+
+        ps_value = txns
+          .where(transaction_type: %w[PURCHASE SALE])
           .sum(:transaction_value)
+
+        rental_value = txns
+          .where(transaction_type: "RENTAL")
+          .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
+          .sum(:transaction_value)
+
+        ps_value + rental_value
       end
 
       # Q63 — a13603AB: Total transactions by virtual currency exchange provider PSAV clients
