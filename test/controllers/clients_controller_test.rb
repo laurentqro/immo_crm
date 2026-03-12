@@ -418,6 +418,17 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     assert @client.source_of_wealth_verified
   end
 
+  test "updates client net_worth_range" do
+    sign_in @user
+
+    patch client_path(@client), params: {
+      client: { net_worth_range: "OVER_50M" }
+    }
+
+    @client.reload
+    assert_equal "OVER_50M", @client.net_worth_range
+  end
+
   test "requires simplified_dd_reason when due_diligence_level is SIMPLIFIED" do
     sign_in @user
 

@@ -26,6 +26,9 @@ module AmsfConstants
   # Risk assessment levels
   RISK_LEVELS = %w[LOW MEDIUM HIGH].freeze
 
+  # Net worth ranges (AMSF thresholds: HNWI >5M EUR, UHNWI >50M EUR)
+  NET_WORTH_RANGES = %w[UNDER_5M 5M_TO_50M OVER_50M].freeze
+
   # Politically Exposed Person types
   PEP_TYPES = %w[DOMESTIC FOREIGN INTL_ORG].freeze
 

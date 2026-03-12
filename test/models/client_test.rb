@@ -927,4 +927,39 @@ class ClientTest < ActiveSupport::TestCase
     assert_includes foreign_cdd, foreign_cdd_client
     assert_not_includes foreign_cdd, local_cdd_client
   end
+
+  # === Net Worth Range ===
+
+  test "net_worth_range accepts valid values" do
+    %w[UNDER_5M 5M_TO_50M OVER_50M].each do |range|
+      client = Client.new(
+        organization: @organization,
+        name: "Test Client",
+        client_type: "NATURAL_PERSON",
+        net_worth_range: range
+      )
+      assert client.valid?, "Expected net_worth_range '#{range}' to be valid"
+    end
+  end
+
+  test "net_worth_range rejects invalid values" do
+    client = Client.new(
+      organization: @organization,
+      name: "Test Client",
+      client_type: "NATURAL_PERSON",
+      net_worth_range: "INVALID"
+    )
+    assert_not client.valid?
+    assert_includes client.errors[:net_worth_range], "is not included in the list"
+  end
+
+  test "net_worth_range is optional" do
+    client = Client.new(
+      organization: @organization,
+      name: "Test Client",
+      client_type: "NATURAL_PERSON",
+      net_worth_range: nil
+    )
+    assert client.valid?
+  end
 end

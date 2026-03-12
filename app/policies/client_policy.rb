@@ -55,6 +55,7 @@ class ClientPolicy < ApplicationPolicy
       :legal_entity_type_other,
       :name,
       :nationality,
+      :net_worth_range,
       :notes,
       :pep_type,
       :professional_category,

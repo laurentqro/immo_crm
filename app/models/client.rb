@@ -43,6 +43,7 @@ class Client < ApplicationRecord
   validates :vasp_other_service_type, presence: true, if: -> { is_vasp? && vasp_type == "OTHER" }
 
   validates :risk_level, inclusion: {in: RISK_LEVELS}, allow_blank: true
+  validates :net_worth_range, inclusion: {in: NET_WORTH_RANGES}, allow_blank: true
   validates :rejection_reason, inclusion: {in: REJECTION_REASONS}, allow_blank: true
   validates :incorporation_country,
     format: {with: /\A[A-Z]{2}\z/, message: "must be ISO 3166-1 alpha-2 format"},

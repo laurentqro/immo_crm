@@ -203,6 +203,19 @@
           { include_blank: "Select risk level..." } %>
     </div>
 
+    <%# Net Worth Range (Natural Persons only) %>
+    <div class="form-group <%= 'hidden' unless client.natural_person? %>" data-client-form-target="netWorthRange">
+      <%= form.label :net_worth_range, "Net worth range" %>
+      <%= form.select :net_worth_range,
+          options_for_select([
+            ["Under EUR 5M", "UNDER_5M"],
+            ["EUR 5M – 50M (HNWI)", "5M_TO_50M"],
+            ["Over EUR 50M (UHNWI)", "OVER_50M"]
+          ], client.net_worth_range),
+          { include_blank: "Select range..." } %>
+      <p class="form-hint">AMSF thresholds: HNWI > EUR 5M, UHNWI > EUR 50M.</p>
+    </div>
+
     <%# Due Diligence Section %>
     <div class="border-t pt-6" style="border-color: var(--base-border-tertiary);">
       <h3 class="text-sm font-medium mb-4" style="color: var(--base-text-secondary);">Due Diligence</h3>

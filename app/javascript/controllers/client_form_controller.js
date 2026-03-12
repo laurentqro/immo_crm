@@ -26,7 +26,8 @@ export default class extends Controller {
     "thirdPartyCddType",
     "thirdPartyCddCountry",
     "nationalitiesContainer",
-    "nationalityEntry"
+    "nationalityEntry",
+    "netWorthRange"
   ]
 
   connect() {
@@ -59,6 +60,10 @@ export default class extends Controller {
     // Show/hide nationality and residence fields (only for natural persons, not legal entities)
     if (this.hasNaturalPersonFieldsTarget) {
       this.naturalPersonFieldsTarget.classList.toggle("hidden", isLegalEntity)
+    }
+    // Show/hide net worth range (only for natural persons)
+    if (this.hasNetWorthRangeTarget) {
+      this.netWorthRangeTarget.classList.toggle("hidden", !isNaturalPerson)
     }
 
     // Re-evaluate legal entity type dependent fields
