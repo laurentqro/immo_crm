@@ -4384,10 +4384,32 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.a2101w
   end
 
-  test "a2101wrp returns setting value when a2101w is Oui" do
+  test "a2101wrp returns Oui when cheque transactions exist in reporting period and a2101w is Oui" do
     Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "had_cheque_operations_in_period", category: "entity_info", value: "Oui")
+
+    client = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Cheque Client",
+      nationality: "FR"
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 5, 1),
+      transaction_value: 50_000,
+      payment_method: "CHECK"
+    )
+
     assert_equal "Oui", @survey.a2101wrp
+  end
+
+  test "a2101wrp returns Non when no cheque transactions exist and a2101w is Oui" do
+    Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    Setting.create!(organization: organizations(:company), key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
+    assert_equal "Non", survey.a2101wrp
   end
 
   test "a2101wrp returns nil when a2101w is not Oui" do
@@ -4396,7 +4418,6 @@ class SurveyTest < ActiveSupport::TestCase
 
   test "a2102w returns count of cheque transactions when a2101wrp is Oui" do
     Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "had_cheque_operations_in_period", category: "entity_info", value: "Oui")
 
     baseline = @survey.a2102w || 0
 
@@ -4432,7 +4453,6 @@ class SurveyTest < ActiveSupport::TestCase
 
   test "a2102bw returns total value of cheque transactions when a2101wrp is Oui" do
     Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "had_cheque_operations_in_period", category: "entity_info", value: "Oui")
 
     baseline = @survey.a2102bw || 0
 

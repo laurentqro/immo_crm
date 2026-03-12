@@ -10,10 +10,14 @@ class Survey
       end
 
       # Q113 — a2101WRP: Did entity accept or carry out cheque operations during reporting period?
-      # Type: enum (Oui/Non) — settings-based, conditional on a2101w
+      # Type: enum (Oui/Non) — computed from transactions, conditional on a2101w
       def a2101wrp
         return nil unless a2101w == "Oui"
-        setting_value_for("had_cheque_operations_in_period")
+
+        year_transactions
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: "CHECK")
+          .exists? ? "Oui" : "Non"
       end
 
       # Q114 — a2102W: Total number of cheque operations (incoming and outgoing) with clients
