@@ -3401,6 +3401,49 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 1_150_000, @survey.a13604cb
   end
 
+  test "a13604cb excludes rental transactions below 10000 EUR monthly rent" do
+    ico_client = Client.create!(
+      organization: @organization,
+      name: "ICO Service Provider",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "ICO",
+      incorporation_country: "FR"
+    )
+
+    # Qualifying rental: annual value >= 120,000
+    Transaction.create!(
+      organization: @organization,
+      client: ico_client,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(@year, 6, 1),
+      transaction_value: 120_000,
+      rental_annual_value: 120_000
+    )
+
+    # Non-qualifying rental: annual value < 120,000
+    Transaction.create!(
+      organization: @organization,
+      client: ico_client,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(@year, 7, 1),
+      transaction_value: 60_000,
+      rental_annual_value: 60_000
+    )
+
+    # Purchase (always counts)
+    Transaction.create!(
+      organization: @organization,
+      client: ico_client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 15),
+      transaction_value: 500_000
+    )
+
+    assert_equal 620_000, @survey.a13604cb
+  end
+
   # Q69 — a13601C2: Does your entity distinguish if PSAV clients provide other services
   # not mentioned above?
   # Type: enum "Oui" / "Non" (settings-based, conditional on a13501b)
