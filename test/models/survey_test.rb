@@ -3245,19 +3245,10 @@ class SurveyTest < ActiveSupport::TestCase
   # Q65 — a13601C: Does your entity distinguish if PSAV clients are ICO service providers?
   # Type: enum "Oui" / "Non" (settings-based, conditional on a13501b)
 
-  test "a13601c returns nil when a13501b is not Oui" do
-    assert_nil @survey.a13601c
-  end
-
-  test "a13601c returns setting value when a13501b is Oui" do
-    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "distinguishes_ico_providers", category: "entity_info", value: "Oui")
+  # Q65 — a13601C: Does your entity distinguish if PSAV clients are ICO service providers?
+  # Always "Oui" since CRM captures vasp_type on every VASP client
+  test "a13601c always returns Oui" do
     assert_equal "Oui", @survey.a13601c
-  end
-
-  test "a13601c returns nil when setting is not set but a13501b is Oui" do
-    Setting.create!(organization: @organization, key: "has_vasp_clients", category: "entity_info", value: "Oui")
-    assert_nil @survey.a13601c
   end
 
   # Q66 — a13601ICO: Does your entity have PSAV clients who are ICO service providers?

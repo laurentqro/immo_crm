@@ -882,10 +882,9 @@ class Survey
       end
 
       # Q65 — a13601C: Does your entity distinguish if PSAV clients are ICO service providers?
-      # Type: enum "Oui" / "Non" (settings-based, conditional on a13501b)
+      # Type: enum "Oui" / "Non" — always "Oui" since CRM captures vasp_type
       def a13601c
-        return nil unless a13501b == "Oui"
-        setting_value_for("distinguishes_ico_providers")
+        "Oui"
       end
 
       # Q66 — a13601ICO: Does your entity have PSAV clients who are ICO service providers?
