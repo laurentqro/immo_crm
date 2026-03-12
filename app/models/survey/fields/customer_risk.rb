@@ -165,9 +165,9 @@ class Survey
 
       # Q78 — a1203: For clients with two or more nationalities, does entity record
       # all nationalities of the client?
-      # Type: enum (Oui/Non) — settings-based
+      # Type: enum (Oui/Non) — crm-capabilities-based
       def a1203
-        setting_value_for("records_all_client_nationalities")
+        "Oui"
       end
 
       # Q79 — a1402: Total secondary nationalities of unique natural person clients,

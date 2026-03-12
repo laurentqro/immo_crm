@@ -4129,19 +4129,11 @@ class SurveyTest < ActiveSupport::TestCase
 
   # === Section 1.10: 2nd Nationalities ===
 
-  test "a1203 returns setting value for recording all client nationalities" do
-    Setting.create!(organization: @organization, key: "records_all_client_nationalities", category: "entity_info", value: "Oui")
-
+  test "a1203 always returns Oui" do
     assert_equal "Oui", @survey.a1203
   end
 
-  test "a1203 returns nil when setting is not set" do
-    assert_nil @survey.a1203
-  end
-
-  test "a1402 returns secondary nationalities breakdown when a1203 is Oui" do
-    Setting.create!(organization: @organization, key: "records_all_client_nationalities", category: "entity_info", value: "Oui")
-
+  test "a1402 returns secondary nationalities breakdown" do
     client = Client.create!(
       organization: @organization,
       client_type: "NATURAL_PERSON",
@@ -4164,9 +4156,6 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 1, result["CH"]
   end
 
-  test "a1402 returns nil when a1203 is not Oui" do
-    assert_nil @survey.a1402
-  end
 
   # === Section 1.11: Monegasque Client Types (Purchases and Sales) ===
 
