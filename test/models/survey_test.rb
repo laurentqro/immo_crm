@@ -3973,6 +3973,50 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 1, result["MC"] # from vasp_client fixture
   end
 
+  test "a13602a excludes clients with only non-qualifying rental transactions" do
+    exchange_a = Client.create!(
+      organization: @organization,
+      name: "Exchange A",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "EXCHANGE",
+      incorporation_country: "CH"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: exchange_a,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 15),
+      transaction_value: 500_000
+    )
+
+    # Client with only non-qualifying rental
+    exchange_b = Client.create!(
+      organization: @organization,
+      name: "Exchange B",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "EXCHANGE",
+      incorporation_country: "DE"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: exchange_b,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(@year, 6, 1),
+      transaction_value: 60_000,
+      rental_annual_value: 60_000
+    )
+
+    result = @survey.a13602a
+    assert_equal 1, result["CH"]
+    assert_nil result["DE"]
+  end
+
   # Q75 — a13602C: Unique ICO service provider PSAV clients
   # by country of establishment, for purchase, sale, and rental
   # Type: xbrli:integerItemType — dimensional by country (hash of counts)
