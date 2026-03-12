@@ -845,12 +845,20 @@ class Survey
       def a13603bb
         return nil unless a13601cw == "Oui"
 
-        year_transactions
-          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+        txns = year_transactions
           .joins(:client)
           .where(clients: {is_vasp: true, vasp_type: "CUSTODIAN"})
-          .distinct
-          .count("clients.id")
+
+        ps_client_ids = txns
+          .where(transaction_type: %w[PURCHASE SALE])
+          .pluck(:client_id)
+
+        rental_client_ids = txns
+          .where(transaction_type: "RENTAL")
+          .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
+          .pluck(:client_id)
+
+        (ps_client_ids + rental_client_ids).uniq.count
       end
 
       # Q60 — a13604BB: Total value of funds transferred by custodian wallet provider

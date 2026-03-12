@@ -3061,6 +3061,50 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 0, @survey.a13603bb
   end
 
+  test "a13603bb excludes clients with only non-qualifying rental transactions" do
+    # Client with qualifying purchase
+    custodian_client_a = Client.create!(
+      organization: @organization,
+      name: "Custodian A",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "CUSTODIAN",
+      incorporation_country: "LU"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: custodian_client_a,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 3, 15),
+      transaction_value: 500_000
+    )
+
+    # Client with only non-qualifying rental (monthly < 10,000 EUR)
+    custodian_client_b = Client.create!(
+      organization: @organization,
+      name: "Custodian B",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA",
+      is_vasp: true,
+      vasp_type: "CUSTODIAN",
+      incorporation_country: "DE"
+    )
+
+    Transaction.create!(
+      organization: @organization,
+      client: custodian_client_b,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(@year, 6, 1),
+      transaction_value: 60_000,
+      rental_annual_value: 60_000
+    )
+
+    # Only client A should be counted
+    assert_equal 1, @survey.a13603bb
+  end
+
   # Q60 — a13604BB: Total value of funds transferred by custodian wallet provider
   # PSAV clients for purchase, sale, and rental of real estate
   # Type: xbrli:monetaryItemType
