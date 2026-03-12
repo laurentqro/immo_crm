@@ -39,9 +39,12 @@ class Survey
       end
 
       # Q116 — a2101B: Did clients accept or perform cheque operations during reporting period?
-      # Type: enum (Oui/Non) — settings-based
+      # Type: enum (Oui/Non) — computed from transactions
       def a2101b
-        setting_value_for("clients_performed_cheque_operations")
+        year_transactions
+          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+          .where(payment_method: "CHECK")
+          .exists? ? "Oui" : "Non"
       end
 
       # Q117 — a2102B: Total number of cheque operations (incoming and outgoing) by clients

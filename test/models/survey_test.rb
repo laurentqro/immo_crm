@@ -4460,17 +4460,31 @@ class SurveyTest < ActiveSupport::TestCase
 
   # === Section 2.2: Cheque Operations BY Clients ===
 
-  test "a2101b returns setting value for clients performed cheque operations" do
-    Setting.create!(organization: @organization, key: "clients_performed_cheque_operations", category: "entity_info", value: "Oui")
+  test "a2101b returns Oui when cheque transactions exist in reporting period" do
+    client = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Cheque Client",
+      nationality: "FR"
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 5, 1),
+      transaction_value: 50_000,
+      payment_method: "CHECK"
+    )
+
     assert_equal "Oui", @survey.a2101b
   end
 
-  test "a2101b returns nil when setting is not set" do
-    assert_nil @survey.a2101b
+  test "a2101b returns Non when no cheque transactions exist in reporting period" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_equal "Non", survey.a2101b
   end
 
   test "a2102b returns count of cheque transactions by clients when a2101b is Oui" do
-    Setting.create!(organization: @organization, key: "clients_performed_cheque_operations", category: "entity_info", value: "Oui")
     baseline = @survey.a2102b || 0
 
     client = Client.create!(
@@ -4492,11 +4506,11 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a2102b returns nil when a2101b is not Oui" do
-    assert_nil @survey.a2102b
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a2102b
   end
 
   test "a2102bb returns total value of cheque transactions by clients when a2101b is Oui" do
-    Setting.create!(organization: @organization, key: "clients_performed_cheque_operations", category: "entity_info", value: "Oui")
     baseline = @survey.a2102bb || 0
 
     client = Client.create!(
@@ -4518,7 +4532,8 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a2102bb returns nil when a2101b is not Oui" do
-    assert_nil @survey.a2102bb
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a2102bb
   end
 
   # === Section 2.3: Wire Transfers WITH Clients ===
