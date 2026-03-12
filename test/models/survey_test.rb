@@ -343,19 +343,9 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   # Q10 — a1204S: Can your entity distinguish the nationality of the beneficial owner of clients?
-  # Type: enum "Oui" / "Non" (settings-based)
-  test "a1204s returns the setting value when set" do
-    Setting.create!(
-      organization: @organization,
-      key: "can_distinguish_bo_nationality",
-      category: "entity_info",
-      value: "Oui"
-    )
+  # Type: enum "Oui" / "Non" — always Oui since the CRM tracks BO nationality
+  test "a1204s always returns Oui" do
     assert_equal "Oui", @survey.a1204s
-  end
-
-  test "a1204s returns nil when setting is not set" do
-    assert_nil @survey.a1204s
   end
 
   # Q11 — a1204S1: Percentage breakdown of beneficial owners' primary nationalities
@@ -376,17 +366,6 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal BigDecimal("50.0"), result["MC"]   # 6/12 = 50.0%
     assert_in_delta 16.67, result["IT"].to_f, 0.01  # 2/12 = 16.67%
     assert_in_delta 8.33, result["CH"].to_f, 0.01   # 1/12 = 8.33%
-  end
-
-  test "a1204s1 returns nil when entity cannot distinguish BO nationality" do
-    # When a1204s (Q10) is "Non", Q11 should return nil
-    Setting.create!(
-      organization: @organization,
-      key: "can_distinguish_bo_nationality",
-      category: "entity_info",
-      value: "Non"
-    )
-    assert_nil @survey.a1204s1
   end
 
   test "a1204s1 returns empty hash when no beneficial owners exist" do

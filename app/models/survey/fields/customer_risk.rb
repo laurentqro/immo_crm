@@ -116,9 +116,9 @@ class Survey
       end
 
       # Q10 — a1204S: Can your entity distinguish the nationality of the beneficial owner of clients?
-      # Type: enum "Oui" / "Non" (settings-based)
+      # Type: enum "Oui" / "Non" - crm-capability-based
       def a1204s
-        setting_value_for("can_distinguish_bo_nationality")
+        "Oui"
       end
 
       # Q12 — a1202O: Total number of BOs exercising direct or indirect control
