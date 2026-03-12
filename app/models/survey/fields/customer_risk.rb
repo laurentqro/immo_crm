@@ -1039,13 +1039,11 @@ class Survey
           .select("clients.id, clients.incorporation_country")
 
         all_rows = ps_clients + rental_clients
-        grouped = all_rows
+        all_rows
           .map { |r| [r.incorporation_country, r.id] }
           .uniq
           .group_by(&:first)
           .transform_values(&:count)
-
-        grouped
       end
 
       # Q74 — a13602A: Unique exchange provider PSAV clients
