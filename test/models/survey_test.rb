@@ -676,19 +676,38 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   # Q22 — a13601: Does entity have PSAV clients that provide other services?
-  # Type: enum "Oui" / "Non" (settings-based)
-  test "a13601 returns the setting value when set" do
-    Setting.create!(
+  # Type: enum "Oui" / "Non" — computed from CRM VASP types
+  test "a13601 returns Oui when organization has VASP clients with other service types" do
+    Client.create!(
       organization: @organization,
-      key: "has_psav_clients_other_services",
-      category: "entity_info",
-      value: "Oui"
+      name: "VASP Transfer Client",
+      client_type: "NATURAL_PERSON",
+      nationality: "FR",
+      residence_country: "FR",
+      became_client_at: 3.months.ago,
+      is_vasp: true,
+      vasp_type: "OTHER",
+      vasp_other_service_type: "Crypto ATM operator"
     )
     assert_equal "Oui", @survey.a13601
   end
 
-  test "a13601 returns nil when setting is not set" do
-    assert_nil @survey.a13601
+  test "a13601 returns Non when no VASP clients with other service types exist" do
+    assert_equal "Non", @survey.a13601
+  end
+
+  test "a13601 returns Non when VASP clients only have named types" do
+    Client.create!(
+      organization: @organization,
+      name: "VASP Exchange Client",
+      client_type: "NATURAL_PERSON",
+      nationality: "FR",
+      residence_country: "FR",
+      became_client_at: 3.months.ago,
+      is_vasp: true,
+      vasp_type: "EXCHANGE"
+    )
+    assert_equal "Non", @survey.a13601
   end
 
   # Q23 — a1102: Total unique natural person clients who are nationals (MC nationality)

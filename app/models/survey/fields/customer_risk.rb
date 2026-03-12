@@ -236,15 +236,20 @@ class Survey
       end
 
       # Q21 — a1801: Does entity identify/record trusts and other legal constructions?
-      # Type: enum "Oui" / "Non" (settings-based)
+      # Type: enum "Oui" / "Non" — crm-capability-based
       def a1801
-        setting_value_for("identifies_records_trusts_legal_constructions")
+        "Oui"
       end
 
       # Q22 — a13601: Does entity have PSAV clients that provide other services?
-      # Type: enum "Oui" / "Non" (settings-based)
+      # Type: enum "Oui" / "Non" — computed from CRM VASP types
       def a13601
-        setting_value_for("has_psav_clients_other_services")
+        has_other_vasp = organization.clients
+          .where(is_vasp: true)
+          .where.not(vasp_type: AmsfConstants::AMSF_NAMED_VASP_TYPES)
+          .exists?
+
+        has_other_vasp ? "Oui" : "Non"
       end
 
       # Q23 — a1102: Total unique natural person clients who are nationals (MC nationality)

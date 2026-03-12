@@ -35,11 +35,11 @@ module AmsfConstants
   # Beneficial owner control types
   CONTROL_TYPES = %w[DIRECT INDIRECT REPRESENTATIVE].freeze
 
-  # Virtual Asset Service Provider types
-  VASP_TYPES = %w[EXCHANGE CUSTODIAN ICO TRANSFER DEFI NFT PAYMENT FUND_MANAGEMENT OTHER].freeze
+  # Virtual Asset Service Provider types (AMSF-defined categories)
+  VASP_TYPES = %w[EXCHANGE CUSTODIAN ICO OTHER].freeze
 
   # AMSF named VASP categories (XBRL has dedicated fields for these three)
-  # Everything else maps to the AMSF "other" bucket in survey fields.
+  # OTHER maps to the AMSF "other" bucket in survey fields.
   AMSF_NAMED_VASP_TYPES = %w[EXCHANGE CUSTODIAN ICO].freeze
 
   # Human-readable labels for VASP types
@@ -47,11 +47,6 @@ module AmsfConstants
     "EXCHANGE" => "Virtual currency exchange",
     "CUSTODIAN" => "Custodian wallet provider",
     "ICO" => "Token offering services (ICO/STO)",
-    "TRANSFER" => "Virtual asset transfer/remittance",
-    "DEFI" => "DeFi services (lending, staking, yield)",
-    "NFT" => "NFT marketplace/services",
-    "PAYMENT" => "Crypto payment processing",
-    "FUND_MANAGEMENT" => "Crypto asset/fund management",
     "OTHER" => "Other"
   }.freeze
 
