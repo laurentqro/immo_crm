@@ -5948,23 +5948,13 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   # Q214 — a3701A: Has comments on distribution risk section?
-  test "a3701a returns setting value for has_distribution_risk_comments" do
+  test "a3701a returns nil" do
     assert_nil @survey.a3701a
-
-    Setting.create!(organization: @organization, key: "has_distribution_risk_comments", category: "entity_info", value: "Oui")
-    @survey = Survey.new(organization: @organization, year: @year)
-    assert_equal "Oui", @survey.a3701a
   end
 
-  # Q215 — a3701: Distribution risk section comments (conditional on a3701A)
-  test "a3701 returns nil when a3701a is not Oui" do
+  # Q215 — a3701: Distribution risk section comments
+  test "a3701 returns nil" do
     assert_nil @survey.a3701
-  end
-
-  test "a3701 returns setting value when a3701a is Oui" do
-    Setting.create!(organization: @organization, key: "has_distribution_risk_comments", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "distribution_risk_comments", category: "entity_info", value: "No additional comments.")
-    assert_equal "No additional comments.", @survey.a3701
   end
 
   # === PART 2: CONTROLS ===

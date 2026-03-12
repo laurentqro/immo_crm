@@ -383,16 +383,13 @@ class Survey
       end
 
       # Q214 — a3701A: Has comments on distribution risk section?
-      # Type: enum (Oui/Non) — settings-based
+      # Type: enum (Oui/Non)
       def a3701a
-        setting_value_for("has_distribution_risk_comments")
       end
 
       # Q215 — a3701: Distribution risk section comments
-      # Type: xbrli:stringItemType — settings-based, conditional on a3701A
+      # Type: xbrli:stringItemType
       def a3701
-        return nil unless a3701a == "Oui"
-        setting_value_for("distribution_risk_comments")
       end
     end
   end
