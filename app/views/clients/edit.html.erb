@@ -15,4 +15,36 @@
       <%= render "form", client: @client %>
     </div>
   </div>
+
+  <% if @client.can_have_beneficial_owners? %>
+    <div class="beneficial-owners mt-8 overflow-hidden bg-white dark:bg-gray-900 shadow sm:rounded-lg border border-gray-200 dark:border-gray-700">
+      <div class="px-4 py-5 sm:px-6 flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">Beneficial Owners</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">People who own or control this entity.</p>
+        </div>
+        <%= link_to new_client_beneficial_owner_path(@client),
+            class: "btn btn-primary",
+            data: { turbo_frame: "new_beneficial_owner" } do %>
+          Add Beneficial Owner
+        <% end %>
+      </div>
+      <div class="border-t border-gray-200 dark:border-gray-700">
+        <%= turbo_frame_tag "beneficial_owners" do %>
+          <% if @client.beneficial_owners.any? %>
+            <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+              <% @client.beneficial_owners.each do |owner| %>
+                <%= render partial: "beneficial_owners/beneficial_owner", locals: { beneficial_owner: owner, client: @client } %>
+              <% end %>
+            </ul>
+          <% else %>
+            <div class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+              No beneficial owners recorded yet.
+            </div>
+          <% end %>
+        <% end %>
+        <%= turbo_frame_tag "new_beneficial_owner" %>
+      </div>
+    </div>
+  <% end %>
 </div>
