@@ -4253,6 +4253,47 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal 1, result["CH"]
   end
 
+  test "a1402 excludes clients with only non-qualifying rental transactions" do
+    # Client with qualifying purchase + secondary nationality
+    client_a = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Qualifying Client",
+      nationality: "FR"
+    )
+    ClientNationality.create!(client: client_a, country_code: "IT")
+
+    Transaction.create!(
+      organization: @organization,
+      client: client_a,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 6, 15),
+      transaction_value: 500_000
+    )
+
+    # Client with only non-qualifying rental + secondary nationality
+    client_b = Client.create!(
+      organization: @organization,
+      client_type: "NATURAL_PERSON",
+      name: "Non-qualifying Client",
+      nationality: "DE"
+    )
+    ClientNationality.create!(client: client_b, country_code: "BR")
+
+    Transaction.create!(
+      organization: @organization,
+      client: client_b,
+      transaction_type: "RENTAL",
+      transaction_date: Date.new(@year, 7, 1),
+      transaction_value: 60_000,
+      rental_annual_value: 60_000
+    )
+
+    result = @survey.a1402
+    assert_equal 1, result["IT"]
+    assert_nil result["BR"]
+  end
+
   # === Section 1.11: Monegasque Client Types (Purchases and Sales) ===
 
   test "ac171 returns Oui when Monegasque clients had purchase/sale transactions" do

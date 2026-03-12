@@ -177,13 +177,23 @@ class Survey
       def a1402
         return nil unless a1203 == "Oui"
 
-        year_transactions
-          .where(transaction_type: %w[PURCHASE SALE RENTAL])
+        txns = year_transactions
           .joins(client: :client_nationalities)
           .where(clients: {client_type: "NATURAL_PERSON"})
-          .distinct
-          .group("client_nationalities.country_code")
-          .count("clients.id")
+
+        ps_rows = txns
+          .where(transaction_type: %w[PURCHASE SALE])
+          .pluck("client_nationalities.country_code", "clients.id")
+
+        rental_rows = txns
+          .where(transaction_type: "RENTAL")
+          .where(Transaction.arel_table[:rental_annual_value].gteq(120_000))
+          .pluck("client_nationalities.country_code", "clients.id")
+
+        (ps_rows + rental_rows)
+          .uniq
+          .group_by(&:first)
+          .transform_values(&:count)
       end
 
       # Q16 — a1203D: Does entity record residence for BOs holding 25% or more?
