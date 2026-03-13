@@ -1,0 +1,182 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Immo CRM CLI - Command-line interface for AI agents and power users.
+#
+# Usage:
+#   immo login --url https://app.immo.lu --token <api-token>
+#   immo clients list --risk_level HIGH
+#   immo compliance gaps --year 2025
+#   immo submissions preview --year 2025
+#
+# Add --format json for machine-readable output (default for piped output).
+
+$LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
+require "cli/api_client"
+require "cli/config"
+require "cli/formatter"
+require "cli/commands"
+
+module Immo
+  module_function
+
+  def run(args)
+    format = extract_format(args)
+    formatter = Cli::Formatter.new(format: format)
+
+    case args.first
+    when "login"
+      args.shift
+      login(args, formatter)
+    when "logout"
+      Cli::Config.clear
+      formatter.success("Logged out. Config removed.")
+    when "status"
+      status(formatter)
+    when "help", nil, "-h", "--help"
+      print_usage
+    when "version", "--version"
+      puts "immo 0.1.0"
+    else
+      run_command(args, formatter)
+    end
+  rescue Cli::ApiClient::ApiError => e
+    formatter.error("API error (#{e.status}): #{e.body}")
+    exit 1
+  rescue => e
+    formatter.error(e.message)
+    exit 1
+  end
+
+  def extract_format(args)
+    idx = args.index("--format")
+    if idx
+      args.delete_at(idx)
+      format = args.delete_at(idx)
+      format&.to_sym || :table
+    elsif !$stdout.tty?
+      :json # Default to JSON when piped
+    else
+      :table
+    end
+  end
+
+  def login(args, formatter)
+    flags = {}
+    args.each_slice(2) do |key, value|
+      flags[key.sub(/^--/, "")] = value if key&.start_with?("--")
+    end
+
+    url = flags["url"] || ENV["IMMO_URL"]
+    token = flags["token"] || ENV["IMMO_TOKEN"]
+
+    unless url && token
+      formatter.error("Usage: immo login --url <url> --token <token>")
+      formatter.error("Or set IMMO_URL and IMMO_TOKEN environment variables")
+      exit 1
+    end
+
+    Cli::Config.set("url", url)
+    Cli::Config.set("token", token)
+    formatter.success("Logged in to #{url}")
+  end
+
+  def status(formatter)
+    config = Cli::Config.load
+    if Cli::Config.configured?
+      formatter.render({
+        "url" => config["url"],
+        "token" => "#{config['token'][0..7]}...",
+        "status" => "configured"
+      })
+    else
+      formatter.error("Not configured. Run: immo login --url <url> --token <token>")
+    end
+  end
+
+  def run_command(args, formatter)
+    unless Cli::Config.configured?
+      url = ENV["IMMO_URL"]
+      token = ENV["IMMO_TOKEN"]
+
+      unless url && token
+        formatter.error("Not configured. Run: immo login --url <url> --token <token>")
+        exit 1
+      end
+    end
+
+    config = Cli::Config.load
+    api_url = ENV["IMMO_URL"] || config["url"]
+    api_token = ENV["IMMO_TOKEN"] || config["token"]
+
+    client = Cli::ApiClient.new(base_url: api_url, token: api_token)
+    Cli::Commands.run(args, client: client, formatter: formatter)
+  end
+
+  def print_usage
+    puts <<~USAGE
+      Immo CRM CLI - AML/KYC compliance management
+
+      Usage: immo <command> [options]
+
+      Setup:
+        login                     Configure API credentials
+        logout                    Remove stored credentials
+        status                    Show current configuration
+
+      Resources:
+        clients list              List clients (--risk_level, --client_type, --q)
+        clients show <id>         Show client details
+        clients create <json>     Create a client
+        clients onboard <json>    Create client with beneficial owners
+        clients assess-risk <id>  Assess client risk factors
+        clients update <id> <json> Update a client
+        clients delete <id>       Soft-delete a client
+
+        transactions list         List transactions (--year, --payment_method, --transaction_type)
+        transactions show <id>    Show transaction details
+        transactions create <json> Create a transaction
+        transactions screen <id>  Screen transaction for AML flags
+        transactions delete <id>  Soft-delete a transaction
+
+        str-reports list          List STR reports (--year, --reason)
+        str-reports show <id>     Show STR report
+        str-reports create <json> Create an STR report
+
+        properties list           List managed properties (--status, --property_type)
+        properties show <id>      Show property details
+        properties create <json>  Create a property
+
+        trainings list            List trainings (--year, --training_type)
+        trainings show <id>       Show training details
+        trainings create <json>   Create a training record
+
+        submissions list          List AMSF submissions
+        submissions show <id>     Show submission details
+        submissions create <json> Create a submission
+        submissions preview       Preview survey calculations (--year)
+        submissions validate <id> Validate submission XBRL
+        submissions complete <id> Complete a draft submission
+        submissions download <id> Download XBRL file
+
+      Compliance:
+        compliance gaps           Show compliance gaps (--year)
+        compliance risk-assessment Organization risk summary (--year)
+
+      Options:
+        --format json             JSON output (default when piped)
+        --file <path>             Read input from JSON file
+        --help                    Show this help
+
+      Examples:
+        immo clients list --risk_level HIGH
+        immo clients create '{"name":"Dupont SA","client_type":"LEGAL_ENTITY","legal_person_type":"SARL"}'
+        immo clients onboard --file new_client.json
+        immo compliance gaps --year 2025
+        immo submissions preview --year 2025
+        immo transactions screen 42
+    USAGE
+  end
+end
+
+Immo.run(ARGV.dup)
