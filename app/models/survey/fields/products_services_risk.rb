@@ -446,10 +446,14 @@ class Survey
       end
 
       # Q160 — aIR2392: How many properties were pre-empted by Monaco?
-      # Type: xbrli:integerItemType — settings-based, conditional on aIR2391
+      # Type: xbrli:integerItemType — computed, conditional on aIR2391
       def air2392
         return nil unless air2391 == "Oui"
-        setting_value_for("monaco_preempted_property_count")
+
+        year_transactions
+          .where(transaction_type: %w[PURCHASE SALE])
+          .where(preempted_by_state: true)
+          .count
       end
 
       # Q161 — aIR2393: What was the total value of pre-empted properties?

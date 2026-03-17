@@ -5412,11 +5412,28 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.air2392
   end
 
-  test "air2392 returns setting value when air2391 is Oui" do
-    Setting.create!(organization: @organization, key: "monaco_preempted_properties", category: "entity_info", value: "Oui")
-    Setting.create!(organization: @organization, key: "monaco_preempted_property_count", category: "entity_info", value: "3")
+  test "air2392 returns count of preempted transactions when air2391 is Oui" do
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Preempt Client", nationality: "FR")
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 3, 1),
+      transaction_value: 1_000_000,
+      payment_method: "WIRE",
+      preempted_by_state: true
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 9, 1),
+      transaction_value: 2_000_000,
+      payment_method: "WIRE",
+      preempted_by_state: true
+    )
 
-    assert_equal "3", @survey.air2392
+    assert_equal 2, @survey.air2392
   end
 
   # Q161 — aIR2393: What was the total value of pre-empted properties?
