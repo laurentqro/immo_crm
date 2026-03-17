@@ -4375,13 +4375,29 @@ class SurveyTest < ActiveSupport::TestCase
 
   # === Section 2.1: Cheque Operations ===
 
-  test "a2101w returns setting value for accepting cheque operations" do
-    Setting.create!(organization: @organization, key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
+  test "a2101w returns Oui when cheque transactions exist" do
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Cheque Client", nationality: "FR")
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "SALE",
+      transaction_date: Date.new(@year, 6, 1),
+      transaction_value: 50_000,
+      payment_method: "CHECK"
+    )
+
     assert_equal "Oui", @survey.a2101w
   end
 
-  test "a2101w returns nil when setting is not set" do
-    assert_nil @survey.a2101w
+  test "a2101w falls back to setting when no cheque transactions exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    Setting.create!(organization: organizations(:company), key: "accepts_cheque_operations", category: "entity_info", value: "Oui")
+    assert_equal "Oui", survey.a2101w
+  end
+
+  test "a2101w returns nil when no transactions and no setting" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a2101w
   end
 
   test "a2101wrp returns Oui when cheque transactions exist in reporting period and a2101w is Oui" do
@@ -4413,7 +4429,8 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a2101wrp returns nil when a2101w is not Oui" do
-    assert_nil @survey.a2101wrp
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a2101wrp
   end
 
   test "a2102w counts rental operations as monthly when rental dates are set" do
@@ -4452,7 +4469,8 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a2102w returns nil when a2101wrp is not Oui" do
-    assert_nil @survey.a2102w
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a2102w
   end
 
   test "a2102bw computes rental value as monthly_value * months for cheque transactions" do
@@ -4491,7 +4509,8 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a2102bw returns nil when a2101wrp is not Oui" do
-    assert_nil @survey.a2102bw
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a2102bw
   end
 
   # === Section 2.2: Cheque Operations BY Clients ===

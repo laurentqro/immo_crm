@@ -4,9 +4,16 @@ class Survey
   module Fields
     module ProductsServicesRisk
       # Q112 — a2101W: Does entity accept or carry out cheque operations with clients?
-      # Type: enum (Oui/Non) — settings-based
+      # Type: enum (Oui/Non) — three-tier: evidence first, then setting fallback
       def a2101w
-        setting_value_for("accepts_cheque_operations")
+        if year_transactions
+            .where(transaction_type: %w[PURCHASE SALE RENTAL])
+            .where(payment_method: "CHECK")
+            .exists?
+          "Oui"
+        else
+          setting_value_for("accepts_cheque_operations")
+        end
       end
 
       # Q113 — a2101WRP: Did entity accept or carry out cheque operations during reporting period?
