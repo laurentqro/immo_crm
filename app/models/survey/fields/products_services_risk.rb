@@ -134,9 +134,16 @@ class Survey
       end
 
       # Q126 — a2107W: Does entity accept or carry out cash operations with clients?
-      # Type: enum (Oui/Non) — settings-based
+      # Type: enum (Oui/Non) — three-tier: evidence first, then setting fallback
       def a2107w
-        setting_value_for("accepts_cash_operations")
+        if year_transactions
+            .where(transaction_type: %w[PURCHASE SALE RENTAL])
+            .where(payment_method: %w[CASH MIXED])
+            .exists?
+          "Oui"
+        else
+          setting_value_for("accepts_cash_operations")
+        end
       end
 
       # Q127 — a2107WRP: Did entity accept or carry out cash operations with clients during reporting period?

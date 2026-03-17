@@ -4745,11 +4745,30 @@ class SurveyTest < ActiveSupport::TestCase
   # === Section 2.5: Cash operations WITH clients ===
 
   # Q126 — a2107W: Does entity accept or carry out cash operations with clients?
-  test "a2107w returns setting value for accepts_cash_operations" do
-    assert_nil @survey.a2107w
-    Setting.create!(organization: @organization, key: "accepts_cash_operations", category: "entity_info", value: "Oui")
-    @survey = Survey.new(organization: @organization, year: @year)
+  test "a2107w returns Oui when cash transactions exist" do
+    client = Client.create!(organization: @organization, client_type: "NATURAL_PERSON", name: "Cash Client", nationality: "FR")
+    Transaction.create!(
+      organization: @organization,
+      client: client,
+      transaction_type: "PURCHASE",
+      transaction_date: Date.new(@year, 6, 1),
+      transaction_value: 50_000,
+      payment_method: "CASH",
+      cash_amount: 50_000
+    )
+
     assert_equal "Oui", @survey.a2107w
+  end
+
+  test "a2107w falls back to setting when no cash transactions exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    Setting.create!(organization: organizations(:company), key: "accepts_cash_operations", category: "entity_info", value: "Oui")
+    assert_equal "Oui", survey.a2107w
+  end
+
+  test "a2107w returns nil when no transactions and no setting" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a2107w
   end
 
   # Q127 — a2107WRP: Did entity accept or carry out cash operations with clients during reporting period?
@@ -4760,7 +4779,8 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   test "a2107wrp returns nil when a2107w is not Oui" do
-    assert_nil @survey.a2107wrp
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a2107wrp
   end
 
   # Q128 — a2108W: Total number of cash operations with clients
