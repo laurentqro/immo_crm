@@ -8,11 +8,20 @@ class Survey
       def setting_value_for(key)
         load_settings_cache unless @settings_cache
         value = @settings_cache[key]
+        value = normalize_boolean(value)
         value.presence
       end
 
       def load_settings_cache
         @settings_cache = organization.settings.pluck(:key, :value).to_h
+      end
+
+      def normalize_boolean(value)
+        case value
+        when "true" then "Oui"
+        when "false" then "Non"
+        else value
+        end
       end
 
       def year_transactions

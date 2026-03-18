@@ -6377,6 +6377,16 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal "Oui", @survey.ac1201
   end
 
+  test "ac1201 returns Oui/Non not true/false when setting stores boolean strings" do
+    Setting.create!(organization: @organization, key: "has_written_aml_policies", category: "compliance_policies", value: "true")
+    @survey = Survey.new(organization: @organization, year: @year)
+    assert_equal "Oui", @survey.ac1201
+
+    Setting.find_by(key: "has_written_aml_policies").update!(value: "false")
+    @survey = Survey.new(organization: @organization, year: @year)
+    assert_equal "Non", @survey.ac1201
+  end
+
   # C8 — aC1202: Policies approved by board/senior management? (conditional on aC114)
   test "ac1202 returns nil when ac114 is not Oui" do
     assert_nil @survey.ac1202
