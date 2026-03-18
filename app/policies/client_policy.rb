@@ -56,6 +56,7 @@ class ClientPolicy < ApplicationPolicy
       :name,
       :nationality,
       :net_worth_range,
+      :non_face_to_face_onboarding,
       :notes,
       :pep_type,
       :professional_category,

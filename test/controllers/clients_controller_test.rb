@@ -533,4 +533,28 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     delete client_path(@client)
     assert_equal "Client was successfully deleted.", flash[:notice]
   end
+
+  test "creates client with non_face_to_face_onboarding" do
+    sign_in @user
+
+    post clients_path, params: {
+      client: {
+        name: "Remote Client",
+        client_type: "NATURAL_PERSON",
+        nationality: "FR",
+        non_face_to_face_onboarding: true
+      }
+    }
+
+    assert_response :redirect
+    assert Client.last.non_face_to_face_onboarding
+  end
+
+  test "new client form includes non_face_to_face_onboarding checkbox" do
+    sign_in @user
+
+    get new_client_path
+    assert_response :success
+    assert_select "input[name='client[non_face_to_face_onboarding]'][type='checkbox']"
+  end
 end
