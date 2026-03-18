@@ -457,10 +457,14 @@ class Survey
       end
 
       # Q161 — aIR2393: What was the total value of pre-empted properties?
-      # Type: xbrli:monetaryItemType — settings-based, conditional on aIR2391
+      # Type: xbrli:monetaryItemType — computed, conditional on aIR2391
       def air2393
         return nil unless air2391 == "Oui"
-        setting_value_for("monaco_preempted_property_value")
+
+        year_transactions
+          .where(transaction_type: %w[PURCHASE SALE])
+          .where(preempted_by_state: true)
+          .sum(:transaction_value)
       end
 
       # Q158 — aIR117: How many purchases/sales were for investment purposes?
