@@ -410,18 +410,28 @@ class Survey
       end
 
       # Q33 — a1501: Total unique legal entity clients (excl. trusts)
-      # by incorporation country, for purchase and sale of real estate
+      # by incorporation country, for purchase, sale, and rental of real estate
       # Type: xbrli:integerItemType — dimensional by country (hash of counts)
       def a1501
-        year_transactions
-          .where(transaction_type: %w[PURCHASE SALE])
-          .joins(:client)
-          .where(clients: {client_type: "LEGAL_ENTITY"})
-          .where.not(clients: {legal_entity_type: "TRUST"})
-          .where.not(clients: {incorporation_country: nil})
-          .distinct
-          .group("clients.incorporation_country")
-          .count("clients.id")
+        le_scope = clients_kept
+          .where(client_type: "LEGAL_ENTITY")
+          .where.not(legal_entity_type: "TRUST")
+          .where.not(incorporation_country: nil)
+
+        ps_ids = le_scope
+          .joins(:transactions)
+          .merge(year_transactions.where(transaction_type: %w[PURCHASE SALE]))
+          .pluck("clients.id", "clients.incorporation_country")
+
+        rental_ids = le_scope
+          .joins(:transactions)
+          .merge(year_transactions.where(transaction_type: "RENTAL")
+            .where(Transaction.arel_table[:rental_annual_value].gteq(120_000)))
+          .pluck("clients.id", "clients.incorporation_country")
+
+        (ps_ids + rental_ids).uniq.each_with_object({}) do |(_id, country), counts|
+          counts[country] = (counts[country] || 0) + 1
+        end
       end
 
       # Q34 — a1502B: Total transactions by legal entity clients (excl. trusts)

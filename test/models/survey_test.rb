@@ -1547,7 +1547,7 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   # Q33 — a1501: Total unique legal entity clients (excl. trusts)
-  # by incorporation country, for purchase and sale of real estate
+  # by incorporation country, for purchase, sale, and rental of real estate
   # Type: xbrli:integerItemType — dimensional by country (hash of counts)
 
   test "a1501 returns hash of unique legal entity clients grouped by incorporation country for purchase/sale" do
@@ -1631,7 +1631,7 @@ class SurveyTest < ActiveSupport::TestCase
     assert_instance_of Hash, result
   end
 
-  test "a1501 excludes rental transactions" do
+  test "a1501 includes qualifying rental clients (annual rent >= 120,000)" do
     le_it = Client.create!(
       organization: @organization,
       name: "Italian Rental Corp",
@@ -1647,14 +1647,38 @@ class SurveyTest < ActiveSupport::TestCase
       reference: "A1501-RENT",
       transaction_date: Date.current - 5.days,
       transaction_type: "RENTAL",
-      transaction_value: 240_000,
       rental_annual_value: 240_000,
       property_country: "MC",
       payment_method: "WIRE"
     )
 
     result = @survey.a1501
-    assert_nil result["IT"], "Rental-only legal entity clients should not appear in a1501"
+    assert_equal 1, result["IT"], "Qualifying rental LE client should appear in a1501"
+  end
+
+  test "a1501 excludes rental clients below threshold (annual rent < 120,000)" do
+    le_it = Client.create!(
+      organization: @organization,
+      name: "Italian Small Rental Corp",
+      client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SCI",
+      nationality: "IT",
+      incorporation_country: "IT",
+      became_client_at: 3.months.ago
+    )
+    Transaction.create!(
+      organization: @organization,
+      client: le_it,
+      reference: "A1501-RENT-SMALL",
+      transaction_date: Date.current - 5.days,
+      transaction_type: "RENTAL",
+      rental_annual_value: 100_000,
+      property_country: "MC",
+      payment_method: "WIRE"
+    )
+
+    result = @survey.a1501
+    assert_nil result["IT"], "Below-threshold rental LE client should not appear in a1501"
   end
 
   test "a1501 counts each client only once per country even with multiple transactions" do
