@@ -5912,18 +5912,35 @@ class SurveyTest < ActiveSupport::TestCase
     assert_equal baseline + 1, @survey.a3210c
   end
 
-  # Q178 — a3211C: LP clients onboarded without face-to-face
+  # Q178 — a3211C: LE clients onboarded without face-to-face
   test "a3211c returns nil when a3209 is not Oui" do
     assert_nil @survey.a3211c
   end
 
-  test "a3211c returns setting value when a3209 is Oui" do
+  test "a3211c counts LE clients onboarded non-face-to-face in reporting period" do
     Setting.create!(organization: @organization, key: "non_face_to_face_onboarding", category: "entity_info", value: "Oui")
-    assert_nil @survey.a3211c
+    baseline = @survey.a3211c
 
-    Setting.create!(organization: @organization, key: "non_face_to_face_lp_onboarded_count", category: "entity_info", value: "3")
-    @survey = Survey.new(organization: @organization, year: @year)
-    assert_equal "3", @survey.a3211c
+    # LE onboarded non-face-to-face in year (counts)
+    Client.create!(organization: @organization, name: "Remote LE", client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SARL", incorporation_country: "FR",
+      became_client_at: Date.new(@year, 3, 1), non_face_to_face_onboarding: true)
+
+    # LE onboarded face-to-face in year (does NOT count)
+    Client.create!(organization: @organization, name: "In-person LE", client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SA", incorporation_country: "IT",
+      became_client_at: Date.new(@year, 6, 1), non_face_to_face_onboarding: false)
+
+    # LE onboarded non-face-to-face outside year (does NOT count)
+    Client.create!(organization: @organization, name: "Old Remote LE", client_type: "LEGAL_ENTITY",
+      legal_entity_type: "SNC", incorporation_country: "DE",
+      became_client_at: Date.new(@year - 1, 3, 1), non_face_to_face_onboarding: true)
+
+    # NP onboarded non-face-to-face in year (does NOT count — wrong client type)
+    Client.create!(organization: @organization, name: "Remote NP", client_type: "NATURAL_PERSON",
+      nationality: "FR", became_client_at: Date.new(@year, 4, 1), non_face_to_face_onboarding: true)
+
+    assert_equal baseline + 1, @survey.a3211c
   end
 
   # Q179 — a3212CTOLA: Trust clients onboarded without face-to-face

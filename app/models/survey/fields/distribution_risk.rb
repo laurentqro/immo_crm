@@ -104,11 +104,17 @@ class Survey
           .count
       end
 
-      # Q178 — a3211C: LP clients onboarded without face-to-face during reporting period
-      # Type: xbrli:integerItemType — settings-based, conditional on a3209
+      # Q178 — a3211C: LE clients onboarded without face-to-face during reporting period
+      # Type: xbrli:integerItemType — DB-computed, conditional on a3209
       def a3211c
         return nil unless a3209 == "Oui"
-        setting_value_for("non_face_to_face_lp_onboarded_count")
+
+        year_range = Date.new(year, 1, 1)..Date.new(year, 12, 31)
+
+        clients_kept
+          .where(client_type: "LEGAL_ENTITY", non_face_to_face_onboarding: true)
+          .where(became_client_at: year_range)
+          .count
       end
 
       # Q179 — a3212CTOLA: Trust clients onboarded without face-to-face during reporting period
