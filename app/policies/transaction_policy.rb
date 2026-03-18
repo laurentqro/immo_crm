@@ -49,6 +49,8 @@ class TransactionPolicy < ApplicationPolicy
       :property_country,
       :payment_method,
       :cash_amount,
+      :foreign_currency_cash_amount,
+      :preempted_by_state,
       :agency_role,
       :purchase_purpose,
       :property_type,

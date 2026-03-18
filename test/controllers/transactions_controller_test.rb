@@ -478,4 +478,54 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     delete transaction_path(@transaction)
     assert_equal "Transaction was successfully deleted.", flash[:notice]
   end
+
+  test "creates transaction with foreign_currency_cash_amount" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "SALE",
+        payment_method: "CASH",
+        cash_amount: 50_000,
+        foreign_currency_cash_amount: 30_000
+      }
+    }
+
+    assert_response :redirect
+    assert_equal 30_000, Transaction.last.foreign_currency_cash_amount
+  end
+
+  test "creates transaction with preempted_by_state" do
+    sign_in @user
+
+    post transactions_path, params: {
+      transaction: {
+        client_id: @client.id,
+        transaction_date: Date.current,
+        transaction_type: "PURCHASE",
+        preempted_by_state: true
+      }
+    }
+
+    assert_response :redirect
+    assert Transaction.last.preempted_by_state
+  end
+
+  test "new transaction form includes preempted_by_state checkbox" do
+    sign_in @user
+
+    get new_transaction_path
+    assert_response :success
+    assert_select "input[name='transaction[preempted_by_state]'][type='checkbox']"
+  end
+
+  test "new transaction form includes foreign_currency_cash_amount field" do
+    sign_in @user
+
+    get new_transaction_path
+    assert_response :success
+    assert_select "input[name='transaction[foreign_currency_cash_amount]']"
+  end
 end

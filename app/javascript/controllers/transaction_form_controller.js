@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Manages dynamic field visibility in the transaction form based on type and payment method
 export default class extends Controller {
-  static targets = ["transactionType", "purchasePurpose", "paymentMethod", "cashAmount", "rentalFields"]
+  static targets = ["transactionType", "purchasePurpose", "paymentMethod", "cashAmount", "foreignCurrencyCashAmount", "rentalFields"]
 
   connect() {
     this.togglePurchasePurpose()
@@ -34,5 +34,8 @@ export default class extends Controller {
     const hasCash = paymentMethod === "CASH" || paymentMethod === "MIXED"
 
     this.cashAmountTarget.classList.toggle("hidden", !hasCash)
+    if (this.hasForeignCurrencyCashAmountTarget) {
+      this.foreignCurrencyCashAmountTarget.classList.toggle("hidden", !hasCash)
+    }
   }
 }
