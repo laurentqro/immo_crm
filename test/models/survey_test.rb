@@ -6998,9 +6998,29 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac1612a
   end
 
-  test "ac1612a returns setting value when ac1609 is Oui" do
+  test "ac1612a returns Oui when SDD reviews exist in reporting year" do
     Setting.create!(organization: @organization, key: "risk_based_approach_for_cdd", category: "kyc_procedures", value: "Oui")
-    Setting.create!(organization: @organization, key: "implemented_simplified_dd", category: "kyc_procedures", value: "Non")
+    client = clients(:natural_person)
+    client.due_diligence_reviews.create!(review_type: "SIMPLIFIED", trigger: "ONBOARDING", performed_at: Date.new(@year, 6, 15))
+    assert_equal "Oui", @survey.ac1612a
+  end
+
+  test "ac1612a returns Non when no SDD reviews exist in reporting year" do
+    Setting.create!(organization: @organization, key: "risk_based_approach_for_cdd", category: "kyc_procedures", value: "Oui")
+    assert_equal "Non", @survey.ac1612a
+  end
+
+  test "ac1612a excludes SDD reviews outside reporting year" do
+    Setting.create!(organization: @organization, key: "risk_based_approach_for_cdd", category: "kyc_procedures", value: "Oui")
+    client = clients(:natural_person)
+    client.due_diligence_reviews.create!(review_type: "SIMPLIFIED", trigger: "ONBOARDING", performed_at: Date.new(@year - 1, 6, 15))
+    assert_equal "Non", @survey.ac1612a
+  end
+
+  test "ac1612a ignores EDD reviews" do
+    Setting.create!(organization: @organization, key: "risk_based_approach_for_cdd", category: "kyc_procedures", value: "Oui")
+    client = clients(:natural_person)
+    client.due_diligence_reviews.create!(review_type: "ENHANCED", trigger: "ONBOARDING", performed_at: Date.new(@year, 6, 15))
     assert_equal "Non", @survey.ac1612a
   end
 
@@ -7009,11 +7029,29 @@ class SurveyTest < ActiveSupport::TestCase
     assert_nil @survey.ac1612
   end
 
-  test "ac1612 returns setting value when ac1612a is Oui" do
+  test "ac1612 returns count of unique clients with SDD reviews" do
     Setting.create!(organization: @organization, key: "risk_based_approach_for_cdd", category: "kyc_procedures", value: "Oui")
-    Setting.create!(organization: @organization, key: "implemented_simplified_dd", category: "kyc_procedures", value: "Oui")
-    Setting.create!(organization: @organization, key: "simplified_dd_client_count", category: "kyc_procedures", value: "5")
-    assert_equal "5", @survey.ac1612
+    client1 = clients(:natural_person)
+    client2 = clients(:legal_entity)
+    client1.due_diligence_reviews.create!(review_type: "SIMPLIFIED", trigger: "ONBOARDING", performed_at: Date.new(@year, 3, 1))
+    client2.due_diligence_reviews.create!(review_type: "SIMPLIFIED", trigger: "ONBOARDING", performed_at: Date.new(@year, 4, 1))
+    assert_equal 2, @survey.ac1612
+  end
+
+  test "ac1612 counts unique clients not reviews" do
+    Setting.create!(organization: @organization, key: "risk_based_approach_for_cdd", category: "kyc_procedures", value: "Oui")
+    client = clients(:natural_person)
+    client.due_diligence_reviews.create!(review_type: "SIMPLIFIED", trigger: "ONBOARDING", performed_at: Date.new(@year, 3, 1))
+    client.due_diligence_reviews.create!(review_type: "SIMPLIFIED", trigger: "ONBOARDING", performed_at: Date.new(@year, 6, 1))
+    assert_equal 1, @survey.ac1612
+  end
+
+  test "ac1612 excludes reviews outside reporting year" do
+    Setting.create!(organization: @organization, key: "risk_based_approach_for_cdd", category: "kyc_procedures", value: "Oui")
+    client = clients(:natural_person)
+    client.due_diligence_reviews.create!(review_type: "SIMPLIFIED", trigger: "ONBOARDING", performed_at: Date.new(@year, 3, 1))
+    client.due_diligence_reviews.create!(review_type: "SIMPLIFIED", trigger: "ONBOARDING", performed_at: Date.new(@year - 1, 6, 1))
+    assert_equal 1, @survey.ac1612
   end
 
   # C54 — aC1614: Identifies/verifies clients using reliable independent info? (enum Oui/Non)

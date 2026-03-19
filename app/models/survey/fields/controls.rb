@@ -339,17 +339,34 @@ class Survey
       end
 
       # C52 — aC1612A: Implemented simplified due diligence?
-      # Type: enum (Oui/Non) — settings-based, conditional on aC1609
+      # Type: enum (Oui/Non) — computed from DB, conditional on aC1609
       def ac1612a
         return nil unless ac1609 == "Oui"
-        setting_value_for("implemented_simplified_dd")
+
+        year_range = Date.new(year, 1, 1)..Date.new(year, 12, 31)
+        has_sdd = DueDiligenceReview
+          .joins(:client)
+          .where(clients: {organization_id: organization.id})
+          .merge(Client.kept)
+          .where(review_type: "SIMPLIFIED", performed_at: year_range)
+          .exists?
+
+        has_sdd ? "Oui" : "Non"
       end
 
-      # C53 — aC1612: Total clients with simplified DD
-      # Type: xbrli:integerItemType — settings-based, conditional on aC1612A
+      # C53 — aC1612: Total unique clients with simplified DD
+      # Type: xbrli:integerItemType — computed from DB, conditional on aC1612A
       def ac1612
         return nil unless ac1612a == "Oui"
-        setting_value_for("simplified_dd_client_count")
+
+        year_range = Date.new(year, 1, 1)..Date.new(year, 12, 31)
+        DueDiligenceReview
+          .joins(:client)
+          .where(clients: {organization_id: organization.id})
+          .merge(Client.kept)
+          .where(review_type: "SIMPLIFIED", performed_at: year_range)
+          .distinct
+          .count(:client_id)
       end
 
       # C54 — aC1614: Identifies/verifies clients using reliable independent info?
