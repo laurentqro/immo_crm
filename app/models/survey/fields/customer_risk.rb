@@ -234,15 +234,23 @@ class Survey
       end
 
       # Q19 — a11201BCD: Does entity identify and record client type: HNWIs?
-      # Type: enum "Oui" / "Non" — crm-capability-based
+      # Type: enum (Oui/Non) — three-tier: evidence first, then setting fallback
       def a11201bcd
-        "Oui"
+        if BeneficialOwner.where(client: organization.clients).hnwis.exists?
+          "Oui"
+        else
+          setting_value_for("identifies_and_records_hnwi_clients")
+        end
       end
 
       # Q20 — a11201BCDU: Does entity identify and record client type: UHNWIs?
-      # Type: enum "Oui" / "Non" — crm-capability-based
+      # Type: enum (Oui/Non) — three-tier: evidence first, then setting fallback
       def a11201bcdu
-        "Oui"
+        if BeneficialOwner.where(client: organization.clients).uhnwis.exists?
+          "Oui"
+        else
+          setting_value_for("identifies_and_records_uhnwi_clients")
+        end
       end
 
       # Q21 — a1801: Does entity identify/record trusts and other legal constructions?
@@ -460,9 +468,17 @@ class Survey
 
       # Q36 — a155: Does your entity distinguish if clients are Monegasque legal entities
       # and the type of legal entity?
-      # Type: stringItemType with enum restriction ("Oui" / "Non") — CRM capability
+      # Type: stringItemType with enum restriction ("Oui" / "Non") — three-tier
       def a155
-        "Oui"
+        has_evidence = year_transactions
+          .where(transaction_type: %w[PURCHASE SALE])
+          .joins(:client)
+          .where(clients: {client_type: "LEGAL_ENTITY", incorporation_country: "MC"})
+          .where.not(clients: {legal_entity_type: "TRUST"})
+          .where.not(clients: {legal_entity_type: nil})
+          .exists?
+
+        has_evidence ? "Oui" : setting_value_for("entity_distinguishes_monegasque_legal_entities")
       end
 
       # Q37 — aMLES: Number of Monegasque legal entity clients, broken down by type

@@ -658,15 +658,45 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   # Q19 — a11201BCD: Does entity identify and record client type: HNWIs?
-  # Type: enum "Oui" / "Non" — crm-capability-based
-  test "a11201bcd always returns Oui since CRM identifies HNWIs" do
+  # Type: enum (Oui/Non) — three-tier: evidence first, then setting fallback
+  test "a11201bcd returns Oui when HNWI beneficial owners exist" do
+    assert BeneficialOwner.where(client: @organization.clients).hnwis.exists?,
+      "Precondition: organization :one should have HNWI beneficial owners"
     assert_equal "Oui", @survey.a11201bcd
   end
 
+  test "a11201bcd falls back to setting when no HNWI beneficial owners exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_not BeneficialOwner.where(client: organizations(:company).clients).hnwis.exists?,
+      "Precondition: organization :company should have no HNWI beneficial owners"
+    Setting.create!(organization: organizations(:company), key: "identifies_and_records_hnwi_clients", category: "entity_info", value: "Oui")
+    assert_equal "Oui", survey.a11201bcd
+  end
+
+  test "a11201bcd returns nil when no HNWI beneficial owners and no setting" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a11201bcd
+  end
+
   # Q20 — a11201BCDU: Does entity identify and record client type: UHNWIs?
-  # Type: enum "Oui" / "Non" — crm-capability-based
-  test "a11201bcdu always returns Oui since CRM identifies UHNWIs" do
+  # Type: enum (Oui/Non) — three-tier: evidence first, then setting fallback
+  test "a11201bcdu returns Oui when UHNWI beneficial owners exist" do
+    assert BeneficialOwner.where(client: @organization.clients).uhnwis.exists?,
+      "Precondition: organization :one should have UHNWI beneficial owners"
     assert_equal "Oui", @survey.a11201bcdu
+  end
+
+  test "a11201bcdu falls back to setting when no UHNWI beneficial owners exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_not BeneficialOwner.where(client: organizations(:company).clients).uhnwis.exists?,
+      "Precondition: organization :company should have no UHNWI beneficial owners"
+    Setting.create!(organization: organizations(:company), key: "identifies_and_records_uhnwi_clients", category: "entity_info", value: "Oui")
+    assert_equal "Oui", survey.a11201bcdu
+  end
+
+  test "a11201bcdu returns nil when no UHNWI beneficial owners and no setting" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a11201bcdu
   end
 
   # Q21 — a1801: Does entity identify/record trusts and other legal constructions?
@@ -1825,9 +1855,20 @@ class SurveyTest < ActiveSupport::TestCase
   end
 
   # Q36 — a155: Does your entity distinguish if clients are Monegasque legal entities and the type?
-  # Type: stringItemType with enum restriction ("Oui" / "Non") — settings-based
-  test "a155 returns Oui (CRM captures legal entity type and incorporation country)" do
+  # Type: stringItemType with enum restriction ("Oui" / "Non") — three-tier
+  test "a155 returns Oui when Monegasque non-trust legal entity clients exist in purchase/sale transactions" do
     assert_equal "Oui", @survey.a155
+  end
+
+  test "a155 falls back to setting when no Monegasque non-trust legal entity transactions exist" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    Setting.create!(organization: organizations(:company), key: "entity_distinguishes_monegasque_legal_entities", category: "entity_info", value: "Oui")
+    assert_equal "Oui", survey.a155
+  end
+
+  test "a155 returns nil when no Monegasque non-trust legal entity transactions and no setting" do
+    survey = Survey.new(organization: organizations(:company), year: @year)
+    assert_nil survey.a155
   end
 
   test "a1210o excludes BOs from other organizations" do
