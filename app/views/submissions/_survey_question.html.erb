@@ -40,7 +40,7 @@
     <% elsif value.blank? %>
       <span class="text-gray-400 dark:text-gray-500 italic text-sm">Non renseigné</span>
     <% elsif question.type == :monetary %>
-      <span class="text-sm text-gray-900 dark:text-white font-semibold"><%= number_to_currency(value, unit: "€", format: "%n %u") %></span>
+      <span class="text-sm text-gray-900 dark:text-white font-semibold font-mono"><%= number_to_currency(value, unit: "€", format: "%n %u") %></span>
     <% elsif value.is_a?(Hash) %>
       <% if value.empty? %>
         <span class="text-gray-400 dark:text-gray-500 italic text-sm">Non renseigné</span>
